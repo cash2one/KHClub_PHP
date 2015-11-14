@@ -1,0 +1,229 @@
+/**
+ * Created by fangboen on 2015/9/15 0015.
+ */
+.agri-banner{
+  max-width:32rem;
+  overflow: hidden;
+}
+.agri-banner img{
+  width: 100%;
+  height: auto;
+}
+.agri-con h1{
+  color:#f5560f;
+  font-size:1.2rem;
+  text-indent:3rem;
+}
+.agri-more{
+  max-width:32rem;
+  margin:0 auto;
+  height:100%;
+}
+.agri-more img{
+  width:100%;
+}
+.link-box{position:absolute;top:42%;left:15px;width:145px}
+.link-box div:nth-child(1){
+  position: relative;
+  width:9.7rem;
+  height:8.3rem;
+  left:1rem;
+}
+.link-box div:nth-child(2){
+  position: relative;
+  width:9.7rem;
+  height:8.3rem;
+  left:18rem;
+  top:-4rem;
+}
+.link-box div:nth-child(3){
+  position: relative;
+  width:9.7rem;
+  height:8.3rem;
+  left:1rem;
+  top:-4rem;
+}
+.link-box div:nth-child(4){
+  position: relative;
+  width:9.7rem;
+  height:8.3rem;
+  left:14rem;
+  top:-7rem;
+}
+@media screen and (max-width:520px){
+  .link-box div:nth-child(1){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+  }
+  .link-box div:nth-child(2){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:17rem;
+    top:-3rem;
+  }
+  .link-box div:nth-child(3){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(4){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:14rem;
+    top:-7rem;
+  }
+
+}
+@media screen and (max-width:480px){
+  .link-box div:nth-child(1){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+  }
+  .link-box div:nth-child(2){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:17rem;
+    top:-3rem;
+  }
+  .link-box div:nth-child(3){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(4){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:14rem;
+    top:-7rem;
+  }
+}
+@media screen and (max-width:440px){
+  .link-box div:nth-child(1){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+  }
+  .link-box div:nth-child(2){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:18rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(3){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(4){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:14rem;
+    top:-7rem;
+  }
+}
+@media screen and (max-width:400px){
+  .link-box div:nth-child(1){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+  }
+  .link-box div:nth-child(2){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:18rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(3){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(4){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:14rem;
+    top:-7rem;
+  }
+}
+@media screen and (max-width:360px){
+  .link-box div:nth-child(1){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+  }
+  .link-box div:nth-child(2){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:16rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(3){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(4){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:16rem;
+    top:-7rem;
+  }
+}
+
+@media screen and (max-width:319px){
+  .link-box div:nth-child(1){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+  }
+  .link-box div:nth-child(2){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:14rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(3){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:1rem;
+    top:-4rem;
+  }
+  .link-box div:nth-child(4){
+    position: relative;
+    width:9.7rem;
+    height:8.3rem;
+    left:12rem;
+    top:-10rem;
+  }
+
+}

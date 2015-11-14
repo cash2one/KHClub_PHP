@@ -1,0 +1,231 @@
+/**
+ * Created by lizhishuang on 2015/8/31 0031.
+ * 基础样式
+ */
+html{word-break: break-all;}
+.wrapper{
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 4rem;
+}
+.wrapper.nf{
+  padding-bottom:0;
+}
+/*footer*/
+.header{
+  position: relative;
+  height: 4rem;
+  padding-left: 5rem;
+  background-color: #fff;
+  z-index: 99;
+}
+.logo{
+  position: absolute;
+  top: 0;
+  left: 1rem;
+}
+.logo>div{
+  display: table-cell;
+  height: 4rem;
+  width: 4rem;
+  vertical-align: middle;
+}
+.search-link{
+  width: 100%;
+  padding: .5rem 1rem .5rem .5rem;
+}
+.search-link>a{
+  display: block;
+  width: 100%;
+  height: 3rem;
+  line-height: 3rem;
+  padding: 0 .5rem;
+  font-size: 1.2rem;
+  color: #999999;
+  background-color: #f3f3f3;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+.search-link > a::after{
+  right: 10px;
+  content: "\e003";
+  color: #afafaf;
+  text-align: right;
+}
+
+.back-header{
+  position: relative;
+  height: 3.8rem;
+  line-height: 3.8rem;
+  background: none no-repeat #f8f8f8;
+  /*border-top: 1px solid #c7c7c7;*/
+  border-bottom: 1px solid #dcdcdc;
+  z-index: 99;
+}
+.back-header>a{
+  top:0;
+  position: absolute;
+  width: 4rem;
+  height: 3.8rem;
+  line-height: 3.8rem;
+  cursor: pointer;
+}
+.back-header>h2{
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+  color: #333333;
+}
+.back{
+  left: 0;
+}
+.back>i{
+  display: block;
+  width: 1.7rem;
+  height: 3.8rem;
+  margin: 0 auto;
+  background-image:url("../../images/icon/back.png");
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+.head-link{
+  right: 0;
+  font-size: 1.2rem;
+  color: #333333;
+}
+
+
+/*footer*/
+.footer{
+  position: fixed;
+  z-index: 99;
+  bottom: 0;
+  max-width: 640px;
+  width: 100%;
+  height: 4rem;
+  margin: 0 auto;
+  border-top: 1px solid #dfdede;
+  background: none no-repeat #ffffff;
+}
+
+.bottom-nav{
+  padding-top: 0.5rem;
+}
+.bottom-nav a{
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #333333;
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+a.link-home::before{
+  background-image: url("../../images/nav/footer-nav-01_32x32.png");
+}
+a.link-category::before{
+  background-image: url("../../images/nav/footer-nav-02_32x32.png");
+}
+a.link-cart::before{
+  background-image: url("../../images/nav/footer-nav-03_32x32.png");
+}
+a.link-my::before{
+  background-image: url("../../images/nav/footer-nav-04_32x32.png");
+}
+
+/* common */
+.img-adaptive,.img-ada{
+  width: 100%;
+  height: auto;
+}
+
+.header{
+
+}
+.container{
+
+}
+
+
+.wrapper,.container,.header,.content,.main,.footer,.nav,.sidebar,.column,.left,.right, .center{
+}
+
+.nav,.main-bav,.sub-nav,.top-nav,.sidebar,.left-sidebar,.right-sidebar,.menu,.sub-menu,.title,.summary{
+}
+
+.logo,.banner,.login,.login-bar,.register,.search,.shop,.title,.status,.btn,.scroll,
+.tab,.list,.msg,.current,.tips,.icon,.shop,.note,.status,.guild,.hot,{
+
+}
+
+/*
+(1)容器: container
+    页头：header
+    内容：content/container
+    页面主体：main
+    页尾：footer
+    导航：nav
+    侧栏：sidebar
+    栏目：column
+    页面外围控制整体布局宽度：wrapper
+    左右中：left right center
+(2)导航
+   导航：nav
+   主导航：main-bav
+   子导航：sub-nav
+   顶导航：top-nav
+   边导航：sidebar
+   左导航：left-sidebar
+   右导航：right-sidebar
+   菜单：menu
+   子菜单：sub-menu
+   标题: title
+   摘要: summary
+(3)功能
+   标志：logo
+   广告：banner
+   登陆：login
+   登录条：login-bar
+   注册：register
+   搜索：search
+   功能区：shop
+   标题：title
+   加入：join-us
+   状态：status
+   按钮：btn
+   滚动：scroll
+   标签页：tab
+   文章列表：list
+   提示信息：msg
+   当前的: current
+   小技巧：tips
+   图标: icon
+   注释：note
+   指南：guild
+   服务：service
+   热点：hot
+   新闻：news
+   下载：download
+   投票：vote
+   合作伙伴：partner
+   友情链接：link
+   版权：copyright*/
+
+
+input[type='text']::-webkit-input-placeholder, textarea::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #999;
+}
+input[type='text']:-moz-placeholder, textarea:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #999;
+}
+input[type='text']::-moz-placeholder, textarea::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #999;
+}
+input[type='text']:-ms-input-placeholder, textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #999;
+}

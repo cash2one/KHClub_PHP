@@ -1,0 +1,163 @@
+/**
+ * Created by fangboen on 2015/9/17 0017.
+ */
+
+div {
+    border: none
+}
+
+ul, li, ol {
+    list-style-type: none; /*clear list style type*/
+    margin-left: 0; /*clear ie left indent */
+    padding-left: 0; /*clear ie left indent */
+}
+.pmy-banner{
+    max-width:32rem;
+    overflow: hidden;
+}
+.pmy-banner img{
+    width: 100%;
+    height: auto;
+}
+.pmy-link-box{
+    position:absolute;
+    top:12%;
+    left:30%;
+    height:17.6rem;
+    width:13.1rem;
+}
+.pmy-link-box li{
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top:0.2rem;
+    padding-bottom:0.2rem;
+}
+.u-head-img-box {
+    text-align: center;
+    height: 7rem;
+}
+.u-head-img-box .gray-img {
+    -webkit-filter: grayscale(100%);
+    -webkit-filter: grayscale(1);
+    filter: grayscale(100%);
+    filter: Alpha(opacity=10);-moz-opacity:.1;opacity:1;
+
+
+}
+.u-head-img-box a img {
+    height: 6.4rem;
+    width: 6.4rem;
+    border-radius: 3.2rem;
+}
+.u-head-img-box > a {
+    top: 1rem;
+    left: 1rem;
+}
+.btn-seller{
+    display: block;
+    color:#ffffff;
+    height:2.75rem;
+    line-height: 2.74rem;
+    background-color: #37ba6e;
+    border-radius:0.4rem;
+}
+.icon-layout{
+    max-width:32rem;
+    padding-top:3.5rem;
+    margin:0 auto;
+    text-align: center;
+}
+.icon-layout .col{
+    float: left;
+    width:100%;
+}
+.icon-layout .col div{
+    float:left;
+    width:33.3%;
+    text-align: center;
+}
+.icon-layout .col  div li{
+    font-size: 1.2rem;
+}
+.icon-layout .col  div li img{
+    width:4.85rem;
+}
+/*icon*/
+
+.auth01 {
+    background-image: url("../../images/icon/icon-auth-01.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin: 0 auto;
+    width: 1.6rem;
+    margin-right: 0.3rem;
+}
+
+.auth02 {
+    background-image: url("../../images/icon/icon-auth-02.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin: 0 auto;
+    width: 1.6rem;
+    margin-right: 0.3rem;
+}
+
+.auth03 {
+    background-image: url("../../images/icon/icon-auth-03.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin: 0 auto;
+    width: 1.6rem;
+    margin-right: 0.3rem;
+}
+
+.auth04 {
+    background-image: url("../../images/icon/icon-auth-04.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin: 0 auto;
+    width: 1.6rem;
+    margin-right: 0.3rem;
+}
+
+.auth05 {
+    background-image: url("../../images/icon/icon-auth-05.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin: 0 auto;
+    width: 1.6rem;
+    margin-right: 0.3rem;
+}
+
+.auth06 {
+    background-image: url("../../images/icon/icon-auth-06.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.6rem;
+    vertical-align: middle;
+    margin: 0 auto;
+    width: 1.6rem;
+    margin-right: 0.3rem;
+}

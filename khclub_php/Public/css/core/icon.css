@@ -1,0 +1,38 @@
+/**
+ * Created by lizhishuang on 2015/9/1 0001.
+ * 图标样式
+ */
+.ico,.ico-l,.ico-r{
+  position: relative;
+}
+.ico::after,.ico::before,.ico-l::before,.ico-r::after{
+  position: absolute;
+  top:0;
+  content: " ";
+  height: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  font-family: 'Glyphicons Halflings';
+  color: inherit;
+  background-image:none;
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+.ico::after,.ico::before,.ico-l::before,.ico-r::after{
+  width: 1.6rem;
+}
+
+.ico::before,.ico-l::before{
+  left: 0;
+}
+.ico::after,.ico-r::after{
+  right: 0;
+}
+.ico.flow::after,.ico.flow::before,.ico-l.flow::before,.ico-r.flow::after{
+  position: relative;
+  display: block;
+  height: 1.6rem;
+  margin: 0 auto;
+}

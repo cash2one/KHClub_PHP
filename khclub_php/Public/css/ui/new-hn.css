@@ -1,0 +1,523 @@
+/**
+ * Created by fangboen on 2015/9/29 0029.
+ */
+.column-content > a{
+    display: block;
+    position: relative;
+    height: 3.25rem;
+    line-height: 3.25rem;
+    font-size: 1.25rem;
+    color: #666666;
+    border-bottom: 1px solid #d9d9d9;
+    overflow:hidden;
+    padding-right: 6rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+/*search*/
+.jd-header-search-input input {
+    border: 0;
+    background: none;
+    font-size: 12px;
+    line-height: 1.2em;
+    height: 1.2em;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    width: 80%;
+    outline:none;
+}
+.jd-header-search-input input:focus {
+    outline:none;
+}
+.jd-header-icon-close {
+    position: absolute;
+    right: 1rem;
+    width: 1.5rem;
+    height: 1.4rem;
+    top: 7px;
+}
+.jd-header-icon-close:after {
+    content: '';
+    width: 14px;
+    height: 12px;
+    background-position: -103px 0;
+    margin: 0.2rem 0 0 0.2rem;
+}
+.icon_company {
+    background-image: url("../../images/icon/npt-company.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 0.8rem;
+    margin-right: 0.2rem;
+    vertical-align: middle;
+    width: 0.8rem;
+}
+.icon_personal {
+    background-image: url("../../images/icon/npt-personal.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 0.8rem;
+    margin-right: 0.2rem;
+    vertical-align: middle;
+    width: 0.8rem;
+}
+.product-company {
+    color: #999;
+    font-size: 12px;
+    height:1.2rem;
+    margin-bottom: 5px;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+.product-addresss {
+    color: #999;
+    font-size: 0.8rem;
+    height:0.8rem;
+    line-height: 0.8rem;
+    margin-bottom: 5px;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+.product-name {
+    color: #333333;
+    font-size: 1rem;
+    height: 2rem;
+    line-height: 1rem;
+    margin-bottom: 2px;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+/* screen */
+.adv-srch-num-inpt {
+    -moz-appearance: caret;
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    box-shadow: none;
+    font-size: 12px;
+    overflow: hidden;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    text-align: center;
+    text-indent: 4px;
+    width: 72px;
+}
+.adv-srch-num-inpt:nth-child(1) {
+    margin-left:0;
+}
+.adv-srch-num-inpt:nth-child(2) {
+    margin-left:1rem;
+}
+.sidebar-categories button.confirm {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #f15353;
+    border-radius: 3px;
+    color: #f15353;
+    display: inline-block;
+    font-size: 13px;
+    margin-left: 1rem;
+    padding: 6px 20px;
+}
+/*index-ll news*/
+.news-list li {
+    border-bottom: 1px solid #dcdcdc;
+    float: left;
+    padding-bottom: 1rem;
+    position: relative;
+    width: 100%;
+}
+/*login*/
+.text-box .tp-btn {
+    display: block;
+    height: 2rem;
+    position: absolute;
+    right: 0.5rem;
+    top: 2.2rem;
+    width: 3.2rem;
+}
+.text-box .btn-off,.text-box .btn-off2 {
+    background: rgba(0, 0, 0, 0) url("../../images/icon/btn-off.png") no-repeat scroll 0 0 / 2.55rem 1.75rem;
+}
+.text-box .btn-on,.text-box .btn-on2 {
+    background: rgba(0, 0, 0, 0) url("../../images/icon/btn-on.png") no-repeat scroll 0 0 / 2.55rem 1.75rem;
+}
+/*purlist*/
+.pur_list {
+    font-size: 1.2rem;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    text-indent: 1rem;
+    border-bottom: 1px solid #ececec;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+.pur_list_address{
+    font-size: 1.2rem;
+     height: auto;
+    line-height: 120%;
+    text-indent: 1rem;
+    border-bottom: 1px solid #ececec;
+}
+/*all product*/
+.back-header-pro {
+    position: relative;
+    height: 3.8rem;
+    line-height: 3.8rem;
+    background: none no-repeat rgba(0,0,0,0.4);
+    z-index: 99;
+}
+.back-header-pro>a {
+    top: 0;
+    position: absolute;
+    width: 4rem;
+    height: 3.8rem;
+    line-height: 3.8rem;
+    cursor: pointer;
+}
+.back-header-pro>h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-align: center;
+    color: #333333;
+}
+.dropdown-toggle2, .dropdown-toggle2 a:focus {
+    color: #fff;
+}
+.back2>i {
+    display: block;
+    width: 1.7rem;
+    height: 3.8rem;
+    margin: 0 auto;
+    background-image: url("../../images/icon/back-white.png");
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+.bg {
+    box-shadow: 0px 0px 5px #acacac;
+    -moz-box-shadow: 0px 0px 5px #acacac;
+    -webkit-box-shadow: 0px 0px 5px #acacac;
+    height: 10.5rem;
+    overflow: hidden;
+}
+.bg .container {
+    position: relative;
+    background-size: 100% 100%;
+}
+.container-full .overlay {
+    padding: 0 16px;
+}
+.container .companyinfo {
+    position: relative;
+    padding:0.5rem 0 0.5rem 0;
+    height: 10.4rem;
+}
+ .container .companyinfo .name {
+    height: 100%;
+}
+.container .companyinfo .name-text {
+    margin-top: 0.75rem;
+    height: 2rem;
+    color: #fff;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.fav-icon {
+    font-style: normal;
+    font-size: 14px;
+    width: 25px;
+}
+.name-text h1 {
+    display: block;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+.container .companyinfo .name .tp {
+    float: left;
+    color: #fff;
+    font-size: 1rem;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+    margin-top: 2px;
+}
+ .container .companyinfo .name .tp .tpYear {
+    color: #ffffff;
+}
+.container .companyinfo .name .tplogo {
+    float: left;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    margin-right: 6px;
+}
+.container .companyinfo .name .tplogo .tplogo-img {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+/*probanner*/
+.pro-bg .banner .banner-warp{
+    max-width:32rem;
+    max-height: 10rem;
+    overflow: hidden;
+}
+.pro-bg .banner .banner-warp img{
+    width: 100%;
+    height: 10rem !important;
+}
+.contact-us dl dt {
+    height: 3.6rem;
+    line-height: 3.6rem;
+    border-bottom: 0.1rem solid #ececec;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+
+}
+.r-tabs-tab {
+    height: 3.1rem;
+    float: left;
+    width: 33.3%;
+    text-align: center;
+    line-height: 3.1rem;
+    border-bottom: 1px solid #dcdcdc;
+}
+.flex-equal-pro .pro_layout .pro ol {
+    float: left;
+    width: 100%;
+    font-size: 1.1rem;
+    font-family: "Microsoft Yahei", Arial, sans-serif;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-right:0.2rem;
+}
+.flex-equal-pro .pro_layout .pro ol li {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0rem 0.2rem 0rem 0.3rem;
+}
+/*product view*/
+.col-4 a{
+    display:block;
+}
+#tabs a {
+    float: left;
+    position: relative;
+    padding: 0 0.5rem;
+    height: 3rem;
+    width: 100%;
+    line-height: 3rem;
+    color: #666666;
+    background-color: #ffffff;
+    text-align: center;
+}
+#tabs a:link {
+    border-bottom: 1px solid #dcdcdc;
+}
+#tabs a:hover {
+    border-bottom: 1px solid #ffffff;
+}
+#tabs a:focus {
+    border-bottom: 1px solid #dcdcdc;
+}
+.flex-equal-pro4 {
+    background-color: #ffffff;
+    margin-top: -3px;
+    margin-bottom: 0;
+    justify-content: space-between;
+}
+.shop-nav {
+    border-bottom: 0 solid transparent;
+}
+.supply-con {
+    line-height: 1.6rem;
+    font-size: 1.2rem;
+}
+.supply-con-open, .supply-con-close {
+    border-top: 0.1rem solid #dcdcdc;
+    text-align: center;
+    margin-top: 1.0rem;
+    line-height: 2;
+}
+.supply-intro {
+    height: auto;
+    border-top: 0.1rem solid #dcdcdc;
+    border-bottom: 0.1rem solid #dcdcdc;
+    margin-bottom: 0.5rem;
+    clear: both;
+    background-color: #ffffff;
+}
+.supply-con-open a, .supply-con-close a {
+    color: #666666;
+    display: block;
+    margin-top: 10px;
+}
+.flex-equal-pro4 .more i {
+    height: 1.85rem;
+    background-image: url("../../images/icon/arrow_right.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0.6rem auto 0 0;
+    width: 1.85rem;
+}
+.flex-equal li {
+    flex: 1 1 0;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    width: 48.5%;
+}
+.pro-bg p {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    padding: 0;
+    margin: 1rem 0 1rem 0;
+}
+.flex-equal-pro4 .title-icon i {
+    margin: 0.6rem 0.6rem 0 1rem;
+    width: 1.5rem;
+    position: absolute;
+    left: 0;
+}
+.flex-equal-pro4 .title-icon {
+    overflow: hidden;
+    padding-right: 1rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -icab-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+    padding-left: 3rem;
+}
+.supply-ver i .auth07{
+    background-image: url("../../images/icon/code_icon_yellow.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    height: 1.4rem;
+    vertical-align: middle;
+    margin: -0.1rem auto 0 0;
+    width: 1.4rem;
+    margin-right: 0.5rem;
+}
+/*order*/
+.order-detail .list a h2 {
+    float: left;
+    width: 50%;
+    margin: 0;
+    padding: 0 0.5rem;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 1.2rem;
+    font-weight: normal;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+.order-detail .list a img {
+    float: left;
+    width: 4.1rem;
+    margin-top: 0.3rem;
+}
+.order-detail .list a em {
+    float: left;
+    width: 65%;
+    text-align: left;
+    margin: 0;
+    padding: 0 0.5rem;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-weight: normal;
+    overflow:hidden;
+    padding-right: 1rem;
+    white-space:nowrap;
+    text-overflow:ellipsis; /* for IE */
+    -o-text-overflow: ellipsis; /* for Opera */
+    -icab-text-overflow: ellipsis; /* for iCab */
+    -khtml-text-overflow: ellipsis; /* for Konqueror Safari */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+    -webkit-text-overflow: ellipsis; /* for Safari,Swift*/
+}
+.order-detail .list .btn-pj{
+    float: right;
+    margin-top: -2.5rem;
+}
+.btn-pj>button{
+    height:2.25rem;
+    width:8rem;
+    background-color:#f47a11;
+    border:0;
+    border-radius: 4px;
+    color:#fff;
+    text-align: center;
+}
+.btn-pj>button :focus{
+    border:0;
+    outline: none;
+}

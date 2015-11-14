@@ -1,0 +1,218 @@
+/**
+ * Created by lizhishuang on 2015/9/1 0001.
+ * 网站样式
+ */
+
+/* begin index css */
+.app-down img{
+  width: 100%;
+  height: auto;
+}
+
+.banner-warp{
+  max-height: 270px;
+  overflow: hidden;
+}
+.banner-warp img{
+  width: 100%;
+  height: auto;
+}
+
+.nav{
+  padding: 1.25rem 0;
+}
+.nav>div{
+  padding-bottom: 1.25rem;
+}
+.nav>div:last-child{
+  padding-bottom: 0;
+}
+.nav-img-box>a{
+  display: block;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333333;
+}
+.nav-img-box>a img{
+  display: block;
+  width: 4rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+
+.column {
+  padding-top: 1rem;
+  border-top: 1px solid #e0dfdf;
+  background: none no-repeat #eeeeee;
+}
+.column-title {
+  padding-left: .515rem;
+  border-top: 1px solid #dfdede;
+  border-bottom: 1px solid #dfdede;
+  background: none no-repeat #ffffff;
+}
+.column-title > a {
+  display: block;
+  position: relative;
+  height: 3.25rem;
+  line-height: 3.25rem;
+  font-size: 1.5rem;
+  color: #333333;
+  background-color: #ffffff;
+  padding-left: 2.5rem;
+}
+
+.column-content{
+  padding: 0 1rem;
+  background: none no-repeat #ffffff;
+}
+.column-content > a{
+  display: block;
+  position: relative;
+  height: 3.25rem;
+  line-height: 3.25rem;
+  font-size: 1.25rem;
+  color: #666666;
+  border-bottom: 1px solid #d9d9d9;
+}
+.column-content > a::after{
+  position: absolute;
+  top: 0;
+  right: 0;
+  content: attr(data-tag);
+  line-height: inherit;
+  font-size:1rem;
+  color: #f4551e;
+}
+.column-content > a:last-child{
+  border-bottom: none;
+}
+
+
+.column-title > a::after{
+  content: "\e258";
+  color: #666666;
+  right: 1rem;
+  text-align: right;
+}
+.column-supply{
+  background-color: #4999eb;
+}
+.column-buy{
+  background-color: #f56823;
+}
+.column-supply > a.ico::before{
+  background-image: url("../../images/icon/ico-02.png");
+  left: .5rem;
+}
+.column-buy> a.ico::before{
+  background-image: url("../../images/icon/ico-01.png");
+  left: .5rem;
+}
+/* end index css */
+
+
+/* begin SupplyDemand css */
+.list-box{
+
+}
+.list-box>a{
+  position: relative;
+  display: block;
+  font-size: 1.25rem;
+  height: 3.5rem;
+  width: 100%;
+  line-height: 3.5rem;
+  color: #666666;
+  padding-left: 4.5rem;
+  padding-right: 6rem;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+  border-bottom: 1px solid #d9d9d9;
+}
+.list-box>a::before{
+  position: absolute;
+  top: 1.1rem;
+  left: 1rem;
+  font-size: 0.9rem;
+  height: 1.4rem;
+  line-height: 1.2rem;
+  padding: 0 0.4rem;
+  border-radius: 0.2rem;
+  color: #fff;
+
+}
+.list-box>a::after{
+  position: absolute;
+  top: 0;
+  right: 1.5rem;
+  font-size: 1rem;
+  color: #f4551e;
+  line-height: inherit;
+
+}
+.demand-list.list-box>a::before{
+  content: "求购";
+  border: 1px solid #e85e0b;
+  background-color: #f57232;
+}
+.demand-list.list-box>a::after{
+  content: attr(data-date);
+}
+.supply-list.list-box>a::before{
+  content: "供应";
+  border: 1px solid #11aa51;
+  background-color: #36b96d;
+}
+.supply-list.list-box>a::after{
+  content: attr(data-price);
+}
+
+.search-box{
+  padding: 0.65rem 1rem 0.85rem;
+  border-bottom: 1px solid #dcdcdc;
+}
+.search-box>div{
+  position: relative;
+  padding-right: 4rem;
+}
+.search-box>div>input{
+  display: block;
+  padding: 0 0.5rem;
+  width: 100%;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 0.9rem;
+  color: #999999;
+  border: 1px solid #dcdcdc;
+  border-bottom-left-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+}
+.search-box>div>a{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4rem;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #333333;
+  border: 1px solid #dcdcdc;
+  border-left: none;
+  border-bottom-right-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+/* end SupplyDemand css */
+
+
+/* pages */
+.swipe-up{
+  text-align: center;
+  font-size: 1.2rem;
+  height: 2.6rem;
+  line-height: 2.6rem;
+  color: #999999;
+}

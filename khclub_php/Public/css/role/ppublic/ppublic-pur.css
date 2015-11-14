@@ -1,0 +1,128 @@
+/**
+ * Created by fangboen on 2015/9/11 0011.
+ */
+div {
+  border: none
+}
+
+ul, li, ol {
+  list-style-type: none; /*clear list style type*/
+  margin-left: 0; /*clear ie left indent */
+  padding-left: 0; /*clear ie left indent */
+}
+
+.footer-ppublic {
+  height: 4rem;
+  background-color: #e9e9e9;
+  border-top: 1px solid #e9e9e9;
+}
+
+.flex-equal {
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox; /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Chrome */
+  display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  margin-top: 8px;
+  width:100%;
+}
+.flex-equal li {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  width: 50%;
+}
+
+.flex-equal li:nth-child(1) {
+  background-color: #f47a11;
+  border-radius: 0.3rem
+}
+
+.flex-equal li:nth-child(2) {
+  background-color: #ff4200;
+  border-radius: 0.3rem
+}
+
+.btn-icon-online, .btn-icon-contact {
+  height: 2.5rem;
+  line-height: 2.5rem;
+  font-size: 1.2rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.btn-icon-online i {
+  background-color: transparent;
+  background-image: url("../../../images/icon/ico_btn_online.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  display: inline-block;
+  height: 1.4rem;
+  vertical-align: middle;
+  margin: -3px auto 0;
+  width: 1.4rem;
+}
+
+.btn-icon-contact i {
+  background-color: transparent;
+  background-image: url("../../../images/icon/ico_btn_contact.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  display: inline-block;
+  height: 1.4rem;
+  vertical-align: middle;
+  margin: -3px auto 0;
+  width: 1.4rem;
+
+}
+
+.pur {
+  max-width: 32rem;
+  margin: 0 auto;
+  word-break: break-all;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pur ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pur h1 {
+  font-size: 1.5rem;
+  font-weight: normal;
+  line-height: 4.15rem;
+  padding-left: 0.6rem;
+  margin-top: 0;
+}
+
+.pur_line {
+  height: 4.15rem;
+  border-left: 0.35rem solid #36b96d;
+  border-bottom: 1px solid #c5c5c5;
+}
+
+.pur_line2 {
+  height: 4.15rem;
+  border-left: 0.35rem solid #36b96d;
+  background-color: #ececec;
+  margin-top: 0;
+}
+
+.pur_list {
+  font-size: 1.2rem;
+  height: 3.5rem;
+  line-height: 3.5rem;
+  text-indent: 1rem;
+  border-bottom: 1px solid #ececec;
+}
+
+.pur_con {
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+.txt_org{
+  color:#f47a11;
+}
