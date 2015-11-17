@@ -1736,7 +1736,7 @@ class MobileApiController extends Controller {
 
             $cardModel = M();
             //这里先这么写
-            $sql = 'SELECT id, title, intro, image, manager_name, phone_num, address, wx_num
+            $sql = 'SELECT id, title, intro, image, manager_name, phone_num, address, wx_num, web
                     FROM kh_circle WHERE delete_flag=0 LIMIT '.$start.','.$end;
             $cardList = $cardModel->query($sql);
 
