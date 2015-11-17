@@ -67,7 +67,7 @@
         .lee-chk input[type='checkbox'] { height: 0; width: 0; display: none; }
             .lee-chk input[type='checkbox'] + label { user-select: none; -webkit-user-select: none; padding-left: 2rem; }
                 .lee-chk input[type='checkbox'] + label > i { position: absolute; top: .25rem; left: 0; height: 1.5rem; width: 1.5rem; border: 1px solid #999999; }
-                    .lee-chk input[type='checkbox'] + label > i::before { content: " "; /*font-family: 'Glyphicons Halflings';*/ /*content: "\e013";*/ position: absolute; top: 0; left: .15rem; /*line-height: 1.5rem;*/ /*font-size: 1.4rem;*/ /*color: #f47a11;*/ width: 1.2rem; height: 1.5rem; background-image: url("../../images/icon/ico-03.png"); background-color: transparent; background-position: center center; background-repeat: no-repeat; background-size: 100% auto; visibility: hidden; }
+                    .lee-chk input[type='checkbox'] + label > i::before { content: " "; /*font-family: 'Glyphicons Halflings';*/ /*content: "\e013";*/ position: absolute; top: 0; left: .15rem; /*line-height: 1.5rem;*/ /*font-size: 1.4rem;*/ /*color: #f47a11;*/ width: 1.2rem; height: 1.5rem; background-color: transparent; background-position: center center; background-repeat: no-repeat; background-size: 100% auto; visibility: hidden; }
             .lee-chk input[type='checkbox']:checked + label > i::before { visibility: visible; }
             .lee-chk input[type='checkbox'] + label > span { display: inline-block; height: 1.5rem; line-height: 1.5rem; }
 
@@ -107,7 +107,7 @@
                         $('#txtTel').text(userInfo.result.phone_num || '');
                         $('#txtEmail').text(userInfo.result.e_mail || '');
                         $('#txtAddress').text(userInfo.result.address || '');
-                        $('#headImage').attr('src', userInfo.result.head_image || '__PUBLIC__/css/not.jpg');
+                        $('#headImage').attr('src', '__ROOT__'+userInfo.result.head_image || '__PUBLIC__/css/not.jpg');
                     }
                 },
                 error: function (error) {
@@ -144,11 +144,11 @@
                         <div class="contact-warp-div">地址：<span id="txtAddress"></span></div>
                     </div>
                     <div style="margin-left:28px;margin-top:60px;font-size:22px;">
-                       &nbsp; &nbsp;KHCLUB(商圈)，全球高端商务圈层社交app，赶快下载成为我的好友吧！
+                       &nbsp; &nbsp;KHCLUB(商务圈)，全球高端商务圈层社交app，赶快下载成为我的好友吧！
                     </div>
                 </div>
                 <div>
-                    <a class="account-btn btn-submit" href="http://120.25.213.171/Apk/KHClub1.00.apk">点击下载</a>
+                    <a class="account-btn btn-submit" href="http://app.qq.com/#id=detail&appid=1104875299">点击下载</a>
                 </div>
             </div>
         </div>

@@ -51,7 +51,7 @@ class WXController extends Controller {
                     $card['head_image'] = '';
                 }else{
                     //120.25.213.171
-                    $card['head_image'] = 'http://localhost/khclub_php/Uploads/'.$user['head_image'];
+                    $card['head_image'] = '/Uploads/'.$user['head_image'];
                 }
                 if(empty($user['company_name'])){
                     $card['company_name'] = '暂无信息';
