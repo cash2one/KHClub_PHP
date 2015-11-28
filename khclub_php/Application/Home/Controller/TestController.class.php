@@ -18,6 +18,7 @@ class TestController {
         echo U("Index/add");
         echo '<br>';
         echo U("Test/get");
+        echo 'test';
     }
 
     public function get(){
