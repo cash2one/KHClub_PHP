@@ -19,6 +19,7 @@ class TestController {
         echo '<br>';
         echo U("Test/get");
         echo 'test';
+        echo 'test2';
     }
 
     public function get(){
