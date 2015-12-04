@@ -786,7 +786,7 @@ class MobileApiController extends Controller {
 
             $report = array('uid'=>$uid,'report_uid'=>$report_uid, 'report_content'=>$report_content);
 
-            $reportModel = M('jlxc_report');
+            $reportModel = M('kh_report');
             $ret = $reportModel->add($report);
 
             if($ret){
