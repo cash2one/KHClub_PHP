@@ -280,7 +280,7 @@ class MobileApiController extends Controller {
     public function getNewsCoverList(){
         try{
             $uid = $_REQUEST['uid'];
-            //附件列表
+            //附件列表 1
             $findImagesModel = M('kh_attachment');
             $images = $findImagesModel->field('url, sub_url')->where(array('delete_flag=0 and type=1 and user_id='.$uid))->limit('3')->order('add_date desc')->select();
             $list = array();
