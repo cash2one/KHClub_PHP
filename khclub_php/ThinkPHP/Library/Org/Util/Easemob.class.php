@@ -16,9 +16,13 @@ namespace Org\Util;
  * @author    limx <limx@xiaoneimimi.com>
  */
 class Easemob {
-	private $client_id = 'YXA6B1DEcHxbEeWryWGbGjsi3Q';
-	private $client_secret = 'YXA6qUnN7YHsIKv_wg40TcbuDctZz5M';
-	private $org_name = 'khclub2015';
+//	private $client_id = 'YXA6B1DEcHxbEeWryWGbGjsi3Q';
+//	private $client_secret = 'YXA6qUnN7YHsIKv_wg40TcbuDctZz5M';
+//	private $org_name = 'khclub2015';
+//	private $app_name = 'khclub';
+	private $client_id = 'YXA6tW7D0G77EeWvK-f5SsEwWg';
+	private $client_secret = 'YXA6ooHN9ybSkuM6z58G2phvr52eEIE';
+	private $org_name = 'yukirin';
 	private $app_name = 'khclub';
 	private $url;
 	
