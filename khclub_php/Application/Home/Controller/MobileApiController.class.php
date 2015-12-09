@@ -270,6 +270,39 @@ class MobileApiController extends Controller {
         }
     }
 
+    /**
+     * @brief 获取用户关注圈子
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/getPersonalCircleList?user_id=4
+     * @param user_id 用户id
+     */
+    public function getPersonalCircleList(){
+        try{
+
+            $user_id = $_REQUEST['user_id'];
+            if(empty($user_id)){
+                returnJson(0,"用户id不能为空");
+                return;
+            }
+            //查询已关注的圈子
+            $sql = 'SELECT pc.circle_name, pc.circle_cover_sub_image FROM kh_user_circle uc, kh_personal_circle pc
+                    WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
+            //获取圈子详细信息
+            $findCircle = M();
+            $followList = $findCircle->query($sql);
+            //查询没有关注的圈子
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image FROM kh_user_circle uc, kh_personal_circle pc
+                    WHERE uc.circle_id=pc.id AND pc.delete_flag=1 AND uc.delete_flag=1 ORDER BY RAND(100)';
+            //获取圈子详细信息
+            $findCircle = M();
+            $unfollowList = $findCircle->query($sql);
+            returnJson(1,"查询成功", array('unfollowList'=>$unfollowList,'followList'=>$followList));
+
+        }catch (Exception $e){
+
+            returnJson(0,"数据异常=_=", $e);
+        }
+    }
 
     /**
      * @brief 获取用户图片组
