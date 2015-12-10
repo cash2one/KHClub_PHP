@@ -1749,7 +1749,7 @@ class MobileApiController extends Controller {
      * http://localhost/khclub_php/index.php/Home/MobileApi/getCircleList
      * @param page 页数
      * @param size 数量
-     * 该方法是紧急情况使用 后期会修改或者作废
+     * 该方法是紧急情况使用 后期会修改或者作废 已作废
      */
     public  function getCircleList(){
         try{
@@ -1839,6 +1839,145 @@ class MobileApiController extends Controller {
             returnJson(0,"数据异常=_=", $e);
         }
     }
+
+    /**
+     * @brief 创建一个圈子
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/postNewCircle?
+     * @param user_id 用户id
+     * @param circle_name 圈子名称
+     * @param circle_detail 圈子描述
+     * @param phone_num 电话
+     * @param address 地址
+     * @param wx_num 微信号
+     * @param circle_web 网址
+     */
+    public function postNewCircle(){
+        try{
+
+            $user_id = $_REQUEST['user_id'];
+            $circle_name = $_REQUEST['circle_name'];
+            $circle_detail = $_REQUEST['circle_detail'];
+            $address = $_REQUEST['address'];
+            $wx_num = $_REQUEST['wx_num'];
+            $circle_web = $_REQUEST['circle_web'];
+            $phone_num = $_REQUEST['phone_num'];
+
+            if(empty($user_id)){
+                returnJson(0,"创建者不能为空！");
+                return;
+            }
+            if(empty($circle_name)){
+                returnJson(0,"圈子名不能为空");
+                return;
+            }
+            if(mb_strlen($circle_name ,'utf-8')>8){
+                returnJson(0,"圈子名长度不能超过8个字");
+                return;
+            }
+            //只有一个图片的时候
+            if(count($_FILES) <= 1){
+
+                if(empty($_FILES)){
+                    returnJson(0,"封面不能为空");
+                    return;
+                }
+
+                //这一个图片是二维码
+                if(substr($_FILES[array_keys($_FILES)[0]]['name'], 0, 6) == 'qrcode'){
+                    returnJson(0,"封面不能为空");
+                    return;
+                }
+            }
+
+            //用户圈子表
+            $circleModel = M('kh_personal_circle');
+            //新圈子
+            $newCircle = array('user_id'=>$user_id,'circle_name'=>$circle_name,
+                                'circle_detail'=>$circle_detail, 'address'=>$address,
+                                'wx_num'=>$wx_num, 'circle_web'=>$circle_web, 'phone_num'=>$phone_num);
+
+            $info = null;
+            $upload = null;
+            //图片
+            if(!empty($_FILES)){
+                $upload = new \Think\Upload();// 实例化上传类
+                $upload->maxSize   =     10*1024*1024 ;// 设置附件上传大小
+                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                $upload->rootPath  =     './Uploads/'; // 设置附件上传根目录
+                $upload->savePath  =     ''; // 设置附件上传（子）目录
+                $upload->saveName  =     '';
+                // 上传文件
+                $info   =   $upload->upload();
+            }
+            //上传成功
+            if($info) {
+                $image = new \Think\Image();
+                foreach($info as $file){
+
+                    $path = $file['savepath'].$file['savename'];
+
+                    //二维码和封面分开处理
+                    if(substr($file['savename'], 0, 6) == 'qrcode'){
+                        //二维码图片地址
+                        $newCircle['wx_qrcode'] = $path;
+                    }else{
+                        $image->open('./Uploads/'.$path);
+                        //缩略图地址前半部分
+                        $preffix = substr($path, 0, strlen($path)-4);
+                        //后缀
+                        $suffix  = substr($path, strlen($path)-4);
+                        //拼接
+                        $subpath = $preffix.'_sub'.$suffix;
+                        //缩略图保存
+                        $image->thumb(360, 360)->save('./Uploads/'.$subpath, null, 90);
+
+                        //封面部分
+                        //图片地址
+                        $newCircle['circle_cover_image'] = $path;
+                        //缩略图
+                        $newCircle['circle_cover_sub_image'] = $subpath;
+                    }
+                }
+            }else{
+                returnJson(0,"图片不能为空!");
+                return;
+            }
+
+            //添加
+            $newCircle['add_date'] = time();
+            $circleModel->startTrans();
+            $circle_id = $circleModel->add($newCircle);
+            //添加成功
+            if($circle_id){
+                //关注自己的圈子
+                $myTopicModel = M('kh_user_circle');
+                $myTopic = array('user_id'=>$user_id, 'circle_id'=>$circle_id, 'add_date'=>time());
+                $ret = $myTopicModel->add($myTopic);
+                //关注成功
+                if($ret){
+                    $newCircle = $circleModel->find($circle_id);
+                    $circleModel->commit();
+                    returnJson(1,"创建成功", $newCircle);
+                    return;
+                }else{
+                    $circleModel->rollback();
+                    returnJson(0,"创建失败!");
+                }
+
+            }else{
+                $circleModel->rollback();
+                returnJson(0,"发布失败!");
+            }
+
+            return;
+
+        }catch (Exception $e){
+
+            returnJson(0,"数据异常！",$e);
+        }
+    }
+
 /////////////////////////////////////////////好友部分////////////////////////////////////////////////////////////
     /**
      * @brief 关注好友 双向
