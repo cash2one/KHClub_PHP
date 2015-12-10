@@ -285,7 +285,7 @@ class MobileApiController extends Controller {
                 return;
             }
             //查询已关注的圈子
-            $sql = 'SELECT pc.circle_name, pc.circle_cover_sub_image FROM kh_user_circle uc, kh_personal_circle pc
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image FROM kh_user_circle uc, kh_personal_circle pc
                     WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
             //获取圈子详细信息
             $findCircle = M();
@@ -1852,7 +1852,7 @@ class MobileApiController extends Controller {
             returnJson(0,"数据异常=_=", $e);
         }
     }
-
+/////////////////////////////////////////////首页'圈子'部分////////////////////////////////////////////////////////////
 
     /**
      * @brief 圈子列表
@@ -1900,6 +1900,56 @@ class MobileApiController extends Controller {
         }
     }
 
+    /**
+     * @brief 获取圈子成员列表
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/MobileApi/getCircleMembers
+     * @param page 页数
+     * @param size 数量
+     * @param circle_id 圈子ID
+     */
+    public  function getCircleMembers(){
+        try{
+
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            $circleId = $_REQUEST['circle_id'];
+            if(empty($circleId)){
+                returnJson(0,"圈子不存在");
+                return;
+            }
+
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+
+            $start = ($page-1)*$size;
+            $end   = $size;
+
+            $memberModel = M();
+            $sql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_circle uc, kh_user_info user
+                    WHERE uc.id="'.$circleId.'" AND user.id=uc.user_id AND uc.delete_flag=0 AND user.delete_flag=0 ORDER BY uc.add_date DESC LIMIT '.$start.','.$end;
+            $memberList = $memberModel->query($sql);
+
+            $result = array();
+            $result['list'] = $memberList;
+            //是否是最后一页
+            if(count($memberList) < $size){
+                $result['is_last'] = '1';
+            }else{
+                $result['is_last'] = '0';
+            }
+            //添加过
+            returnJson(1,"获取成功", $result);
+
+        }catch (Exception $e) {
+
+            returnJson(0,"数据异常=_=", $e);
+        }
+    }
 /////////////////////////////////////////////好友部分////////////////////////////////////////////////////////////
     /**
      * @brief 关注好友 双向
