@@ -303,6 +303,117 @@ class MobileApiController extends Controller {
             returnJson(0,"数据异常=_=", $e);
         }
     }
+    
+    /**
+     * @brief 获取圈子主页信息
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/MobileApi/getCircleHomeList
+     * @param page 页码 默认1
+     * @param size 每页数量 默认10
+     * @param user_id 用户id
+     * @param frist_time 第一条状态的时间
+     */
+    public function getCircleHomeList(){
+        try {
+            $id = $_REQUEST['user_id'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            $frist_time = $_REQUEST['frist_time'];
+            if(empty($id)){
+                returnJson(0,"用户Id不能为空");
+                return;
+            }
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+            if(empty($frist_time)){
+                $frist_time = time();
+            }
+            //获取圈子主页信息
+            $circleModel = M('kh_personal_circle');
+            $findCircle = $circleModel->where('id='.$id)->getField('id,user_id,circle_name,circle_detail,circle_cover_image,circle_cover_sub_image,manager_name,phone_num,address,wx_num,wx_qrcode');
+            var_dump($findCircle);
+
+            //获取达人信息
+            $sql = 'SELECT ui.id, ui.head_sub_image FROM kh_user_circle uc, kh_personal_circle pc, kh_user_info ui
+                    WHERE pc.id='.$id.' AND uc.circle_id=pc.id AND ui.id=uc.user_id AND pc.delete_flag=0 AND uc.delete_flag=0
+                    ORDER BY uc.add_date DESC LIMIT 10';
+            $memberModel = M();
+            $circleMembers = $memberModel->query($sql);
+            var_dump($circleMembers);
+
+            //获取说说，动态信息
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $sql = 'SELECT user.name, user.head_sub_image, user.company_name, news.content_text, a.url
+                    FROM kh_news_content news,kh_user_info user, kh_attachment a, kh_news_extra nc
+                    WHERE nc.circle_id='.$id.' and nc.news_id=user.id and news.user_id=user.id and a.entity_id=user.id and news.delete_flag=0 and nc.delete_flag=0
+                    ORDER BY news.add_date DESC LIMIT '.$start.','.$end;
+            $contentModel = M();
+            $circleContent = $contentModel->query($sql);
+            var_dump($circleContent);
+            if(isset($circleContent)){
+                //SELECT id,type,sub_url,url,size,add_date from jlxc_attachment WHERE entity_id=7 and delete_flag = 0
+                if(count($circleContent) > 0){
+
+                    //处理图片
+                    for($i=0; $i<count($circleContent); $i++) {
+                        $news = $circleContent[$i];
+                        //该状态发的图片
+                        $imageSql = 'SELECT id,type,sub_url,url,size,add_date
+                                      from kh_attachment WHERE delete_flag = 0 and entity_id='.$news['id'].' ORDER BY url';
+                        $images = $contentModel->query($imageSql);
+                        //返回尺寸
+                        for($j=0; $j<count($images); $j++) {
+                            try{
+                                $image = new \Think\Image();
+                                $path = $images[$j]['url'];
+                                $image->open('./Uploads/'.$path);
+                                $images[$j]['width']  = $image->size()[0];
+                                $images[$j]['height'] = $image->size()[1];
+                            }catch (Exception $e){
+                                $images[$j]['width']  = '100';
+                                $images[$j]['height'] = '100';
+                            }
+                        }
+
+                        //获取该状态是否这个人赞了
+                        $likeModel = M('kh_news_like');
+                        $oldLike = $likeModel->where('delete_flag=0 and news_id='.$news['id'].' and user_id='.$id)->find();
+                        if($oldLike){
+                            $circleContent[$i]['is_like'] = '1';
+                        }else{
+                            $circleContent[$i]['is_like'] = '0';
+                        }
+
+                        //赋值
+                        $circleContent[$i]['images'] = $images;
+                        $circleContent[$i]['add_time'] = $circleContent[$i]['add_date'];
+                        $circleContent[$i]['add_date'] = date('Y-m-d H:i:s', $circleContent[$i]['add_date']);
+                    }
+                }
+
+                $result = array();
+                $result['list'] = $circleContent;
+                //是否是最后一页
+                if(count($circleContent) < $size){
+                    $result['is_last'] = '1';
+                }else{
+                    $result['is_last'] = '0';
+                }
+                returnJson(1,"查询成功",array('findCircle'=>$findCircle,'circleMembers'=>$circleMembers,'circleContent'=>$result));
+                return;
+            }else{
+                returnJson(0,"查询失败T_T");
+            }
+
+        }catch (Exception $e){
+            returnJson(0,"数据异常=_=",$e);
+        }
+    }
 
     /**
      * @brief 获取用户图片组
