@@ -285,13 +285,13 @@ class MobileApiController extends Controller {
                 return;
             }
             //查询已关注的圈子
-            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image FROM kh_user_circle uc, kh_personal_circle pc
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
                     WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
             //获取圈子详细信息
             $findCircle = M();
             $followList = $findCircle->query($sql);
             //查询没有关注的圈子
-            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image FROM kh_user_circle uc, kh_personal_circle pc
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
                     WHERE uc.circle_id=pc.id AND pc.delete_flag=1 AND uc.delete_flag=1 ORDER BY RAND(100)';
             //获取圈子详细信息
             $findCircle = M();
@@ -2004,7 +2004,7 @@ class MobileApiController extends Controller {
             //用户圈子表
             $circleModel = M('kh_personal_circle');
             //新圈子
-            $newCircle = array('user_id'=>$user_id,'circle_name'=>$circle_name,
+            $newCircle = array('user_id'=>$user_id,'circle_name'=>$circle_name,'follow_quantity'=>1,
                                 'circle_detail'=>$circle_detail, 'address'=>$address,
                                 'wx_num'=>$wx_num, 'circle_web'=>$circle_web, 'phone_num'=>$phone_num);
 
