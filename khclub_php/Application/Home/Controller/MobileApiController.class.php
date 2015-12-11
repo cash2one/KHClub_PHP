@@ -1981,19 +1981,18 @@ class MobileApiController extends Controller {
     /**
      * @brief 获取圈子主页信息
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/MobileApi/getCircleHomeList
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/getPersonalCircleList?user_id=4
      * @param page 页码 默认1
      * @param size 每页数量 默认10
-     * @param user_id 用户id
-     * @param frist_time 第一条状态的时间
+     * @param circle_id 圈子id
      */
     public function getCircleHomeList(){
         try {
-            $id = $_REQUEST['user_id'];
+            $circle_id = $_REQUEST['circle_id'];
             $page = $_REQUEST['page'];
             $size = $_REQUEST['size'];
             $frist_time = $_REQUEST['frist_time'];
-            if(empty($id)){
+            if(empty($circle_id)){
                 returnJson(0,"用户Id不能为空");
                 return;
             }
@@ -2007,12 +2006,15 @@ class MobileApiController extends Controller {
                 $frist_time = time();
             }
             //获取圈子主页信息
-            $circleModel = M('kh_personal_circle');
-            $findCircle = $circleModel->where('id='.$id)->getField('id,user_id,circle_name,circle_detail,circle_cover_image,circle_cover_sub_image,manager_name,phone_num,address,wx_num,wx_qrcode');
+            $sql = 'SELECT pc.id, pc.user_id, pc.circle_name, pc.circle_detail, pc.circle_cover_image, pc.circle_cover_sub_image, pc.phone_num,
+                    pc.address,wx_num, pc.wx_qrcode, uc.name, pc.follow_quantity, pc.circle_web, pc.delete_flag
+                    FROM kh_personal_circle pc, kh_user_info uc WHERE pc.id='.$circle_id.' AND pc.user_id=uc.id';
+            $circleModel = M();
+            $findCircle = $circleModel->query($sql);
 
             //获取达人信息
             $sql = 'SELECT ui.id, ui.head_sub_image FROM kh_user_circle uc, kh_personal_circle pc, kh_user_info ui
-                    WHERE pc.id='.$id.' AND uc.circle_id=pc.id AND ui.id=uc.user_id AND pc.delete_flag=0 AND uc.delete_flag=0
+                    WHERE pc.id='.$circle_id.' AND uc.circle_id=pc.id AND ui.id=uc.user_id AND pc.delete_flag=0 AND uc.delete_flag=0
                     ORDER BY uc.add_date DESC LIMIT 10';
             $memberModel = M();
             $circleMembers = $memberModel->query($sql);
@@ -2022,7 +2024,7 @@ class MobileApiController extends Controller {
             $end   = $size;
             $sql = 'SELECT user.name, user.head_sub_image, user.company_name, news.content_text, a.url
                     FROM kh_news_content news,kh_user_info user, kh_attachment a, kh_news_extra nc
-                    WHERE nc.circle_id='.$id.' and nc.news_id=user.id and news.user_id=user.id and a.entity_id=user.id and news.delete_flag=0 and nc.delete_flag=0
+                    WHERE nc.circle_id='.$circle_id.' and nc.news_id=user.id and news.user_id=user.id and a.entity_id=user.id and news.delete_flag=0 and nc.delete_flag=0
                     ORDER BY news.add_date DESC LIMIT '.$start.','.$end;
             $contentModel = M();
             $circleContent = $contentModel->query($sql);
