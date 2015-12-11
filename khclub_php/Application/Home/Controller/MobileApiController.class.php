@@ -1985,9 +1985,11 @@ class MobileApiController extends Controller {
      * @param page 页码 默认1
      * @param size 每页数量 默认10
      * @param circle_id 圈子id
+     * @param user_id  用户id
      */
     public function getCircleHomeList(){
         try {
+            $user_id = $_REQUEST['user_id'];
             $circle_id = $_REQUEST['circle_id'];
             $page = $_REQUEST['page'];
             $size = $_REQUEST['size'];
@@ -2007,11 +2009,18 @@ class MobileApiController extends Controller {
             }
             //获取圈子主页信息
             $sql = 'SELECT pc.id, pc.user_id, pc.circle_name, pc.circle_detail, pc.circle_cover_image, pc.circle_cover_sub_image, pc.phone_num,
-                    pc.address,wx_num, pc.wx_qrcode, uc.name, pc.follow_quantity, pc.circle_web, pc.delete_flag
+                    pc.address,wx_num, pc.wx_qrcode, uc.name, pc.follow_quantity, pc.circle_web
                     FROM kh_personal_circle pc, kh_user_info uc WHERE pc.id='.$circle_id.' AND pc.user_id=uc.id';
             $circleModel = M();
             $findCircle = $circleModel->query($sql);
-
+            //获取是否关注圈子
+            $followModel = M('kh_user_circle');
+            $isFollow = $followModel->where('user_id='.$user_id.' and circle_id='.$circle_id. ' and delete_flag=0')->select();
+            if($isFollow){
+                $findCircle['is_follow']=1;
+            }else{
+                $findCircle['is_follow']=0;
+            };
             //获取达人信息
             $sql = 'SELECT ui.id, ui.head_sub_image FROM kh_user_circle uc, kh_personal_circle pc, kh_user_info ui
                     WHERE pc.id='.$circle_id.' AND uc.circle_id=pc.id AND ui.id=uc.user_id AND pc.delete_flag=0 AND uc.delete_flag=0
@@ -2022,9 +2031,9 @@ class MobileApiController extends Controller {
             //获取说说，动态信息
             $start = ($page-1)*$size;
             $end   = $size;
-            $sql = 'SELECT user.name, user.head_sub_image, user.company_name, news.content_text, a.url
+            $sql = 'SELECT user.name, user.head_sub_image, user.company_name, news.content_text, a.url, news.id
                     FROM kh_news_content news,kh_user_info user, kh_attachment a, kh_news_extra nc
-                    WHERE nc.circle_id='.$circle_id.' and nc.news_id=user.id and news.user_id=user.id and a.entity_id=user.id and news.delete_flag=0 and nc.delete_flag=0
+                    WHERE news.add_date<='.$frist_time.' and nc.circle_id='.$circle_id.' and nc.news_id=news.id and news.user_id=user.id and a.entity_id=news.id and news.delete_flag=0 and nc.delete_flag=0
                     ORDER BY news.add_date DESC LIMIT '.$start.','.$end;
             $contentModel = M();
             $circleContent = $contentModel->query($sql);
@@ -2054,7 +2063,7 @@ class MobileApiController extends Controller {
 
                         //获取该状态是否这个人赞了
                         $likeModel = M('kh_news_like');
-                        $oldLike = $likeModel->where('delete_flag=0 and news_id='.$news['id'].' and user_id='.$id)->find();
+                        $oldLike = $likeModel->where('delete_flag=0 and news_id='.$news['id'].' and user_id='.$user_id)->find();
                         if($oldLike){
                             $circleContent[$i]['is_like'] = '1';
                         }else{
@@ -2070,13 +2079,15 @@ class MobileApiController extends Controller {
 
                 $result = array();
                 $result['list'] = $circleContent;
+                $result['circle']= $findCircle;
+                $result['circleMembers'] = $circleMembers;
                 //是否是最后一页
                 if(count($circleContent) < $size){
                     $result['is_last'] = '1';
                 }else{
                     $result['is_last'] = '0';
                 }
-                returnJson(1,"查询成功",array('findCircle'=>$findCircle,'circleMembers'=>$circleMembers,'circleContent'=>$result));
+                returnJson(1,"查询成功",$result);
                 return;
             }else{
                 returnJson(0,"查询失败T_T");
