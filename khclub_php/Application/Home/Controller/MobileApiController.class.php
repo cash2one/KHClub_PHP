@@ -2013,13 +2013,19 @@ class MobileApiController extends Controller {
                     FROM kh_personal_circle pc, kh_user_info uc WHERE pc.id='.$circle_id.' AND pc.user_id=uc.id';
             $circleModel = M();
             $findCircle = $circleModel->query($sql);
+            if($findCircle){
+                $findCircle = $findCircle[0];
+            }else{
+                returnJson(0,"目标圈子不存在");
+                return;
+            }
             //获取是否关注圈子
             $followModel = M('kh_user_circle');
             $isFollow = $followModel->where('user_id='.$user_id.' and circle_id='.$circle_id. ' and delete_flag=0')->select();
             if($isFollow){
-                $findCircle['is_follow']=1;
+                $findCircle['is_follow']='1';
             }else{
-                $findCircle['is_follow']=0;
+                $findCircle['is_follow']='0';
             };
             //获取达人信息
             $sql = 'SELECT ui.id, ui.head_sub_image FROM kh_user_circle uc, kh_personal_circle pc, kh_user_info ui
