@@ -1786,7 +1786,7 @@ class MobileApiController extends Controller {
 
             $memberModel = M();
             $sql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_circle uc, kh_user_info user
-                    WHERE uc.id="'.$circleId.'" AND user.id=uc.user_id AND uc.delete_flag=0 AND user.delete_flag=0 ORDER BY uc.add_date DESC LIMIT '.$start.','.$end;
+                    WHERE uc.circle_id="'.$circleId.'" AND user.id=uc.user_id AND uc.delete_flag=0 AND user.delete_flag=0 ORDER BY uc.add_date DESC LIMIT '.$start.','.$end;
             $memberList = $memberModel->query($sql);
 
             $result = array();
