@@ -1966,7 +1966,7 @@ class MobileApiController extends Controller {
             $followList = $findCircle->query($sql);
             //查询没有关注的圈子
             $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
-                    WHERE uc.circle_id=pc.id AND pc.delete_flag=1 AND uc.delete_flag=1 ORDER BY RAND(100)';
+                    WHERE uc.circle_id!=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0 ORDER BY RAND(100)';
             //获取圈子详细信息
             $findCircle = M();
             $unfollowList = $findCircle->query($sql);
