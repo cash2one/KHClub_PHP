@@ -1809,7 +1809,7 @@ class MobileApiController extends Controller {
     /**
      * @brief 创建一个圈子
      * 接口地址
-     * http://localhost/jlxc_php/index.php/Home/MobileApi/postNewCircle?
+     * http://localhost/khclub_php/index.php/Home/MobileApi/postNewCircle?
      * @param user_id 用户id
      * @param circle_name 圈子名称
      * @param circle_detail 圈子描述
@@ -1860,8 +1860,8 @@ class MobileApiController extends Controller {
             $circleModel = M('kh_personal_circle');
             //新圈子
             $newCircle = array('user_id'=>$user_id,'circle_name'=>$circle_name,'follow_quantity'=>1,
-                                'circle_detail'=>$circle_detail, 'address'=>$address,
-                                'wx_num'=>$wx_num, 'circle_web'=>$circle_web, 'phone_num'=>$phone_num);
+                'circle_detail'=>$circle_detail, 'address'=>$address,
+                'wx_num'=>$wx_num, 'circle_web'=>$circle_web, 'phone_num'=>$phone_num);
 
             $info = null;
             $upload = null;
@@ -1937,6 +1937,116 @@ class MobileApiController extends Controller {
             }
 
             return;
+
+        }catch (Exception $e){
+
+            returnJson(0,"数据异常！",$e);
+        }
+    }
+
+    /**
+     * @brief 修改圈子信息
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/MobileApi/modifyCircle?
+     * @param circle_id 圈子id
+     * @param circle_name 圈子名称
+     * @param circle_detail 圈子描述
+     * @param phone_num 电话
+     * @param address 地址
+     * @param wx_num 微信号
+     * @param circle_web 网址
+     */
+    public function modifyCircle(){
+        try{
+
+            $circle_id = $_REQUEST['circle_id'];
+            $circle_name = $_REQUEST['circle_name'];
+            $circle_detail = $_REQUEST['circle_detail'];
+            $address = $_REQUEST['address'];
+            $wx_num = $_REQUEST['wx_num'];
+            $circle_web = $_REQUEST['circle_web'];
+            $phone_num = $_REQUEST['phone_num'];
+
+            if(empty($user_id)){
+                returnJson(0,"创建者不能为空！");
+                return;
+            }
+            if(empty($circle_name)){
+                returnJson(0,"圈子名不能为空");
+                return;
+            }
+            if(mb_strlen($circle_name ,'utf-8')>8){
+                returnJson(0,"圈子名长度不能超过8个字");
+                return;
+            }
+
+            //用户圈子表
+            $circleModel = M('kh_personal_circle');
+            $oldCircle = $circleModel->where('id='.$circle_id)->find();
+            //圈子信息更新
+            $oldCircle['circle_name'] = $circle_name;
+            $oldCircle['circle_detail'] = $circle_detail;
+            $oldCircle['address'] = $address;
+            $oldCircle['wx_num'] = $wx_num;
+            $oldCircle['circle_web'] = $circle_web;
+            $oldCircle['phone_num'] = $phone_num;
+
+            $info = null;
+            $upload = null;
+            //图片
+            if(!empty($_FILES)){
+                $upload = new \Think\Upload();// 实例化上传类
+                $upload->maxSize   =     10*1024*1024 ;// 设置附件上传大小
+                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                $upload->rootPath  =     './Uploads/'; // 设置附件上传根目录
+                $upload->savePath  =     ''; // 设置附件上传（子）目录
+                $upload->saveName  =     '';
+                // 上传文件
+                $info   =   $upload->upload();
+            }
+            //上传成功
+            if($info) {
+                $image = new \Think\Image();
+                foreach($info as $file){
+
+                    $path = $file['savepath'].$file['savename'];
+
+                    //二维码和封面分开处理
+                    if(substr($file['savename'], 0, 6) == 'qrcode'){
+                        //二维码图片地址
+                        $oldCircle['wx_qrcode'] = $path;
+                    }else{
+                        $image->open('./Uploads/'.$path);
+                        //缩略图地址前半部分
+                        $preffix = substr($path, 0, strlen($path)-4);
+                        //后缀
+                        $suffix  = substr($path, strlen($path)-4);
+                        //拼接
+                        $subpath = $preffix.'_sub'.$suffix;
+                        //缩略图保存
+                        $image->thumb(360, 360)->save('./Uploads/'.$subpath, null, 90);
+
+                        //封面部分
+                        //图片地址
+                        $oldCircle['circle_cover_image'] = $path;
+                        //缩略图
+                        $oldCircle['circle_cover_sub_image'] = $subpath;
+                    }
+                }
+            }else{
+                returnJson(0,"图片不能为空!");
+                return;
+            }
+
+            //添加
+            $oldCircle['update_date'] = time();
+            $circle_id = $circleModel->save($oldCircle);
+            //修改成功
+            if($circle_id){
+                returnJson(1,"创建成功", $oldCircle);
+            }else{
+                returnJson(0,"发布失败!");
+            }
 
         }catch (Exception $e){
 
