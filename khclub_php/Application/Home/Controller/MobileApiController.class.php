@@ -2352,25 +2352,54 @@ class MobileApiController extends Controller {
      * http://localhost/khclub_php/index.php/Home/MobileApi/getCircleFollowList?user_id=4
      * @param user_id 用户id
      */
-    public function getMyFollowCircleList(){
-        try{
+    public function getMyFollowCircleList()
+    {
+        try {
 
             $user_id = $_REQUEST['user_id'];
-            if(empty($user_id)){
-                returnJson(0,"用户id不能为空");
+            if (empty($user_id)) {
+                returnJson(0, "用户id不能为空");
                 return;
             }
             //查询已关注的圈子
             $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
-                    WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
+                    WHERE uc.user_id=' . $user_id . ' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
             //获取圈子详细信息
             $findCircle = M();
             $followList = $findCircle->query($sql);
-            returnJson(1,"查询成功", array('list'=>$followList));
+            returnJson(1, "查询成功", array('list' => $followList));
+
+        } catch (Exception $e) {
+
+            returnJson(0, "数据异常", $e);
+        }
+    }
+    /**
+     * @brief 获得我的圈子列表
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/getMyCircleList?
+     * @param user_id 用户id
+     */
+    public function getMyCircleList(){
+        try{
+            $user_id = $_REQUEST['user_id'];
+            if(empty($user_id)){
+                returnJson(0,"用户Id不能为空");
+                return;
+            }
+            $personalModel = M();
+            $sql = 'SELECT uc.id, uc.head_sub_image, pc.circle_name, follow_quantity FROM kh_personal_circle pc, kh_user_info uc
+                      WHERE pc.user_id='.$user_id.' AND uc.id=pc.user_id AND pc.delete_flag=0';
+            $personal_circle = $personalModel->query($sql);
+            if($personal_circle){
+                returnJson(1,"获取成功", $personal_circle);
+            }else{
+                returnJson(0,"获取失败!");
+            }
 
         }catch (Exception $e){
 
-            returnJson(0,"数据异常", $e);
+            returnJson(0,"数据异常",$e);
         }
     }
 
