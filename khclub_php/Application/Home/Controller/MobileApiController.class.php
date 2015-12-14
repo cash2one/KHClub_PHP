@@ -2325,6 +2325,36 @@ class MobileApiController extends Controller {
 
     }
 
+    
+    /**
+     * @brief 获得我的圈子列表
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/getMyCircleList?
+     * @param user_id 用户id
+     */
+    public function getMyCircleList(){
+        try{
+            $user_id = $_REQUEST['user_id'];
+            if(empty($user_id)){
+                returnJson(0,"用户Id不能为空");
+                return;
+            }
+            $personalModel = M();
+            $sql = 'SELECT uc.id, uc.head_sub_image, pc.circle_name, follow_quantity FROM kh_personal_circle pc, kh_user_info uc
+                      WHERE pc.user_id='.$user_id.' AND uc.id=pc.user_id AND pc.delete_flag=0';
+            $personal_circle = $personalModel->query($sql);
+            if($personal_circle){
+                returnJson(1,"获取成功", $personal_circle);
+            }else{
+                returnJson(0,"获取失败!");
+            }
+
+        }catch (Exception $e){
+
+            returnJson(0,"数据异常",$e);
+        }
+    }
+
 /////////////////////////////////////////////好友部分////////////////////////////////////////////////////////////
     /**
      * @brief 关注好友 双向
