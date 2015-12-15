@@ -1086,7 +1086,7 @@ class MobileApiController extends Controller {
     /**
      * @brief 发布状态
      * 接口地址
-     * http://localhost/jlxc_php/index.php/Home/MobileApi/publishNews?
+     * http://localhost/khclub_php/index.php/Home/MobileApi/publishNews?
      * @param uid 用户id
      * @param content_text 内容
      * @param location 地理位置
@@ -1102,6 +1102,8 @@ class MobileApiController extends Controller {
                 returnJson(0 ,'内容不能为空');
                 return;
             }
+            //发布到的圈子
+            $circles = $_REQUEST['circles'];
 
             $findUser = M('kh_user_info');
             $user = $findUser->find($uid);
@@ -1142,6 +1144,23 @@ class MobileApiController extends Controller {
             $news_id = $newsModel->add($news);
 
             if($news_id){
+                //发布的圈子
+                if(!empty($circles)){
+                    $cirlcesArr = explode(',', $circles);
+                    $newsCircles = array();
+                    foreach($cirlcesArr as $circleId){
+                        $circleEntity = array('news_id'=>$news_id, 'circle_id'=>$circleId, 'add_date'=>time());
+                        array_push($newsCircles, $circleEntity);
+                    }
+                    $newsExtraModel = M('kh_news_extra');
+                    $extraRet = $newsExtraModel->addAll($newsCircles);
+                    if(!$extraRet){
+                        $newsModel->rollback();
+                        returnJson(0,'发布失败!');
+                        return;
+                    }
+                }
+
                 $attachment = array();
                 //返回值
                 $retJson = array();
@@ -2147,9 +2166,11 @@ class MobileApiController extends Controller {
             //获取说说，动态信息
             $start = ($page-1)*$size;
             $end   = $size;
-            $sql = 'SELECT user.name, user.head_sub_image, user.company_name, news.content_text, a.url, news.id
-                    FROM kh_news_content news,kh_user_info user, kh_attachment a, kh_news_extra nc
-                    WHERE news.add_date<='.$frist_time.' and nc.circle_id='.$circle_id.' and nc.news_id=news.id and news.user_id=user.id and a.entity_id=news.id and news.delete_flag=0 and nc.delete_flag=0
+            $sql = 'SELECT user.id user_id, user.name, user.head_image,user.head_sub_image, user.job, news.id ,
+                    user.company_name, news.content_text, news.location, news.comment_quantity,
+                    news.browse_quantity, news.like_quantity, news.add_date
+                    FROM kh_news_content news,kh_user_info user, kh_news_extra nc
+                    WHERE news.add_date<='.$frist_time.' and nc.circle_id='.$circle_id.' and nc.news_id=news.id and news.user_id=user.id and news.delete_flag=0 and nc.delete_flag=0
                     ORDER BY news.add_date DESC LIMIT '.$start.','.$end;
             $contentModel = M();
             $circleContent = $contentModel->query($sql);
@@ -2325,6 +2346,35 @@ class MobileApiController extends Controller {
 
     }
 
+
+    /**
+     * @brief 获取关注圈子列表
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/MobileApi/getCircleFollowList?user_id=4
+     * @param user_id 用户id
+     */
+    public function getMyFollowCircleList()
+    {
+        try {
+
+            $user_id = $_REQUEST['user_id'];
+            if (empty($user_id)) {
+                returnJson(0, "用户id不能为空");
+                return;
+            }
+            //查询已关注的圈子
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
+                    WHERE uc.user_id=' . $user_id . ' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
+            //获取圈子详细信息
+            $findCircle = M();
+            $followList = $findCircle->query($sql);
+            returnJson(1, "查询成功", array('list' => $followList));
+
+        } catch (Exception $e) {
+
+            returnJson(0, "数据异常", $e);
+        }
+    }
 
     /**
      * @brief 获得我的圈子列表
