@@ -1231,7 +1231,6 @@ class MobileApiController extends Controller {
      * @param page 页码 默认1
      * @param size 每页数量 默认10
      * @param user_id 用户id
-     * @param school_code 学校代码
      * @param frist_time 第一条状态的时间
      */
     public function newsList(){
@@ -1302,6 +1301,15 @@ class MobileApiController extends Controller {
                             $newsList[$i]['is_like'] = '0';
                         }
 
+                        //该状态所属圈子
+                        $circleSql = 'SELECT pc.circle_name circle_name FROM kh_personal_circle pc, kh_news_extra ne
+                                      WHERE ne.news_id='.$news['id'].' AND pc.id=ne.circle_id AND pc.delete_flag=0';
+                        $circles = $likeModel->query($circleSql);
+                        $circleArr = array();
+                        foreach($circles as $circleModel){
+                            array_push($circleArr, $circleModel['circle_name']);
+                        }
+                        $newsList[$i]['circles'] = $circleArr;
                         //赋值
                         $newsList[$i]['images'] = $images;
                         $newsList[$i]['add_time'] = $newsList[$i]['add_date'];
@@ -1409,6 +1417,15 @@ class MobileApiController extends Controller {
                 $comments[$i]['add_date'] = date('Y-m-d H:i:s', $comments[$i]['add_date']);
             }
 
+            //该状态所属圈子
+            $circleSql = 'SELECT pc.circle_name circle_name FROM kh_personal_circle pc, kh_news_extra ne
+                                      WHERE ne.news_id='.$news_id.' AND pc.id=ne.circle_id AND pc.delete_flag=0';
+            $circles = $likeModel->query($circleSql);
+            $circleArr = array();
+            foreach($circles as $circleModel){
+                array_push($circleArr, $circleModel['circle_name']);
+            }
+            $news['circles'] = $circleArr;
             $news['images'] = $images;
             $news['comments'] = $comments;
             $news['likes'] = $likes;
@@ -1441,14 +1458,28 @@ class MobileApiController extends Controller {
             $comment['comment_content'] = $_REQUEST['comment_content'];
             $comment['add_date'] = time();
 
+            if(empty($comment['news_id'])){
+                returnJson(0 ,'状态不存在');
+                return;
+            }
+
             $findUser = M('kh_user_info');
             $checkUser = $findUser->find($comment['user_id']);
             if(!$checkUser){
-                returnJson(0 ,'该用户不存在T_T');
+                returnJson(0 ,'该用户不存在');
                 return;
             }
             if($checkUser['delete_flag'] == 1){
                 returnJson(0 ,'您因为不当操作，已经被管理员拉黑');
+                return;
+            }
+
+            $permissSql = 'SELECT COUNT(1) isExist FROM kh_news_content nc, kh_news_extra ne, kh_user_circle uc
+                          WHERE nc.id='.$comment['news_id'].' AND ne.news_id=nc.id AND ne.circle_id=uc.circle_id
+                          AND uc.user_id='.$comment['user_id'].' AND nc.delete_flag=0 AND uc.delete_flag=0';
+            $isExist = $findUser->query($permissSql)[0]['isExist'];
+            if($isExist == '0'){
+                returnJson(0 ,'您没有关注这个圈子', '1');
                 return;
             }
 
@@ -1986,10 +2017,6 @@ class MobileApiController extends Controller {
             $circle_web = $_REQUEST['circle_web'];
             $phone_num = $_REQUEST['phone_num'];
 
-            if(empty($user_id)){
-                returnJson(0,"创建者不能为空！");
-                return;
-            }
             if(empty($circle_name)){
                 returnJson(0,"圈子名不能为空");
                 return;
@@ -2052,17 +2079,15 @@ class MobileApiController extends Controller {
                         $oldCircle['circle_cover_sub_image'] = $subpath;
                     }
                 }
-            }else{
-                returnJson(0,"图片不能为空!");
-                return;
             }
 
             //添加
             $oldCircle['update_date'] = time();
-            $circle_id = $circleModel->save($oldCircle);
+            $ret = $circleModel->save($oldCircle);
             //修改成功
-            if($circle_id){
-                returnJson(1,"创建成功", $oldCircle);
+            if($ret){
+                $oldCircle = $circleModel->find($circle_id);
+                returnJson(1,"修改成功", $oldCircle);
             }else{
                 returnJson(0,"发布失败!");
             }
@@ -2388,8 +2413,8 @@ class MobileApiController extends Controller {
                 return;
             }
             $personalModel = M();
-            $sql = 'SELECT uc.id, uc.head_sub_image, pc.circle_name, follow_quantity FROM kh_personal_circle pc, kh_user_info uc
-                      WHERE pc.user_id='.$user_id.' AND uc.id=pc.user_id AND pc.delete_flag=0';
+            $sql = 'SELECT id, circle_name, follow_quantity, circle_cover_sub_image FROM kh_personal_circle
+                      WHERE user_id='.$user_id.' AND delete_flag=0';
             $personal_circle = $personalModel->query($sql);
             if($personal_circle){
                 returnJson(1,"获取成功", $personal_circle);
