@@ -2371,6 +2371,7 @@ class MobileApiController extends Controller {
 
     }
 
+
     /**
      * @brief 获取关注圈子列表
      * 接口地址
@@ -2399,6 +2400,7 @@ class MobileApiController extends Controller {
             returnJson(0, "数据异常", $e);
         }
     }
+
     /**
      * @brief 获得我的圈子列表
      * 接口地址
