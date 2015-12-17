@@ -1,1 +1,73 @@
- sdfsdf
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <title>圈子</title>
+    <!-- Custom Theme files -->
+    <link href="__ROOT__/Public/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <!-- Custom Theme files -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+    <!--Google Fonts-->
+    <script type="text/javascript" src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript">
+        function checkLogin(){
+            if($("#user").val() == "")
+            {
+                alert("账号不能为空！");
+                $("#user").focus();
+                return false;
+            }
+            if($("#password").val() == "")
+            {
+                alert("请输入密码！");
+                $("#password").focus();
+                return false;
+            }
+        }
+    </script>
+    <!---->
+    <!--Google Fonts-->
+</head>
+<body>
+<form action="__APP__/home/WX/details" method="post">
+<!--<form action="__APP__/home/WX/card" method="post">-->
+    <!--用户：<input type="text" name="user_id"/>-->
+    <!--内容：<input type="text" name="content_text"/>-->
+    圈子：<input type="text" name="circle_id"/>
+    <!--关注：<input type="text" name="isCircle"/>-->
+    <!--密  码：<input type="password" name="password"/>-->
+    <input type="submit" value="查询"/>
+</form>
+<!--<div class="login">-->
+    <!--<div class="login-top">-->
+        <!--<h1>后台登陆</h1>-->
+        <!--<form action="__APP__/home/Login/login" method="post" onsubmit="return checkLogin()">-->
+            <!--<table>-->
+                <!--<tr>-->
+                    <!--<td>账号：</td>-->
+                    <!--<td><input type="text" id="user" name="user" size="30"></td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td>密码：</td>-->
+                    <!--<td><input type="password" id="password" name="password" size="30"></td>-->
+                <!--</tr>-->
+            <!--</table>-->
+        <!--<div class="forgot">-->
+            <!--<input type="submit" value="登录" style="margin-top: 30px" size="40">-->
+        <!--</div>-->
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class="login-bottom">-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--
+	<script src="http://www.mycodes.net/js/tongji.js"></script>
+	<script src="http://www.mycodes.net/js/youxia.js" type="text/javascript"></script>
+-->
+
+
+</body>
+</html>
