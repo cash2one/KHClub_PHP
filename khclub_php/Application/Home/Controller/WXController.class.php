@@ -102,5 +102,24 @@ class WXController extends Controller {
         }
     }
 
+    /**
+     * @brief 圈子详情
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/MobileApi/details
+     * @param circle_id 圈子id
+     */
+    public function details(){
+        $circle_id = $_REQUEST['circle_id'];
+        $circle = M('kh_personal_circle');
+        $circleList = $circle->where('id='.$circle_id.' and delete_flag=0')->getField('id,user_id,circle_name,circle_detail,circle_cover_image,circle_web,phone_num,address,wx_num,wx_qrcode,follow_quantity');
+        if($circleList){
+            $this->assign('circleList',$circleList);
+            $this->display();
+        }else{
+            $this->error('该圈子不存在');
+        }
+
+    }
+
 }
 

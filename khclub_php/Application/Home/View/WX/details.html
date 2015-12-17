@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>详情</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/core/details.css" />
+    <!--<link rel="stylesheet" href="__PUBLIC__/css/ui/adaptation.css" />-->
+</head>
+<body>
+<volist name="circleList" id="v">
+<div class="wrapper">
+    <div id="header">
+        <div class="details">详情</div>
+    </div>
+    <!--<div class="img-responsive">-->
+        <!--<div class="images" style="background-image:url('__ROOT__/Uploads/{$v.circle_cover_image}'); background-size:110%;"></div>-->
+        <img class="img-responsive" src="__ROOT__/Uploads/{$v.circle_cover_image}" alt=""/>
+    <!--<img class="img-responsive" src="__ROOT__/Uploads/{$v.circle_cover_image}" alt="" style="background-size: 50%"/>-->
+    <!--</div>-->
+    <div id="circleName" class="clear">
+        <div class="name">{$v.circle_name}<span class="follow"><img class="like" src="__PUBLIC__/images/like_btn_normal@2x.png" alt="" width="18px" height="18px"/>{$v.follow_quantity}</span></div>
+    </div>
+    <div class="wire1"></div>
+    <div class="clear">
+        <p class="introduce">圈层介绍</p>
+        <div class="intro">{$v.circle_detail}</div>
+    </div>
+    <div class="wire1"></div>
+    <div class="clear">
+        <img class="icon1" src="__PUBLIC__/images/icon_address@2x.png" alt=""/><p class="addr">{$v.address}</p>
+    </div>
+    <div class="wire2"></div>
+    <div class="clear">
+        <img class="icon2" src="__PUBLIC__/images/icon_phone@2x.png" alt=""/><p class="tel">{$v.phone_num}</p>
+    </div>
+    <div class="wire2"></div>
+    <div class="clear">
+        <img class="icon2" src="__PUBLIC__/images/icon_weixin@2x.png" alt=""/><p class="emsName">{$v.wx_num}<img class="wx_qrcode" src="__ROOT__/Uploads/{$v.wx_qrcode}" alt="" width="40px" height="40px"></p>
+    </div>
+    <div class="wire2"></div>
+    <!--<hr style="margin-left: 60px;"/>-->
+    <div class="clear">
+        <img class="icon2" src="__PUBLIC__/images/icon_web@2x.png" alt=""/><p class="web">{$v.circle_web}</p>
+    </div>
+    <div class="wire1"></div>
+    <!--<hr/>-->
+</div>
+</volist>
+</body>
+</html>
