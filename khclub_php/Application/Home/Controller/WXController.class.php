@@ -105,7 +105,7 @@ class WXController extends Controller {
     /**
      * @brief 圈子详情
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/MobileApi/details
+     * http://localhost/khclub_php/index.php/Home/WX/details
      * @param circle_id 圈子id
      */
     public function details(){
