@@ -111,14 +111,61 @@ class WXController extends Controller {
     public function details(){
         $circle_id = $_REQUEST['circle_id'];
         $circle = M('kh_personal_circle');
-        $circleList = $circle->where('id='.$circle_id.' and delete_flag=0')->getField('id,user_id,circle_name,circle_detail,circle_cover_image,circle_web,phone_num,address,wx_num,wx_qrcode,follow_quantity');
-        if($circleList){
-            $this->assign('circleList',$circleList);
-            $this->display();
+        $circle = $circle->where('id='.$circle_id.' and delete_flag=0')->getField('id,user_id,circle_name,circle_detail,circle_cover_image,circle_web,phone_num,address,wx_num,wx_qrcode,follow_quantity');
+        if($circle) {
+            $circleList = array();
+            foreach ($circle as $v) {
+                if (empty($v['circle_name'])) {
+                    $circleList['circle_name'] = '暂无信息';
+                } else {
+                    $circleList['circle_name'] = $v['circle_name'];
+                }
+                if (empty($v['circle_detail'])) {
+                    $circleList['circle_detail'] = '暂无信息';
+                } else {
+                    $circleList['circle_detail'] = $v['circle_detail'];
+                }
+                if (empty($v['circle_cover_image'])) {
+                    $circleList['circle_cover_image'] = '';
+                } else {
+                    $circleList['circle_cover_image'] = $v['circle_cover_image'];
+                }
+                if (empty($v['circle_web'])) {
+                    $circleList['circle_web'] = '暂无信息';
+                } else {
+                    $circleList['circle_web'] = $v['circle_web'];
+                }
+                if (empty($v['phone_num'])) {
+                    $circleList['phone_num'] = '暂无信息';
+                } else {
+                    $circleList['phone_num'] = $v['circle_web'];
+                }
+                if (empty($v['address'])) {
+                    $circleList['address'] = '暂无信息';
+                } else {
+                    $circleList['address'] = $v['address'];
+                }
+                if (empty($v['wx_num'])) {
+                    $circleList['wx_num'] = '暂无信息';
+                } else {
+                    $circleList['wx_num'] = $v['wx_num'];
+                }
+                if (empty($v['wx_qrcode'])) {
+                    $circleList['wx_qrcode'] = '';
+                } else {
+                    $circleList['wx_qrcode'] = $v['wx_qrcode'];
+                }
+                if (empty($v['follow_quantity'])) {
+                    $circleList['follow_quantity'] = '0';
+                } else {
+                    $circleList['follow_quantity'] = $v['follow_quantity'];
+                }
+                $this->assign('circleList',$circleList);
+                $this->display();
+            }
         }else{
             $this->error('该圈子不存在');
         }
-
     }
 
 }
