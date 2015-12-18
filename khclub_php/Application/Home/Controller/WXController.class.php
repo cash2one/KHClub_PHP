@@ -138,7 +138,7 @@ class WXController extends Controller {
                 if (empty($v['phone_num'])) {
                     $circleList['phone_num'] = '暂无信息';
                 } else {
-                    $circleList['phone_num'] = $v['circle_web'];
+                    $circleList['phone_num'] = $v['phone_num'];
                 }
                 if (empty($v['address'])) {
                     $circleList['address'] = '暂无信息';
