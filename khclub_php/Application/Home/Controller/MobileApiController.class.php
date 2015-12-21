@@ -1474,14 +1474,14 @@ class MobileApiController extends Controller {
                 return;
             }
 
-            $permissSql = 'SELECT COUNT(1) isExist FROM kh_news_content nc, kh_news_extra ne, kh_user_circle uc
-                          WHERE nc.id='.$comment['news_id'].' AND ne.news_id=nc.id AND ne.circle_id=uc.circle_id
-                          AND uc.user_id='.$comment['user_id'].' AND nc.delete_flag=0 AND uc.delete_flag=0';
-            $isExist = $findUser->query($permissSql)[0]['isExist'];
-            if($isExist == '0'){
-                returnJson(0 ,'您没有关注这个圈子', '1');
-                return;
-            }
+//            $permissSql = 'SELECT COUNT(1) isExist FROM kh_news_content nc, kh_news_extra ne, kh_user_circle uc
+//                          WHERE nc.id='.$comment['news_id'].' AND ne.news_id=nc.id AND ne.circle_id=uc.circle_id
+//                          AND uc.user_id='.$comment['user_id'].' AND nc.delete_flag=0 AND uc.delete_flag=0';
+//            $isExist = $findUser->query($permissSql)[0]['isExist'];
+//            if($isExist == '0'){
+//                returnJson(0 ,'您没有关注这个圈子', '1');
+//                return;
+//            }
 
             $newsModel = M('kh_news_content');
             $news = $newsModel->where('id='.$comment['news_id'].' and delete_flag = 0')->find();
@@ -1536,21 +1536,55 @@ class MobileApiController extends Controller {
                     //推送通知
                     pushMessage($news['user_id'],$content, 2, '有人为你评论了');
 
-                    //如果不为空 并且 如果不是评论的自己 则推送通知
+                    //如果不为空 并且 如果不是评论的状态发送人 则推送通知
                     if(!empty($comment['target_id']) && $news['user_id'] != $comment['target_id']){
 
-//                        //要发送的内容
-//                        $content = array(
-//                            'uid'=>$comment['user_id'],
-//                            'head_image'=>$user['head_sub_image'],
-//                            'name'=>$user['name'],
-//                            'comment_content'=>$comment['comment_content'],
-//                            'news_id'=>$news['id'],
-//                            'news_content'=>$news['content_text'],
-//                            'news_image'=>$imagePath,
-//                            'news_user_name'=>$newsUser['name'],
-//                            'push_time'=>date('Y-m-d H:i:s', time())
-//                        );
+                        //要发送的内容
+                        $content = array(
+                            'uid'=>$comment['user_id'],
+                            'head_image'=>$user['head_sub_image'],
+                            'name'=>$user['name'],
+                            'comment_content'=>$comment['comment_content'],
+                            'news_id'=>$news['id'],
+                            'news_content'=>$news['content_text'],
+                            'news_image'=>$imagePath,
+                            'news_user_name'=>$newsUser['name'],
+                            'push_time'=>date('Y-m-d H:i:s', time())
+                        );
+                        //推送通知
+                        pushMessage($comment['target_id'],$content,2, '有人为你评论了');
+                    }
+                }else{
+                    //如果不为空 并且 如果不是评论的自己 则推送通知
+                    if(!empty($comment['target_id']) && $comment['user_id'] != $comment['target_id']){
+                        $imagePath = '';
+                        //该状态发的图片
+                        $imageSql = 'SELECT sub_url
+                                  from kh_attachment WHERE delete_flag = 0 and entity_id='.$news['id'].' ORDER BY id DESC';
+                        $images = $commentModel->query($imageSql);
+                        if(!empty($images)){
+                            $imagePath = $images[0]['sub_url'];
+                        }
+
+                        //获取头像
+                        $userModel = M('kh_user_info');
+                        //发的人
+                        $user = $userModel->field('name,head_sub_image')->where('id='.$comment['user_id'])->find();
+                        //主人
+                        $newsUser = $userModel->field('name')->where('id='.$news['user_id'])->find();
+
+                        //要发送的内容
+                        $content = array(
+                            'uid'=>$comment['user_id'],
+                            'head_image'=>$user['head_sub_image'],
+                            'name'=>$user['name'],
+                            'comment_content'=>$comment['comment_content'],
+                            'news_id'=>$news['id'],
+                            'news_content'=>$news['content_text'],
+                            'news_image'=>$imagePath,
+                            'news_user_name'=>$newsUser['name'],
+                            'push_time'=>date('Y-m-d H:i:s', time())
+                        );
                         //推送通知
                         pushMessage($comment['target_id'],$content,2, '有人为你评论了');
                     }
@@ -1836,7 +1870,7 @@ class MobileApiController extends Controller {
 
             $memberModel = M();
             $sql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_circle uc, kh_user_info user
-                    WHERE uc.circle_id="'.$circleId.'" AND user.id=uc.user_id AND uc.delete_flag=0 AND user.delete_flag=0 ORDER BY uc.add_date DESC LIMIT '.$start.','.$end;
+                    WHERE uc.circle_id="'.$circleId.'" AND user.id=uc.user_id AND uc.delete_flag=0 AND user.delete_flag=0 ORDER BY uc.add_date LIMIT '.$start.','.$end;
             $memberList = $memberModel->query($sql);
 
             $result = array();
