@@ -2222,6 +2222,11 @@ class MobileApiController extends Controller {
             $memberModel = M();
             $circleMembers = $memberModel->query($sql);
 
+            //获取最新的一条公告
+            $sql = 'SELECT content_text, user_id, id FROM kh_circle_notice WHERE circle_id='.$circle_id.' AND delete_flag=0 ORDER BY add_date DESC LIMIT 1';
+            $noticeModel = M();
+            $newNotice = $noticeModel->query($sql);
+
             //获取说说，动态信息
             $start = ($page-1)*$size;
             $end   = $size;
@@ -2277,6 +2282,7 @@ class MobileApiController extends Controller {
                 $result['list'] = $circleContent;
                 $result['circle']= $findCircle;
                 $result['circleMembers'] = $circleMembers;
+                $result['newNotice'] = $newNotice;
                 //是否是最后一页
                 if(count($circleContent) < $size){
                     $result['is_last'] = '1';
@@ -2461,6 +2467,184 @@ class MobileApiController extends Controller {
         }catch (Exception $e){
 
             returnJson(0,"数据异常",$e);
+        }
+    }
+
+    /**
+     * @brief 创建一个公告
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/MobileApi/postNewNotice
+     * @param circle_id 圈子id
+     * @param user_id 圈主id
+     * @param content 公告内容
+     */
+    public  function postNewNotice(){
+        try{
+            $circle_id = $_REQUEST['circle_id'];
+            $user_id = $_REQUEST['user_id'];
+            $content_text = $_REQUEST['content_text'];
+            if(empty($user_id)){
+                returnJson(0,'创建者不能为空！');
+                return;
+            }
+            if(empty($content_text)){
+                returnJson(0,'公告内容不能为空！');
+                return;
+            }
+            if(empty($circle_id)){
+                returnJson(0,'圈子不能为空！');
+                return;
+            }
+            if(mb_strlen($content_text ,'utf-8')>140){
+                returnJson(0,"圈子名长度不能超过140个字！");
+                return;
+            }
+            //公告信息
+            $newNotice = array('user_id'=>$user_id,'circle_id'=>$circle_id,'content_text'=>$content_text);
+            $newNotice['add_date'] = time();
+            //公告内容表
+            $noticeModel = M('kh_circle_notice');
+            $notice_id = $noticeModel->add($newNotice);
+            if($notice_id){
+                returnJson(1,'创建成功！',$notice_id);
+                return;
+            }else{
+                returnJson(0,'创建失败！');
+            }
+        }catch (Exception  $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 获取公告列表信息
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/getNoticeList
+     * @param page 页码 默认1
+     * @param size 每页数量 默认10
+     * @param circle_id 圈子id
+     * @param user_id 圈子id
+     */
+    public function getNoticeList(){
+        try{
+            $circle_id = $_REQUEST['circle_id'];
+            $user_id = $_REQUEST['user_id'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            $frist_time = $_REQUEST['frist_time'];
+            if(empty($circle_id)){
+                returnJson(0,'圈子ID不能为空！');
+                return;
+            }
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+            if(empty($frist_time)){
+                $frist_time = time();
+            }
+            $start = ($page-1)*$size;
+            $end = $size;
+            //查询圈子的公告列表
+            $sql = 'SELECT id, user_id, content_text, add_date FROM kh_circle_notice
+                    WHERE add_date<='.$frist_time.' AND circle_id='.$circle_id.' AND delete_flag=0
+                    ORDER BY add_date DESC LIMIT '.$start.','.$end;
+            $noticeModel = M('kh_circle_notice');
+            $noticeList = $noticeModel->query($sql);
+            //获取该状态是否这个人赞了
+            for($i=0; $i<count($noticeList); $i++) {
+                $news = $noticeList[$i];
+                $likeModel = M('kh_notice_like');
+                $oldLike = $likeModel->where('delete_flag=0 and news_id=' . $news['id'] . ' and user_id=' . $user_id)->find();
+                if ($oldLike) {
+                    $noticeList[$i]['is_like'] = '1';
+                } else {
+                    $noticeList[$i]['is_like'] = '0';
+                }
+            }
+            $result['list'] = $noticeList;
+            //判断是否是最后一页
+            if(count($noticeList) < $size){
+                $result['is_last'] = '1';
+            }else{
+                $result['is_last'] = '0';
+            }
+            returnJson(1,'查询成功！',$result);
+            return;
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 获取公告详情信息
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/getNoticeDetails
+     * @param page 页码 默认1
+     * @param size 每页数量 默认10
+     * @param id 公告id
+     */
+    public function getNoticeDetails(){
+        try{
+            $id = $_REQUEST['id'];
+            $user_id = $_REQUEST['user_id'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            $frist_time = $_REQUEST['frist_time'];
+            if(empty($id)){
+                returnJson(0,'公告ID不能为空');
+                return;
+            }
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+            if(empty($frist_time)){
+                $frist_time = time();
+            }
+            //获取公告详情
+            $noticeModel = M('kh_circle_notice');
+            $notice = $noticeModel->field('user_id, circle_id, content_text, add_date, comment_quantity, like_quantity, browse_quantity')->where('id='.$id)->find();
+            //每查询一次关注加一
+            if($notice){
+                $notice['browse_quantity']++;
+                $noticeModel->where('id='.$id)->save($notice);
+            }
+            //获取该状态是否这个人赞了
+            $likeModel = M('kh_notice_like');
+            $oldLike = $likeModel->where('delete_flag=0 and notice_id='.$id.' and user_id='.$user_id)->find();
+            if($oldLike){
+                $notice['is_like'] = '1';
+            }else{
+                $notice['is_like'] = '0';
+            }
+
+            $start = ($page-1)*$size;
+            $end = $size;
+            //获取公告评论列表
+            $sql = 'SELECT nc.comment_content, nc.add_date, uc.name, uc.head_sub_image FROM kh_notice_comment nc, kh_user_info uc
+                    WHERE nc.add_date<='.$frist_time.' AND nc.notice_id='.$id.' AND nc.delete_flag=0 AND uc.id=nc.user_id
+                    ORDER BY nc.add_date DESC LIMIT '.$start.','.$end;
+            $commentModel = M('kh_notice_comment');
+            $commentList = $commentModel->query($sql);
+            $result['notice'] = $notice;
+            $result['commentList'] = $commentList;
+            //判断是否是最后一页
+            if(count($commentList) < $size){
+                $result['is_last'] = '1';
+            }else{
+                $result['is_last'] = '0';
+            }
+            returnJson(1,'查询成功',$result);
+            return;
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常',$e);
         }
     }
 
