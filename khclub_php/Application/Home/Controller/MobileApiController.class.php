@@ -2556,7 +2556,7 @@ class MobileApiController extends Controller {
             for($i=0; $i<count($noticeList); $i++) {
                 $news = $noticeList[$i];
                 $likeModel = M('kh_notice_like');
-                $oldLike = $likeModel->where('delete_flag=0 and news_id=' . $news['id'] . ' and user_id=' . $user_id)->find();
+                $oldLike = $likeModel->where('delete_flag=0 and notice_id=' . $news['id'] . ' and user_id=' . $user_id)->find();
                 if ($oldLike) {
                     $noticeList[$i]['is_like'] = '1';
                 } else {
@@ -2728,43 +2728,17 @@ class MobileApiController extends Controller {
                             returnJson(1,'点赞成功！');
                             $likeModel -> commit();
 
-                            //如果不是自己点赞，则推送通知
-                            if($notice['user_id'] != $like['user_id']){
-                                //获取用户头像
-                                $userModel = M('kh_user_info');
-                                $user = $userModel->field('name, head_sub_image')->where('id='.$like['user_id'])->find();
-
-                                //主人
-                                $noticeUsr = $userModel->field('name')->where('id='.$notice['user_id'])->find();
-
-                                //要推送的内容
-                                $content = array(
-                                    'uid'=>$like['user_id'],
-                                    'name'=>$user['name'],
-                                    'head_image'=>$user['head_sub_image'],
-                                    'notice_id'=>$notice['id'],
-                                    'notice_content'=>$notice['content_text'],
-                                    'notice_user_name'=>$noticeUsr['name'],
-                                    'push_time'=>date('Y-m-d H:i:s', time())
-                                );
-                                //推送通知
-                                pushMessage($notice['user_id'],$content,4,'有人为你点赞了！');
-                            }
-                            return;
                         }else{
                             returnJson(0,'点赞失败！');
                             $likeModel -> rollback();
-                            return;
                         }
                     }else{
                         returnJson(0,'点赞失败！');
                         $likeModel -> rollback();
-                        return;
                     }
                 }else{
                     returnJson(0,'本来就没有点赞!');
                     $likeModel -> rollback();
-                    return;
                 }
             }
 
@@ -2824,7 +2798,8 @@ class MobileApiController extends Controller {
                 $comment = $commentModel->find($ret);
                 $comment['add_date'] = date('Y-m-d H:i:s',$comment['add_date']);
                 returnJson(1,'发送评论成功！',$comment);
-                if($notice['user_id'] != $comment['user_id']){
+
+                if(!empty($comment['target_id']) && $comment['user_id'] != $comment['target_id']){
                     //发送评论的人
                     $userModel = M('kh_user_info');
                     $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
@@ -2842,50 +2817,7 @@ class MobileApiController extends Controller {
                         'push_time'=>date('Y-m-d H:i:s', time())
                     );
                     //推送通知
-                    pushMessage($notice['user_id'],$comment,2,'有人评论了你！');
-                    //如果不为空 并且 如果不是评论的状态发送人 则推送通知
-                    if(!empty($comment['target_id']) && $notice['user_id'] != $comment['target_id']){
-
-                        //发送评论的人
-                        $userModel = M('kh_user_info');
-                        $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
-                        //公告主人
-                        $newsUser = $userModel->field('name')->where('id='.$notice['user_id'])->find();
-                        //推送内容
-                        $content = array(
-                            'uid'=>$comment['user_id'],
-                            'name'=>$user['name'],
-                            'head_image'=>$user['head_sub_image'],
-                            'comment_content'=>$comment['comment_content'],
-                            'notice_id'=>$notice['id'],
-                            'notice_content'=>$notice['content_text'],
-                            'notice_user_name'=>$newsUser['name'],
-                            'push_time'=>date('Y-m-d H:i:s', time())
-                        );
-                        //推送通知
-                        pushMessage($comment['target_id'],$comment,2,'有人评论了你！');
-                    }
-                }else{
-                    if(!empty($comment['target_id']) && $comment['user_id'] != $comment['target_id']){
-                        //发送评论的人
-                        $userModel = M('kh_user_info');
-                        $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
-                        //公告主人
-                        $newsUser = $userModel->field('name')->where('id='.$notice['user_id'])->find();
-                        //推送内容
-                        $content = array(
-                            'uid'=>$comment['user_id'],
-                            'name'=>$user['name'],
-                            'head_image'=>$user['head_sub_image'],
-                            'comment_content'=>$comment['comment_content'],
-                            'notice_id'=>$notice['id'],
-                            'notice_content'=>$notice['content_text'],
-                            'notice_user_name'=>$newsUser['name'],
-                            'push_time'=>date('Y-m-d H:i:s', time())
-                        );
-                        //推送通知
-                        pushMessage($comment['target_id'],$comment,2,'有人评论了你！');
-                    }
+                    pushMessage($comment['target_id'],$content,2, '有人为你评论了');
                 }
 
             }else{

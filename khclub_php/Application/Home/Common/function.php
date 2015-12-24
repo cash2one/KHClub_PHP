@@ -91,6 +91,7 @@ function array_replace_null($result)
  * //回复状态 2
  * //回复别人的回复 3
  * //点赞 4
+ * //公告中的评论 5
  * */
 function pushMessage($target_id, $message, $type, $apnsAlert='您有一条新消息'){
     //发送的内容
