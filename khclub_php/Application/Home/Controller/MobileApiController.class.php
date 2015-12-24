@@ -2223,9 +2223,8 @@ class MobileApiController extends Controller {
             $circleMembers = $memberModel->query($sql);
 
             //获取最新的一条公告
-            $sql = 'SELECT content_text, user_id, id FROM kh_circle_notice WHERE circle_id='.$circle_id.' AND delete_flag=0 ORDER BY add_date DESC LIMIT 1';
-            $noticeModel = M();
-            $newNotice = $noticeModel->query($sql);
+            $noticeModel = M('kh_circle_notice');
+            $newNotice = $noticeModel->field('content_text, user_id')->where('circle_id='.$circle_id)->order('add_date desc')->find();
 
             //获取说说，动态信息
             $start = ($page-1)*$size;
@@ -2647,6 +2646,251 @@ class MobileApiController extends Controller {
             }
             returnJson(1,'查询成功',$result);
             return;
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常',$e);
+        }
+    }
+
+    /**
+     * @brief 公告点赞或者取消赞
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/noticeLikeOrCancel
+     * @param isLike 点赞还是取消 1是赞 0是取消
+     * @param notice_id 公告id
+     * @param user_id 用户id
+     */
+    public  function noticeLikeOrCancel(){
+        try{
+            $like = array();
+            $like['notice_id'] = $_REQUEST['notice_id'];
+            $like['user_id'] = $_REQUEST['user_id'];
+            $isLike = $_REQUEST['isLike'];
+            $like['add_date'] = time();
+
+            $likeModel = M('kh_notice_like');
+            $likeModel->startTrans();
+
+            $noticeModel = M('kh_circle_notice');
+
+            //查询公告状态
+            $notice = $noticeModel->where('id='.$like['notice_id'].' AND delete_flag = 0')->find();
+            if(!$notice){
+                returnJson(0,'该公告不存在!');
+                $likeModel -> rollback();
+                return;
+            }
+            //查询点赞情况
+            $oldLike = $likeModel->where('notice_id='.$like['notice_id'].' ANd user_id='.$like['user_id'])->find();
+            if($oldLike){
+                if($oldLike['delete_flag'] == !$isLike){
+                    returnJson(0,'已经点过了！');
+                    $likeModel -> rollback();
+                    return;
+                }
+
+                $oldLike['delete_flag'] = !$isLike;
+                //点赞加一或减一
+                if($isLike){
+                    $notice['like_quantity'] ++;
+                    $oldLike['resume_date'] = time();
+                }else{
+                    $notice['like_quantity'] --;
+                    $oldLike['delete_date'] = time();
+                }
+                //保存点赞
+                $ret = $likeModel -> save($oldLike);
+                if($ret){
+                    $ret = $noticeModel -> save($notice);
+                    if($ret){
+                        returnJson(1,'操作成功！');
+                        $likeModel -> commit();
+                        return;
+                    }else{
+                        returnJson(0,'操作失败！');
+                        $likeModel -> rollback();
+                        return;
+                    }
+                }else{
+                    returnJson(0,'点赞失败！');
+                    $likeModel -> rollback();
+                    return;
+                }
+
+            }else{
+                if($isLike){
+                    //保存点赞
+                    $ret = $likeModel -> add($like);
+                    if($ret){
+                        $notice['like_quantity'] ++;
+                        $ret = $noticeModel -> save($notice);
+                        if($ret){
+                            returnJson(1,'点赞成功！');
+                            $likeModel -> commit();
+
+                            //如果不是自己点赞，则推送通知
+                            if($notice['user_id'] != $like['user_id']){
+                                //获取用户头像
+                                $userModel = M('kh_user_info');
+                                $user = $userModel->field('name, head_sub_image')->where('id='.$like['user_id'])->find();
+
+                                //主人
+                                $noticeUsr = $userModel->field('name')->where('id='.$notice['user_id'])->find();
+
+                                //要推送的内容
+                                $content = array(
+                                    'uid'=>$like['user_id'],
+                                    'name'=>$user['name'],
+                                    'head_image'=>$user['head_sub_image'],
+                                    'notice_id'=>$notice['id'],
+                                    'notice_content'=>$notice['content_text'],
+                                    'notice_user_name'=>$noticeUsr['name'],
+                                    'push_time'=>date('Y-m-d H:i:s', time())
+                                );
+                                //推送通知
+                                pushMessage($notice['user_id'],$content,4,'有人为你点赞了！');
+                            }
+                            return;
+                        }else{
+                            returnJson(0,'点赞失败！');
+                            $likeModel -> rollback();
+                            return;
+                        }
+                    }else{
+                        returnJson(0,'点赞失败！');
+                        $likeModel -> rollback();
+                        return;
+                    }
+                }else{
+                    returnJson(0,'本来就没有点赞!');
+                    $likeModel -> rollback();
+                    return;
+                }
+            }
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常',$e);
+        }
+    }
+
+    /**
+     * @brief 发布公告评论
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/sendNoticeComment
+     * @param notice_id 公告id
+     * @param user_id 用户id
+     * @param target_id 评论的用户id
+     * @param comment_content 评论的内容
+     */
+    public function sendNoticeComment(){
+        try{
+            $comment = array();
+            $comment['notice_id'] = $_REQUEST['notice_id'];
+            $comment['user_id'] = $_REQUEST['user_id'];
+            $comment['target_id'] = $_REQUEST['target_id'];
+            $comment['comment_content'] = $_REQUEST['comment_content'];
+            $comment['add_date'] = time();
+            if(empty($comment['notice_id'])){
+                returnJson(0,'公告ID不能为空！');
+                return;
+            }
+            $findUser = M('kh_user_info');
+            $checkUser = $findUser->find($comment['user_id']);
+            if(!$checkUser){
+                returnJson(0 ,'该用户不存在');
+                return;
+            }
+            if($checkUser['delete_flag'] == 1){
+                returnJson(0 ,'您因为不当操作，已经被管理员拉黑');
+                return;
+            }
+
+            //查看公告状态
+            $noticeModel = M('kh_circle_notice');
+            $notice = $noticeModel->where('id='.$comment['notice_id'].' and delete_flag=0')->find();
+            if(!$notice){
+                returnJson(0,'该公告不存在!');
+                return;
+            }
+            if(empty($comment['comment_content'])){
+                returnJson(0,'评论内容不能为空！');
+                return;
+            }
+            $commentModel = M('kh_notice_comment');
+            $ret = $commentModel->add($comment);
+            if($ret){
+                $notice['comment_quantity'] ++;
+                $noticeModel->save($notice);
+                $comment = $commentModel->find($ret);
+                $comment['add_date'] = date('Y-m-d H:i:s',$comment['add_date']);
+                returnJson(1,'发送评论成功！',$comment);
+                if($notice['user_id'] != $comment['user_id']){
+                    //发送评论的人
+                    $userModel = M('kh_user_info');
+                    $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
+                    //公告主人
+                    $newsUser = $userModel->field('name')->where('id='.$notice['user_id'])->find();
+                    //推送内容
+                    $content = array(
+                        'uid'=>$comment['user_id'],
+                        'name'=>$user['name'],
+                        'head_image'=>$user['head_sub_image'],
+                        'comment_content'=>$comment['comment_content'],
+                        'notice_id'=>$notice['id'],
+                        'notice_content'=>$notice['content_text'],
+                        'notice_user_name'=>$newsUser['name'],
+                        'push_time'=>date('Y-m-d H:i:s', time())
+                    );
+                    //推送通知
+                    pushMessage($notice['user_id'],$comment,2,'有人评论了你！');
+                    //如果不为空 并且 如果不是评论的状态发送人 则推送通知
+                    if(!empty($comment['target_id']) && $notice['user_id'] != $comment['target_id']){
+
+                        //发送评论的人
+                        $userModel = M('kh_user_info');
+                        $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
+                        //公告主人
+                        $newsUser = $userModel->field('name')->where('id='.$notice['user_id'])->find();
+                        //推送内容
+                        $content = array(
+                            'uid'=>$comment['user_id'],
+                            'name'=>$user['name'],
+                            'head_image'=>$user['head_sub_image'],
+                            'comment_content'=>$comment['comment_content'],
+                            'notice_id'=>$notice['id'],
+                            'notice_content'=>$notice['content_text'],
+                            'notice_user_name'=>$newsUser['name'],
+                            'push_time'=>date('Y-m-d H:i:s', time())
+                        );
+                        //推送通知
+                        pushMessage($comment['target_id'],$comment,2,'有人评论了你！');
+                    }
+                }else{
+                    if(!empty($comment['target_id']) && $comment['user_id'] != $comment['target_id']){
+                        //发送评论的人
+                        $userModel = M('kh_user_info');
+                        $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
+                        //公告主人
+                        $newsUser = $userModel->field('name')->where('id='.$notice['user_id'])->find();
+                        //推送内容
+                        $content = array(
+                            'uid'=>$comment['user_id'],
+                            'name'=>$user['name'],
+                            'head_image'=>$user['head_sub_image'],
+                            'comment_content'=>$comment['comment_content'],
+                            'notice_id'=>$notice['id'],
+                            'notice_content'=>$notice['content_text'],
+                            'notice_user_name'=>$newsUser['name'],
+                            'push_time'=>date('Y-m-d H:i:s', time())
+                        );
+                        //推送通知
+                        pushMessage($comment['target_id'],$comment,2,'有人评论了你！');
+                    }
+                }
+
+            }else{
+                returnJson(0,'发送评论失败！');
+            }
 
         }catch (Exception $e){
             returnJson(0,'数据异常',$e);
