@@ -2548,7 +2548,7 @@ class MobileApiController extends Controller {
             $start = ($page-1)*$size;
             $end = $size;
             //查询圈子的公告列表
-            $sql = 'SELECT id, user_id, content_text, add_date FROM kh_circle_notice
+            $sql = 'SELECT id, user_id, content_text, add_date, comment_quantity, like_quantity FROM kh_circle_notice
                     WHERE add_date<='.$frist_time.' AND circle_id='.$circle_id.' AND delete_flag=0
                     ORDER BY add_date DESC LIMIT '.$start.','.$end;
             $noticeModel = M('kh_circle_notice');
@@ -2563,6 +2563,7 @@ class MobileApiController extends Controller {
                 } else {
                     $noticeList[$i]['is_like'] = '0';
                 }
+                $noticeList[$i]['add_date'] = date('Y-m-d H:i:s',$noticeList[$i]['add_date']);
             }
             $result['list'] = $noticeList;
             //判断是否是最后一页
@@ -2610,6 +2611,7 @@ class MobileApiController extends Controller {
             //获取公告详情
             $noticeModel = M('kh_circle_notice');
             $notice = $noticeModel->field('user_id, circle_id, content_text, add_date, comment_quantity, like_quantity, browse_quantity')->where('id='.$id)->find();
+            $notice['add_date'] = date('Y-m-d H:i:s', $notice['add_date']);
             //每查询一次关注加一
             if($notice){
                 $notice['browse_quantity']++;
@@ -2632,6 +2634,9 @@ class MobileApiController extends Controller {
                     ORDER BY nc.add_date DESC LIMIT '.$start.','.$end;
             $commentModel = M('kh_notice_comment');
             $commentList = $commentModel->query($sql);
+            for($j=0;$j<count($commentList);$j++){
+                $commentList[$j]['add_date'] = date('Y-m-d H:i:s',$commentList[$j]['add_date']);
+            }
             $result['notice'] = $notice;
             $result['commentList'] = $commentList;
             //判断是否是最后一页
