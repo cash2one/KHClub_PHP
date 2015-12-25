@@ -2225,7 +2225,9 @@ class MobileApiController extends Controller {
             //获取最新的一条公告
             $noticeModel = M('kh_circle_notice');
             $newNotice = $noticeModel->field('content_text, user_id')->where('circle_id='.$circle_id)->order('add_date desc')->find();
-
+            if(empty($newNotice)){
+                $newNotice = array('content_text'=>'');
+            }
             //获取说说，动态信息
             $start = ($page-1)*$size;
             $end   = $size;
