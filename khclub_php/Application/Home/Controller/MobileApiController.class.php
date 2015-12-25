@@ -2597,12 +2597,13 @@ class MobileApiController extends Controller {
             //获取公告详情
             $noticeModel = M('kh_circle_notice');
             $notice = $noticeModel->field('id, user_id, circle_id, content_text, add_date, comment_quantity, like_quantity, browse_quantity')->where('id='.$id.' and delete_flag=0')->find();
-            $notice['add_date'] = date('Y-m-d H:i:s', $notice['add_date']);
             //每查询一次关注加一
             if($notice){
                 $notice['browse_quantity']++;
+                $notice['update_date'] = time();
                 $noticeModel->where('id='.$id)->save($notice);
             }
+            $notice['add_date'] = date('Y-m-d H:i:s', $notice['add_date']);
             //获取该状态点赞的人
             $findNews = M();
             $likeSql = 'SELECT l.user_id, u.head_sub_image, u.name, u.job FROM kh_notice_like l,kh_user_info u
