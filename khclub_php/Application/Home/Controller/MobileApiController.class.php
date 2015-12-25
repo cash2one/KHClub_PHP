@@ -2583,39 +2583,32 @@ class MobileApiController extends Controller {
      * @brief 获取公告详情信息
      * 接口地址
      * http://localhost/jlxc_php/index.php/Home/MobileApi/getNoticeDetails
-     * @param page 页码 默认1
-     * @param size 每页数量 默认10
+     * @param user_id 用户id
      * @param id 公告id
      */
     public function getNoticeDetails(){
         try{
             $id = $_REQUEST['id'];
             $user_id = $_REQUEST['user_id'];
-            $page = $_REQUEST['page'];
-            $size = $_REQUEST['size'];
-            $frist_time = $_REQUEST['frist_time'];
             if(empty($id)){
                 returnJson(0,'公告ID不能为空');
                 return;
             }
-            if(empty($page)){
-                $page = 1;
-            }
-            if(empty($size)){
-                $size = 10;
-            }
-            if(empty($frist_time)){
-                $frist_time = time();
-            }
             //获取公告详情
             $noticeModel = M('kh_circle_notice');
-            $notice = $noticeModel->field('user_id, circle_id, content_text, add_date, comment_quantity, like_quantity, browse_quantity')->where('id='.$id)->find();
+            $notice = $noticeModel->field('id, user_id, circle_id, content_text, add_date, comment_quantity, like_quantity, browse_quantity')->where('id='.$id.' and delete_flag=0')->find();
             $notice['add_date'] = date('Y-m-d H:i:s', $notice['add_date']);
             //每查询一次关注加一
             if($notice){
                 $notice['browse_quantity']++;
                 $noticeModel->where('id='.$id)->save($notice);
             }
+            //获取该状态点赞的人
+            $findNews = M();
+            $likeSql = 'SELECT l.user_id, u.head_sub_image, u.name, u.job FROM kh_notice_like l,kh_user_info u
+                        WHERE l.user_id = u.id and l.notice_id='.$notice['id'].' AND l.delete_flag = 0 order by l.add_date DESC';
+            $likes = $findNews->query($likeSql);
+
             //获取该状态是否这个人赞了
             $likeModel = M('kh_notice_like');
             $oldLike = $likeModel->where('delete_flag=0 and notice_id='.$id.' and user_id='.$user_id)->find();
@@ -2625,25 +2618,18 @@ class MobileApiController extends Controller {
                 $notice['is_like'] = '0';
             }
 
-            $start = ($page-1)*$size;
-            $end = $size;
             //获取公告评论列表
-            $sql = 'SELECT nc.comment_content, nc.add_date, uc.name, uc.head_sub_image FROM kh_notice_comment nc, kh_user_info uc
-                    WHERE nc.add_date<='.$frist_time.' AND nc.notice_id='.$id.' AND nc.delete_flag=0 AND uc.id=nc.user_id
-                    ORDER BY nc.add_date DESC LIMIT '.$start.','.$end;
-            $commentModel = M('kh_notice_comment');
-            $commentList = $commentModel->query($sql);
+            $commentSql = 'SELECT c.id, u.name, u.head_sub_image, u.job, c.add_date, c.user_id,c.comment_content,c.target_id, u2.name target_name
+                            from kh_notice_comment c LEFT JOIN kh_user_info u2 ON (c.target_id=u2.id), kh_user_info u WHERE c.user_id=u.id and c.delete_flag = 0
+                            and c.notice_id='.$notice['id'].' ORDER BY c.add_date';
+            $commentList = $findNews->query($commentSql);
+            $commentList = array_replace_null($commentList);
             for($j=0;$j<count($commentList);$j++){
                 $commentList[$j]['add_date'] = date('Y-m-d H:i:s',$commentList[$j]['add_date']);
             }
             $result['notice'] = $notice;
+            $result['likes'] = $likes;
             $result['commentList'] = $commentList;
-            //判断是否是最后一页
-            if(count($commentList) < $size){
-                $result['is_last'] = '1';
-            }else{
-                $result['is_last'] = '0';
-            }
             returnJson(1,'查询成功',$result);
             return;
 
