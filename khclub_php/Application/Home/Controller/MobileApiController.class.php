@@ -2800,13 +2800,15 @@ class MobileApiController extends Controller {
                         'name'=>$user['name'],
                         'head_image'=>$user['head_sub_image'],
                         'comment_content'=>$comment['comment_content'],
-                        'notice_id'=>$notice['id'],
-                        'notice_content'=>$notice['content_text'],
-                        'notice_user_name'=>$newsUser['name'],
+                        'news_id'=>$notice['id'],
+                        'news_content'=>$notice['content_text'],
+                        'news_image'=>'',
+                        'news_user_name'=>$newsUser['name'],
                         'push_time'=>date('Y-m-d H:i:s', time())
                     );
+
                     //推送通知
-                    pushMessage($comment['target_id'],$content,2, '有人为你评论了');
+                    pushMessage($comment['target_id'],$content, 6, '有人为你评论了');
                 }
 
             }else{
