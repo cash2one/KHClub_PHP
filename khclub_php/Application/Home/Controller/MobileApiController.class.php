@@ -2818,6 +2818,34 @@ class MobileApiController extends Controller {
         }
     }
 
+    /**
+     * @brief 删除公告
+     * 接口地址
+     * http://localhost/jlxc_php/index.php/Home/MobileApi/deleteNotice
+     * @param notice_id 公告id
+     */
+    public function deleteNotice(){
+        try{
+            $notice = array();
+            $notice['id'] = $_REQUEST['notice_id'];
+            $notice['delete_date'] = time();
+            $notice['delete_flag'] = 1;
+
+            $noticeModel = M('kh_circle_notice');
+            $ret = $noticeModel->where('id='.$notice['id'])->save($notice);
+            if($ret){
+                returnJson(1,'删除成功！');
+                return;
+            }else{
+                returnJson(0,'删除失败！');
+                return;
+            }
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
 /////////////////////////////////////////////好友部分////////////////////////////////////////////////////////////
     /**
      * @brief 关注好友 双向
