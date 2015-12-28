@@ -2225,9 +2225,6 @@ class MobileApiController extends Controller {
             //获取最新的一条公告
             $noticeModel = M('kh_circle_notice');
             $newNotice = $noticeModel->field('content_text, user_id')->where('circle_id='.$circle_id.' and delete_flag=0')->order('add_date desc')->find();
-            if(empty($newNotice)){
-                $newNotice = array('content_text'=>'');
-            }
 
             //获取说说，动态信息
             $start = ($page-1)*$size;
@@ -2628,8 +2625,10 @@ class MobileApiController extends Controller {
                             and c.notice_id='.$notice['id'].' ORDER BY c.add_date';
             $commentList = $findNews->query($commentSql);
             $commentList = array_replace_null($commentList);
-            for($j=0;$j<count($commentList);$j++){
-                $commentList[$j]['add_date'] = date('Y-m-d H:i:s',$commentList[$j]['add_date']);
+            if($commentList) {
+                for ($j = 0; $j < count($commentList); $j++) {
+                    $commentList[$j]['add_date'] = date('Y-m-d H:i:s', $commentList[$j]['add_date']);
+                }
             }
             $result['notice'] = $notice;
             $result['likes'] = $likes;
@@ -2792,8 +2791,7 @@ class MobileApiController extends Controller {
                 if(!empty($comment['target_id']) && $comment['user_id'] != $comment['target_id']){
                     //发送评论的人
                     $userModel = M('kh_user_info');
-                    $user = $userModel->field('name, head_sub_image')->where('id='.$comment['user_id'])->find();
-
+                    $user = $userModel->field('name, head_sub_image')->where('id='.$comment[user_id])->find();
                     //公告主人
                     $newsUser = $userModel->field('name')->where('id='.$notice['user_id'])->find();
                     //推送内容
@@ -2802,15 +2800,13 @@ class MobileApiController extends Controller {
                         'name'=>$user['name'],
                         'head_image'=>$user['head_sub_image'],
                         'comment_content'=>$comment['comment_content'],
-                        'news_id'=>$notice['id'],
-                        'news_content'=>$notice['content_text'],
-                        'news_image'=>'',
-                        'news_user_name'=>$newsUser['name'],
+                        'notice_id'=>$notice['id'],
+                        'notice_content'=>$notice['content_text'],
+                        'notice_user_name'=>$newsUser['name'],
                         'push_time'=>date('Y-m-d H:i:s', time())
                     );
                     //推送通知
-                    pushMessage($comment['target_id'],$content, 6, '有人为你评论了');
-
+                    pushMessage($comment['target_id'],$content,2, '有人为你评论了');
                 }
 
             }else{
