@@ -168,5 +168,49 @@ class WXController extends Controller {
         }
     }
 
+    public function noticeDetail(){
+
+        $this->display("notice");
+
+    }
+
+    /**
+     * @brief 公告详情
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/notice?notice_id=4
+     * @param circle_id 公告id
+     */
+    public  function getNoticeInfo(){
+        try {
+            $notice_id = $_REQUEST['notice_id'];
+            $noticeModel = M('kh_circle_notice');
+            $notice = $noticeModel->find($notice_id);
+            if($notice){
+                $notices = array();
+                if(empty($notice['content_text'])){
+                    $notices['content_text'] = '暂无信息';
+                }else{
+                    $notices['content_text'] = $notice['content_text'];
+                }
+                if(empty($notice['comment_quantity'])){
+                    $notices['comment_quantity'] = '暂无评论';
+                }else{
+                    $notices['comment_quantity'] = $notice['comment_quantity'];
+                }
+                if(empty($notice['like_quantity'])){
+                    $notices['like_quantity'] = '暂无信息';
+                }else{
+                    $notices['like_quantity'] = $notice['like_quantity'];
+                }
+
+                returnJson(1,'查询成功！',$notices);
+            }else{
+                returnJson(0,'查询失败！');
+            }
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
 }
 

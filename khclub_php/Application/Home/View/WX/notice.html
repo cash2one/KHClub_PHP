@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>公告</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/share/notice.css" />
+    <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            getNoticeInfo();
+        })
+        function getNoticeInfo(){
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                timeout:10000,
+                url:'__URL__/getNoticeInfo?' + Math.random(),
+                data:{notice_id: $.request.queryString['notice_id'] || '4'},
+                success:function(rData){
+                    var noticeInfo = eval(rData);
+                    if(noticeInfo && noticeInfo.status == 1 ){
+                        $('#content_text').text(noticeInfo.result.content_text || '');
+                        $('#comment').text(noticeInfo.result.comment_quantity || '');
+                        $('#like').text(noticeInfo.result.like_quantity || '');
+                    }
+                },
+                error:function(error){
+                    alert(eval(error));
+                    return false;
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div id="header">
+        <div class="details">公告内容</div>
+    </div>
+    <div class="content" id="content_text"></div>
+    <div class="clear state">
+        <div class="left"><img class="icon" src="__PUBLIC__/images/chat.png" alt=""/><span id="comment"></span></div>
+        <div class="wire1">1</div>
+        <div class="right"><img class="icon" src="__PUBLIC__/images/zan.png" alt=""/><span id="like"></span></div>
+    </div>
+    <!--<div class="wire1"></div>-->
+    <div style="margin-left:20px;margin-top:20px;font-size:20px;">
+        &nbsp; &nbsp;商务圈，全球高端商务圈层社交app，赶快下载成为我的好友吧！
+    </div>
+    <div>
+        <!--<a class="account-btn btn-submit" href="http://app.qq.com/#id=detail&appid=1104875299"><input type="submit" value="点击下载"/></a>-->
+        <a class="account-btn btn-submit" href="http://app.qq.com/#id=detail&appid=1104875299">点击下载</a>
+    </div>
+    <!--<hr/>-->
+</div>
+</body>
+</html>

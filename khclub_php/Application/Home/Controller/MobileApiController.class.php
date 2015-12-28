@@ -2600,6 +2600,10 @@ class MobileApiController extends Controller {
             //获取公告详情
             $noticeModel = M('kh_circle_notice');
             $notice = $noticeModel->field('id, user_id, circle_id, content_text, add_date, comment_quantity, like_quantity, browse_quantity')->where('id='.$id.' and delete_flag=0')->find();
+            if(empty($notice)){
+                returnJson(0,'该公告不存在！');
+                return;
+            }
             //每查询一次关注加一
             if($notice){
                 $notice['browse_quantity']++;
@@ -2844,6 +2848,96 @@ class MobileApiController extends Controller {
                 return;
             }else{
                 returnJson(0,'删除失败！');
+                return;
+            }
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 删除公告评论
+     * 接口地址
+     * http://114.215.95.23/khclub_php/index.php/Home/MobileApi/deleteNoticeComment
+     * @param cid 评论id
+     * @param notice_id 公告id
+     */
+    public  function deleteNoticeComment(){
+        try{
+            $comment = array();
+            $comment['id'] = $_REQUEST['cid'];
+            $notice_id = $_REQUEST['notice_id'];
+            if(empty($comment['id'])){
+                returnJson(0,"目标评论不能为空");
+                return;
+            }
+            $comment['delete_date'] = time();
+            $comment['delete_flag'] = 1;
+
+            $commentModel = M('kh_notice_comment');
+            $commentModel->startTrans();
+            $comments = $commentModel->where('id='.$comment['id'].' and notice_id='.$notice_id.' and delete_flag=0')->find();
+            if(empty($comments)){
+                returnJson(0,'该评论不存在！');
+                return;
+            }
+            $ret = $commentModel->save($comment);
+
+            //哪条公告
+            $noticeModel = M('kh_circle_notice');
+            //评论数减一
+            $notice = $noticeModel->where('id='.$notice_id)->find();
+            if($notice['comment_quantity'] > 0){
+                $notice['comment_quantity'] = $notice['comment_quantity']-1;
+            }
+            //不能为负数
+            if($notice['comment_quantity'] < 0){
+                $notice['comment_quantity'] = 0;
+            }
+
+            $notice['update_date'] = time();
+            $nret = $noticeModel->save($notice);
+
+            if($ret && $nret){
+                $commentModel -> commit();
+                returnJson(1,"删除成功!");
+                return;
+            }else{
+                $commentModel -> rollback();
+                returnJson(0,"删除失败!");
+            }
+
+        }catch (Exception $e) {
+
+            returnJson(0,"数据异常=_=", $e);
+        }
+    }
+
+    /**
+     * @brief 动态圈子列表
+     * 接口地址
+     * http://http://114.215.95.23/khclub_php/index.php/Home/MobileApi/newsCircleList
+     * @param news_id 动态id
+     */
+    public function newsCircleList(){
+        try{
+            $news_id = $_REQUEST['news_id'];
+            if(empty($news_id)){
+                returnJson(0,'动态ID不能为空！');
+                return;
+            }
+            //该动态所属的圈子
+            $Sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_image, pc.follow_quantity FROM kh_personal_circle pc, kh_news_extra ne
+                    WHERE ne.news_id='.$news_id.' AND pc.id=ne.circle_id AND pc.delete_flag=0';
+            $circleModel = M();
+            $circles = $circleModel->query($Sql);
+            $result['circles'] = $circles;
+            if($circles){
+                returnJson(1,"查询成功！",$circles);
+                return;
+            }else{
+                returnJson(0,'查询失败！');
                 return;
             }
 
