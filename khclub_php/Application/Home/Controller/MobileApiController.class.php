@@ -2224,10 +2224,8 @@ class MobileApiController extends Controller {
 
             //获取最新的一条公告
             $noticeModel = M('kh_circle_notice');
-            $newNotice = $noticeModel->field('content_text, user_id')->where('circle_id='.$circle_id)->order('add_date desc')->find();
-            if(empty($newNotice)){
-                $newNotice = array('content_text'=>'');
-            }
+            $newNotice = $noticeModel->field('content_text, user_id')->where('circle_id='.$circle_id.' and delete_flag=0')->order('add_date desc')->find();
+
             //获取说说，动态信息
             $start = ($page-1)*$size;
             $end   = $size;
@@ -2800,15 +2798,13 @@ class MobileApiController extends Controller {
                         'name'=>$user['name'],
                         'head_image'=>$user['head_sub_image'],
                         'comment_content'=>$comment['comment_content'],
-                        'news_id'=>$notice['id'],
-                        'news_content'=>$notice['content_text'],
-                        'news_image'=>'',
-                        'news_user_name'=>$newsUser['name'],
+                        'notice_id'=>$notice['id'],
+                        'notice_content'=>$notice['content_text'],
+                        'notice_user_name'=>$newsUser['name'],
                         'push_time'=>date('Y-m-d H:i:s', time())
                     );
-
                     //推送通知
-                    pushMessage($comment['target_id'],$content, 6, '有人为你评论了');
+                    pushMessage($comment['target_id'],$content,2, '有人为你评论了');
                 }
 
             }else{
