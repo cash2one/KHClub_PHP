@@ -2617,7 +2617,7 @@ class MobileApiController extends Controller {
                 $notice['is_like'] = '1';
             }else{
                 $notice['is_like'] = '0';
-            }
+            } 
 
             //获取公告评论列表
             $commentSql = 'SELECT c.id, u.name, u.head_sub_image, u.job, c.add_date, c.user_id,c.comment_content,c.target_id, u2.name target_name
