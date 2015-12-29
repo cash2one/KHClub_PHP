@@ -1885,7 +1885,7 @@ class MobileApiController extends Controller {
                 array_unshift($memberList, $host);
             }
             $result = array();
-            $result['memberList'] = $memberList;
+            $result['list'] = $memberList;
             //是否是最后一页
             if(count($memberList) < $size){
                 $result['is_last'] = '1';
