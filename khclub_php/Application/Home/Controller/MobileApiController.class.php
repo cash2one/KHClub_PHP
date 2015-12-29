@@ -1847,7 +1847,7 @@ class MobileApiController extends Controller {
      * @param size 数量
      * @param circle_id 圈子ID
      */
-    public  function getCircleMembers(){
+    public function getCircleMembers(){
         try{
 
             $page = $_REQUEST['page'];
@@ -1869,12 +1869,23 @@ class MobileApiController extends Controller {
             $end   = $size;
 
             $memberModel = M();
-            $sql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_circle uc, kh_user_info user
-                    WHERE uc.circle_id="'.$circleId.'" AND user.id=uc.user_id AND uc.delete_flag=0 AND user.delete_flag=0 ORDER BY uc.add_date LIMIT '.$start.','.$end;
+            //获取圈主信息
+            $hostsql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_info user, kh_personal_circle pc
+                        WHERE pc.id='.$circleId.' AND pc.user_id=user.id AND pc.delete_flag=0';
+            $hosts = $memberModel->query($hostsql);
+            foreach($hosts as $v){
+                $host = $v;
+            }
+            //获取圈成员信息
+            $sql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_circle uc, kh_user_info user,kh_personal_circle pc
+                    WHERE pc.id='.$circleId.' AND pc.id=uc.circle_id AND pc.user_id!=uc.user_id AND uc.user_id=user.id AND uc.delete_flag=0 AND user.delete_flag=0 AND pc.delete_flag=0
+                    ORDER BY uc.add_date LIMIT '.$start.','.$end;
             $memberList = $memberModel->query($sql);
-
+            if($start == 0){
+                array_unshift($memberList, $host);
+            }
             $result = array();
-            $result['list'] = $memberList;
+            $result['memberList'] = $memberList;
             //是否是最后一页
             if(count($memberList) < $size){
                 $result['is_last'] = '1';
