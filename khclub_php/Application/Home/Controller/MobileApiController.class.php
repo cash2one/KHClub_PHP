@@ -1879,7 +1879,7 @@ class MobileApiController extends Controller {
             //获取圈成员信息
             $sql = 'SELECT user.id user_id, user.name, user.job, user.head_sub_image FROM kh_user_circle uc, kh_user_info user,kh_personal_circle pc
                     WHERE pc.id='.$circleId.' AND pc.id=uc.circle_id AND pc.user_id!=uc.user_id AND uc.user_id=user.id AND uc.delete_flag=0 AND user.delete_flag=0 AND pc.delete_flag=0
-                    ORDER BY uc.add_date LIMIT '.$start.','.$end;
+                    ORDER BY uc.add_date desc LIMIT '.$start.','.$end;
             $memberList = $memberModel->query($sql);
             if($start == 0){
                 array_unshift($memberList, $host);
@@ -2939,7 +2939,7 @@ class MobileApiController extends Controller {
                 return;
             }
             //该动态所属的圈子
-            $Sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_image, pc.follow_quantity FROM kh_personal_circle pc, kh_news_extra ne
+            $Sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_personal_circle pc, kh_news_extra ne
                     WHERE ne.news_id='.$news_id.' AND pc.id=ne.circle_id AND pc.delete_flag=0';
             $circleModel = M();
             $circles = $circleModel->query($Sql);
