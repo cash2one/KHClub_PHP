@@ -159,7 +159,7 @@ img{display:block;}
     margin: 1rem 1rem 1rem auto;
     float: right;
 }
-.icon2 {
+.icon3 {
     float: left;
     margin: 5px auto 5px 20%;
 }
@@ -169,41 +169,41 @@ html{font-size: 18px;}
 .footer{max-width: 520px;}
 .introduce, .name{font-size: 20px}
 .account-btn{font-size: 1.5rem;}
-.icon2 {width: 38px;height: 46px}
+.icon3 {width: 38px;height: 46px}
 @media screen and (max-width:520px){
     html{font-size: 18px;}
     .introduce, .name{font-size: 19px}
     .account-btn{font-size: 1.5rem;}
-    .icon2 {width: 38px;height: 46px}
+    .icon3 {width: 38px;height: 46px}
 }
 @media screen and (max-width:480px){
     html{font-size: 17px;}
     .introduce, .name{font-size: 18px}
     .account-btn{font-size: 1.4rem;}
-    .icon2 {width: 36px;height: 44px}
+    .icon3 {width: 36px;height: 44px}
 }
 @media screen and (max-width:440px){
     html{font-size: 16px;}
     .introduce, .name{font-size: 17px}
     .account-btn{font-size: 1.3rem;}
-    .icon2 {width: 34px;height: 40px}
+    .icon3 {width: 34px;height: 40px}
 }
 @media screen and (max-width:400px){
     html{font-size: 15px;}
     .introduce, .name{font-size: 16px}
     .account-btn{font-size: 1.2rem;}
-    .icon2 {width: 32px;height: 38px}
+    .icon3 {width: 32px;height: 38px}
 }
 @media screen and (max-width:360px){
     html{font-size: 14px;}
     .introduce, .name{font-size: 15px}
     .account-btn{font-size: 1rem;}
-    .icon2 {width: 28px;height: 33px}
+    .icon3 {width: 28px;height: 33px}
 }
 
 @media screen and (max-width:319px){
     html{font-size: 13px;}
     .introduce, .name{font-size: 14px}
     .account-btn{font-size: 0.8rem;}
-    .icon2 {width: 26px;height: 30px}
+    .icon3 {width: 26px;height: 30px}
 }
