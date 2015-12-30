@@ -5,21 +5,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>详情</title>
-    <link rel="stylesheet" href="__PUBLIC__/css/core/details.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/share/details.css" />
+    <!--<link rel="stylesheet" href="__PUBLIC__/css/ui/adaptation.css" />-->
+    <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <!--<script type="text/javascript">
+        $(function(){
+            getCircleInfo();
+            alert('url');
+        })
+        function getCircleInfo(){
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                timeout:10000,
+                url:'__URL__/details?' + Math.random(),
+                data:{circle_id: $.request.queryString['circcle_id'] || '7'},
+                success:function(rData){
+                    var circleInfo = eval(rData);
+                    if(circleInfo && circleInfo.status == 1 ){
+                        alert(11111111);
+                        alert(circleInfo);
+                    }
+                },
+                error:function(error){
+                    alert(222222);
+                    alert(eval(error));
+                    return false;
+                }
+            })
+        }
+    </script> -->
 </head>
 <body>
 <div class="wrapper">
     <div id="header">
         <div class="details">详情</div>
     </div>
+    <!--<div class="img-responsive">-->
         <div class="images" style="background-image:url('__ROOT__/Uploads/{$circleList.circle_cover_image}'); background-size:100%;"></div>
+        <!--<if condition="$circleList.circle_cover_image neq null ">-->
+            <!--<img src="__ROOT__/Uploads/{$circleList.circle_cover_image}" alt="" width="100%" height="60%"/>-->
+            <!--<else/>-->
+            <!--<div class="img-responsive" style="background-color: #e1e1e1;width: 100%; height: 16rem" ></div>-->
+        <!--</if>-->
+    <!--<img class="img-responsive" src="__ROOT__/Uploads/{$v.circle_cover_image}" alt="" style="background-size: 50%"/>-->
+    <!--</div>-->
     <div id="circleName" class="clear">
         <div class="name">{$circleList.circle_name}<span class="follow"><img class="like" src="__PUBLIC__/images/like_btn_normal@2x.png" alt="" width="18px" height="18px"/>{$circleList.follow_quantity}</span></div>
     </div>
     <div class="wire1"></div>
     <div class="clear">
-    <p class="introduce">圈子介绍</p>
-    <div class="intro">{$circleList.circle_detail}</div>
+        <p class="introduce">圈层介绍</p>
+        <div class="intro">{$circleList.circle_detail}</div>
     </div>
     <div class="wire1"></div>
     <div class="clear">
@@ -38,16 +76,19 @@
         </p>
     </div>
     <div class="wire2"></div>
+    <!--<hr style="margin-left: 60px;"/>-->
     <div class="clear">
         <img class="icon2" src="__PUBLIC__/images/icon_web@2x.png" alt=""/><p class="web">{$circleList.circle_web}</p>
     </div>
     <div class="wire1"></div>
-    <div style="margin-left:28px;margin-top:20px;font-size:22px;">
-        &nbsp; &nbsp;商务圈，全球高端商务圈层社交app，赶快下载成为我的好友吧！
+    <div style="margin:20px 1rem auto 1rem;font-size:18px;text-indent: 2em;">
+        全球高端兴趣圈层互动社区，快来加入我们吧！
     </div>
-    <div>
-        <a class="account-btn btn-submit" href="http://app.qq.com/#id=detail&appid=1104875299">点击下载</a>
+    <div class="clear">
+        <a class="btn-submit1" href="http://app.qq.com/#id=detail&appid=1104875299"><img class="icon2" src="__PUBLIC__/images/android_06.png" alt=""><span class="account-btn">安卓下载</span></a>
+        <a class="btn-submit2" href="https://appsto.re/cn/saQA_.i"><img class="icon2" src="__PUBLIC__/images/ios_03.png" alt=""><span class="account-btn">IOS下载</span></a>
     </div>
+    <!--<hr/>-->
 </div>
 </body>
 </html>

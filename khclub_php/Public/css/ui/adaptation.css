@@ -16,22 +16,36 @@
 html{font-size: 16.25px;}
 .wrapper{max-width: 520px}
 .footer{max-width: 520px;}
+.account-btn{font-size: 1.5rem;}
+.icon2 {width: 44px;height: 50px}
 @media screen and (max-width:520px){
-  html{font-size: 16.25px;}
+    html{font-size: 16.25px;}
+    .account-btn{font-size: 1.5rem;}
+    .icon2 {width: 44px;height: 50px}
 }
 @media screen and (max-width:480px){
-  html{font-size: 15px;}
+    html{font-size: 15px;}
+    .account-btn{font-size: 1.4rem;}
+    .icon2 {width: 42px;height: 49px}
 }
 @media screen and (max-width:440px){
-  html{font-size: 13.75px;}
+    html{font-size: 13.75px;}
+    .account-btn{font-size: 1.3rem;}
+    .icon2 {width: 40px;height: 48px}
 }
 @media screen and (max-width:400px){
-  html{font-size: 12.5px;}
+     html{font-size: 12.5px;}
+    .account-btn{font-size: 1.2rem;}
+    .icon2 {width: 33px;height: 42px}
 }
 @media screen and (max-width:360px){
-  html{font-size: 11.25px;}
+    html{font-size: 11.25px;}
+    .account-btn{font-size: 1.1rem;}
+    .icon2 {width: 30px;height: 36px}
 }
 
 @media screen and (max-width:319px){
-  html{font-size: 10px;}
+    html{font-size: 10px;}
+    .account-btn{font-size: 1rem;}
+    .icon2 {width: 26px;height: 34px}
 }
