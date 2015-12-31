@@ -2170,12 +2170,8 @@ class MobileApiController extends Controller {
                 //获取旧的查看时间
                 $oldTime = $userModel->field('last_refresh_date')->where('user_id='.$user_id.' and circle_id='.$followList[$i]['id'])->find();
                 //获取新动态数
-                $news = $newsModel->where('circle_id='.$followList[$i]['id'].' and add_date >'.$oldTime['last_refresh_date'])->select();
-                if($news){
-                    $followList[$i]['new_newsnum'] = count($news);
-                }else{
-                    $followList[$i]['new_newsnum'] = 0;
-                }
+                $newsNum = $newsModel->where('circle_id='.$followList[$i]['id'].' and add_date >'.$oldTime['last_refresh_date'])->count('id');
+                $followList[$i]['new_newsnum'] = $newsNum;
             }
             //查询没有关注的圈子
             $sql = 'SELECT id, circle_name, circle_cover_sub_image, follow_quantity FROM kh_personal_circle
@@ -2241,9 +2237,11 @@ class MobileApiController extends Controller {
                 $findCircle['is_follow']='0';
             };
 
-            //保存浏览时间
-            $data['last_refresh_date'] = time();
-            $followModel->where('user_id='.$user_id.' and circle_id='.$circle_id. ' and delete_flag=0')->save($data);
+            if($page == 1){
+                //保存浏览时间
+                $data['last_refresh_date'] = time();
+                $followModel->where('user_id='.$user_id.' and circle_id='.$circle_id. ' and delete_flag=0')->save($data);
+            }
 
             //获取达人信息
             $sql = 'SELECT ui.id, ui.head_sub_image FROM kh_user_circle uc, kh_personal_circle pc, kh_user_info ui
