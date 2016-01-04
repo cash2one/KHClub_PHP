@@ -2171,7 +2171,11 @@ class MobileApiController extends Controller {
                 $oldTime = $userModel->field('last_refresh_date')->where('user_id='.$user_id.' and circle_id='.$followList[$i]['id'])->find();
                 //获取新动态数
                 $newsNum = $newsModel->where('circle_id='.$followList[$i]['id'].' and add_date >'.$oldTime['last_refresh_date'])->count('id');
-                $followList[$i]['new_newsnum'] = $newsNum;
+                if($newsNum){
+                    $followList[$i]['new_newsnum'] = $newsNum;
+                }else{
+                    $followList[$i]['new_newsnum'] = 0;
+                }
             }
             //查询没有关注的圈子
             $sql = 'SELECT id, circle_name, circle_cover_sub_image, follow_quantity FROM kh_personal_circle
