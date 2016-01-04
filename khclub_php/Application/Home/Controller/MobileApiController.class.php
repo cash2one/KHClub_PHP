@@ -2170,9 +2170,11 @@ class MobileApiController extends Controller {
                 //获取旧的查看时间
                 $oldTime = $userModel->field('last_refresh_date')->where('user_id='.$user_id.' and circle_id='.$followList[$i]['id'])->find();
                 //获取新动态数
-                $newsNum = $newsModel->where('circle_id='.$followList[$i]['id'].' and add_date >'.$oldTime['last_refresh_date'])->count('id');
+                $sql = 'SELECT COUNT(nc.id) as num FROM kh_news_extra nc, kh_news_content ne
+                        WHERE nc.circle_id='.$followList[$i]['id'].' AND nc.add_date > '.$oldTime['last_refresh_date'].' AND nc.news_id=ne.id AND ne.user_id !='.$user_id;
+                $newsNum = $newsModel->query($sql);
                 if($newsNum){
-                    $followList[$i]['new_newsnum'] = $newsNum;
+                    $followList[$i]['new_newsnum'] = $newsNum[0]['num'];
                 }else{
                     $followList[$i]['new_newsnum'] = '0';
                 }
