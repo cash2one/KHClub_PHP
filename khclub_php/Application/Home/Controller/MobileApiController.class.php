@@ -2174,7 +2174,7 @@ class MobileApiController extends Controller {
                 if($newsNum){
                     $followList[$i]['new_newsnum'] = $newsNum;
                 }else{
-                    $followList[$i]['new_newsnum'] = 0;
+                    $followList[$i]['new_newsnum'] = '0';
                 }
             }
             //查询没有关注的圈子
