@@ -1912,6 +1912,7 @@ class MobileApiController extends Controller {
      * @param address 地址
      * @param wx_num 微信号
      * @param circle_web 网址
+     * @param category_id 分类代码
      */
     public function postNewCircle(){
         try{
@@ -1923,6 +1924,7 @@ class MobileApiController extends Controller {
             $wx_num = $_REQUEST['wx_num'];
             $circle_web = $_REQUEST['circle_web'];
             $phone_num = $_REQUEST['phone_num'];
+            $category_id = $_REQUEST['category_id'];
 
             if(empty($user_id)){
                 returnJson(0,"创建者不能为空！");
@@ -1955,7 +1957,7 @@ class MobileApiController extends Controller {
             $circleModel = M('kh_personal_circle');
             //新圈子
             $newCircle = array('user_id'=>$user_id,'circle_name'=>$circle_name,'follow_quantity'=>1,
-                'circle_detail'=>$circle_detail, 'address'=>$address,
+                'circle_detail'=>$circle_detail, 'address'=>$address, 'category_id'=>$category_id,
                 'wx_num'=>$wx_num, 'circle_web'=>$circle_web, 'phone_num'=>$phone_num);
 
             $info = null;
@@ -2140,6 +2142,53 @@ class MobileApiController extends Controller {
         }catch (Exception $e){
 
             returnJson(0,"数据异常！",$e);
+        }
+    }
+
+    /**
+     * @brief 获取圈子分类列表
+     * 接口地址
+     * http://114.215.95.23/khclub_php/index.php/Home/MobileApi/getCircleCategoryList?user_id=2&category_id=1001
+     * @param user_id 用户id
+     * @param category_id 圈子分类代码
+     */
+    public function getCircleCategoryList(){
+        try{
+            $user_id = $_REQUEST['user_id'];
+            $category_id = $_REQUEST['category_id'];
+            if(empty($user_id)){
+                returnJson(0,'用户id不能为空！');
+                return;
+            }
+            if(empty($category_id)){
+                $category_id = '1001';
+            }
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_personal_circle pc, kh_circle_category ca
+                    WHERE pc.category_id='.$category_id.' AND pc.delete_flag=0 AND pc.category_id=ca.category_id';
+            //获取圈子信息
+            $findCircle = M();
+            $categoryList = $findCircle->query($sql);
+            if($categoryList){
+                //获取是否关注圈子
+                $followModel = M('kh_user_circle');
+                for($i=0;$i<count($categoryList);$i++){
+                    $isFollow = $followModel->where('user_id='.$user_id.' and circle_id='.$categoryList[$i]['id']. ' and delete_flag=0')->select();
+                    if($isFollow){
+                        $categoryList[$i]['is_follow']='1';
+                    }else{
+                        $categoryList[$i]['is_follow']='0';
+                    };
+                }
+                $result['list'] = $categoryList;
+                returnJson(1,'查询成功！',$result);
+                return;
+            }else{
+                returnJson(0,'该分类不存在！');
+                return;
+            }
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
         }
     }
 
