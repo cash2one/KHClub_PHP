@@ -1934,6 +1934,10 @@ class MobileApiController extends Controller {
                 returnJson(0,"圈子名不能为空");
                 return;
             }
+            if(empty($category_id)){
+                returnJson(0,"圈子类型不能为空！");
+                return;
+            }
             if(mb_strlen($circle_name ,'utf-8')>8){
                 returnJson(0,"圈子名长度不能超过8个字");
                 return;
@@ -2207,8 +2211,8 @@ class MobileApiController extends Controller {
                 return;
             }
             //查询已关注的圈子
-            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
-                    WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity, ca.category_name FROM kh_user_circle uc, kh_personal_circle pc, kh_circle_category ca
+                    WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0 AND pc.category_id=ca.category_id';
             //获取圈子详细信息
             $findCircle = M();
             $followList = $findCircle->query($sql);
@@ -2229,8 +2233,8 @@ class MobileApiController extends Controller {
                 }
             }
             //查询没有关注的圈子
-            $sql = 'SELECT id, circle_name, circle_cover_sub_image, follow_quantity FROM kh_personal_circle
-                    WHERE id NOT IN (SELECT circle_id FROM kh_user_circle WHERE user_id='.$user_id.' AND delete_flag=0 ) ORDER BY RAND() LIMIT 100';
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity, ca.category_name FROM kh_personal_circle pc, kh_circle_category ca
+                    WHERE pc.id NOT IN (SELECT circle_id FROM kh_user_circle WHERE user_id='.$user_id.' AND delete_flag=0 ) AND pc.category_id=ca.category_id ORDER BY RAND() LIMIT 100';
             //获取圈子详细信息
             $findCircle = M();
             $unfollowList = $findCircle->query($sql);
@@ -2273,8 +2277,8 @@ class MobileApiController extends Controller {
             }
             //获取圈子主页信息
             $sql = 'SELECT pc.id, pc.user_id, pc.circle_name, pc.circle_detail, pc.circle_cover_image, pc.circle_cover_sub_image, pc.phone_num,
-                    pc.address,wx_num, pc.wx_qrcode, uc.name, pc.follow_quantity, pc.circle_web
-                    FROM kh_personal_circle pc, kh_user_info uc WHERE pc.id='.$circle_id.' AND pc.user_id=uc.id';
+                    pc.address,wx_num, pc.wx_qrcode, uc.name, pc.follow_quantity, pc.circle_web, ca.category_name
+                    FROM kh_personal_circle pc, kh_user_info uc, kh_circle_category ca WHERE pc.id='.$circle_id.' AND pc.user_id=uc.id AND pc.category_id=ca.category_id';
             $circleModel = M();
             $findCircle = $circleModel->query($sql);
             if($findCircle){
@@ -2540,8 +2544,8 @@ class MobileApiController extends Controller {
                 return;
             }
             $personalModel = M();
-            $sql = 'SELECT id, circle_name, follow_quantity, circle_cover_sub_image FROM kh_personal_circle
-                      WHERE user_id='.$user_id.' AND delete_flag=0';
+            $sql = 'SELECT pc.id, pc.circle_name, pc.follow_quantity, pc.circle_cover_sub_image, ca.category_name FROM kh_personal_circle pc, kh_circle_category ca
+                    WHERE pc.user_id='.$user_id.' AND pc.delete_flag=0 AND pc.category_id=ca.category_id';
             $personal_circle = $personalModel->query($sql);
             if($personal_circle){
                 returnJson(1,"获取成功", $personal_circle);
