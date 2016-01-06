@@ -2172,7 +2172,6 @@ class MobileApiController extends Controller {
             //获取圈子信息
             $findCircle = M();
             $categoryList = $findCircle->query($sql);
-            if($categoryList){
                 //获取是否关注圈子
                 $followModel = M('kh_user_circle');
                 for($i=0;$i<count($categoryList);$i++){
@@ -2186,10 +2185,6 @@ class MobileApiController extends Controller {
                 $result['list'] = $categoryList;
                 returnJson(1,'查询成功！',$result);
                 return;
-            }else{
-                returnJson(0,'该分类不存在！');
-                return;
-            }
 
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
