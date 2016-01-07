@@ -2522,8 +2522,8 @@ class MobileApiController extends Controller {
                 return;
             }
             //查询已关注的圈子
-            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_user_circle uc, kh_personal_circle pc
-                    WHERE uc.user_id=' . $user_id . ' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0';
+            $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity, ca.category_name FROM kh_user_circle uc, kh_personal_circle pc, kh_circle_category ca
+                    WHERE uc.user_id='.$user_id.' AND uc.circle_id=pc.id AND pc.delete_flag=0 AND uc.delete_flag=0 AND pc.category_id=ca.category_id';
             //获取圈子详细信息
             $findCircle = M();
             $followList = $findCircle->query($sql);
