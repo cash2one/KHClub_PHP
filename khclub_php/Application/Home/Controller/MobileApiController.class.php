@@ -2167,6 +2167,8 @@ class MobileApiController extends Controller {
         try{
             $user_id = $_REQUEST['user_id'];
             $category_id = $_REQUEST['category_id'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
             if(empty($user_id)){
                 returnJson(0,'用户id不能为空！');
                 return;
