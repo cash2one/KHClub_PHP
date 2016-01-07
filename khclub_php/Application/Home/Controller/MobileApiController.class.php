@@ -2200,6 +2200,12 @@ class MobileApiController extends Controller {
                     };
                 }
                 $result['list'] = $categoryList;
+                //是否是最后一页
+                if(count($categoryList) < $size){
+                    $result['is_last'] = '1';
+                }else{
+                    $result['is_last'] = '0';
+                }
                 returnJson(1,'查询成功！',$result);
                 return;
 
