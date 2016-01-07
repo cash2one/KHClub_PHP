@@ -2155,6 +2155,8 @@ class MobileApiController extends Controller {
      * http://114.215.95.23/khclub_php/index.php/Home/MobileApi/getCircleCategoryList?user_id=2&category_id=1001
      * @param user_id 用户id
      * @param category_id 圈子分类代码
+     * @param page 页码 默认1
+     * @param size 每页显示数量 默认10
      */
     public function getCircleCategoryList(){
         try{
@@ -2167,8 +2169,16 @@ class MobileApiController extends Controller {
             if(empty($category_id)){
                 $category_id = '1001';
             }
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+            $start = ($page-1)*$size;
+            $end = $size;
             $sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_personal_circle pc, kh_circle_category ca
-                    WHERE pc.category_id='.$category_id.' AND pc.delete_flag=0 AND pc.category_id=ca.category_id';
+                    WHERE pc.category_id='.$category_id.' AND pc.delete_flag=0 AND pc.category_id=ca.category_id ORDER BY pc.add_date ASC LIMIT '.$start.','.$end;
             //获取圈子信息
             $findCircle = M();
             $categoryList = $findCircle->query($sql);
