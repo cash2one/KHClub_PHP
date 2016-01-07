@@ -181,6 +181,11 @@ class MobileApiController extends Controller {
         try{
             $username = $_REQUEST['username'];
             $password = $_REQUEST['password'];
+            if(empty($username) || empty($password)){
+                returnJson(0,"1","用户名或密码不能都为空");
+                return;
+            }
+
             //判断用户名密码
             $findUser = M('kh_user_info');
             $user = $findUser->where(array('username='.$username ,'password="'.$password.'"'))->find();
