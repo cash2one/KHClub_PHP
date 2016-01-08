@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <!-- Bootstrap -->
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/ui/card.css" rel="stylesheet">
+    <title>编辑名片</title>
+
+    <script type="text/javascript">
+
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+
+        function save()
+        {
+            if($('#name').val().length < 1){
+                drawToast("姓名不能为空");
+                return;
+            }
+            if($('#company').val().length < 1){
+                drawToast("公司不能为空");
+                return;
+            }
+            if($('#phone').val().length < 1){
+                drawToast("电话不能为空");
+                return;
+            }
+
+            //submit
+            var form = $("#form");
+            form.attr("method", "GET");
+            form.attr("action", "putPersonalInfo");
+            form.submit();
+        }
+
+    </script>
+</head>
+<body>
+
+    <form id="form">
+        <div class="center-block">
+            <h3 align="center" class="top_title">KHClub</h3>
+            <p class="msg_title lead">基本信息</p>
+            <div class="msg_content">
+                <p class="modify_content_title">姓名</p>
+                <input class="input-class" maxlength="30" id="name" name="name" value="{$_SESSION['userInfo']['name']}" type="text" placeholder="（必填）" />
+            </div>
+
+            <div class="msg_content">
+                <p class="modify_content_title">公司</p>
+                <input class="input-class" maxlength="30" id="company" name="company" value="{$_SESSION['userInfo']['company_name']}" type="text" placeholder="（必填）" />
+            </div>
+
+            <div class="msg_content">
+                <p class="modify_content_title">职位</p>
+                <input class="input-class" maxlength="30" id="job" name="job" value="{$_SESSION['userInfo']['job']}" type="text" />
+            </div>
+
+            <div class="msg_content">
+                <p class="modify_content_title">手机</p>
+                <input class="input-class" maxlength="30" id="phone" name="phone" value="{$_SESSION['userInfo']['phone_num']}" type="text" placeholder="（必填）" />
+            </div>
+
+            <div class="msg_content">
+                <p class="modify_content_title">邮箱</p>
+                <input class="input-class" maxlength="50" id="email" name="email" value="{$_SESSION['userInfo']['e_mail']}" type="text" />
+            </div>
+
+            <p class="msg_title lead">公司信息</p>
+            <div class="msg_content">
+                <p class="modify_content_title">地址</p>
+                <input class="input-class" maxlength="50" id="address" name="address" value="{$_SESSION['userInfo']['address']}" type="text" />
+            </div>
+
+            <div class="msg_content">
+                <p class="modify_content_title">网址</p>
+                <input class="input-class" maxlength="50" id="web" name="web" value="{$_SESSION['userInfo']['web']}" type="text" />
+            </div>
+
+            <p class="msg_title lead">社交网络</p>
+            <div class="msg_content">
+                <p class="modify_content_title">QQ</p>
+                <input class="input-class" maxlength="20" id="qq" name="qq" value="{$_SESSION['userInfo']['qq']}" type="text" />
+            </div>
+
+            <div style="margin-bottom: 80px" class="msg_content">
+                <p class="modify_content_title">微信</p>
+                <input class="input-class" maxlength="20" id="wechat" name="wechat" value="{$_SESSION['userInfo']['wechat']}" type="text"  />
+            </div>
+
+            <a onclick="save()" class="save" >保存</a>
+        </div>
+
+    </form>
+
+</body>
+</html>

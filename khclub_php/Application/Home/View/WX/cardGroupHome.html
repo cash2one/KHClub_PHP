@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <!-- Bootstrap -->
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/ui/card.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <title>名片夹</title>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.group').click(function () {
+//                window.location.href='infoUpdate.html';
+                alert($(this).val());
+            });
+
+        })
+
+    </script>
+
+</head>
+<body>
+
+    <volist name="cards" id="group">
+        <div value="{$group.id}" class="group">
+
+            <div>{$group.group_title}</div>
+            <div style="margin-top: 0.2rem;margin-left: 0.2rem">
+                <img class="member-count" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=128811874,840272376&fm=116&gp=0.jpg" >
+                <span>{$group.count}人</span>
+            </div>
+
+        </div>
+    </volist>
+
+    <a href="createCardGroupPage" class="save" >新建名片群</a>
+
+</body>
+</html>
