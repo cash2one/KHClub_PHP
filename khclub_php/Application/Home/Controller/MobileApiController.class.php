@@ -3033,8 +3033,8 @@ class MobileApiController extends Controller {
                 return;
             }
             //该动态所属的圈子
-            $Sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_sub_image, pc.follow_quantity FROM kh_personal_circle pc, kh_news_extra ne
-                    WHERE ne.news_id='.$news_id.' AND pc.id=ne.circle_id AND pc.delete_flag=0';
+            $Sql = 'SELECT pc.id, pc.circle_name, pc.circle_cover_image, pc.follow_quantity, ca.category_name FROM kh_personal_circle pc, kh_news_extra ne, kh_circle_category ca
+                    WHERE ne.news_id='.$news_id.' AND pc.id=ne.circle_id AND pc.delete_flag=0 AND pc.category_id=ca.category_id';
             $circleModel = M();
             $circles = $circleModel->query($Sql);
             $result['circles'] = $circles;
