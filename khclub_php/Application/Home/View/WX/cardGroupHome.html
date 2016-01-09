@@ -14,8 +14,7 @@
     <script type="text/javascript">
         $(function () {
             $('.group').click(function () {
-//                window.location.href='infoUpdate.html';
-                alert($(this).val());
+                window.location.href='cardGroupMembers?group_id='+$(this).attr('value');
             });
 
         })
@@ -36,6 +35,7 @@
 
         </div>
     </volist>
+    <div style="height: 4rem"></div>
 
     <a href="createCardGroupPage" class="save" >新建名片群</a>
 

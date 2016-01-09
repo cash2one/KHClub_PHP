@@ -272,7 +272,8 @@ class WXController extends Controller {
             echo '不好意思，您微信未授权';
             return;
         }
-        if(empty($_SESSION['open_id'])){
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
             $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
             $openID = json_decode($content)->openid;
             if(empty($openID)){
@@ -402,23 +403,65 @@ class WXController extends Controller {
             return;
         }
         $cardsModel = M('kh_wx_card_group');
-        $cards = $cardsModel->where('creator_id='.$id)->select();
+        $sql = 'SELECT cg.id, cg.group_title FROM kh_wx_card_group cg, kh_wx_card_member cm
+                WHERE cg.id=cm.group_id AND cg.delete_flag=0 AND cm.delete_flag=0 AND cm.member_id='.$id;
+        $cards = $cardsModel->query($sql);
         for($i=0; $i<count($cards); $i++){
             $memberModel = M('kh_wx_card_member');
             $memberCount = $memberModel->field('count(1) count')->where('delete_flag=0 AND group_id='.$cards[$i]['id'])->find();
             $cards[$i]['count'] = $memberCount['count'];
         }
+
         $this->assign("cards",$cards);
         $this->display("cardGroupHome");
     }
 
     /**
-     * @brief 名片群首页
+     * @brief 名片群成员页面首页
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/cardGroupMembers
+     * @param group_id 成员id
+     */
+    public  function cardGroupMembers(){
+        $group_id = $_REQUEST['group_id'];
+        if(empty($group_id)){
+            echo '圈子不能为空';
+            return;
+        }
+        //圈子信息
+        $cardsModel = M('kh_wx_card_group');
+        $group = $cardsModel->where('delete_flag=0')->find($group_id);
+        $memberModel = M('kh_wx_card_member');
+        $memberCount = $memberModel->field('count(1) count')->where('delete_flag=0 AND group_id='.$group['id'])->find();
+        $group['count'] = $memberCount['count'];
+
+        //成员信息
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.company_name, ui.head_sub_image FROM kh_user_info ui, kh_wx_card_member cm
+                WHERE ui.id=cm.member_id AND cm.group_id='.$group_id.' AND cm.delete_flag=0 ORDER BY cm.member_id='.$group['creator_id'].' DESC';
+        $cardList = $cardsModel->query($sql);
+        //头像过滤
+        for($i=0; $i<count($cardList); $i++){
+            $card = $cardList[$i];
+            if(!strstr($card['head_sub_image'], 'http')){
+                $cardList[$i]['head_sub_image'] = __ROOT__.'/Uploads/'.$cardList[$i]['head_sub_image'];
+            }
+        }
+
+        $this->assign("group", $group);
+        $this->assign("manager",$cardList[0]);
+        array_shift($cardList);
+        $this->assign("cardList",$cardList);
+        $this->display("cardGroupMembers");
+    }
+
+    /**
+     * @brief 创建名片群页面
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/createCardGroupPage
      */
     public function createCardGroupPage(){
         $this->display("createCardGroup");
+
     }
 
     /**
@@ -446,7 +489,7 @@ class WXController extends Controller {
         if($ret){
 
             $memberModel = M('kh_wx_card_member');
-            $member = array('group_id'=>$ret,'member_id'=>$id);
+            $member = array('group_id'=>$ret,'member_id'=>$id, 'add_date'=>time());
             $memberRet = $memberModel->add($member);
 
             if($memberRet){
@@ -476,8 +519,6 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/deleteCardGroup
      */
     public function deleteCardGroup(){
-
-
     }
 
 
