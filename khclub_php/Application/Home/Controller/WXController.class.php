@@ -260,6 +260,7 @@ class WXController extends Controller {
         }
     }
 
+
     /**
      * @brief 名片详情
      * 接口地址
@@ -522,6 +523,122 @@ class WXController extends Controller {
         array_shift($cardList);
         $this->assign("cardList",$cardList);
         $this->display("cardGroupMembers");
+    }
+
+    /**
+     * @brief 名片群申请加入详情页
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/cardGroupApplyDetail
+     */
+    public function cardGroupApplyDetail(){
+        $groupID = $_REQUEST['groupID'];
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$groupID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $memberModel = M('kh_wx_card_member');
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        //0未登录 1是成员 2不是成员
+        if(empty($userExtra)){
+            $this->assign("isMember",'0');
+        }else{
+            $isMember = $memberModel->where('delete_flag=0 AND group_id='.$groupID.' AND member_id='.$userExtra['id'])->find();
+            if($isMember){
+                $this->assign("isMember",'1');
+            }else{
+                $this->assign("isMember",'2');
+            }
+        }
+
+        $sql = 'SELECT cg.id, ui.name, ui.job, ui.head_sub_image, cg.group_title, cg.group_desc FROM kh_wx_card_group cg, kh_user_info ui
+                    WHERE ui.id=cg.creator_id AND cg.id='.$groupID.' AND cg.delete_flag=0';
+        $groupDetail = $memberModel->query($sql);
+        $groupDetail = $groupDetail[0];
+        if(!strstr($groupDetail['head_sub_image'], 'http')){
+            $groupDetail['head_sub_image'] = __ROOT__.'/Uploads/'.$groupDetail['head_sub_image'];
+        }
+
+        $this->assign("groupDetail",$groupDetail);
+        $this->display("applyGroup");
+    }
+
+    /**
+     * @brief 加入圈子
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/cardGroupApplyDetail
+     * @param groupID 群组ID
+     */
+    public function joinCardGroup(){
+        $groupID = $_REQUEST['groupID'];
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$groupID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $memberModel = M('kh_wx_card_member');
+        // 1是成员 2不是成员
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+            WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+        if(empty($userExtra)){
+            echo '这里应该去登录注册';
+            exit;
+        }else{
+            $member = $memberModel->where('group_id='.$groupID.' AND member_id='.$userExtra['id'])->find();
+            if($member){
+                if($member['delete_flag'] == '1'){
+                    $member['delete_flag'] = '0';
+                    $memberModel->save($member);
+                }
+            }else{
+                $member = array('group_id'=>$groupID, 'member_id'=>$userExtra['id'], 'add_date'=>time());
+                $memberModel->add($member);
+            }
+        }
+
+        $sql = 'SELECT cg.id, ui.name, ui.job, ui.head_sub_image, cg.group_title, cg.group_desc FROM kh_wx_card_group cg, kh_user_info ui
+                    WHERE ui.id=cg.creator_id AND cg.id='.$groupID.' AND cg.delete_flag=0';
+        $groupDetail = $memberModel->query($sql);
+        $groupDetail = $groupDetail[0];
+        if(!strstr($groupDetail['head_sub_image'], 'http')){
+            $groupDetail['head_sub_image'] = __ROOT__.'/Uploads/'.$groupDetail['head_sub_image'];
+        }
+
+        $this->assign("isMember",'1');
+        $this->assign("groupDetail",$groupDetail);
+        $this->display("applyGroup");
     }
 
     /**

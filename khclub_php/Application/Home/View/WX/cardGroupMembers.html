@@ -9,7 +9,27 @@
     <link href="__PUBLIC__/css/ui/card.css" rel="stylesheet">
     <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
     <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/css/share/mycard.css">
     <title>名片夹</title>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#zhezhao').click(function(){
+                $('#zhezhao').css({display:"none"});
+                $('#login').css({display:"none"});
+            });
+            $('#login').click(function(){
+                $('#zhezhao').css({display:"none"});
+                $('#login').css({display:"none"});
+            });
+        })
+
+        function share(){
+            $('#zhezhao').css({display:"block"});
+            $('#login').css({display:"block"});
+        }
+
+    </script>
 
 </head>
 <body>
@@ -56,8 +76,11 @@
     </volist>
 
     <div style="height: 4rem"></div>
-    <a class="member-share" >分享</a>
+    <a onclick="share()" class="member-share" >分享</a>
     <a href="createCardGroupPage"  class="member-create" >新建名片群</a>
+
+    <div class="zhezhao" id="zhezhao"></div>
+    <div class="login" id="login" style="background: url('__PUBLIC__/images/icon/fx.png') no-repeat top right">点击右上角菜单分享</div>
 
 </body>
 </html>

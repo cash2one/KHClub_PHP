@@ -22,22 +22,22 @@
     </script>
 
 </head>
-<body>
+<body style="background-color: #e9e9e9">
 
     <volist name="cards" id="group">
         <div value="{$group.id}" class="group">
 
-            <div>{$group.group_title}</div>
+            <div class="group-title">{$group.group_title}</div>
             <div style="margin-top: 0.2rem;margin-left: 0.2rem">
-                <img class="member-count" src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=128811874,840272376&fm=116&gp=0.jpg" >
-                <span>{$group.count}人</span>
+                <img class="member-count" src="__PUBLIC__/images/icon/member.png" >
+                <span class="group-member-count">{$group.count}人</span>
             </div>
 
         </div>
     </volist>
     <div style="height: 4rem"></div>
 
-    <a href="createCardGroupPage" class="save" >新建名片群</a>
+    <a href="createCardGroupPage" class="save" >新建圈通讯录</a>
 
 </body>
 </html>
