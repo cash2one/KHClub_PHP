@@ -260,6 +260,76 @@ class WXController extends Controller {
         }
     }
 
+    /**
+     * @brief 名片详情
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/mycard?usere_id=3
+     * @param circle_id 公告id
+     */
+    public function mycard(){
+        $user_id = $_REQUEST['user_id'];
+        $userModel = M();
+        $sql='SELECT uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
+              WHERE uc.id=3 AND uc.delete_flag=0 AND ex.user_id=uc.id';
+        $userInfo = $userModel->query($sql);
+        foreach($userInfo as $v){
+            if (empty($v['head_sub_image'])) {
+                $userInfo['head_sub_image'] = '';
+            } else {
+                $userInfo['head_sub_image'] = $v['head_sub_image'];
+            }
+            if (empty($v['name'])) {
+                $userInfo['name'] = '暂无信息';
+            } else {
+                $userInfo['name'] = $v['name'];
+            }
+            if (empty($v['job'])) {
+                $userInfo['job'] = '暂无信息';
+            } else {
+                $userInfo['job'] = $v['job'];
+            }
+            if (empty($v['phone_num'])) {
+                $userInfo['phone_num'] = '暂无信息';
+            } else {
+                $userInfo['phone_num'] = $v['phone_num'];
+            }
+            if (empty($v['e_mail'])) {
+                $userInfo['e_mail'] = '暂无信息';
+            } else {
+                $userInfo['e_mail'] = $v['e_mail'];
+            }
+            if (empty($v['company_name'])) {
+                $userInfo['company_name'] = '暂无信息';
+            } else {
+                $userInfo['company_name'] = $v['company_name'];
+            }
+            if (empty($v['address'])) {
+                $userInfo['address'] = '暂无信息';
+            } else {
+                $userInfo['address'] = $v['address'];
+            }
+            if (empty($v['web'])) {
+                $userInfo['web'] = '暂无信息';
+            } else {
+                $userInfo['web'] = $v['web'];
+            }
+            if (empty($v['qq'])) {
+                $userInfo['qq'] = '暂无信息';
+            } else {
+                $userInfo['qq'] = $v['qq'];
+            }
+            if (empty($v['wechat'])) {
+                $userInfo['wechat'] = '暂无信息';
+            } else {
+                $userInfo['wechat'] = $v['wechat'];
+            }
+        }
+        $userInfo['collect'] = '1';
+        $userInfo['my'] = false;
+        $this->assign('userInfo',$userInfo);
+        $this->display("mycard");
+    }
+
     ///////////////////////////////////////////微信服务号部分/////////////////////////////////////////////
     /**
      * @brief 名片首页
