@@ -17,18 +17,18 @@
             <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
                 <if condition="$userInfo.head_sub_image neq null">
                     <img class="image" src="/kh/Uploads/{$userInfo.head_sub_image}" alt="">
-                <else/>
+                    <else/>
                     <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
-                 </if>
+                </if>
                 <div class="name"><p>{$userInfo.name} / {$userInfo.job}</p></div>
                 <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/tel.png" alt=""><p class="details1">{$userInfo.phone_num}</p></div>
                 <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/dx.png" alt=""><p class="details1">{$userInfo.e_mail}</p></div>
                 <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/gs.png" alt=""><p class="details1">{$userInfo.company_name}</p></div>
                 <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/addr.png" alt=""><p class="details1">{$userInfo.address}</p></div>
-                <switch name="userInfo.collect">
-                    <case value="0"><div class="collect1">取消收藏</div></case>
-                    <case value="1"><div class="collect1">收藏成功</div></case>
-                </switch>
+                <!--<switch name="userInfo.collect">
+                    <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
+                    <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
+                </switch>-->
                 <a href="#"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
             </div>
         </div>
@@ -43,10 +43,10 @@
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/web.png" alt=""><p class="details2">{$userInfo.web}</p></div>
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/qq.png" alt=""><p class="details2">{$userInfo.qq}</p></div>
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/wx.png" alt=""><p class="details2">{$userInfo.wechat}</p></div>
-                <switch name="userInfo.collect">
-                    <case value="0"><div class="collect2">取消收藏</div></case>
-                    <case value="1"><div class="collect2">收藏成功</div></case>
-                </switch>
+                <!--<switch name="userInfo.collect">
+                    <case value="0"><div class="collect2" id="showcollect">收藏成功</div></case>
+                    <case value="1"><div class="collect2" id="showcollect">取消收藏</div></case>
+                </switch>-->
                 <a href="#"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
             </div>
         </div>
@@ -58,19 +58,34 @@
 <div class="mask opacity"></div>
 <div class="zhezhao" id="zhezhao"></div>
 <div class="login" id="login" style="background: url('__PUBLIC__/images/icon/fx.png') no-repeat top right">点击右上角菜单分享</div>
-<if condition="$userInfo.my neq false">
+<if condition="$userInfo.ifmy neq false">
     <a class="btn-submit1" id="bt" href="#">分享</a>
-<else/>
+    <else/>
     <div class="menu1 clear">
-        <span class="menubox"><a href="#"><img class="menuicon" src="__PUBLIC__/images/icon/telicon.png" alt=""/></a></span>
-        <span class="menubox"><a href="#"><img class="menuicon" src="__PUBLIC__/images/icon/dxicon.png" alt=""/></a></span>
-        <span class="menubox"><a href="#"><img class="menuicon" src="__PUBLIC__/images/icon/ccicon.png" alt=""/></a></span>
+        <span class="menubox"><a href="tel:{$userInfo.phone_num}"><img class="menuicon" src="__PUBLIC__/images/icon/telicon.png" alt=""/></a></span>
+        <span class="menubox"><a href="sms:{$userInfo.phone_num}"><img class="menuicon" src="__PUBLIC__/images/icon/dxicon.png" alt=""/></a></span>
+        <if condition="$userInfo.collect neq 1">
+            <form id="form" method="get" action="collectCard">
+                <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
+                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon" src="__PUBLIC__/images/icon/qxccicon.png" alt=""/></span>
+            </form>
+            <else/>
+            <form id="form" method="get" action="deleteCard">
+                <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
+                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon" src="__PUBLIC__/images/icon/ccicon.png" alt=""/></span>
+            </form>
+        </if>
+
         <span class="menubox"><a href="#" id="bt"><img class="menuicon" src="__PUBLIC__/images/icon/fxicon.png" alt=""/></a></span>
     </div>
     <div class="menu2 clear">
         <div class="menubtbox"><span class="menubt">电话</span></div>
         <div class="menubtbox"><span class="menubt">短信</span></div>
-        <div class="menubtbox"><span class="menubt">收藏</span></div>
+        <if condition="$userInfo.collect neq 1">
+            <div class="menubtbox"><span class="menubt">收藏</span></div>
+            <else/>
+            <div class="menubtbox"><span class="menubt1">取消收藏</span></div>
+        </if>
         <div class="menubtbox"><span class="menubt">分享</span></div>
     </div>
 </if>
@@ -90,6 +105,8 @@
         var zhezhao=document.getElementById("zhezhao");
         var login=document.getElementById("login");
         var bt=document.getElementById("bt");
+        var collect=document.getElementById("collect");
+        var showcollect=document.getElementById("showcollect");
         login.style.display="none";
 
         bt.onclick=function()
@@ -106,6 +123,13 @@
         {
             zhezhao.style.display="none";
             login.style.display="none";
+        }
+        collect.onclick=function collect(){
+//            showcollect.style.display="block";
+//            window.setTimeout('show()',2000);
+            //submit
+            var form = $("#form");
+            form.submit();
         }
     }
 </script>

@@ -264,14 +264,23 @@ class WXController extends Controller {
     /**
      * @brief 名片详情
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WX/mycard?usere_id=3
+     * http://localhost/khclub_php/index.php/Home/WX/mycard?usere_id=3&target_id=23
      * @param circle_id 公告id
+     * @param target_id 名片id
      */
     public function mycard(){
         $user_id = $_REQUEST['user_id'];
+        $target_id = $_REQUEST['target_id'];
+        if(empty($user_id)){
+            $this->error("用户不能为空");
+        }
+
+        if(empty($target_id)){
+            $this->error("名片不能为空");
+        }
         $userModel = M();
-        $sql='SELECT uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
-              WHERE uc.id=3 AND uc.delete_flag=0 AND ex.user_id=uc.id';
+        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
+              WHERE uc.id='.$target_id.' AND uc.delete_flag=0 AND ex.user_id=uc.id';
         $userInfo = $userModel->query($sql);
         foreach($userInfo as $v){
             if (empty($v['head_sub_image'])) {
@@ -324,9 +333,242 @@ class WXController extends Controller {
             } else {
                 $userInfo['wechat'] = $v['wechat'];
             }
+            if ($v['id'] == $user_id) {
+                $userInfo['ifmy'] = true;
+            } else {
+                $userInfo['ifmy'] = false;
+            }
+            $userInfo['target_id'] = $v['id'];
         }
-        $userInfo['collect'] = '1';
-        $userInfo['my'] = false;
+        $userInfo['user_id'] = $user_id;
+        $cardModel = M('kh_card');
+        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
+        if(empty($card)){
+            $userInfo['collect'] = '0';
+        }else{
+            $userInfo['collect'] = '1';
+        }
+        $this->assign('userInfo',$userInfo);
+        $this->display("mycard");
+    }
+
+    /**
+     * @brief 收藏名片
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/collectCard?
+     * @param user_id 用户ID
+     * @param target_id 收藏id
+     */
+    public function collectCard(){
+        $user_id = $_REQUEST['user_id'];
+        $target_id = $_REQUEST['target_id'];
+
+        if(empty($user_id)){
+            $this->error("用户不能为空");
+        }
+
+        if(empty($target_id)){
+            $this->error("收藏不能为空");
+        }
+        if($user_id == $target_id){
+            $this->error("不能收藏自己");
+        }
+
+        $cardModel = M('kh_card');
+        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id)->find();
+        if($card){
+            if(!$card['delete_flag'] == 0){
+                $card['delete_flag'] = 0;
+                $card['update_date'] = time();
+                $ret = $cardModel->save($card);
+                if(!$ret){
+                    $this->error("收藏失败!");
+                }
+            }
+
+        }else{
+            $card = array('user_id'=>$user_id,'target_id'=>$target_id, 'add_date'=>time());
+            $ret = $cardModel->add($card);
+            if(!$ret){
+                $this->error("收藏失败!");
+            }
+        }
+        //获取名片详情
+        $userModel = M();
+        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
+              WHERE uc.id='.$target_id.' AND uc.delete_flag=0 AND ex.user_id=uc.id';
+        $userInfo = $userModel->query($sql);
+        foreach($userInfo as $v){
+            if (empty($v['head_sub_image'])) {
+                $userInfo['head_sub_image'] = '';
+            } else {
+                $userInfo['head_sub_image'] = $v['head_sub_image'];
+            }
+            if (empty($v['name'])) {
+                $userInfo['name'] = '暂无信息';
+            } else {
+                $userInfo['name'] = $v['name'];
+            }
+            if (empty($v['job'])) {
+                $userInfo['job'] = '暂无信息';
+            } else {
+                $userInfo['job'] = $v['job'];
+            }
+            if (empty($v['phone_num'])) {
+                $userInfo['phone_num'] = '暂无信息';
+            } else {
+                $userInfo['phone_num'] = $v['phone_num'];
+            }
+            if (empty($v['e_mail'])) {
+                $userInfo['e_mail'] = '暂无信息';
+            } else {
+                $userInfo['e_mail'] = $v['e_mail'];
+            }
+            if (empty($v['company_name'])) {
+                $userInfo['company_name'] = '暂无信息';
+            } else {
+                $userInfo['company_name'] = $v['company_name'];
+            }
+            if (empty($v['address'])) {
+                $userInfo['address'] = '暂无信息';
+            } else {
+                $userInfo['address'] = $v['address'];
+            }
+            if (empty($v['web'])) {
+                $userInfo['web'] = '暂无信息';
+            } else {
+                $userInfo['web'] = $v['web'];
+            }
+            if (empty($v['qq'])) {
+                $userInfo['qq'] = '暂无信息';
+            } else {
+                $userInfo['qq'] = $v['qq'];
+            }
+            if (empty($v['wechat'])) {
+                $userInfo['wechat'] = '暂无信息';
+            } else {
+                $userInfo['wechat'] = $v['wechat'];
+            }
+            if ($v['id'] == $user_id) {
+                $userInfo['ifmy'] = true;
+            } else {
+                $userInfo['ifmy'] = false;
+            }
+            $userInfo['target_id'] = $v['id'];
+        }
+        $userInfo['user_id'] = $user_id;
+        $cardModel = M('kh_card');
+        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
+        if(empty($card)){
+            $userInfo['collect'] = '0';
+        }else{
+            $userInfo['collect'] = '1';
+        }
+        $this->assign('userInfo',$userInfo);
+        $this->display("mycard");
+
+    }
+
+    /**
+     * @brief 删除名片
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/collectCard?
+     * @param user_id 用户ID
+     * @param target_id 收藏id
+     */
+    public function deleteCard(){
+        $user_id = $_REQUEST['user_id'];
+        $target_id = $_REQUEST['target_id'];
+
+        if(empty($user_id)){
+            $this->error("用户不能为空");
+        }
+
+        if(empty($target_id)){
+            $this->error("删除不能为空");
+        }
+
+        $cardModel = M('kh_card');
+        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
+        if($card){
+            $card['delete_flag'] = 1;
+            $card['delete_date'] = time();
+            $ret = $cardModel->save($card);
+            if(!$ret){
+                $this->error("删除失败!");
+            }
+        }
+        //获取名片详情
+        $userModel = M();
+        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
+              WHERE uc.id='.$target_id.' AND uc.delete_flag=0 AND ex.user_id=uc.id';
+        $userInfo = $userModel->query($sql);
+        foreach($userInfo as $v){
+            if (empty($v['head_sub_image'])) {
+                $userInfo['head_sub_image'] = '';
+            } else {
+                $userInfo['head_sub_image'] = $v['head_sub_image'];
+            }
+            if (empty($v['name'])) {
+                $userInfo['name'] = '暂无信息';
+            } else {
+                $userInfo['name'] = $v['name'];
+            }
+            if (empty($v['job'])) {
+                $userInfo['job'] = '暂无信息';
+            } else {
+                $userInfo['job'] = $v['job'];
+            }
+            if (empty($v['phone_num'])) {
+                $userInfo['phone_num'] = '暂无信息';
+            } else {
+                $userInfo['phone_num'] = $v['phone_num'];
+            }
+            if (empty($v['e_mail'])) {
+                $userInfo['e_mail'] = '暂无信息';
+            } else {
+                $userInfo['e_mail'] = $v['e_mail'];
+            }
+            if (empty($v['company_name'])) {
+                $userInfo['company_name'] = '暂无信息';
+            } else {
+                $userInfo['company_name'] = $v['company_name'];
+            }
+            if (empty($v['address'])) {
+                $userInfo['address'] = '暂无信息';
+            } else {
+                $userInfo['address'] = $v['address'];
+            }
+            if (empty($v['web'])) {
+                $userInfo['web'] = '暂无信息';
+            } else {
+                $userInfo['web'] = $v['web'];
+            }
+            if (empty($v['qq'])) {
+                $userInfo['qq'] = '暂无信息';
+            } else {
+                $userInfo['qq'] = $v['qq'];
+            }
+            if (empty($v['wechat'])) {
+                $userInfo['wechat'] = '暂无信息';
+            } else {
+                $userInfo['wechat'] = $v['wechat'];
+            }
+            if ($v['id'] == $user_id) {
+                $userInfo['ifmy'] = true;
+            } else {
+                $userInfo['ifmy'] = false;
+            }
+            $userInfo['target_id'] = $v['id'];
+        }
+        $userInfo['user_id'] = $user_id;
+        $cardModel = M('kh_card');
+        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
+        if(empty($card)){
+            $userInfo['collect'] = '0';
+        }else{
+            $userInfo['collect'] = '1';
+        }
         $this->assign('userInfo',$userInfo);
         $this->display("mycard");
     }
