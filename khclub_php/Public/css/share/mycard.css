@@ -99,7 +99,7 @@ body {
     margin-left: 3rem;
 }
 .details1{
-    margin: 10px auto 10px 0px;
+    margin: 5px auto 10px 0px;
     padding-right: 40px;
     padding-left: 100px;
     text-align: left;
@@ -117,11 +117,11 @@ body {
 .btn-submit1{
     display: block;
     width: 90%;
-    height: 3rem;
-    border-radius: 5px;
-    background-color: #cc9900;
+    height: 40px;
+    border-radius: 3px;
+    background-color: #deb574;
     margin: 3rem auto 1rem auto;
-    line-height: 3rem;
+    line-height: 40px;
     color: #fff;
     font-size: 24px;
     text-align: center;
@@ -170,7 +170,7 @@ body {
     width: 130px;
     height: 2rem;
     border-radius: 5px;
-    background-color: #cc9900;
+    background-color: #deb574;
     margin: 0rem auto 1rem auto;
     line-height: 2rem;
     color: #fff;
@@ -180,7 +180,7 @@ body {
     width: 130px;
     height: 2rem;
     border-radius: 5px;
-    background-color: #cc9900;
+    background-color: #deb574;
     margin: 1.5rem auto 1rem auto;
     line-height: 2rem;
     color: #fff;
@@ -189,8 +189,6 @@ body {
 .swiper-pagination{
     width: 90%;
     left: 5%;
-    margin: 1rem auto 1rem auto;
-    padding-right: 20px;
 }
 
 .swiper-pagination-bullet{margin:0 5px}

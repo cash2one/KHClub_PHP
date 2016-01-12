@@ -260,7 +260,7 @@ class WXController extends Controller {
         }
     }
 
-
+    ///////////////////////////////////////////微信服务号部分/////////////////////////////////////////////
     /**
      * @brief 名片详情
      * 接口地址
@@ -269,15 +269,41 @@ class WXController extends Controller {
      * @param target_id 名片id
      */
     public function mycard(){
-        $user_id = $_REQUEST['user_id'];
         $target_id = $_REQUEST['target_id'];
-        if(empty($user_id)){
-            $this->error("用户不能为空");
+
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $memberModel = M('kh_wx_card_member');
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+        //都为空
+        if(empty($target_id) && empty($userExtra)){
+            echo '这里应该去注册';
+            exit;
         }
 
         if(empty($target_id)){
-            $this->error("名片不能为空");
+            $target_id = $userExtra['id'];
         }
+
         $userModel = M();
         $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
               WHERE uc.id='.$target_id.' AND uc.delete_flag=0 AND ex.user_id=uc.id';
@@ -286,7 +312,11 @@ class WXController extends Controller {
             if (empty($v['head_sub_image'])) {
                 $userInfo['head_sub_image'] = '';
             } else {
-                $userInfo['head_sub_image'] = $v['head_sub_image'];
+                if(!strstr($v['head_sub_image'], 'http')){
+                    $userInfo['head_sub_image'] = __ROOT__.'/Uploads/'.$v['head_sub_image'];
+                }else{
+                    $userInfo['head_sub_image'] = $v['head_sub_image'];
+                }
             }
             if (empty($v['name'])) {
                 $userInfo['name'] = '暂无信息';
@@ -333,21 +363,28 @@ class WXController extends Controller {
             } else {
                 $userInfo['wechat'] = $v['wechat'];
             }
-            if ($v['id'] == $user_id) {
+            if ($v['id'] == $userExtra['id']) {
                 $userInfo['ifmy'] = true;
             } else {
                 $userInfo['ifmy'] = false;
             }
             $userInfo['target_id'] = $v['id'];
         }
-        $userInfo['user_id'] = $user_id;
-        $cardModel = M('kh_card');
-        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
-        if(empty($card)){
-            $userInfo['collect'] = '0';
+        $userInfo['user_id'] = $userExtra['id'];
+
+        //0为未收藏 1已收藏 2未登录
+        if(empty($userExtra)){
+            $userInfo['collect'] = '2';
         }else{
-            $userInfo['collect'] = '1';
+            $cardModel = M('kh_card');
+            $card = $cardModel->where('user_id='.$userExtra['id'].' and target_id='.$target_id.' and delete_flag=0')->find();
+            if(empty($card)){
+                $userInfo['collect'] = '0';
+            }else{
+                $userInfo['collect'] = '1';
+            }
         }
+
         $this->assign('userInfo',$userInfo);
         $this->display("mycard");
     }
@@ -360,22 +397,29 @@ class WXController extends Controller {
      * @param target_id 收藏id
      */
     public function collectCard(){
-        $user_id = $_REQUEST['user_id'];
-        $target_id = $_REQUEST['target_id'];
-
-        if(empty($user_id)){
-            $this->error("用户不能为空");
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            echo '微信未授权';
+            exit;
         }
+        $memberModel = M('kh_wx_card_member');
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+        if(empty($userExtra)){
+            echo '这里跳转到注册部分';
+            exit;
+        }
+
+        $target_id = $_REQUEST['target_id'];
 
         if(empty($target_id)){
             $this->error("收藏不能为空");
         }
-        if($user_id == $target_id){
-            $this->error("不能收藏自己");
-        }
 
         $cardModel = M('kh_card');
-        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id)->find();
+        $card = $cardModel->where('user_id='.$userExtra['id'].' and target_id='.$target_id)->find();
         if($card){
             if(!$card['delete_flag'] == 0){
                 $card['delete_flag'] = 0;
@@ -387,85 +431,14 @@ class WXController extends Controller {
             }
 
         }else{
-            $card = array('user_id'=>$user_id,'target_id'=>$target_id, 'add_date'=>time());
+            $card = array('user_id'=>$userExtra['id'],'target_id'=>$target_id, 'add_date'=>time());
             $ret = $cardModel->add($card);
             if(!$ret){
                 $this->error("收藏失败!");
             }
         }
-        //获取名片详情
-        $userModel = M();
-        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
-              WHERE uc.id='.$target_id.' AND uc.delete_flag=0 AND ex.user_id=uc.id';
-        $userInfo = $userModel->query($sql);
-        foreach($userInfo as $v){
-            if (empty($v['head_sub_image'])) {
-                $userInfo['head_sub_image'] = '';
-            } else {
-                $userInfo['head_sub_image'] = $v['head_sub_image'];
-            }
-            if (empty($v['name'])) {
-                $userInfo['name'] = '暂无信息';
-            } else {
-                $userInfo['name'] = $v['name'];
-            }
-            if (empty($v['job'])) {
-                $userInfo['job'] = '暂无信息';
-            } else {
-                $userInfo['job'] = $v['job'];
-            }
-            if (empty($v['phone_num'])) {
-                $userInfo['phone_num'] = '暂无信息';
-            } else {
-                $userInfo['phone_num'] = $v['phone_num'];
-            }
-            if (empty($v['e_mail'])) {
-                $userInfo['e_mail'] = '暂无信息';
-            } else {
-                $userInfo['e_mail'] = $v['e_mail'];
-            }
-            if (empty($v['company_name'])) {
-                $userInfo['company_name'] = '暂无信息';
-            } else {
-                $userInfo['company_name'] = $v['company_name'];
-            }
-            if (empty($v['address'])) {
-                $userInfo['address'] = '暂无信息';
-            } else {
-                $userInfo['address'] = $v['address'];
-            }
-            if (empty($v['web'])) {
-                $userInfo['web'] = '暂无信息';
-            } else {
-                $userInfo['web'] = $v['web'];
-            }
-            if (empty($v['qq'])) {
-                $userInfo['qq'] = '暂无信息';
-            } else {
-                $userInfo['qq'] = $v['qq'];
-            }
-            if (empty($v['wechat'])) {
-                $userInfo['wechat'] = '暂无信息';
-            } else {
-                $userInfo['wechat'] = $v['wechat'];
-            }
-            if ($v['id'] == $user_id) {
-                $userInfo['ifmy'] = true;
-            } else {
-                $userInfo['ifmy'] = false;
-            }
-            $userInfo['target_id'] = $v['id'];
-        }
-        $userInfo['user_id'] = $user_id;
-        $cardModel = M('kh_card');
-        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
-        if(empty($card)){
-            $userInfo['collect'] = '0';
-        }else{
-            $userInfo['collect'] = '1';
-        }
-        $this->assign('userInfo',$userInfo);
-        $this->display("mycard");
+
+        header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id);
 
     }
 
@@ -477,19 +450,25 @@ class WXController extends Controller {
      * @param target_id 收藏id
      */
     public function deleteCard(){
-        $user_id = $_REQUEST['user_id'];
-        $target_id = $_REQUEST['target_id'];
-
-        if(empty($user_id)){
-            $this->error("用户不能为空");
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            echo '微信未授权';
+            exit;
         }
+        $memberModel = M('kh_wx_card_member');
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        $target_id = $_REQUEST['target_id'];
 
         if(empty($target_id)){
             $this->error("删除不能为空");
         }
 
         $cardModel = M('kh_card');
-        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
+        $card = $cardModel->where('user_id='.$userExtra['id'].' and target_id='.$target_id.' and delete_flag=0')->find();
         if($card){
             $card['delete_flag'] = 1;
             $card['delete_date'] = time();
@@ -498,103 +477,32 @@ class WXController extends Controller {
                 $this->error("删除失败!");
             }
         }
-        //获取名片详情
-        $userModel = M();
-        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc, kh_user_extra_info ex
-              WHERE uc.id='.$target_id.' AND uc.delete_flag=0 AND ex.user_id=uc.id';
-        $userInfo = $userModel->query($sql);
-        foreach($userInfo as $v){
-            if (empty($v['head_sub_image'])) {
-                $userInfo['head_sub_image'] = '';
-            } else {
-                $userInfo['head_sub_image'] = $v['head_sub_image'];
-            }
-            if (empty($v['name'])) {
-                $userInfo['name'] = '暂无信息';
-            } else {
-                $userInfo['name'] = $v['name'];
-            }
-            if (empty($v['job'])) {
-                $userInfo['job'] = '暂无信息';
-            } else {
-                $userInfo['job'] = $v['job'];
-            }
-            if (empty($v['phone_num'])) {
-                $userInfo['phone_num'] = '暂无信息';
-            } else {
-                $userInfo['phone_num'] = $v['phone_num'];
-            }
-            if (empty($v['e_mail'])) {
-                $userInfo['e_mail'] = '暂无信息';
-            } else {
-                $userInfo['e_mail'] = $v['e_mail'];
-            }
-            if (empty($v['company_name'])) {
-                $userInfo['company_name'] = '暂无信息';
-            } else {
-                $userInfo['company_name'] = $v['company_name'];
-            }
-            if (empty($v['address'])) {
-                $userInfo['address'] = '暂无信息';
-            } else {
-                $userInfo['address'] = $v['address'];
-            }
-            if (empty($v['web'])) {
-                $userInfo['web'] = '暂无信息';
-            } else {
-                $userInfo['web'] = $v['web'];
-            }
-            if (empty($v['qq'])) {
-                $userInfo['qq'] = '暂无信息';
-            } else {
-                $userInfo['qq'] = $v['qq'];
-            }
-            if (empty($v['wechat'])) {
-                $userInfo['wechat'] = '暂无信息';
-            } else {
-                $userInfo['wechat'] = $v['wechat'];
-            }
-            if ($v['id'] == $user_id) {
-                $userInfo['ifmy'] = true;
-            } else {
-                $userInfo['ifmy'] = false;
-            }
-            $userInfo['target_id'] = $v['id'];
-        }
-        $userInfo['user_id'] = $user_id;
-        $cardModel = M('kh_card');
-        $card = $cardModel->where('user_id='.$user_id.' and target_id='.$target_id.' and delete_flag=0')->find();
-        if(empty($card)){
-            $userInfo['collect'] = '0';
-        }else{
-            $userInfo['collect'] = '1';
-        }
-        $this->assign('userInfo',$userInfo);
-        $this->display("mycard");
-    }
 
-    ///////////////////////////////////////////微信服务号部分/////////////////////////////////////////////
+        header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id);
+    }
     /**
      * @brief 名片首页
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/cardHome
      */
     public  function cardHome(){
-        $code = $_REQUEST['code'];
-        if(empty($code)){
-            echo '不好意思，您微信未授权';
-            return;
-        }
+        //先授权获取openID
         $openID = $_SESSION['open_id'];
         if(empty($openID)){
-            $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
-            $openID = json_decode($content)->openid;
-            if(empty($openID)){
-                echo '不好意思，您微信未授权openID';
-                return;
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
             }
-            //openID存入
-            $_SESSION['open_id'] = $openID;
         }
 
         $findExtraUser = M('kh_user_extra_info');
@@ -608,7 +516,7 @@ class WXController extends Controller {
             $_SESSION['userInfo'] = $userExtra[0];
             //$userExtra['user_id']
             $sql = 'SELECT u.id user_id, u.head_sub_image, u.name, u.sex, u.job, u.company_name, u.signature, u.e_mail, u.phone_num, u.address, u.email_state, u.phone_state, u.address_state
-                    FROM kh_card c, kh_user_info u WHERE c.delete_flag=0 AND c.target_id=u.id AND c.user_id='.'3'.' ORDER BY c.add_date';
+                    FROM kh_card c, kh_user_info u WHERE c.delete_flag=0 AND c.target_id=u.id AND c.user_id='.$userExtra[0]['id'].' ORDER BY c.add_date';
             $cardList = $findExtraUser->query($sql);
             for($i=0; $i<count($cardList); $i++){
                 $card = $cardList[$i];
@@ -620,6 +528,7 @@ class WXController extends Controller {
             $this->display("cardHolder");
 
         }else{
+            //注册逻辑
             $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.json_decode($content)->access_token.'&openid='.$openID;
             $msg = file_get_contents($msgUrl);
             $wxUser = json_decode($msg);
@@ -657,6 +566,37 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/modifyCardPage
      */
     public  function modifyCardPage(){
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/modifyCardPage&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $findExtraUser = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $findExtraUser->query($sql);
+        if(empty($userExtra)){
+            echo '这里应该去登录';
+            exit;
+        }else{
+            //存入信息
+            $_SESSION['userInfo'] = $userExtra[0];
+        }
+
         $this->display("infoUpdate");
     }
 
@@ -666,16 +606,39 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/modifyCardPage
      */
     public  function putPersonalInfo(){
-        $id = $_SESSION['userInfo']['id'];
-        if(empty($id)){
-            echo '该用户不存在';
-            return;
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/modifyCardPage&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
         }
+
+        $cardsModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $cardsModel->query($sql)[0];
+        if(empty($userExtra)){
+            echo '这里应该去注册';
+            exit;
+        }
+
         $userModel = M('kh_user_info');
-        $user = $userModel->find($id);
+        $user = $userModel->find($userExtra['id']);
 
         $userExtraModel = M('kh_user_extra_info');
-        $userExtra = $userExtraModel->where('user_id='.$id)->find();
+        $userExtra = $userExtraModel->where('user_id='.$userExtra['id'])->find();
 
         if(!$user || !$userExtra){
             echo '用户信息有误';
@@ -695,11 +658,11 @@ class WXController extends Controller {
         $userExtra['qq'] = $_REQUEST['qq'];
         $userExtra['wechat'] = $_REQUEST['wechat'];
         $extraRet = $userExtraModel->save($userExtra);
-        if($ret && $extraRet){
-            echo 'test ok';
+        if($ret !== false && $extraRet !== false){
             $userModel->commit();
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard");
         }else{
-            echo 'test fail';
+            echo 'modify fail';
             $userModel->rollback();
         }
     }
@@ -710,14 +673,36 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/cardGroupHome
      */
     public  function cardGroupHome(){
-        $id = $_SESSION['userInfo']['id'];
-        if(empty($id)){
-            echo '该用户不存在';
-            return;
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
         }
+
         $cardsModel = M('kh_wx_card_group');
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $cardsModel->query($sql)[0];
+        if(empty($userExtra)){
+            echo '这里应该去注册';
+            exit;
+        }
+
         $sql = 'SELECT cg.id, cg.group_title FROM kh_wx_card_group cg, kh_wx_card_member cm
-                WHERE cg.id=cm.group_id AND cg.delete_flag=0 AND cm.delete_flag=0 AND cm.member_id='.$id;
+                WHERE cg.id=cm.group_id AND cg.delete_flag=0 AND cm.delete_flag=0 AND cm.member_id='.$userExtra['0'];
         $cards = $cardsModel->query($sql);
         for($i=0; $i<count($cards); $i++){
             $memberModel = M('kh_wx_card_member');

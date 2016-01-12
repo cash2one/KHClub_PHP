@@ -12,44 +12,41 @@
     <title>名片夹</title>
 
     <script type="text/javascript">
-        var msg_title = "“三只松鼠”要开实体店了，从线上要走回线下？";
-        var msg_desc = "36氪微信号：wow36kr编者按：本文经授权转载自峰瑞资本（freesvc）。提问人：李丰，峰瑞资本创始合";
-        var msg_cdn_url = "http://mmbiz.qpic.cn/mmbiz/WRGz2LWLARAb0pnA8pHSuH6gYTN3DhibUfmEibaelvjOcm15AXb63HFiawArqfiaZjXVryHvJ7Md5YsayebJFdRxlQ/0?wx_fmt=jpeg";
 
         $(function () {
             $('#myCard').click(function () {
-                window.location.href='modifyCardPage';
+                window.location.href='mycard';
             });
             $('#cardGroup').click(function () {
                 window.location.href='cardGroupHome';
             });
 
             $('.card').click(function(){
-                alert($(this).attr('value'));
+                window.location.href='mycard?target_id='+$(this).attr('value');
             });
         })
 
     </script>
 
 </head>
-<body>
+<body style="background-color: #f9f9f9">
     <div id="myCard" class="card-group-back">
-        <img class="card-group-img" src="groupCard.png" >
+        <img class="card-group-img" src="__PUBLIC__/images/icon/myCard.png"  >
         <p align="center" class="card-group-name">我的名片</p>
     </div>
 
     <div id="cardGroup" class="card-group-back">
-        <img class="card-group-img" src="groupCard.png" >
+        <img class="card-group-img" src="__PUBLIC__/images/icon/groupCard.png" >
         <p align="center" class="card-group-name">圈通讯录</p>
     </div>
 
-    <div style="margin-top: 1rem;"></div>
+    <div style="margin-top: 10px;"></div>
 
     <volist name="cardList" id="card">
         <div value="{$card.user_id}" class="white_back card">
             <img src="{$card.head_sub_image}" >
             <div>
-                <div style="height: 1.3rem; margin-top: 0.6rem">{$card.name}</div>
+                <div class="personal-card-name">{$card.name}</div>
                 <div class="content">
                     <php>
                         echo $card['job']==null ? '暂无信息':$card['job'];

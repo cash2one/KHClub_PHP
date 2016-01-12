@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>我的名片</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
 
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="__PUBLIC__/css/core/swiper.min.css">
@@ -16,7 +16,7 @@
         <div class="swiper-slide">
             <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
                 <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="/kh/Uploads/{$userInfo.head_sub_image}" alt="">
+                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
                     <else/>
                     <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
                 </if>
@@ -29,13 +29,15 @@
                     <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
                     <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
                 </switch>-->
-                <a href="#"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
+                <if condition="$userInfo.ifmy eq true">
+                    <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
+                </if>
             </div>
         </div>
         <div class="swiper-slide">
             <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
                 <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="/kh/Uploads/{$userInfo.head_sub_image}" alt="">
+                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
                     <else/>
                     <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
                 </if>
@@ -47,7 +49,9 @@
                     <case value="0"><div class="collect2" id="showcollect">收藏成功</div></case>
                     <case value="1"><div class="collect2" id="showcollect">取消收藏</div></case>
                 </switch>-->
-                <a href="#"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
+                <if condition="$userInfo.ifmy eq true">
+                    <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
+                </if>
             </div>
         </div>
     </div>
@@ -89,7 +93,7 @@
         <div class="menubtbox"><span class="menubt">分享</span></div>
     </div>
 </if>
-
+<div style="margin-top: 10px;height: 1px"></div>
 <!-- Swiper JS -->
 <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
 <script src="__PUBLIC__/js/swiper.jquery.min.js"></script>
