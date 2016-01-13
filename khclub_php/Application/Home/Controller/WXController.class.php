@@ -1,6 +1,8 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+Vendor('alisdk.TopSdk');
+
 class WXController extends Controller {
 
     private $WX_APPID = 'wxa1cc9ce0fd9a1372';
@@ -261,73 +263,6 @@ class WXController extends Controller {
     }
 
     ///////////////////////////////////////////微信服务号部分/////////////////////////////////////////////
-    /**
-     * @brief 发送验证码
-     * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WX/requertSms
-     * @param circle_id 公告id
-     * @param target_id 名片id
-     */
-    public function requestSms(){
-
-        try{
-            $phone_num = $_REQUEST['phone_num'];
-            if(empty($phone_num)){
-                returnJson(0,"手机号不能为空！");
-                return;
-            }else{
-                //判断是否被注册
-                $findUser = M('jlxc_user');
-                $user = $findUser->where(array('username='.$phone_num))->find();
-                if($user){
-                    returnJson(0 ,'该手机已被申请!');
-                    return;
-                }
-
-                $verify = get_rand_code(4, 1);
-                $c = new \TopClient();
-                $c->format = 'json';
-                $c->appkey = '23298649';
-                $c->secretKey = '2baa68b8ae1790f1512c585d576d19b6';
-                $req = new \AlibabaAliqinFcSmsNumSendRequest();
-                $req->setSmsType("normal");
-                $req->setSmsFreeSignName("注册验证");
-                $req->setSmsParam('{"code":"'.$verify.'","product":"商务圈"}');
-                $req->setRecNum($phone_num);
-                $req->setSmsTemplateCode("SMS_4445955");
-                $resp = $c->execute($req);
-                $resp->result->success;
-
-                //发送成功
-                if($resp->result->success == true) {
-                    $add = D('kh_sms');
-                    $data = array();
-                    $data['phone_num'] = $phone_num;
-                    $data['verify_code']  = $verify;
-                    $data['add_date'] = time();
-                    $add->add($data);
-                    returnJson(1,'验证码已发送至您的手机！','');
-
-                }else{
-                    //失败
-                    returnJson(0,"发送失败！");
-                }
-
-            }
-
-        }catch (Exception $e){
-
-            returnJson(0,"数据异常！");
-        }
-
-        //            $verifyModel = M('jlxc_sms');
-//               //查看是否验证成功
-//            $sql = 'SELECT * FROM jlxc_sms WHERE phone_num='.$username.'
-//            and verify_code='.$verify_code.' and delete_flag=0 and add_date>'.(time()-60);
-//            $data = $verifyModel->query($sql);
-//
-//            if(count($data) > 0){
-    }
 
     /**
      * @brief 名片详情
@@ -364,7 +299,7 @@ class WXController extends Controller {
         $userExtra = $memberModel->query($sql)[0];
         //都为空
         if(empty($target_id) && empty($userExtra)){
-            echo '这里应该去注册';
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
             exit;
         }
 
@@ -662,34 +597,36 @@ class WXController extends Controller {
             $this->display("cardHolder");
 
         }else{
-            //注册逻辑
-            $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.json_decode($content)->access_token.'&openid='.$openID;
-            $msg = file_get_contents($msgUrl);
-            $wxUser = json_decode($msg);
 
-            $user = array('name'=>$wxUser->nickname,'sex'=>$wxUser->sex-1, 'head_image'=>$wxUser->headimgurl, 'head_sub_image'=>$wxUser->headimgurl);
-            $userModel = M('kh_user_info');
-
-            $userModel->startTrans();
-            $retID = $userModel->add($user);
-            if($retID){
-                $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$retID);
-                $extraRet = $findExtraUser->add($userExtra);
-                if($extraRet){
-                    $userExtra = $findExtraUser->query($sql);
-                    //存入信息
-                    $_SESSION['userInfo'] = $userExtra[0];
-
-                    $userModel->commit();
-                    $this->display("cardHolder");
-                }else{
-                    $userModel->rollback();
-                    echo '创建失败';
-                }
-            }else{
-                $userModel->rollback();
-                echo '创建失败';
-            }
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+//            //注册逻辑
+//            $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.json_decode($content)->access_token.'&openid='.$openID;
+//            $msg = file_get_contents($msgUrl);
+//            $wxUser = json_decode($msg);
+//
+//            $user = array('name'=>$wxUser->nickname,'sex'=>$wxUser->sex-1, 'head_image'=>$wxUser->headimgurl, 'head_sub_image'=>$wxUser->headimgurl);
+//            $userModel = M('kh_user_info');
+//
+//            $userModel->startTrans();
+//            $retID = $userModel->add($user);
+//            if($retID){
+//                $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$retID);
+//                $extraRet = $findExtraUser->add($userExtra);
+//                if($extraRet){
+//                    $userExtra = $findExtraUser->query($sql);
+//                    //存入信息
+//                    $_SESSION['userInfo'] = $userExtra[0];
+//
+//                    $userModel->commit();
+//                    $this->display("cardHolder");
+//                }else{
+//                    $userModel->rollback();
+//                    echo '创建失败';
+//                }
+//            }else{
+//                $userModel->rollback();
+//                echo '创建失败';
+//            }
         }
 
     }
@@ -764,7 +701,7 @@ class WXController extends Controller {
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $cardsModel->query($sql)[0];
         if(empty($userExtra)){
-            echo '这里应该去注册';
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
             exit;
         }
 
@@ -831,7 +768,7 @@ class WXController extends Controller {
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $cardsModel->query($sql)[0];
         if(empty($userExtra)){
-            echo '这里应该去注册';
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
             exit;
         }
 
@@ -974,7 +911,7 @@ class WXController extends Controller {
             WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $memberModel->query($sql)[0];
         if(empty($userExtra)){
-            echo '这里应该去登录注册';
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
             exit;
         }else{
             $member = $memberModel->where('group_id='.$groupID.' AND member_id='.$userExtra['id'])->find();
@@ -1147,6 +1084,25 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/usepass
      */
     public function userpass(){
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
         $username = $_REQUEST['username'];
         $userModel = M('kh_user_info');
         $user = $userModel->field('id')->where('username='.$username)->find();
@@ -1157,7 +1113,6 @@ class WXController extends Controller {
             $this->assign('username',$username);
             $this->display('userRegister');
         }
-
     }
 
     /**
@@ -1166,11 +1121,102 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/userLogin
      */
     public function userLogin(){
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userpass&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
         $username = $_REQUEST['username'];
         $password = md5($_REQUEST['password']);
-        echo $username.'<br/>'.$password;
         $userModel = M('kh_user_info');
         $user = $userModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
+        if($user){
+            //绑定微信
+            $findExtraUser = M('kh_user_extra_info');
+            $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$user['id']);
+            $extraRet = $findExtraUser->add($userExtra);
+            if($extraRet){
+                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome");
+            }else{
+                $this->assign('username',$username);
+                $this->display('userLogin');
+            }
+        }else{
+            $this->assign('username',$username);
+            $this->display('userLogin');
+        }
+
+    }
+
+    /**
+     * @brief 发送验证码
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/requertSms
+     * @param phone_num 手机号
+     */
+    public function requestSms(){
+
+        try{
+            $phone_num = $_REQUEST['phone_num'];
+            if(empty($phone_num)){
+                returnJson(0,"手机号不能为空！");
+                return;
+            }else{
+                //判断是否被注册
+                $findUser = M('kh_user_info');
+                $user = $findUser->where(array('username='.$phone_num))->find();
+                if($user){
+                    returnJson(0 ,'该手机已被申请!');
+                    return;
+                }
+
+                $verify = get_rand_code(4, 1);
+                $c = new \TopClient();
+                $c->format = 'json';
+                $c->appkey = '23298649';
+                $c->secretKey = '2baa68b8ae1790f1512c585d576d19b6';
+                $req = new \AlibabaAliqinFcSmsNumSendRequest();
+                $req->setSmsType("normal");
+                $req->setSmsFreeSignName("注册验证");
+                $req->setSmsParam('{"code":"'.$verify.'","product":"商务圈"}');
+                $req->setRecNum($phone_num);
+                $req->setSmsTemplateCode("SMS_4445955");
+                $resp = $c->execute($req);
+                //发送成功
+                if($resp->result->success == true) {
+                    $add = D('kh_sms');
+                    $data = array();
+                    $data['phone_num'] = $phone_num;
+                    $data['verify_code']  = $verify;
+                    $data['add_date'] = time();
+                    $add->add($data);
+                    returnJson(1,'验证码已发送至您的手机！','');
+
+                }else{
+                    //失败
+                    returnJson(0,"发送失败！");
+                }
+
+            }
+
+        }catch (Exception $e){
+
+            returnJson(0,"数据异常！");
+        }
 
     }
 
@@ -1180,13 +1226,64 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/userRegister
      */
     public function userRegister(){
-        $yzm1 = $_REQUEST['yzm1'];
-        $yzm2 = $_REQUEST['yzm2'];
-        $yzm3 = $_REQUEST['yzm3'];
-        $yzm4 = $_REQUEST['yzm4'];
-        $yzm = $yzm1.$yzm2.$yzm3.$yzm4;
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+//            $verifyModel = M('jlxc_sms');
+//               //查看是否验证成功
+//            $sql = 'SELECT * FROM jlxc_sms WHERE phone_num='.$username.'
+//            and verify_code='.$verify_code.' and delete_flag=0 and add_date>'.(time()-60);
+//            $data = $verifyModel->query($sql);
+//
+//            if(count($data) > 0){
+
         $username = $_REQUEST['username'];
         $password = md5($_REQUEST['password']);
+
+        //            //注册逻辑
+//            $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.json_decode($content)->access_token.'&openid='.$openID;
+//            $msg = file_get_contents($msgUrl);
+//            $wxUser = json_decode($msg);
+//
+//            $user = array('name'=>$wxUser->nickname,'sex'=>$wxUser->sex-1, 'head_image'=>$wxUser->headimgurl, 'head_sub_image'=>$wxUser->headimgurl);
+//            $userModel = M('kh_user_info');
+//
+//            $userModel->startTrans();
+//            $retID = $userModel->add($user);
+//            if($retID){
+//                $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$retID);
+//                $extraRet = $findExtraUser->add($userExtra);
+//                if($extraRet){
+//                    $userExtra = $findExtraUser->query($sql);
+//                    //存入信息
+//                    $_SESSION['userInfo'] = $userExtra[0];
+//
+//                    $userModel->commit();
+//                    $this->display("cardHolder");
+//                }else{
+//                    $userModel->rollback();
+//                    echo '创建失败';
+//                }
+//            }else{
+//                $userModel->rollback();
+//                echo '创建失败';
+//            }
 
     }
 
