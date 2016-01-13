@@ -132,3 +132,43 @@ function pushMessage($target_id, $message, $type, $apnsAlert='您有一条新消
     \Think\Log::record(json_encode($result),'INFO');
     return $result;
 }
+
+/**
+ * @brief 获取随机数
+ * @param length 随机数长度
+ * @param model 模式 0 大小写数字 1 纯数字 2 纯小写字母 3 大写字母 4 大小写字母 5 大写字母数字 6 小写字母数字
+ *
+ */
+function get_rand_code ($length = 6, $mode = 0)
+{
+    switch ($mode) {
+        case '1':
+            $str = '1234567890';
+            break;
+        case '2':
+            $str = 'abcdefghijklmnopqrstuvwxyz';
+            break;
+        case '3':
+            $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            break;
+        case '4':
+            $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            break;
+        case '5':
+            $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+            break;
+        case '6':
+            $str = 'abcdefghijklmnopqrstuvwxyz1234567890';
+            break;
+        default:
+            $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+            break;
+    }
+    $randString = '';
+    $len = strlen($str)-1;
+    for($i = 0;$i < $length;$i ++){
+        $num = mt_rand(0, $len);
+        $randString .= $str[$num];
+    }
+    return $randString ;
+}

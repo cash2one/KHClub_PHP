@@ -262,6 +262,74 @@ class WXController extends Controller {
 
     ///////////////////////////////////////////微信服务号部分/////////////////////////////////////////////
     /**
+     * @brief 发送验证码
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/requertSms
+     * @param circle_id 公告id
+     * @param target_id 名片id
+     */
+    public function requestSms(){
+
+        try{
+            $phone_num = $_REQUEST['phone_num'];
+            if(empty($phone_num)){
+                returnJson(0,"手机号不能为空！");
+                return;
+            }else{
+                //判断是否被注册
+                $findUser = M('jlxc_user');
+                $user = $findUser->where(array('username='.$phone_num))->find();
+                if($user){
+                    returnJson(0 ,'该手机已被申请!');
+                    return;
+                }
+
+                $verify = get_rand_code(4, 1);
+                $c = new \TopClient();
+                $c->format = 'json';
+                $c->appkey = '23298649';
+                $c->secretKey = '2baa68b8ae1790f1512c585d576d19b6';
+                $req = new \AlibabaAliqinFcSmsNumSendRequest();
+                $req->setSmsType("normal");
+                $req->setSmsFreeSignName("注册验证");
+                $req->setSmsParam('{"code":"'.$verify.'","product":"商务圈"}');
+                $req->setRecNum($phone_num);
+                $req->setSmsTemplateCode("SMS_4445955");
+                $resp = $c->execute($req);
+                $resp->result->success;
+
+                //发送成功
+                if($resp->result->success == true) {
+                    $add = D('kh_sms');
+                    $data = array();
+                    $data['phone_num'] = $phone_num;
+                    $data['verify_code']  = $verify;
+                    $data['add_date'] = time();
+                    $add->add($data);
+                    returnJson(1,'验证码已发送至您的手机！','');
+
+                }else{
+                    //失败
+                    returnJson(0,"发送失败！");
+                }
+
+            }
+
+        }catch (Exception $e){
+
+            returnJson(0,"数据异常！");
+        }
+
+        //            $verifyModel = M('jlxc_sms');
+//               //查看是否验证成功
+//            $sql = 'SELECT * FROM jlxc_sms WHERE phone_num='.$username.'
+//            and verify_code='.$verify_code.' and delete_flag=0 and add_date>'.(time()-60);
+//            $data = $verifyModel->query($sql);
+//
+//            if(count($data) > 0){
+    }
+
+    /**
      * @brief 名片详情
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/mycard?usere_id=3&target_id=23
@@ -301,7 +369,8 @@ class WXController extends Controller {
         }
 
         if(empty($target_id)){
-            $target_id = $userExtra['id'];
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$userExtra['id']);
+            exit;
         }
 
         $userModel = M();
@@ -435,7 +504,72 @@ class WXController extends Controller {
             $ret = $cardModel->add($card);
             if(!$ret){
                 $this->error("收藏失败!");
+            }else{
+
+//                $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
+//                $openModel = M('kh_user_extra_info');
+//                $open = $openModel->where('user_id="'.$target_id.'"');
+//                if($open){
+//                    $json=file_get_contents($TOKEN_URL);
+//                    $result=json_decode($json);
+//                    $ACC_TOKEN=$result->access_token;
+//                    $data = '{
+//                        "touser":"'.$open['wx_open_id'].'",
+//                        "msgtype":"text",
+//                        "text":
+//                        {
+//                            "content":"hahaha"
+//                        }
+//                    }';
+//
+//                    $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+//
+//                    $curl = curl_init();
+//                    curl_setopt($curl, CURLOPT_URL, $url);
+//                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+//                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+//                    curl_setopt($curl, CURLOPT_POST, 1);
+//                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+//                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+//                    $result = curl_exec($curl);
+////                if (curl_errno($curl)) {
+////                    return 'Errno'.curl_error($curl);
+////                }
+//                    curl_close($curl);
+////                $final = json_decode($result);
+////                echo $final;
+//                }
+
             }
+        }
+
+        $openModel = M('kh_user_extra_info');
+        $open = $openModel->where('user_id="'.$target_id.'"')->find();
+        if($open){
+            $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
+            $json=file_get_contents($TOKEN_URL);
+            $result=json_decode($json);
+            $ACC_TOKEN=$result->access_token;
+            $data = '{
+                        "touser":"'.$open['wx_open_id'].'",
+                        "msgtype":"text",
+                        "text":
+                        {
+                            "content":"hahaha"
+                        }
+                    }';
+
+            $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_exec($curl);
+            curl_close($curl);
         }
 
         header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id);
@@ -660,7 +794,7 @@ class WXController extends Controller {
         $extraRet = $userExtraModel->save($userExtra);
         if($ret !== false && $extraRet !== false){
             $userModel->commit();
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard");
+            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$user['id']);
         }else{
             echo 'modify fail';
             $userModel->rollback();
@@ -861,6 +995,37 @@ class WXController extends Controller {
         $groupDetail = $groupDetail[0];
         if(!strstr($groupDetail['head_sub_image'], 'http')){
             $groupDetail['head_sub_image'] = __ROOT__.'/Uploads/'.$groupDetail['head_sub_image'];
+        }
+
+        //微信推送
+        $openModel = M();
+        $sql = 'SELECT ue.wx_open_id FROM kh_user_extra_info ue, kh_wx_card_group cg WHERE cg.creator_id=ue.user_id AND cg.id='.$groupID;
+        $openID = $openModel->query($sql)[0]['wx_open_id'];
+        if(!empty($openID)){
+            $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
+            $json=file_get_contents($TOKEN_URL);
+            $result=json_decode($json);
+            $ACC_TOKEN=$result->access_token;
+            $data = '{
+                        "touser":"'.$openID.'",
+                        "msgtype":"text",
+                        "text":
+                        {
+                            "content":"hahaha"
+                        }
+                    }';
+
+            $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_exec($curl);
+            curl_close($curl);
         }
 
         $this->assign("isMember",'1');
