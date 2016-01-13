@@ -1,0 +1,53 @@
+a{text-decoration:none;}
+input{border: none}
+body{
+    padding: 0;
+    margin: 0;
+    background-color: #4a4a4c;
+}
+.ts{
+    display: block;
+    width: 95%;
+    height: 45px;
+    margin: 0px auto auto auto;
+    line-height: 45px;
+    font-size: 16px;
+    color: #ffffff;
+}
+.tel{
+    display: block;
+    width: 95%;
+    margin: 0px auto auto auto;
+}
+.btn-submit{
+    display: block;
+    width: 95%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #deb574;
+    margin: 30px auto 1rem auto;
+    line-height: 40px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+}
+#toast
+{
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 1px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
+
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
+}
