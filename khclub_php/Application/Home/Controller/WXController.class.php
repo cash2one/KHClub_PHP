@@ -1129,5 +1129,67 @@ class WXController extends Controller {
 //        }
 //
 //    }
+
+    /**
+     * @brief 手机验证页面
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/userVerify
+     */
+    public function userVerify(){
+
+        $this->display('userVerify');
+
+    }
+
+    /**
+     * @brief 用户验证接口
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/usepass
+     */
+    public function userpass(){
+        $username = $_REQUEST['username'];
+        $userModel = M('kh_user_info');
+        $user = $userModel->field('id')->where('username='.$username)->find();
+        if($user){
+            $this->assign('username',$username);
+            $this->display('userLogin');
+        }else{
+            $this->assign('username',$username);
+            $this->display('userRegister');
+        }
+
+    }
+
+    /**
+     * @brief 用户登录
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/userLogin
+     */
+    public function userLogin(){
+        $username = $_REQUEST['username'];
+        $password = md5($_REQUEST['password']);
+        echo $username.'<br/>'.$password;
+        $userModel = M('kh_user_info');
+        $user = $userModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
+
+    }
+
+    /**
+     * @brief 用户注册
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/userRegister
+     */
+    public function userRegister(){
+        $yzm1 = $_REQUEST['yzm1'];
+        $yzm2 = $_REQUEST['yzm2'];
+        $yzm3 = $_REQUEST['yzm3'];
+        $yzm4 = $_REQUEST['yzm4'];
+        $yzm = $yzm1.$yzm2.$yzm3.$yzm4;
+        $username = $_REQUEST['username'];
+        $password = md5($_REQUEST['password']);
+
+    }
+
+
 }
 
