@@ -30,33 +30,31 @@
 
 </head>
 <body style="background-color: #f9f9f9">
-    <div id="myCard" class="card-group-back">
-        <img class="card-group-img" src="__PUBLIC__/images/icon/myCard.png"  >
-        <p align="center" class="card-group-name">我的名片</p>
-    </div>
+<div id="myCard" class="card-group-back">
+    <img class="card-group-img" src="__PUBLIC__/images/icon/myCard.png"  >
+    <p align="center" class="card-group-name">我的名片</p>
+</div>
 
-    <div id="cardGroup" class="card-group-back">
-        <img class="card-group-img" src="__PUBLIC__/images/icon/groupCard.png" >
-        <p align="center" class="card-group-name">圈通讯录</p>
-    </div>
+<div id="cardGroup" class="card-group-back">
+    <img class="card-group-img" src="__PUBLIC__/images/icon/groupCard.png" >
+    <p align="center" class="card-group-name">圈通讯录</p>
+</div>
 
-    <div style="margin-top: 10px;"></div>
-
-    <volist name="cardList" id="card">
-        <div value="{$card.user_id}" class="white_back card">
-            <img src="{$card.head_sub_image}" >
-            <div>
-                <div class="personal-card-name">{$card.name}</div>
-                <div class="content">
-                    <php>
-                        echo $card['job']==null ? '暂无信息':$card['job'];
-                        echo '/';
-                        echo $card['company_name']==null?'暂无信息':$card['company_name'];
-                    </php>
-                </div>
+<volist name="cardList" id="card">
+    <div value="{$card.user_id}" class="white_back card">
+        <img src="{$card.head_sub_image}" >
+        <div>
+            <div class="personal-card-name">{$card.name}</div>
+            <div class="content">
+                <php>
+                    echo $card['job']==null ? '暂无信息':$card['job'];
+                    echo ' | ';
+                    echo $card['company_name']==null?'暂无信息':$card['company_name'];
+                </php>
             </div>
         </div>
-    </volist>
+    </div>
+</volist>
 
 </body>
 </html>
