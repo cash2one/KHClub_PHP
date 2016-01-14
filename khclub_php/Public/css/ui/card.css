@@ -1,313 +1,330 @@
 body {
-  background-color: #2d2d2e;
+    background-color: #2d2d2e;
 }
 
 .group{
-  padding: 0.5rem;
-  background-color: #4a4a4c;
-  height: 5rem;
-  border-bottom-color: #ffffff;
-  border-style: none none solid none;
-  border-bottom-width: 1px;
+    background-color: #2e2e2d;
+    height: 72px;
+    border-bottom-color: #ffffff;
+    border-style: none none solid none;
+    border-bottom-width: 1px;
 }
 
 .group-title{
-  font-size: 16px;
-  color: #ffffff;
+    padding-left: 10px;
+    height: 72px;
+    line-height: 72px;
+    font-size: 17px;
+    color: #ffffff;
 }
 .group-member-count{
-  color: #949494;
-  font-size: 12px
+    float: right;
+    margin-right: 15px;
+    padding-right: 10px;
+    color: #ffffff;
+    font-size: 14px
 }
 
 .member-count{
-  width: 11px;
-  height: 12px;
+    float: right;
+    margin-top: 30px;
+    margin-right: 5px;
+    width: 11px;
+    height: 12px;
 }
 
 
 .save {
-  font-size: 16px;
-  float: left;
-  clear: both;
-  text-align: center;
-  padding: 1rem;
-  width: 100%;
-  margin: 0px;
-  position:fixed;
-  bottom:0px;
-  left: 0px;
-  color: #ffffff;
-  background-color: #dfb574;
-  border-color: transparent;
+    border: 1px solid red;
+    font-size: 16px;
+    float: left;
+    clear: both;
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    color: #ffffff;
+    background-color: #dfb574;
+    border-color: transparent;
 }
 
 .apply {
-  float: left;
-  clear: both;
-  text-align: center;
-  padding: 10px;
-  position:fixed;
-  bottom:50px;
-  left: 10px;
-  right: 10px;
-  color: #ffffff;
-  background-color: #dfb574;
-  border-color: transparent;
+    float: left;
+    clear: both;
+    text-align: center;
+    padding: 10px;
+    position:fixed;
+    bottom:50px;
+    left: 10px;
+    right: 10px;
+    color: #ffffff;
+    background-color: #dfb574;
+    border-color: transparent;
 }
 
 a:visited {
-  color:#ffffff;
-  text-decoration:none;
+    color:#ffffff;
+    text-decoration:none;
 }
 
 .card-group-back{
-  background-color: #4a4a4c;
-  height: 50px;
-  line-height: 50px;
-  border-style: none none solid none;
-  border-bottom-color: #000000;
-  border-bottom-width: 1px;
+    background-color: #4a4a4c;
+    height: 80px;
+    line-height: 80px;
+    border-style: none none solid none;
+    border-bottom-color: #000000;
+    border-bottom-width: 1px;
 }
 .card-group-img{
-  margin: 13px;
-  width: 24px;
-  height: 24px;
-  float: left;
+    margin: 10px 15px 10px 10px;
+    width: 57px;
+    height: 57px;
+    float: left;
 }
 
 .card-group-name{
-  font-size: 16px;
-  color: #ffffff;
-  text-align: left;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: left;
 }
 
 .white_back{
-  background-color: #f9f9f9;
-  height: 77px;
+    background-color: #f9f9f9;
+    height: 77px;
 }
 
 .card{
-  border-bottom-color: #e9e9e9;
-  border-style: none none solid none;
-  border-bottom-width: 1px;
+    border-bottom-color: #e9e9e9;
+    border-style: none none solid none;
+    border-bottom-width: 1px;
 }
 
 .card img{
-  margin: 10px 15px 10px 10px;
-  width: 57px;
-  height: 57px;
-  float: left;
+    margin: 10px 15px 10px 10px;
+    width: 57px;
+    height: 57px;
+    float: left;
 }
 
 .card > div{
-  width: 230px;
-  height: 100%;
-  display: inline;
-  float: left
+    width: 230px;
+    height: 100%;
+    display: inline;
+    float: left
 }
 
 .personal-card-name {
-  height: 14px;
-  margin-top: 15px;
-  font-size: 14px
+    height: 16px;
+    margin-top: 15px;
+    font-size: 16px
 }
 
 .content{
-  font-size: 12px;
-  margin-top: 12px;
-  width: 100%;
-  line-height:12px;
-  height: 12px;
-  overflow:hidden;
-  color: #949494;
+    font-size: 12px;
+    margin-top: 15px;
+    width: 100%;
+    line-height:12px;
+    height: 12px;
+    overflow:hidden;
+    color: #949494;
 }
 
 .msg_content{
-  padding-left: 10px;
-  padding-top: 7px;
-  padding-bottom: 2px;
-  color: #ffffff;
+    padding-left: 10px;
+    padding-top: 7px;
+    padding-bottom: 2px;
+    color: #ffffff;
 }
 .input-class {
-  width: 75%;
-  margin-left: 10px;
-  padding-left: 5px;
-  border-style: none none solid none;
-  border-bottom-color: transparent;
-  background-color: transparent;
+    width: 75%;
+    margin-left: 15px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #c8c7cc;
+    height: 35px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
 }
 .modify_bottom_line {
-  padding: 0px;
-  margin: 0px 0px 0px 40px;
-  border-color: #dfb574;
+    padding: 0px;
+    margin: 0px 0px 0px 70px;
+    border-color: #b79869;
 }
 
 .content_title {
-  margin-top: 0.2rem;
-  display: inline;
+    margin-top: 0.2rem;
+    display: inline;
 }
 
 #toast
 {
-  position: fixed;
-  top: 200px;
-  left: 50%;
-  width: 200px;
-  margin-left: -100px;
-  border: 1px solid #666;
-  background-color: #ffffff;
-  padding: 10px 0 ;
-  text-align:center;
-  opacity: .9;
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 1px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
 
-  -webkit-transition: opacity 0.5s ease-out;
-  -moz-transition: opacity 0.5s ease-out;
-  -ms-transition: opacity 0.5s ease-out;
-  -o-transition: opacity 0.5s ease-out;
-  transition: opacity 0.5s ease-out;
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
 }
 
 .top_title {
-  color: #dfb574;
-  margin: auto;padding-top: 1rem;"
+    color: #dfb574;
+    font-size: 16px;
+    line-height: 45px;
+    height: 45px;
+    margin: auto;
 }
 .msg_title{
-  height: 30px;
-  padding-left: 20px;
-  padding-top: 5px;
-  font-size: 14px;
-  background-color: #000000;
-  color: #dfb574;
-  margin-top: 10px;
-  margin-bottom: 5px;
+    height: 30px;
+    padding-left: 20px;
+    line-height: 30px;
+    font-size: 14px;
+    background-color: #000000;
+    color: #dfb574;
+    margin-bottom: 0px;
 }
 
 .modify_content_title {
-  float: left;
-  display: inline;
-  width: 30px;
-  padding-top: 2px;
+    float: left;
+    display: inline;
+    width: 40px;
+    font-size: 16px;
+    margin-left: 12px;
+    padding-top: 5px;
 }
 
 .dissolve {
-  float: right;
-  color: #ffffff;
-  margin-right: 1.5rem;
-  padding: 0.05rem 0.2rem 0.05rem 0.2rem;
-  border: #dfb574 solid 1px;
+    float: right;
+    color: #ffffff;
+    margin-right: 1.5rem;
+    padding: 0.05rem 0.2rem 0.05rem 0.2rem;
+    border: #dfb574 solid 1px;
 }
 .group_manager {
   padding-left: 5px;
   margin-top: 10px;
   color: #ffffff;
-
 }
 
 .group_name_div {
-  float: left;
-  width: 100%;
-  height: 2rem;
+    float: left;
+    width: 100%;
+    height: 2rem;
 }
 
 .group_name {
-  width: 20rem;
-  float: left;
-  padding-left: 0.5rem;
-  padding-top:0.1rem;
-  color: #ffffff;
+    width: 20rem;
+    float: left;
+    padding-left: 0.5rem;
+    padding-top:0.1rem;
+    color: #ffffff;
 }
 
 .detail {
-  color: gray;
-  clear: both;
-  padding: 0.5rem 0.5rem 0 0.5rem
+    color: gray;
+    clear: both;
+    padding: 0.5rem 0.5rem 0 0.5rem
 }
 
 .manager {
-  color: #dfb574;
-  text-align: center;
-  position: absolute;
-  margin-top: 26px;
-  right: 13px;
-  height: 20px;
-  display: block;
-  width: 40px;
-  border:1px solid #dfb574;
-  border-radius:3px;
+    color: #dfb574;
+    text-align: center;
+    position: absolute;
+    margin-top: 26px;
+    /*top: 61px;*/
+    right: 25px;
+    height: 20px;
+    display: block;
+    width: 40px;
+    border:1px solid #dfb574;
+    border-radius:3px;
 }
 
 .member-share {
-  font-size: 16px;
-  float: left;
-  clear: both;
-  text-align: center;
-  padding: 10px;
-  width: 45%;
-  margin-left: 10px;
-  position:fixed;
-  bottom:5px;
-  left: 0px;
-  color: #ffffff;
-  background-color: #dfb574;
-  border-color: transparent;
-  border-radius: 2px;
+    font-size: 16px;
+    float: left;
+    clear: both;
+    text-align: center;
+    padding: 10px;
+    width: 45%;
+    margin-left: 10px;
+    position:fixed;
+    bottom:5px;
+    left: 0px;
+    color: #ffffff;
+    background-color: #dfb574;
+    border-color: transparent;
+    border-radius: 2px;
 }
 
 .member-create {
-  font-size: 16px;
-  float: left;
-  clear: both;
-  text-align: center;
-  padding: 10px;
-  width: 45%;
-  margin-right: 10px;
-  position:fixed;
-  bottom:5px;
-  right: 0px;
-  color: #ffffff;
-  background-color: #dfb574;
-  border-color: transparent;
-  border-radius: 2px;
+    font-size: 16px;
+    float: left;
+    clear: both;
+    text-align: center;
+    padding: 10px;
+    width: 45%;
+    margin-right: 10px;
+    position:fixed;
+    bottom:5px;
+    right: 0px;
+    color: #ffffff;
+    background-color: #dfb574;
+    border-color: transparent;
+    border-radius: 2px;
 }
 
 .apply-back {
-  text-align: center;
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  min-height: 380px;
-  background: url(../../images/icon/bjcolor.png) no-repeat;
-  background-size: 100% 100%
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-height: 380px;
+    background: url(../../images/icon/bjcolor.png) no-repeat;
+    background-size: 100% 100%
 }
 
 .apply-head {
-  margin-top: 30px;
-  width: 80px;
-  height: 80px;
-  border-radius: 40px;
-  border: solid 2px rgba(255,255,255,0.8);
+    margin-top: 30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    border: solid 2px rgba(255,255,255,0.8);
 }
 
 .apply-name {
-  color: #ffffff;
-  font-size: 16px;
-  margin-top: 10px;
+    color: #ffffff;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
 .apply-title {
-  color: #ffffff;
-  font-size: 15px;
-  margin-top: 10px;
+    color: #ffffff;
+    font-size: 15px;
+    margin-top: 10px;
 }
 
 .apply-content {
-  text-align: left;
-  line-height:23px;
-  margin-left: 15px;
-  margin-right: 15px;
-  color: #ffffff;
-  font-size: 13px;
-  margin-top: 10px;
+    text-align: left;
+    line-height:23px;
+    margin-left: 15px;
+    margin-right: 15px;
+    color: #ffffff;
+    font-size: 13px;
+    margin-top: 10px;
 
 }
