@@ -198,8 +198,8 @@ a:visited {
   border: #dfb574 solid 1px;
 }
 .group_manager {
-  padding-left: 0.5rem;
-  margin-top: 1rem;
+  padding-left: 5px;
+  margin-top: 10px;
   color: #ffffff;
 
 }

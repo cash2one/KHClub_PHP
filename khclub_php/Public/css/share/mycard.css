@@ -11,7 +11,7 @@ a{text-decoration:none;}
     filter:alpha(opacity=50);
     -moz-opacity:0.8;
     opacity:0.8;
-    position:absolute;
+    position:fixed;
     left:0px;
     top:0px;
     display:none;
@@ -24,7 +24,7 @@ a{text-decoration:none;}
     text-align: center;
     line-height: 420px;
     color: #ffffff;
-    position:absolute;
+    position:fixed;
     top:0;
     font-size: 18px;
     display:none;

@@ -7,6 +7,7 @@
     <title>账号验证</title>
     <link rel="stylesheet" href="__PUBLIC__/css/share/userRegister.css">
     <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+
     <script>
 
         var input1, input2, input3, input4, support;
@@ -18,8 +19,15 @@
             input4 = $("#input4");
             support = $("#support");
 
-            //获取验证码
-            getVerify();
+            if('{$verifyError}' == 1){
+                drawToast('验证码错误!');
+            }else if('{$verifyError}' == 2){
+                drawToast('注册失败');
+            }else{
+                //获取验证码
+                getVerify();
+            }
+
         })
 
         var intervalCounter = 0;
@@ -48,8 +56,13 @@
 
         function save()
         {
-            if($('#password').val().length < 1){
-                drawToast("密码不能为空");
+            if($('#support').val().length < 4){
+                drawToast("验证码有误");
+                return;
+            }
+
+            if($('#password').val().length < 6){
+                drawToast("密码不能少于6位");
                 return;
             }
 
@@ -59,6 +72,8 @@
             form.attr("action", "userRegister");
             form.submit();
         }
+
+        var onGoing = false;
         var index = 60;//时间
         function start()
         {
@@ -67,12 +82,15 @@
             index--;
             if(index < 0) {
                 //清空定时器
-                clearTimeout(t);
                 document.getElementById("dates").style.display="none";
+                index = 60;
+                onGoing = false;
+                $("#resend").attr('class','resend-verify');
             }
             else {
                 //开启计时
-                var t = setTimeout("start()",1000);
+                setTimeout("start()",1000);
+                $("#resend").attr('class','wait-verify');
             }
 
         }
@@ -95,45 +113,59 @@
         }
 
         function getVerify(){
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                timeout: 10000,
-                url: "__URL__/requestSms?" + Math.random(),
-                data: { phone_num : '{$username}' },
-                success: function (rData) {
-                    var result = eval(rData);
-                    if(result.status == 1){
-                        drawToast('短信已经发送');
-                        start();
-                    }else{
-                        drawToast('短信发送失败');
+            if(onGoing == false){
+                onGoing = true;
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    timeout: 10000,
+                    url: "__URL__/requestSms?" + Math.random(),
+                    data: { phone_num : '{$username}' },
+                    success: function (rData) {
+                        var result = eval(rData);
+                        if(result.status == 1){
+                            start();
+                        }else{
+                            document.getElementById("dates").style.display="none";
+                            index = 60;
+                            onGoing = false;
+                            $("#resend").attr('class','resend-verify');
+                            drawToast('短信发送失败');
+
+                        }
+                    },
+                    error: function (error) {
+                        document.getElementById("dates").style.display="none";
+                        index = 60;
+                        onGoing = false;
+                        $("#resend").attr('class','resend-verify');
+                        drawToast('服务器异常');
+                        //alert('您好、当前服务器正忙、请稍后……');
+                        return false;
                     }
-                },
-                error: function (error) {
-                    drawToast('服务器异常');
-                    //alert('您好、当前服务器正忙、请稍后……');
-                    return false;
-                }
-            })
+                })
+            }
         }
 
     </script>
 </head>
 <body>
-<form id="form">
+<form id="form" style="background-color: #2E2E2D">
     <input type="hidden" name="username" value="{$username}">
     <div class="ts">验证码已发送到您的手机,请注意查收并填写</div>
     <div class="clear" id="box">
-        <div class="yzm1"><input onclick="jump()"  id="input1" type="text" name="yzm1" style="border-radius: 0; margin: 0;padding: 0; height:40px; width: 100%; font-size: 16px; text-align: center;" maxlength="4"/></div>
-        <div class="yzm1"><input onclick="jump()" id="input2" type="text" name="yzm2" style="border-radius: 0; margin: 0;padding: 0; height:40px; width: 100%; font-size: 16px; text-align: center;" maxlength="1"/></div>
-        <div class="yzm1"><input onclick="jump()" id="input3" type="text" name="yzm3" style="border-radius: 0; margin: 0;padding: 0; height:40px; width: 100%; font-size: 16px; text-align: center;" maxlength="1"/></div>
-        <div class="yzm2"><input onclick="jump()" id="input4" type="text" name="yzm4" style="border-radius: 0; margin: 0;padding: 0; height:40px; width: 100%; font-size: 16px; text-align: center;" maxlength="1"/></div>
-        <input maxlength="4" name="verify" oninput="supportInput(this)" id="support" style="float: left; width: 1px;height: 1px;margin: 0px;padding: 0px; background-color: #2d2d2e;color: #2d2d2e;border: none" />
+        <div class="yzm1"><input onclick="jump()" id="input1" type="text" name="yzm1" class="verify" maxlength="1"/></div>
+        <div class="yzm1"><input onclick="jump()" id="input2" type="text" name="yzm2" class="verify" maxlength="1"/></div>
+        <div class="yzm1"><input onclick="jump()" id="input3" type="text" name="yzm3" class="verify" maxlength="1"/></div>
+        <div class="yzm2"><input onclick="jump()" id="input4" type="text" name="yzm4" class="verify" maxlength="1"/></div>
+        <input maxlength="4" name="verify" oninput="supportInput(this)" id="support" class="supportVerfiy" />
     </div>
-    <div class="box1 clear"><a  href="#" class="get" onclick="start()">重新发送验证码</a><span id="dates"><span id="timeSpan">60</span>s 秒后</span></div>
+    <div class="box1 clear">
+        <span id="dates"><span id="timeSpan">60</span>s</span>
+        <a id="resend" href="#" class="wait-verify" onclick="getVerify()">重新发送验证码</a>
+    </div>
     <div class="ts1">请填写密码</div>
-    <div class="tel"><input type="text" id="password" name="password" style=" margin: 0;padding: 0 2% 0 2%; height:40px; width: 96%; font-size: 16px; border-radius: 3px;"/></div>
+    <div class="tel"><input type="password" id="password" name="password" style=" margin: 0;padding: 0 2% 0 2%; height:40px; width: 96%; font-size: 16px; border-radius: 3px;"/></div>
     <a onclick="save()" class="btn-submit"/>下一步</a>
 </form>
 
