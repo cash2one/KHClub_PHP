@@ -567,7 +567,7 @@ class MobileApiController extends Controller {
     }
 
     /**
-     * @brief 修改个人额外信息
+     * @brief 修改个人额外信息 作废不在使用  注意extra表是和微信同步的
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/MobileApi/changePersonalExtraInformation?
      * @param uid 用户id
@@ -612,7 +612,7 @@ class MobileApiController extends Controller {
     }
 
     /**
-     * @brief 获取个人额外信息
+     * @brief 获取个人额外信息 作废不在使用 注意extra表是和微信同步的
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/MobileApi/getPersonalExtraInformation?
      * @param uid 用户id

@@ -227,10 +227,10 @@ a:visited {
 }
 
 .group_name {
-    width: 20rem;
+    width: 250px;
     float: left;
-    padding-left: 0.5rem;
-    padding-top:0.1rem;
+    padding-left: 5px;
+    padding-top:1px;
     color: #ffffff;
 }
 

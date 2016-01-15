@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>我的名片</title>
+    <if condition="$userInfo.ifmy neq false">
+        <title>我的名片</title>
+        <else/>
+        <title>TA的名片</title>
+    </if>
+
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
 
     <!-- Link Swiper's CSS -->

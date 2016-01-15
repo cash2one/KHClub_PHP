@@ -8,5 +8,5 @@ return array(
     'DB_PWD'    => 'khclub8888', // 密码
     'DB_CHARSET'=> 'utf8mb4',
     'DB_PORT'   => 3306, // 端口
-
+    'DB_FIELDS_CACHE'=>false
 );
