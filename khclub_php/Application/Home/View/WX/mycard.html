@@ -16,12 +16,16 @@
 </head>
 <body>
 <!-- Swiper -->
+<div class="topbox clear">
+    <a href="#" class="leftbox"><img class="carscase" src="__PUBLIC__/images/icon/cardcase.png" alt=""><span class="carscasespan">名片夹</span></a>
+    <a href="#" class="rightbox"><img class="mecard" src="__PUBLIC__/images/icon/mecard.png" alt=""><span class="mecardspan">我的名片</span></a>
+</div>
 <div class="swiper-container">
     <div class="swiper-wrapper">
         <div class="swiper-slide">
             <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
                 <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
+                    <img class="image" src="__ROOT__/Uploads/{$userInfo.head_sub_image}" alt="">
                     <else/>
                     <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
                 </if>
@@ -42,7 +46,8 @@
         <div class="swiper-slide">
             <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
                 <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
+                    <!--<img class="image" src="{$userInfo.head_sub_image}" alt="">-->
+                    <img class="image" src="__ROOT__/Uploads/{$userInfo.head_sub_image}" alt="">
                     <else/>
                     <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
                 </if>
@@ -73,31 +78,28 @@
     <div class="menu1 clear">
         <span class="menubox"><a href="tel:{$userInfo.phone_num}"><img class="menuicon" src="__PUBLIC__/images/icon/telicon.png" alt=""/></a></span>
         <span class="menubox"><a href="sms:{$userInfo.phone_num}"><img class="menuicon" src="__PUBLIC__/images/icon/dxicon.png" alt=""/></a></span>
-        <if condition="$userInfo.collect neq 1">
-            <form id="form" method="get" action="collectCard">
-                <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
-                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon" src="__PUBLIC__/images/icon/qxccicon.png" alt=""/></span>
-            </form>
-            <else/>
-            <form id="form" method="get" action="deleteCard">
-                <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
-                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon" src="__PUBLIC__/images/icon/ccicon.png" alt=""/></span>
-            </form>
-        </if>
-
         <span class="menubox"><a href="#" id="bt"><img class="menuicon" src="__PUBLIC__/images/icon/fxicon.png" alt=""/></a></span>
     </div>
     <div class="menu2 clear">
         <div class="menubtbox"><span class="menubt">电话</span></div>
         <div class="menubtbox"><span class="menubt">短信</span></div>
-        <if condition="$userInfo.collect neq 1">
-            <div class="menubtbox"><span class="menubt">收藏</span></div>
-            <else/>
-            <div class="menubtbox"><span class="menubt1">取消收藏</span></div>
-        </if>
         <div class="menubtbox"><span class="menubt">分享</span></div>
     </div>
 </if>
+<div class="clear">
+    <if condition="$userInfo.collect neq 1">
+        <form id="form" method="get" action="collectCard">
+            <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
+            <a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>收藏到名片夹</span></a>
+        </form>
+        <else/>
+        <form id="form" method="get" action="deleteCard">
+            <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
+            <a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>移出名片夹</span></a>
+        </form>
+    </if>
+    <a class="btn-submit3" href="#"><span>保存到电话本</span></a>
+</div>
 <div style="margin-top: 10px;height: 1px"></div>
 <!-- Swiper JS -->
 <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>

@@ -328,3 +328,36 @@ a:visited {
     margin-top: 10px;
 
 }
+.dabox a:hover,.dabox1 a:visited,.dabox1 a:link,.dabox1 a:active{
+    text-decoration:none;
+    color: #ffffff;
+}
+.dabox{
+    margin: 80px 20px auto 20px;
+}
+.username{
+    font-size: 22px;
+    color: #5b5b5b;
+    text-align: center;
+}
+.codeimage{
+    display: block;
+    margin: 5px auto 5px auto;
+}
+.hint{
+    font-size: 18px;
+    color: #878988;
+    text-align: center;
+}
+.btn-submit{
+    display: block;
+    width: 200px;
+    height: 40px;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #66CE39;
+    margin: 1rem auto auto auto;
+}
