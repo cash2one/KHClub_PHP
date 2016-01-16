@@ -548,6 +548,33 @@ class WXController extends Controller {
 
         header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id);
     }
+
+    /**
+     * @brief 通讯录名片页面
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/contackQRcode
+     */
+    public  function contactQRcode(){
+        $user_id = $_REQUEST['user_id'];
+        if(empty($user_id)){
+            echo '该用户不存在';
+            exit;
+        }
+
+        $userModel = M();
+        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc LEFT JOIN kh_user_extra_info ex ON (ex.user_id=uc.id)
+              WHERE uc.id='.$user_id.' AND uc.delete_flag=0';
+        $userInfo = $userModel->query($sql)[0];
+        if(empty($userInfo)){
+            echo '该用户不存在';
+            exit;
+        }else{
+            $this->assign("userInfo",$userInfo);
+            $this->display("contactQRcode");
+        }
+
+    }
+
     /**
      * @brief 名片首页
      * 接口地址

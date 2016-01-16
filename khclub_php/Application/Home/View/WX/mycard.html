@@ -16,10 +16,10 @@
 </head>
 <body>
 <!-- Swiper -->
-<div class="topbox clear">
-    <a href="#" class="leftbox"><img class="carscase" src="__PUBLIC__/images/icon/cardcase.png" alt=""><span class="carscasespan">名片夹</span></a>
-    <a href="#" class="rightbox"><img class="mecard" src="__PUBLIC__/images/icon/mecard.png" alt=""><span class="mecardspan">我的名片</span></a>
-</div>
+<!--<div class="topbox clear">-->
+    <!--<a href="#" class="leftbox"><img class="carscase" src="__PUBLIC__/images/icon/cardcase.png" alt=""><span class="carscasespan">名片夹</span></a>-->
+    <!--<a href="#" class="rightbox"><img class="mecard" src="__PUBLIC__/images/icon/mecard.png" alt=""><span class="mecardspan">我的名片</span></a>-->
+<!--</div>-->
 <div class="swiper-container">
     <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -98,7 +98,7 @@
             <a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>移出名片夹</span></a>
         </form>
     </if>
-    <a class="btn-submit3" href="#"><span>保存到电话本</span></a>
+    <a class="btn-submit3" href="contactQRcode?user_id={$userInfo.target_id}"><span>保存到电话本</span></a>
 </div>
 <div style="margin-top: 10px;height: 1px"></div>
 <!-- Swiper JS -->
