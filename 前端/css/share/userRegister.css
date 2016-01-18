@@ -1,0 +1,106 @@
+a{text-decoration:none;}
+input{border: none}
+.box1 a:hover,.box1 a:visited,.box1 a:link,.box1 a:active{
+    color: #cc9900;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #4a4a4c;
+}
+.ts{
+    display: block;
+    width: 95%;
+    height: 45px;
+    line-height: 45px;
+    margin: 0rem auto auto auto;
+    font-size: 14px;
+    color: #ffffff;
+}
+.ts1{
+    display: block;
+    width: 95%;
+    height: 45px;
+    line-height: 45px;
+    margin: 0px auto 0px auto;
+    font-size: 14px;
+    color: #ffffff;
+}
+.tel{
+    display: block;
+    width: 95%;
+    margin: 0px auto auto auto;
+}
+#box{
+    display: block;
+    width: 95%;
+    margin: -12px auto auto auto;
+}
+.yzm1{
+    float: left;
+    display: block;
+    width: 20%;
+    text-align: center;
+    margin: 10px 6.6% auto auto;
+}
+.yzm2{
+    float: left;
+    display: block;
+    width: 20%;
+    text-align: center;
+    margin: 10px auto auto auto;
+}
+.box1{
+    display: block;
+    width: 95%;
+    padding-right: 0px;
+    text-align: center;
+    margin: 15px auto 0 auto;
+}
+#dates{
+    color: #ffffff;
+    font-size: 16px;
+    display: none;
+    float: right;
+}
+.get{
+    color: #deb574;
+    font-size: 16px;
+    float: right;
+}
+.btn-submit{
+    display: block;
+    width: 95%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #deb574;
+    margin: 30px auto 1rem auto;
+    line-height: 40px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+}
+#toast
+{
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 1px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
+
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
+}

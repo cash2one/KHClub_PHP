@@ -1,0 +1,209 @@
+/*重置*/
+body{background-color:#f2f2f2;}
+body,dl,dd,h1,p{margin:0;}
+ul{margin:0;padding:0;}
+a{text-decoration:none;}
+li{list-style:none;}
+img{display:block;}
+/**{font-size:14px;color:#7d7d7d;font-family:Helvetica,"微软雅黑";}*/
+
+.wrapper {
+    /*border: 2px solid #000000;*/
+    max-width: 640px;
+    /*height: 800px;*/
+    margin: 0 auto;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+#header{
+    height: 50px;
+    background-color: #deb574;
+    margin: 0 auto 0 auto;
+}
+.details{
+    font-size: 24px;
+    /*font-weight: bold;*/
+    line-height: 50px;
+    text-align: center;
+    /*text-indent: 40px;*/
+    color: #ffffff;
+}
+.images{
+    width: 100%;
+    height: 16rem;
+    background-position:center;
+}
+.img-responsive{
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+#circleName{
+    padding-right: 15px;
+    margin-top: 5px;
+}
+.name{
+    padding-left: 10px;
+    padding-bottom: 5px;
+    /*font-size: 22px;*/
+    line-height: 25px;
+    color: #000000;
+}
+.follow{
+    float: right;
+    color: #8c8c8c;
+    /*font-size: 14px;*/
+}
+.introduce{
+    padding-left: 10px;
+    padding-top: 5px;
+    /*font-size: 22px;*/
+    color: #000000;
+}
+.intro{
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-indent: 2em;
+    /*font-size: 18px;*/
+    line-height: 20px;
+    color: #000000;
+}
+.intro a{
+    float: right;
+    /*font-size: 20px;*/
+    color: #3399ff;
+}
+.addr{
+    /*padding-left: 60px;*/
+    /*padding-right: 10px;*/
+    padding: 12px 10px 12px 50px;
+    /*font-size: 18px;*/
+    /*overflow:hidden;*/
+    line-height: 15px;
+    color: #000000;
+}
+.tel{
+    padding-left: 50px;
+    /*font-size: 18px;*/
+    line-height: 40px;
+    color: #000000;
+}
+.emsName{
+    padding-left: 50px;
+    /*font-size: 18px;*/
+    line-height: 40px;
+    color: #000000;
+}
+.web{
+    padding-left: 50px;
+    /*font-size: 18px;*/
+    line-height: 40px;
+    /*border: 1px solid #ffff00;*/
+    color: #000000;
+}
+.wx_qrcode{
+    margin: 1px 10px 0px 1px;
+    float: right;
+}
+.icon1{
+    float: left;
+    width: 40px;
+    height: 40px;
+}
+.icon2{
+    float: left;
+    margin: 3px;
+    width: 34px;
+    height: 34px;
+}
+.like{
+    float: left;
+    margin: 5px 2px auto auto;
+}
+.wire1{
+    width: 100%;
+    height: 1px;
+    background-color: #e9e9e9;
+}
+.wire2{
+    width: auto;
+    height: 1px;
+    margin-left: 50px;
+    background-color: #e9e9e9;
+}
+.account-btn{
+    line-height: 3rem;
+    color: #fff;
+    text-align: center;
+    margin-left: 10px;
+    float: left;
+}
+.btn-submit1{
+    display: block;
+    width: 44%;
+    height: 3rem;
+    border-radius: 4px;
+    background-color: #bdb76b;
+    margin: 1rem auto 1rem 1rem;
+    float: left;
+}
+.btn-submit2{
+    display: block;
+    width: 44%;
+    height: 3rem;
+    border-radius: 4px;
+    background-color: #bdb76b;
+    margin: 1rem 1rem 1rem auto;
+    float: right;
+}
+.icon3 {
+    float: left;
+    margin: 5px auto 5px 20%;
+}
+
+html{font-size: 18px;}
+.wrapper{max-width: 520px}
+.footer{max-width: 520px;}
+.introduce, .name{font-size: 20px}
+.account-btn{font-size: 1.5rem;}
+.icon3 {width: 38px;height: 46px}
+@media screen and (max-width:520px){
+    html{font-size: 18px;}
+    .introduce, .name{font-size: 19px}
+    .account-btn{font-size: 1.5rem;}
+    .icon3 {width: 38px;height: 46px}
+}
+@media screen and (max-width:480px){
+    html{font-size: 17px;}
+    .introduce, .name{font-size: 18px}
+    .account-btn{font-size: 1.4rem;}
+    .icon3 {width: 36px;height: 44px}
+}
+@media screen and (max-width:440px){
+    html{font-size: 16px;}
+    .introduce, .name{font-size: 17px}
+    .account-btn{font-size: 1.3rem;}
+    .icon3 {width: 34px;height: 40px}
+}
+@media screen and (max-width:400px){
+    html{font-size: 15px;}
+    .introduce, .name{font-size: 16px}
+    .account-btn{font-size: 1.2rem;}
+    .icon3 {width: 32px;height: 38px}
+}
+@media screen and (max-width:360px){
+    html{font-size: 14px;}
+    .introduce, .name{font-size: 15px}
+    .account-btn{font-size: 1rem;}
+    .icon3 {width: 28px;height: 33px}
+}
+
+@media screen and (max-width:319px){
+    html{font-size: 13px;}
+    .introduce, .name{font-size: 14px}
+    .account-btn{font-size: 0.8rem;}
+    .icon3 {width: 26px;height: 30px}
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ui/card.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/share/mycard.css">
+    <title>电视的附加费回克</title>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#zhezhao').click(function(){
+                $('#zhezhao').css({display:"none"});
+                $('#login').css({display:"none"});
+            });
+            $('#login').click(function(){
+                $('#zhezhao').css({display:"none"});
+                $('#login').css({display:"none"});
+            });
+
+            $('.card').click(function(){
+                window.location.href='mycard?target_id='+$(this).attr('value');
+            });
+        })
+
+        function share(){
+            $('#zhezhao').css({display:"block"});
+            $('#login').css({display:"block"});
+        }
+
+    </script>
+
+</head>
+<body style="background-color: #f9f9f9">
+
+<div class="group" style="border-bottom-color: transparent;">
+    <div class="group-title">电视的附加费回克
+        <span class="group-member-count">454人</span>
+        <img class="member-count" src="../images/icon/member.png" >
+    </div>
+</div>
+
+<a href="../view/mycard.html"><div value="{$manager.id}" class="white_back card">
+    <img src="../Uploads/71445775226_sub.jpg" >
+    <div>
+        <div class="personal-card-name" style="color: #000000">东方今</div>
+        <div class="content">
+                度客服 | 试图解释法分开
+        </div>
+    </div>
+    <span class="manager">群主</span>
+</div></a>
+
+<volist name="cardList" id="card">
+    <a href="../view/mycard.html"><div value="{$card.id}" class="white_back card">
+        <img src="../Uploads/71445775226_sub.jpg" >
+        <div>
+            <div class="personal-card-name" style="color: #000000">电视剧</div>
+            <div class="content">
+                <!--<php>-->
+                    <!--echo $card['job']==null ? '暂无信息':大声道;-->
+                    <!--echo ' | ';-->
+                    <!--echo $card['company_name']==null?'暂无信息':都市路附近了;-->
+                    大声道 | 都市路附近了
+                <!--</php>-->
+            </div>
+        </div>
+    </div></a>
+</volist>
+
+<div style="height: 4rem"></div>
+<!--<a onclick="share()" class="member-share" >分享</a>-->
+<a href="../view/cardGroupDetail.html" class="member-share">分享</a>
+<a href="../view/createCardGroup.html"  class="member-create" >新建圈通讯录</a>
+
+<div class="zhezhao" id="zhezhao"></div>
+<div class="login" id="login" style="background: url(.._/images/icon/fx.png) no-repeat top right">点击右上角菜单分享</div>
+
+</body>
+</html>

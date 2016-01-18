@@ -22,14 +22,14 @@
                 "color": "#3a3",
                 "text": "BEGIN:VCARD\n"+
                 "VERSION:3.0\n"+
-                "N;CHARSET=utf8:刘兴瑞;;;;\n"+
-                "ORG;CHARSET=utf8:深圳市狮虎兽科技有限公司\n"+
-                "TITLE;CHARSET=utf8:产品经理\n"+
-                "TEL;CELL;VOICE;CHARSET=utf8:15040174635\n"+
-                "EMAIL;INTERNET;CHARSET=utf8:1570557967@qq.com\n"+
-                "NOTE;CHARSET=utf8:QQ: 1570557967 微信: 15040174635\n"+
-                "URL;CHARSET=utf8:www.khclub.sg\n"+
-                "ADR;PREF;CHARSET=utf8:;;深圳市南山区海的一道中洲控股金融中心;;;;\n"+
+                "N;CHARSET=utf8:{$userInfo.name};;;;\n"+
+                "ORG;CHARSET=utf8:{$userInfo.company_name}\n"+
+                "TITLE;CHARSET=utf8:{$userInfo.job}\n"+
+                "TEL;CELL;VOICE;CHARSET=utf8:{$userInfo.phone_num}\n"+
+                "EMAIL;INTERNET;CHARSET=utf8:{$userInfo.web}\n"+
+                "NOTE;CHARSET=utf8:QQ: {$userInfo.qq} 微信: {$userInfo.wechat}\n"+
+                "URL;CHARSET=utf8:{$userInfo.web}\n"+
+                "ADR;PREF;CHARSET=utf8:;;{$userInfo.address};;;;\n"+
                 "END:VCARD"
             });
 
@@ -39,7 +39,7 @@
 </head>
 <body style="background-color: #e8e8e8">
 <div class="dabox">
-    <div class="username">Hello！<span style="color: #666666;font-size: 24px">我是杨波</span></div>
+    <div class="username">Hello！<span style="color: #666666;font-size: 24px">我是{$userInfo.name}</span></div>
     <div id="container" style="text-align: center" class="codeimage" alt="" width="200px"></div>
     <div class="hint">长按识别二维码</div>
     <div class="hint">添加联系方式到通讯录</div>

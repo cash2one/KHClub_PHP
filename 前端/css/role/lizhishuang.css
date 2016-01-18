@@ -1,0 +1,360 @@
+/**
+ * Created by lizhishuang on 2015/9/7 0007.
+ */
+
+/* register,login */
+/*****************/
+/* common */
+.login-warp,.forget-warp,.reset-warp,.reg-warp,.reg2-warp,.bind-warp,.uinfo-warp,.contact-warp,.upd-pwd-warp{
+  padding: 0 1rem;
+}
+
+.text-box{
+  position: relative;
+  padding-top: 1.5rem;
+}
+.bind-warp .text-box,.uinfo-warp .text-box,.contact-warp .text-box,.upd-pwd-warp .text-box {
+  padding-top: 0;
+}
+.text-box input{
+  padding: 0 1rem;
+  width: 100%;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.2rem;
+  color: #333333;
+  border: none;
+  border-bottom: 1px solid #b8b8b8;
+  background-color: #fff;
+}
+.text-box.textarea textarea{
+  width: 100%;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.2rem;
+  overflow: hidden;
+  color: #333333;
+  border-top:0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 1px solid #b8b8b8;
+  background-color: #fff;
+}
+
+.bind-warp .text-box input,.uinfo-warp .text-box input,.contact-warp .text-box input,.upd-pwd-warp .text-box input{
+  border-bottom:1px solid #dfdede;
+  background-color: #fff;
+}
+
+.text-box input:focus{
+  outline: none;
+}
+.text-box input::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #999;
+}
+.text-box input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #999;
+}
+.text-box input::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #999;
+}
+.text-box input:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #999;
+}
+
+
+.btn-submit{
+  display: block;
+  width: 98%;
+  height: 3.8rem;
+  line-height: 3.8rem;
+  font-size: 1.5rem;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  background-color: #ff4200;
+  margin:0 auto;
+}
+.btn-submit.ban{
+  background-color: #e6e6e6;
+}
+
+.first-sign::before{
+  content: "@";
+  visibility: hidden;
+}
+
+/*****************/
+.forget-warp .text-box input,.reg-warp .text-box input,.uinfo-warp .text-box input,.bind-warp .text-box input ,
+ .upd-pwd-warp .text-box input{
+  padding-left: 6rem;
+}
+
+.text-box.pl0{
+  padding-left: 0 !important;
+}
+.text-box.pl0 input{
+  padding-left: 0 !important;
+}
+
+.forget-warp .text-box label,.reset-warp .text-box label,.reg-warp .text-box label,.reg2-warp .text-box label,
+ .bind-warp .text-box label,.uinfo-warp .text-box label,.upd-pwd-warp .text-box label{
+  position: absolute;
+  top:1.5rem;
+  left: 0;
+  height: 3rem;
+  line-height: 3rem;
+  width: 5.5rem;
+  color: #666666;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.bind-warp .text-box label,.uinfo-warp .text-box label,.contact-warp .text-box label,.upd-pwd-warp .text-box label{
+  top:0;
+}
+
+.reset-warp .text-box input,.reg2-warp .text-box input{
+  padding-left: 7rem;
+}
+.reset-warp .text-box label{
+  width: 6.5rem;
+}
+
+.forget-warp .text-box input.m-validate,.reg-warp .text-box input.m-validate{
+  padding-right: 7.5rem;
+}
+.forget-warp .text-box a.get-validate-code,.reg-warp .text-box a.get-validate-code,
+  .bind-warp .text-box a.get-validate-code{
+  position: absolute;
+  top:1.5rem;
+  right: 0;
+  height: 3rem;
+  line-height: 3rem;
+  width: 7.5rem;
+  color: #f47a11;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.bind-warp .text-box a.get-validate-code{
+  top:0;
+}
+
+.uinfo-warp .text-box label,.upd-pwd-warp .text-box label{
+  text-align: left;
+}
+.text-box a.get-validate-code.grey{
+  color: #666666;
+}
+
+
+
+
+a.get-validate-code.off{
+  color: #999 !important;
+  cursor:not-allowed;
+}
+
+
+.login-btn,.reg-btn,.reset-btn{
+  margin: 2.5rem 0;
+}
+.pwd-serve,.agree-warp{
+  position: relative;
+  font-size: 1.2rem;
+  height: 2rem;
+  line-height: 2rem;
+  color: #666666;
+}
+.pwd-serve > a{
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: inherit;
+  color: #333333;
+}
+.agree-warp{
+  margin-top: 2rem;
+}
+
+.login-warp{
+  padding-bottom: 16rem;
+}
+.other-login-box{
+  position: absolute;
+  bottom: 0;
+  height: 16rem;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  background: none no-repeat #f2f2f2;
+}
+.other-login-title{
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.2rem;
+  color: #666666;
+  text-align: center;
+  border-top: 1px solid #dcdcdc;
+  background-color: #e5e5e5;
+}
+.other-login-way{
+  padding-top: 1.3rem;
+}
+.other-login-way a{
+  display: block;
+  font-size: 0.9rem;
+  color: #333333;
+  text-align: center;
+}
+.other-login-way a.ico-l.flow::before{
+  width: 3.9rem;
+  height: 3.9rem;
+}
+.other-login-way a.qq::before{
+  background-image: url("../../images/icon/login_qq.png");
+}
+.other-login-way a.qq.ban::before{
+  background-image: url("../../images/icon/login_qq_ban.png");
+}
+.other-login-way a.wx::before{
+  background-image: url("../../images/icon/login_wx.png");
+}
+.other-login-way a.wb::before{
+  background-image: url("../../images/icon/login_xl.png");
+}
+.other-login-way a.wb.ban::before{
+  background-image: url("../../images/icon/login_xl_ban.png");
+}
+.other-login-way p{
+  margin: 0;
+  padding-top: 1rem;
+}
+.other-login-way del{
+  color: #999;
+}
+
+.lee-chk input[type='checkbox']{
+  height: 0;
+  width: 0;
+  display: none;
+}
+.lee-chk input[type='checkbox'] + label{
+  user-select: none;
+  -webkit-user-select: none;
+  padding-left: 2rem;
+}
+.lee-chk input[type='checkbox'] + label > i{
+  position: absolute;
+  top: .25rem;
+  left: 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  border: 1px solid #999999;
+}
+.lee-chk input[type='checkbox'] + label > i::before{
+  content: " ";
+  /*font-family: 'Glyphicons Halflings';*/
+  /*content: "\e013";*/
+  position: absolute;
+  top: 0;
+  left: .15rem;
+  /*line-height: 1.5rem;*/
+  /*font-size: 1.4rem;*/
+  /*color: #f47a11;*/
+  width: 1.2rem;
+  height: 1.5rem;
+  background-image:url("../../images/icon/ico-03.png");
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  visibility: hidden;
+
+}
+.lee-chk input[type='checkbox']:checked + label > i::before{
+  visibility: visible;
+}
+.lee-chk input[type='checkbox'] + label > span{
+  display: inline-block;
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+
+/* begin account */
+.account-btn{
+  margin-top: 1.4rem;
+}
+
+
+.uinfo-list.list-box{
+
+}
+.uinfo-list.list-box>a {
+  position: relative;
+  display: block;
+  font-size: 1.2rem;
+  height: 3.25rem;
+  width: 100%;
+  line-height: 3.25rem;
+  color: #333333;
+  padding-left: 1rem;
+  padding-right: 3rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-bottom: 1px solid #d9d9d9;
+}
+.uinfo-list.list-box>a:hover{
+  background-color: #f8f8f8;
+}
+.uinfo-list.list-box>a::after{
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  font-size: 1.1rem;
+  color: #666666;
+  right: 1rem;
+  text-align: right;
+}
+.u-head-img-box{
+  position: relative;
+  height: 8.4rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #d9d9d9;
+}
+/*.u-head-img-box::after{
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  font-size: 1.1rem;
+  line-height: 8.4rem;
+  color: #666666;
+  text-align: right;
+}*/
+
+.u-head-img-box > a{
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+
+}
+.u-head-img-box a img{
+  display: block;
+  height: 6.4rem;
+  width: 6.4rem;
+  border-radius: 3.2rem;
+}
+
+.contact-warp>div{
+  height: 3.25rem;
+  line-height: 2.25rem;
+  color: #333333;
+  font-size: 1.2rem;
+  background-color: #fff;
+}
+.contact-warp>div.contact-img{
+  margin-bottom: 1rem;
+  height: auto;
+}

@@ -38,50 +38,80 @@
 </head>
 <body style="background-color: #f9f9f9">
 
-<div class="group" style="border-bottom-color: transparent;">
-    <div class="group-title">{$group.group_title}
-        <span class="group-member-count">{$group.count}人</span>
-        <img class="member-count" src="__PUBLIC__/images/icon/member.png" >
-    </div>
-</div>
-
-<div value="{$manager.id}" class="white_back card">
-    <img src="{$manager.head_sub_image}" >
-    <div>
-        <div class="personal-card-name">{$manager.name}</div>
-        <div class="content">
-            <php>
-                echo $manager['job']==null ? '暂无信息':$manager['job'];
-                echo ' | ';
-                echo $manager['company_name']==null?'暂无信息':$manager['company_name'];
-            </php>
+    <div class="group" style="border-bottom-color: transparent;">
+        <div class="group-title">{$group.group_title}
+            <span class="group-member-count">{$group.count}人</span>
+            <img class="member-count" src="__PUBLIC__/images/icon/member.png" >
         </div>
     </div>
-    <span class="manager">群主</span>
-</div>
 
-<volist name="cardList" id="card">
-    <div value="{$card.id}" class="white_back card">
-        <img src="{$card.head_sub_image}" >
+    <div value="{$manager.id}" class="white_back card">
+        <img src="{$manager.head_sub_image}" >
         <div>
-            <div class="personal-card-name">{$card.name}</div>
+            <div class="personal-card-name">{$manager.name}</div>
             <div class="content">
                 <php>
-                    echo $card['job']==null ? '暂无信息':$card['job'];
+                    echo $manager['job']==null ? '暂无信息':$manager['job'];
                     echo ' | ';
-                    echo $card['company_name']==null?'暂无信息':$card['company_name'];
+                    echo $manager['company_name']==null?'暂无信息':$manager['company_name'];
                 </php>
             </div>
         </div>
+        <span class="manager">群主</span>
     </div>
-</volist>
 
-<div style="height: 4rem"></div>
-<a onclick="share()" class="member-share" >分享</a>
-<a href="createCardGroupPage"  class="member-create" >新建圈通讯录</a>
+    <volist name="cardList" id="card">
+        <div value="{$card.id}" class="white_back card">
+            <img src="{$card.head_sub_image}" >
+            <div>
+                <div class="personal-card-name">{$card.name}</div>
+                <div class="content">
+                    <php>
+                        echo $card['job']==null ? '暂无信息':$card['job'];
+                        echo ' | ';
+                        echo $card['company_name']==null?'暂无信息':$card['company_name'];
+                    </php>
+                </div>
+            </div>
+        </div>
+    </volist>
 
-<div class="zhezhao" id="zhezhao"></div>
-<div class="login" id="login" style="background: url('__PUBLIC__/images/icon/fx.png') no-repeat top right">点击右上角菜单分享</div>
+    <div style="height: 4rem"></div>
+    <a onclick="share()" class="member-share" >分享</a>
+    <a href="createCardGroupPage"  class="member-create" >新建圈通讯录</a>
+
+    <div class="zhezhao" id="zhezhao"></div>
+    <div class="login" id="login" style="background: url('__PUBLIC__/images/icon/fx.png') no-repeat top right">点击右上角菜单分享</div>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+
+    wx.config({
+        debug: false,
+        appId: '{$signPackage.appId}',
+        timestamp: {$signPackage.timestamp},
+        nonceStr: '{$signPackage.nonceStr}',
+        signature: '{$signPackage.signature}',
+        jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
+        "onMenuShareQQ", "onMenuShareWeibo" ]
+    });
+
+    var imageUrl = "{$userInfo.head_sub_image}";
+    if(imageUrl.substr(0, 4) != "http"){
+        imageUrl = "http://a.pinweihuanqiu.com/"+imageUrl;
+    }
+
+    var params = {
+        title : "加入圈子", // 分享标题
+        desc : "{$userInfo.name}邀请你加入\"{$group.group_title}\"", // 分享描述
+        link : "http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID={$group.id}",
+        imgUrl : imageUrl // 分享图标
+    };
+
+    operate.initOpenShare(params);
+
+</script>
 
 </body>
 </html>

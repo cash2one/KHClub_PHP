@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>公告</title>
+    <link rel="stylesheet" href="../css/share/notice.css" />
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            getNoticeInfo();
+        })
+        function getNoticeInfo(){
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                timeout:10000,
+                url:'__URL__/getNoticeInfo?' + Math.random(),
+                data:{notice_id: $.request.queryString['notice_id'] || '4'},
+                success:function(rData){
+                    var noticeInfo = eval(rData);
+                    if(noticeInfo && noticeInfo.status == 1 ){
+                        $('#content_text').text(noticeInfo.result.content_text || '');
+                        $('#comment').text(noticeInfo.result.comment_quantity || '');
+                        $('#like').text(noticeInfo.result.like_quantity || '');
+                    }
+                },
+                error:function(error){
+                    alert(eval(error));
+                    return false;
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div id="header">
+        <div class="details">公告内容</div>
+    </div>
+    <div class="content" id="content_text">粗犷的咖啡机的空间来看V领的开发的连接法兰克国际法施工的开发商来得快</div>
+    <div class="clear state">
+        <div class="left"><img class="icon" src="../images/chat.png" alt=""/><span id="comment">11</span></div>
+        <div class="wire1">1</div>
+        <div class="right"><img class="icon" src="../images/zan.png" alt=""/><span id="like">45</span></div>
+    </div>
+    <!--<div class="wire1"></div>-->
+    <div style="margin:20px 1rem auto 1rem;font-size:18px;text-indent: 2em;">
+        全球高端兴趣圈层互动社区，快来加入我们吧！
+    </div>
+    <div class="clear">
+        <a class="btn-submit1" href="http://fusion.qq.com/cgi-bin/qzapps/unified_jump?appid=12188158&from=singlemessage&isTimeline=false&actionFlag=0&params=pname%3Dcom.app.khclub%26versioncode%3D9%26channelid%3D%26actionflag%3D0&isappinstalled=0"><img class="icon2" src="../images/android_06.png" alt=""><span class="account-btn">安卓下载</span></a>
+        <a class="btn-submit2" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.app.khclub&g_f=991653"><img class="icon2" src="../images/ios_03.png" alt=""><span class="account-btn">IOS下载</span></a>
+    </div>
+    <!--<hr/>-->
+</div>
+</body>
+</html>

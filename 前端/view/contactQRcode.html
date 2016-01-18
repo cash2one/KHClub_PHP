@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ui/card.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script src="../js/qrcode/qrcode.js"></script>
+    <script src="../js/qrcode/qrcode_UTF8.js"></script>
+    <script src="../js/qrcode/jquery.qrcode.js"></script>
+
+    <title>添加大神至通讯录</title>
+
+    <script type="text/javascript">
+
+        $(function(){
+            $('#container').qrcode({
+                "size": 250,
+                "color": "#3a3",
+                "text": "BEGIN:VCARD\n"+
+                "VERSION:3.0\n"+
+                "N;CHARSET=utf8:刘兴瑞;;;;\n"+
+                "ORG;CHARSET=utf8:深圳市狮虎兽科技有限公司\n"+
+                "TITLE;CHARSET=utf8:产品经理\n"+
+                "TEL;CELL;VOICE;CHARSET=utf8:15040174635\n"+
+                "EMAIL;INTERNET;CHARSET=utf8:1570557967@qq.com\n"+
+                "NOTE;CHARSET=utf8:QQ: 1570557967 微信: 15040174635\n"+
+                "URL;CHARSET=utf8:www.khclub.sg\n"+
+                "ADR;PREF;CHARSET=utf8:;;深圳市南山区海的一道中洲控股金融中心;;;;\n"+
+                "END:VCARD"
+            });
+
+        })
+
+    </script>
+</head>
+<body style="background-color: #e8e8e8">
+<div class="dabox">
+    <div class="username">Hello！<span style="color: #666666;font-size: 24px">我是杨波</span></div>
+    <div id="container" style="text-align: center" class="codeimage" alt="" width="200px"></div>
+    <div class="hint">长按识别二维码</div>
+    <div class="hint">添加联系方式到通讯录</div>
+    <div><a class="btn-submit" href="#" onclick="history.go(-1)">返回</a></div>
+</div>
+</body>
+</html>

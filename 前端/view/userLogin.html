@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>账号验证</title>
+    <link rel="stylesheet" href="../css/share/userLogin.css">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script>
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+
+        function save()
+        {
+            if($('#password').val().length < 1){
+                drawToast("密码不能为空");
+                return;
+            }
+
+            //submit
+            var form = $("#form");
+            form.attr("method", "post");
+            form.attr("action", "userLogin");
+            form.submit();
+        }
+    </script>
+</head>
+<body style="background-color: #2E2E2D">
+<form id="form" >
+    <input type="hidden" name="username" value="{$username}">
+    <div class="ts">请填写密码</div>
+    <div class="tel"><input type="password" id="password" name="password" style=" margin: 0;padding: 0 2% 0 2%; height:40px; width: 96%; font-size: 16px; border-radius: 3px;"/></div>
+    <!--<a onclick="save()" class="btn-submit"/>下一步</a>-->
+    <a href="../view/infoUpdate.html" class="btn-submit"/>下一步</a>
+</form>
+</body>
+</html>

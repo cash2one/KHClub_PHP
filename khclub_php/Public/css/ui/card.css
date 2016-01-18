@@ -35,7 +35,6 @@ body {
 
 
 .save {
-    border: 1px solid red;
     font-size: 16px;
     float: left;
     clear: both;
@@ -152,7 +151,7 @@ a:visited {
 }
 .modify_bottom_line {
     padding: 0px;
-    margin: 0px 0px 0px 70px;
+    margin: 0px 0px 0px 50px;
     border-color: #b79869;
 }
 

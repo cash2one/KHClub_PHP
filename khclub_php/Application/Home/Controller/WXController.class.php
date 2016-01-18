@@ -2,6 +2,7 @@
 namespace Home\Controller;
 use Think\Controller;
 Vendor('alisdk.TopSdk');
+Vendor('jssdk');
 
 class WXController extends Controller {
 
@@ -411,6 +412,11 @@ class WXController extends Controller {
             }
         }
 
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
         $this->assign('userInfo',$userInfo);
         $this->display("mycard");
     }
@@ -467,10 +473,14 @@ class WXController extends Controller {
         $openModel = M('kh_user_extra_info');
         $open = $openModel->where('user_id="'.$target_id.'"')->find();
         //获取授权
-        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
-        $json=file_get_contents($TOKEN_URL);
-        $result=json_decode($json);
-        $ACC_TOKEN=$result->access_token;
+//        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
+//        $json=file_get_contents($TOKEN_URL);
+//        $result=json_decode($json);
+//        $ACC_TOKEN=$result->access_token;
+
+        //获取AccessToken
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
 
         if($open){
 
@@ -482,7 +492,6 @@ class WXController extends Controller {
                             "content":"'.$userExtra['name'].'收藏了你的名片<a href=\"http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id='.$userExtra['id'].'\">点击查看</a>"
                         }
                     }';
-
 
             $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
 
@@ -506,7 +515,6 @@ class WXController extends Controller {
         }else{
             header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/subscribeWX");
         }
-
 
     }
 
@@ -623,36 +631,7 @@ class WXController extends Controller {
             $this->display("cardHolder");
 
         }else{
-
             header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
-//            //注册逻辑
-//            $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.json_decode($content)->access_token.'&openid='.$openID;
-//            $msg = file_get_contents($msgUrl);
-//            $wxUser = json_decode($msg);
-//
-//            $user = array('name'=>$wxUser->nickname,'sex'=>$wxUser->sex-1, 'head_image'=>$wxUser->headimgurl, 'head_sub_image'=>$wxUser->headimgurl);
-//            $userModel = M('kh_user_info');
-//
-//            $userModel->startTrans();
-//            $retID = $userModel->add($user);
-//            if($retID){
-//                $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$retID);
-//                $extraRet = $findExtraUser->add($userExtra);
-//                if($extraRet){
-//                    $userExtra = $findExtraUser->query($sql);
-//                    //存入信息
-//                    $_SESSION['userInfo'] = $userExtra[0];
-//
-//                    $userModel->commit();
-//                    $this->display("cardHolder");
-//                }else{
-//                    $userModel->rollback();
-//                    echo '创建失败';
-//                }
-//            }else{
-//                $userModel->rollback();
-//                echo '创建失败';
-//            }
         }
 
     }
@@ -818,7 +797,7 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/cardGroupMembers
      * @param group_id 成员id
      */
-    public  function cardGroupMembers(){
+    public function cardGroupMembers(){
         $group_id = $_REQUEST['group_id'];
         if(empty($group_id)){
             echo '圈子不能为空';
@@ -879,6 +858,13 @@ class WXController extends Controller {
                 $cardList[$i]['head_sub_image'] = __ROOT__.'/Uploads/'.$cardList[$i]['head_sub_image'];
             }
         }
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->assign('userInfo',$userExtra);
 
         $this->assign("group", $group);
         $this->assign("manager",$cardList[0]);
@@ -1004,10 +990,13 @@ class WXController extends Controller {
         $open = $openModel->query($sql)[0];
         $targetOpenID = $open['wx_open_id'];
 
-        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
-        $json=file_get_contents($TOKEN_URL);
-        $result=json_decode($json);
-        $ACC_TOKEN=$result->access_token;
+//        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
+//        $json=file_get_contents($TOKEN_URL);
+//        $result=json_decode($json);
+//        $ACC_TOKEN=$result->access_token;
+        //获取AccessToken
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
 
         if(!empty($targetOpenID)){
             $data = '{
@@ -1148,35 +1137,6 @@ class WXController extends Controller {
     public function deleteCardGroup(){
     }
 
-
-//    /**
-//     * @brief 修改名片页面
-//     * 接口地址
-//     * http://localhost/khclub_php/index.php/Home/WX/modifyCardPage
-//     */
-//    public  function modifyCardPage(){
-//        $code = $_REQUEST['code'];
-//        if(empty($code)){
-//            echo '不好意思，您微信未授权';
-//            return;
-//        }
-//        $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
-//        $openID = json_decode($content)->openid;
-//        $findExtraUser = M('kh_user_extra_info');
-//        $sql = 'SELECT ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
-//                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
-//        $userExtra = $findExtraUser->query($sql);
-//        //存在
-//        if($userExtra){
-//            print_r($userExtra);
-//            print_r($_SESSION['userInfo']);
-//            $this->assign('userInfo', $userExtra[0]);
-//            $this->display("infoUpdate");
-//        }else{
-//            echo '微信未授权';
-//        }
-//
-//    }
     /**
      * @brief 跳到关注页面
      * 接口地址

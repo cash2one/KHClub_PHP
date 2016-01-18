@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/ui/card.css" rel="stylesheet">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <title>名片夹</title>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.group').click(function () {
+                window.location.href='cardGroupMembers?group_id='+$(this).attr('value');
+            });
+
+        })
+
+    </script>
+
+</head>
+<body style="background-color: #f9f9f9">
+
+<volist name="cards" id="group">
+
+    <a href="../view/applyGroup.html"><div value="{$group.id}" class="group">
+        <div class="group-title">电视的附加费回克
+            <span class="group-member-count">435人</span>
+            <img class="member-count" src="../images/icon/member.png" >
+        </div>
+    </div></a>
+
+</volist>
+
+<div style="height: 4rem"></div>
+
+<a href="../view/createCardGroup.html" class="save" >新建圈通讯录</a>
+
+</body>
+</html>

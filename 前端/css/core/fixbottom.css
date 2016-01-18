@@ -1,0 +1,9 @@
+/**
+ * Created by lizhishuang on 2015/9/7 0007.
+ */
+html,body{
+  height: 100%;
+}
+.wrapper{
+  min-height: 100%;
+}

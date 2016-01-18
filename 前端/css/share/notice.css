@@ -1,0 +1,133 @@
+body{background-color:#f2f2f2;}
+body,dl,dd,h1,p{margin:0;}
+ul{margin:0;padding:0;}
+a{text-decoration:none;}
+li{list-style:none;}
+img{display:block;}
+
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+}
+#header{
+    height: 3rem;
+    background-color: #deb574;
+    margin: 0 auto 0 auto;
+}
+.details{
+    font-size: 24px;
+    line-height: 3rem;
+    text-align: center;
+    color: #ffffff;
+}
+.content{
+    margin: 1rem 1rem 1rem 1rem;
+    /*text-align: center;*/
+    line-height: 25px;
+    text-indent: 2em;
+}
+.state{
+    margin: auto 1rem;
+    border: 1px solid #deb574;
+    height: 2rem;
+}
+.wire1{
+    float: left;
+    width: 1px;
+    height: 100%;
+    text-indent: 9999px;
+    background-color: #deb574;
+}
+.account-btn{
+    line-height: 3rem;
+    color: #fff;
+    text-align: center;
+    margin-left: 10px;
+    float: left;
+}
+.btn-submit1{
+    display: block;
+    width: 44%;
+    height: 3rem;
+    border-radius: 4px;
+    background-color: #bdb76b;
+    margin: 1rem auto 1rem 1rem;
+    float: left;
+}
+.btn-submit2{
+    display: block;
+    width: 44%;
+    height: 3rem;
+    border-radius: 4px;
+    background-color: #bdb76b;
+    margin: 1rem 1rem 1rem auto;
+    float: right;
+}
+.icon2 {
+    float: left;
+    margin: 5px auto 5px 15%;
+}
+.left{
+    width: 49%;
+    float: left;
+}
+.right{
+    width: 49%;
+    float: right;
+}
+#comment, #like{
+    margin-left: 0.25rem;
+    text-align: center;
+    line-height: 2rem;
+    width: 1rem;
+    float: left;
+}
+.icon {
+    float: left;
+    width: 27px;
+    height: 22px;
+    margin-top: 4%;
+    margin-left: 35%;
+}
+
+html{font-size: 20px;}
+.wrapper{max-width: 520px}
+.footer{max-width: 520px;}
+.introduce, .name{font-size: 20px}
+.account-btn{font-size: 1.5rem;}
+.icon2 {width: 44px;height: 50px}
+@media screen and (max-width:520px){
+    html{font-size: 20px;}
+    .account-btn{font-size: 1.5rem;}
+    .icon2 {width: 44px;height: 50px}
+}
+@media screen and (max-width:480px){
+    html{font-size: 19px;}
+    .account-btn{font-size: 1.4rem;}
+    .icon2 {width: 42px;height: 49px}
+}
+@media screen and (max-width:440px){
+    html{font-size: 18.5px;}
+    .account-btn{font-size: 1.3rem;}
+    .icon2 {width: 40px;height: 48px}
+}
+@media screen and (max-width:400px){
+    html{font-size: 18px;}
+    .account-btn{font-size: 1.2rem;}
+    .icon2 {width: 33px;height: 42px}
+}
+@media screen and (max-width:360px){
+    html{font-size: 17px;}
+    .account-btn{font-size: 1rem;}
+    .icon2 {width: 30px;height: 36px}
+}
+
+@media screen and (max-width:319px){
+    html{font-size: 16px;}
+    .account-btn{font-size: 0.8rem;}
+    .icon2 {width: 26px;height: 34px}
+}

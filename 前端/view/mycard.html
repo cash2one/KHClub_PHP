@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--<if condition="$userInfo.ifmy neq false">
+        <title>我的名片</title>
+        <else/>-->
+        <title>TA的名片</title>
+    <!--</if>-->
+
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="../css/core/swiper.min.css">
+    <link rel="stylesheet" href="../css/share/mycard.css">
+</head>
+<body>
+<!-- Swiper -->
+<!--<div class="topbox clear">-->
+    <!--<a href="#" class="leftbox"><img class="carscase" src="__PUBLIC__/images/icon/cardcase.png" alt=""><span class="carscasespan">名片夹</span></a>-->
+    <!--<a href="#" class="rightbox"><img class="mecard" src="__PUBLIC__/images/icon/mecard.png" alt=""><span class="mecardspan">我的名片</span></a>-->
+<!--</div>-->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div style="width: 90%; height: 100%; background: url(../images/icon/bjcolor.png) no-repeat; background-size: 100% 100%; border-radius: 5px;">
+                <!--<if condition="$userInfo.head_sub_image neq null">-->
+                    <img class="image" src="../Uploads/71445775226_sub.jpg" alt="">
+                    <!--<else/>
+                    <img class="image" src="../images/icon/head.png" alt="">
+                </if>-->
+                <div class="name"><p>沙发垫 / 防守打法</p></div>
+                <div class="clear box"><img class="icon1" src="../images/icon/tel.png" alt=""><p class="details1">15373467833</p></div>
+                <div class="clear box"><img class="icon1" src="../images/icon/dx.png" alt=""><p class="details1">33746726@qq.com</p></div>
+                <div class="clear box"><img class="icon1" src="../images/icon/gs.png" alt=""><p class="details1">好的风景好的减肥电话</p></div>
+                <div class="clear box"><img class="icon1" src="../images/icon/addr.png" alt=""><p class="details1">发的好疯狂的减肥发快递</p></div>
+                <!--<switch name="userInfo.collect">
+                    <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
+                    <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
+                </switch>-->
+                <if condition="$userInfo.ifmy eq true">
+                    <a href="../view/userVerify.html"><img class="bj" src="../images/icon/bj.png" alt=""></a>
+                </if>
+            </div>
+        </div>
+        <div class="swiper-slide">
+            <div style="width: 90%; height: 100%; background: url(../images/icon/bjcolor.png) no-repeat; background-size: 100% 100%; border-radius: 5px;">
+                <!--<if condition="$userInfo.head_sub_image neq null">-->
+                    <img class="image" src="../Uploads/71445775226_sub.jpg" alt="">
+                    <!--<else/>
+                    <img class="image" src="../images/icon/head.png" alt="">
+                </if>-->
+                <div class="name"><p class="content">沙发垫 / 防守打法</p></div>
+                <div class="clear box"><img class="icon2" src="../images/icon/web.png" alt=""><p class="details2">dfdjfk.com</p></div>
+                <div class="clear box"><img class="icon2" src="../images/icon/qq.png" alt=""><p class="details2">246352671</p></div>
+                <div class="clear box"><img class="icon2" src="../images/icon/wx.png" alt=""><p class="details2">dghs53652</p></div>
+                <!--<switch name="userInfo.collect">
+                    <case value="0"><div class="collect2" id="showcollect">收藏成功</div></case>
+                    <case value="1"><div class="collect2" id="showcollect">取消收藏</div></case>
+                </switch>-->
+                <if condition="$userInfo.ifmy eq true">
+                    <a href="../view/userVerify.html"><img class="bj" src="../images/icon/bj.png" alt=""></a>
+                </if>
+            </div>
+        </div>
+    </div>
+    <!-- Add Pagination -->
+    <!--<div class="swiper-pagination"></div>-->
+</div>
+<div class="swiper-pagination"></div>
+<div class="mask opacity"></div>
+<div class="zhezhao" id="zhezhao"></div>
+<div class="login" id="login" style="background: url(../images/icon/fx.png) no-repeat top right">点击右上角菜单分享</div>
+<!--<if condition="$userInfo.ifmy neq false">
+    <a class="btn-submit1" id="bt" href="#">分享</a>
+    <else/>-->
+    <div class="menu1 clear">
+        <span class="menubox"><a href="tel:{$userInfo.phone_num}"><img class="menuicon" src="../images/icon/telicon.png" alt=""/></a></span>
+        <span class="menubox"><a href="sms:{$userInfo.phone_num}"><img class="menuicon" src="../images/icon/dxicon.png" alt=""/></a></span>
+        <span class="menubox"><a href="#" id="bt"><img class="menuicon" src="../images/icon/fxicon.png" alt=""/></a></span>
+    </div>
+    <div class="menu2 clear">
+        <div class="menubtbox"><span class="menubt">电话</span></div>
+        <div class="menubtbox"><span class="menubt">短信</span></div>
+        <div class="menubtbox"><span class="menubt">分享</span></div>
+    </div>
+<!--</if>-->
+<div class="clear">
+    <!--<if condition="$userInfo.collect neq 1">-->
+        <form id="form" method="get" action="collectCard">
+            <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
+            <a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>收藏到名片夹</span></a>
+        </form>
+      <!--  <else/>
+        <form id="form" method="get" action="deleteCard">
+            <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
+            <a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>移出名片夹</span></a>
+        </form>
+    </if>-->
+    <a class="btn-submit3" href="../view/contactQRcode.html"><span>保存到电话本</span></a>
+</div>
+<div style="margin-top: 10px;height: 1px"></div>
+<!-- Swiper JS -->
+<script src="../js/jquery-1.8.1.min.js"></script>
+<script src="../js/swiper.jquery.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+    window.onload=function()
+    {
+        var zhezhao=document.getElementById("zhezhao");
+        var login=document.getElementById("login");
+        var bt=document.getElementById("bt");
+        var collect=document.getElementById("collect");
+        var showcollect=document.getElementById("showcollect");
+        login.style.display="none";
+
+        bt.onclick=function()
+        {
+            zhezhao.style.display="block";
+            login.style.display="block";
+        }
+        login.onclick=function()
+        {
+            zhezhao.style.display="none";
+            login.style.display="none";
+        }
+        zhezhao.onclick=function()
+        {
+            zhezhao.style.display="none";
+            login.style.display="none";
+        }
+        collect.onclick=function collect(){
+//            showcollect.style.display="block";
+//            window.setTimeout('show()',2000);
+            //submit
+            var form = $("#form");
+            form.submit();
+        }
+    }
+</script>
+</body>
+</html>

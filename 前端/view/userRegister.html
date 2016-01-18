@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>账号验证</title>
+    <link rel="stylesheet" href="../css/share/userRegister.css">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+
+    <script>
+
+        var input1, input2, input3, input4, support;
+
+        $(function () {
+            input1 = $("#input1");
+            input2 = $("#input2");
+            input3 = $("#input3");
+            input4 = $("#input4");
+            support = $("#support");
+
+            if('{$verifyError}' == 1){
+                drawToast('验证码错误!');
+            }else if('{$verifyError}' == 2){
+                drawToast('注册失败');
+            }else{
+                //获取验证码
+                getVerify();
+            }
+
+        })
+
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+
+        function save()
+        {
+            if($('#support').val().length < 4){
+                drawToast("验证码有误");
+                return;
+            }
+
+            if($('#password').val().length < 6){
+                drawToast("密码不能少于6位");
+                return;
+            }
+
+            //submit
+            var form = $("#form");
+            form.attr("method", "GET");
+            form.attr("action", "userRegister");
+            form.submit();
+        }
+
+        var onGoing = false;
+        var index = 60;//时间
+        function start()
+        {
+            document.getElementById("timeSpan").innerHTML = index;
+            document.getElementById("dates").style.display="block";
+            index--;
+            if(index < 0) {
+                //清空定时器
+                document.getElementById("dates").style.display="none";
+                index = 60;
+                onGoing = false;
+                $("#resend").attr('class','resend-verify');
+            }
+            else {
+                //开启计时
+                setTimeout("start()",1000);
+                $("#resend").attr('class','wait-verify');
+            }
+
+        }
+
+        function supportInput(){
+            var first = support.val().substr(0,1);
+            var second = support.val().substr(1,1);
+            var third = support.val().substr(2,1);
+            var fouth = support.val().substr(3,1);
+
+            input1.val(first);
+            input2.val(second);
+            input3.val(third);
+            input4.val(fouth);
+
+        }
+
+        function jump(){
+            support.focus();
+        }
+
+        function getVerify(){
+            if(onGoing == false){
+                onGoing = true;
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    timeout: 10000,
+                    url: "__URL__/requestSms?" + Math.random(),
+                    data: { phone_num : '{$username}' },
+                    success: function (rData) {
+                        var result = eval(rData);
+                        if(result.status == 1){
+                            start();
+                        }else{
+                            document.getElementById("dates").style.display="none";
+                            index = 60;
+                            onGoing = false;
+                            $("#resend").attr('class','resend-verify');
+                            drawToast('短信发送失败');
+
+                        }
+                    },
+                    error: function (error) {
+                        document.getElementById("dates").style.display="none";
+                        index = 60;
+                        onGoing = false;
+                        $("#resend").attr('class','resend-verify');
+                        drawToast('服务器异常');
+                        //alert('您好、当前服务器正忙、请稍后……');
+                        return false;
+                    }
+                })
+            }
+        }
+
+    </script>
+</head>
+<body style="background-color: #2E2E2D">
+<form id="form" >
+    <input type="hidden" name="username" value="{$username}">
+    <div class="ts">验证码已发送到您的手机,请注意查收并填写</div>
+    <div class="clear" id="box">
+        <div class="yzm1"><input onclick="jump()" id="input1" type="text" name="yzm1" class="verify" maxlength="1"/></div>
+        <div class="yzm1"><input onclick="jump()" id="input2" type="text" name="yzm2" class="verify" maxlength="1"/></div>
+        <div class="yzm1"><input onclick="jump()" id="input3" type="text" name="yzm3" class="verify" maxlength="1"/></div>
+        <div class="yzm2"><input onclick="jump()" id="input4" type="text" name="yzm4" class="verify" maxlength="1"/></div>
+        <!--<input maxlength="4" name="verify" oninput="supportInput(this)" id="support" class="supportVerfiy" />-->
+    </div>
+    <div class="box1 clear">
+        <span id="dates"><span id="timeSpan">60</span>s</span>
+        <a id="resend" href="#" class="wait-verify" onclick="getVerify()">重新发送验证码</a>
+    </div>
+    <div class="ts1">请填写密码</div>
+    <div class="tel"><input type="password" id="password" name="password" style=" margin: 0;padding: 0 2% 0 2%; height:40px; width: 96%; font-size: 16px; border-radius: 3px;"/></div>
+    <!--<a onclick="save()" class="btn-submit"/>下一步</a>-->
+    <a href="../view/userLogin.html" class="btn-submit"/>下一步</a>
+</form>
+
+</body>
+</html>
