@@ -151,6 +151,12 @@ a:visited {
 }
 .modify_bottom_line {
     padding: 0px;
+    margin: 0px 0px 0px 70px;
+    border-color: #b79869;
+}
+
+.input_bottom_line {
+    padding: 0px;
     margin: 0px 0px 0px 50px;
     border-color: #b79869;
 }

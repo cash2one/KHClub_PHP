@@ -910,7 +910,9 @@ class WXController extends Controller {
         }else{
             $isMember = $memberModel->where('delete_flag=0 AND group_id='.$groupID.' AND member_id='.$userExtra['id'])->find();
             if($isMember){
-                $this->assign("isMember",'1');
+                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupMembers?group_id=".$groupID);
+                exit;
+//                $this->assign("isMember",'1');
             }else{
                 $this->assign("isMember",'2');
             }
