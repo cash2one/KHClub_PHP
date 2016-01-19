@@ -18,6 +18,7 @@
 
         $(function(){
             $('#container').qrcode({
+                render: 'image',
                 "size": 250,
                 "color": "#3a3",
                 "text": "BEGIN:VCARD\n"+
@@ -32,7 +33,6 @@
                 "ADR;PREF;CHARSET=utf8:;;{$userInfo.address};;;;\n"+
                 "END:VCARD"
             });
-
         })
 
     </script>
@@ -43,7 +43,29 @@
     <div id="container" style="text-align: center" class="codeimage" alt="" width="200px"></div>
     <div class="hint">长按识别二维码</div>
     <div class="hint">添加联系方式到通讯录</div>
-    <div><a class="btn-submit" href="#" onclick="history.go(-1)">返回</a></div>
+    <div><a class="btn-submit" href="#" onclick="back()">返回</a></div>
+    <div style="height: 20px"></div>
 </div>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+    wx.config({
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
+        "onMenuShareQQ", "onMenuShareWeibo" ]
+    });
+
+    function back(){
+        wx.closeWindow();
+    }
+
+</script>
+
 </body>
 </html>
