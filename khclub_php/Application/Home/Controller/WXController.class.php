@@ -313,7 +313,8 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."mycard?target_id=".$target_id."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                $url = HTTP_URL_PREFIX."mycard?target_id=".$target_id."&isShared=".$_REQUEST['isShared'];
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".urlencode($url)."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -721,7 +722,10 @@ class WXController extends Controller {
             //存入信息
             $_SESSION['userInfo'] = $userExtra[0];
         }
-
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
         $this->display("infoUpdate");
     }
 
@@ -784,26 +788,8 @@ class WXController extends Controller {
         $userExtra['wechat'] = $_REQUEST['wechat'];
         $extraRet = $userExtraModel->save($userExtra);
 
-
         if($ret !== false && $extraRet !== false){
             $userModel->commit();
-
-            //是否要收藏一下名片
-            $collectID = $_REQUEST['collectID'];
-            if(!empty($collectID)){
-                $cardModel = M('kh_card');
-                $card = $cardModel->where('user_id='.$userExtra['id'].' and target_id='.$collectID)->find();
-                if($card){
-                    if(!$card['delete_flag'] == 0){
-                        $card['delete_flag'] = 0;
-                        $card['update_date'] = time();
-                        $cardModel->save($card);
-                    }
-                }else{
-                    $card = array('user_id'=>$userExtra['id'],'target_id'=>$collectID, 'add_date'=>time());
-                    $cardModel->add($card);
-                }
-            }
 
             //是否订阅了公众号 没订阅去订阅
             $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -1471,9 +1457,6 @@ class WXController extends Controller {
         and verify_code='.$verify.' and delete_flag=0 and add_date>'.(time()-60);
         $data = $verifyModel->query($sql)[0];
 
-        //要收藏的人
-        $this->assign('collectID',$collectID);
-
         //验证成功注册
         if($data['id'] > 0){
             //注册逻辑
@@ -1492,6 +1475,12 @@ class WXController extends Controller {
                 $extraRet = $findExtraUser->add($userExtra);
                 if($extraRet){
                     $userModel->commit();
+                    //是否要收藏一下名片
+                    if(!empty($collectID)){
+                        $cardModel = M('kh_card');
+                        $card = array('user_id'=>$retID,'target_id'=>$collectID, 'add_date'=>time());
+                        $cardModel->add($card);
+                    }
 //                    header("Location: ".HTTP_URL_PREFIX."cardHome");
                     header("Location: ".HTTP_URL_PREFIX."modifyCardPage?collectID=".$collectID);
                 }else{

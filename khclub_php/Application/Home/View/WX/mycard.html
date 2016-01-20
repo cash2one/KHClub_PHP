@@ -12,13 +12,13 @@
 
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="__PUBLIC__/css/core/swiper.min.css">
-    <link rel="stylesheet" href="__PUBLIC__/css/share/mycard.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/share/mycard.css?v=2">
 </head>
 <body>
 <!-- Swiper -->
 <!--<div class="topbox clear">-->
-    <!--<a href="#" class="leftbox"><img class="carscase" src="__PUBLIC__/images/icon/cardcase.png" alt=""><span class="carscasespan">名片夹</span></a>-->
-    <!--<a href="#" class="rightbox"><img class="mecard" src="__PUBLIC__/images/icon/mecard.png" alt=""><span class="mecardspan">我的名片</span></a>-->
+<!--<a href="#" class="leftbox"><img class="carscase" src="__PUBLIC__/images/icon/cardcase.png" alt=""><span class="carscasespan">名片夹</span></a>-->
+<!--<a href="#" class="rightbox"><img class="mecard" src="__PUBLIC__/images/icon/mecard.png" alt=""><span class="mecardspan">我的名片</span></a>-->
 <!--</div>-->
 <div class="swiper-container">
     <div class="swiper-wrapper">
@@ -38,9 +38,15 @@
                     <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
                     <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
                 </switch>-->
+                <!--如果是自己的话 则右上角显示编辑-->
                 <if condition="$userInfo.ifmy eq true">
                     <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
                 </if>
+                <!-- 分享进来的 -->
+                <if condition="$isShared eq 1">
+                    <a href="cardHome"><img class="home" src="__PUBLIC__/images/icon/home.png" alt=""></a>
+                </if>
+
             </div>
         </div>
         <div class="swiper-slide">
@@ -54,12 +60,13 @@
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/web.png" alt=""><p class="details2">{$userInfo.web}</p></div>
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/qq.png" alt=""><p class="details2">{$userInfo.qq}</p></div>
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/wx.png" alt=""><p class="details2">{$userInfo.wechat}</p></div>
-                <!--<switch name="userInfo.collect">
-                    <case value="0"><div class="collect2" id="showcollect">收藏成功</div></case>
-                    <case value="1"><div class="collect2" id="showcollect">取消收藏</div></case>
-                </switch>-->
+                <!--如果是自己的话 则右上角显示编辑-->
                 <if condition="$userInfo.ifmy eq true">
                     <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
+                </if>
+                <!-- 分享进来的 -->
+                <if condition="$isShared eq 1">
+                    <a href="cardHome"><img class="home" src="__PUBLIC__/images/icon/home.png" alt=""></a>
                 </if>
             </div>
         </div>
@@ -71,52 +78,60 @@
 <div class="mask opacity"></div>
 <div class="zhezhao" id="zhezhao"></div>
 <div class="login" id="login" style="background: url('__PUBLIC__/images/icon/fx.png') no-repeat top right">点击右上角菜单分享</div>
+
+<div class="zhezhao2" id="zhezhao2"></div>
+<div class="createhint" id="createhint" style="background: url('__PUBLIC__/images/icon/arrows.png') no-repeat 70px 290px">
+    <div class="guide">
+        <img src="__PUBLIC__/images/icon/guide.png" alt="" width="235px" height="148px">
+    </div>
+    <div class="createicon">
+        <img src="__PUBLIC__/images/icon/createicon.png" alt="" width="50px" height="50px">
+    </div>
+</div>
+
 <if condition="$userInfo.ifmy neq false">
     <a class="btn-submit1" id="bt" href="#">分享</a>
     <else/>
     <div class="menu1 clear">
-        <span class="menubox"><a href="tel:{$userInfo.phone_num}"><img class="menuicon" src="__PUBLIC__/images/icon/telicon.png" alt=""/></a></span>
-        <span class="menubox"><a href="sms:{$userInfo.phone_num}"><img class="menuicon" src="__PUBLIC__/images/icon/dxicon.png" alt=""/></a></span>
+        <if condition="$userInfo.collect eq 2">
+            <span class="menubox"><a href="userVerify"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/create.png" alt=""/></a></span>
+            <else/>
+            <span class="menubox"><a href="tel:{$userInfo.phone_num}"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/telicon.png" alt=""/></a></span>
+        </if>
+
         <if condition="$userInfo.collect neq 1">
             <form id="form" method="get" action="collectCard">
                 <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
-                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon" src="__PUBLIC__/images/icon/qxccicon.png" alt=""/></span>
+                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/qxccicon.png" alt=""/></span>
             </form>
             <else/>
             <form id="form" method="get" action="deleteCard">
                 <input type="hidden" name="user_id" value="{$userInfo.user_id}"/>
-                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon" src="__PUBLIC__/images/icon/ccicon.png" alt=""/></span>
+                <span class="menubox" id="collect"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/ccicon.png" alt=""/></span>
             </form>
         </if>
 
-        <span class="menubox"><a href="#" id="bt"><img class="menuicon" src="__PUBLIC__/images/icon/fxicon.png" alt=""/></a></span>
-    </div>
-    <div class="menu2 clear">
-        <div class="menubtbox"><span class="menubt">电话</span></div>
-        <div class="menubtbox"><span class="menubt">短信</span></div>
+        <span class="menubox"><a href="contactQRcode?user_id={$userInfo.target_id}"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/save.png" alt=""/></a></span>
+        <span class="menubox"><a href="#" id="bt"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/fxicon.png" alt=""/></a></span>
+
+        <if condition="$userInfo.collect eq 2">
+            <div class="menubtbox"><span class="menubt">创建</span></div>
+            <else/>
+            <div class="menubtbox"><span class="menubt">电话</span></div>
+        </if>
+
         <if condition="$userInfo.collect neq 1">
             <div class="menubtbox"><span class="menubt">收藏</span></div>
             <else/>
-            <div class="menubtbox"><span class="menubt1">取消收藏</span></div>
+            <div class="menubtbox"><span class="menubt">取消收藏</span></div>
         </if>
+        <div class="menubtbox"><span class="menubt">保存</span></div>
         <div class="menubtbox"><span class="menubt">分享</span></div>
+
     </div>
 
 </if>
-<!--<div class="clear">-->
-    <!--<if condition="$userInfo.collect neq 1">-->
-        <!--<form id="form" method="get" action="collectCard">-->
-            <!--<input type="hidden" name="user_id" value="{$userInfo.user_id}"/>-->
-            <!--<a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>收藏到名片夹</span></a>-->
-        <!--</form>-->
-        <!--<else/>-->
-        <!--<form id="form" method="get" action="deleteCard">-->
-            <!--<input type="hidden" name="user_id" value="{$userInfo.user_id}"/>-->
-            <!--<a class="btn-submit2" href="#"><input type="hidden" name="target_id" value="{$userInfo.target_id}"/><span>移出名片夹</span></a>-->
-        <!--</form>-->
-    <!--</if>-->
-    <!--<a class="btn-submit3" href="contactQRcode?user_id={$userInfo.target_id}"><span>保存到电话本</span></a>-->
-<!--</div>-->
+
 <div style="margin-top: 10px;height: 1px"></div>
 <!-- Swiper JS -->
 <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
@@ -126,6 +141,7 @@
 
 <!-- Initialize Swiper -->
 <script>
+
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true
@@ -137,7 +153,20 @@
         var bt=document.getElementById("bt");
         var collect=document.getElementById("collect");
         var showcollect=document.getElementById("showcollect");
+
+        //创建提示遮罩
+        var createhint=document.getElementById("createhint");
+        var zhezhao2=document.getElementById("zhezhao2");
+
         login.style.display="none";
+        createhint.style.display="none";
+        zhezhao2.style.display="none";
+
+        //未创建的用户
+        if("{$userInfo.collect}" == 2){
+            createhint.style.display="block";
+            zhezhao2.style.display="block";
+        }
 
         bt.onclick=function()
         {
@@ -155,21 +184,31 @@
             login.style.display="none";
         }
         collect.onclick=function collect(){
-//            showcollect.style.display="block";
-//            window.setTimeout('show()',2000);
             //submit
             var form = $("#form");
             form.submit();
         }
+
+        //遮罩部分
+        zhezhao2.onclick=function()
+        {
+            zhezhao2.style.display="none";
+            createhint.style.display="none";
+        }
+        createhint.onclick=function()
+        {
+            zhezhao2.style.display="none";
+            createhint.style.display="none";
+        }
     }
 
     wx.config({
-        debug: false,
-        appId: '{$signPackage.appId}',
-        timestamp: {$signPackage.timestamp},
-        nonceStr: '{$signPackage.nonceStr}',
-        signature: '{$signPackage.signature}',
-        jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
         "onMenuShareQQ", "onMenuShareWeibo" ]
     });
 
@@ -181,7 +220,7 @@
     var params = {
         title : "微信云名片", // 分享标题
         desc : "{$userInfo.name} | {$userInfo.job}\n{$userInfo.company_name}", // 分享描述
-        link : "http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id={$userInfo.target_id}",
+        link : "http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?isShared=1&target_id={$userInfo.target_id}",
         imgUrl : imageUrl // 分享图标
     };
 

@@ -5,4 +5,5 @@ gen/
 .settings/
 proguard/
 .idea/
-
+WXTest/
+testCss/

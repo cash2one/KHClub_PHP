@@ -2,6 +2,7 @@ var operate = function(){
 
     var openShare = function(params){
         wx.ready(function () {
+            wx.showOptionMenu();
             // 分享到朋友圈
             wx.onMenuShareTimeline({
                 title: params.title, // 分享标题
@@ -39,8 +40,8 @@ var operate = function(){
         initOpenShare: function(params){
             openShare(params);
         },
-        initCloseShare: function(params){
-            closeShare(params);
+        initCloseShare: function(){
+            closeShare();
         }
     }
 }();

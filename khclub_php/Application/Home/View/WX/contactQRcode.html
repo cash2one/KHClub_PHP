@@ -27,7 +27,7 @@
                 "ORG;CHARSET=utf8:{$userInfo.company_name}\n"+
                 "TITLE;CHARSET=utf8:{$userInfo.job}\n"+
                 "TEL;CELL;VOICE;CHARSET=utf8:{$userInfo.phone_num}\n"+
-                "EMAIL;INTERNET;CHARSET=utf8:{$userInfo.web}\n"+
+                "EMAIL;INTERNET;CHARSET=utf8:{$userInfo.e_mail}\n"+
                 "NOTE;CHARSET=utf8:QQ: {$userInfo.qq} 微信: {$userInfo.wechat}\n"+
                 "URL;CHARSET=utf8:{$userInfo.web}\n"+
                 "ADR;PREF;CHARSET=utf8:;;{$userInfo.address};;;;\n"+
@@ -43,7 +43,7 @@
     <div id="container" style="text-align: center" class="codeimage" alt="" width="200px"></div>
     <div class="hint">长按识别二维码</div>
     <div class="hint">添加联系方式到通讯录</div>
-    <div><a class="btn-submit" href="#" onclick="back()">返回</a></div>
+    <!--<div><a class="btn-submit" href="#" onclick="history.go(-1)">返回</a></div>-->
     <div style="height: 20px"></div>
 </div>
 
@@ -62,7 +62,6 @@
     });
 
     function back(){
-        wx.closeWindow();
     }
 
 </script>

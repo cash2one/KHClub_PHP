@@ -54,7 +54,7 @@ class JSSDK {
       $res = json_decode($this->httpGet($url));
       $ticket = $res->ticket;
       if ($ticket) {
-        $data->expire_time = time() + 7000;
+        $data->expire_time = time() + 5000;
         $data->jsapi_ticket = $ticket;
         $this->set_php_file("jsapi_ticket.php", json_encode($data));
       }
@@ -75,7 +75,7 @@ class JSSDK {
       $res = json_decode($this->httpGet($url));
       $access_token = $res->access_token;
       if ($access_token) {
-        $data->expire_time = time() + 7000;
+        $data->expire_time = time() + 5000;
         $data->access_token = $access_token;
         $this->set_php_file("access_token.php", json_encode($data));
       }
