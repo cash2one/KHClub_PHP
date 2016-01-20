@@ -4,6 +4,8 @@ use Think\Controller;
 Vendor('alisdk.TopSdk');
 Vendor('jssdk');
 
+define("HTTP_URL_PREFIX","http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/");
+
 class WXController extends Controller {
 
     private $WX_APPID = 'wxa1cc9ce0fd9a1372';
@@ -33,32 +35,32 @@ class WXController extends Controller {
 
 //        $APPID="wxa1cc9ce0fd9a1372";
 //        $APPSECRET="d734cd2152eb5557a78477ed09136196";
-        $open_id = $_SESSION['open_id'];
-        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
-
-        $json=file_get_contents($TOKEN_URL);
-        $result=json_decode($json);
-        $ACC_TOKEN=$result->access_token;
+//        $open_id = $_SESSION['open_id'];
+//        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
+//
+//        $json=file_get_contents($TOKEN_URL);
+//        $result=json_decode($json);
+//        $ACC_TOKEN=$result->access_token;
         //是否订阅测试
 //        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$ACC_TOKEN.'&openid='.$open_id.'&lang=zh_CN';
 ////        echo $url; <a href="http://www.5icool.org">酷站代码网</a>
 //        $msg = file_get_contents($url);
 //        echo json_decode($msg)->subscribe;
 
-        $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$ACC_TOKEN.'&openid='.$_SESSION['open_id'];
-        $msg = file_get_contents($msgUrl);
-        $wxUser = json_decode($msg);
-        print_r($wxUser);
-        print_r($result->access_token);
-
-        $data = '{
-            "touser":"oqi98uEfL2sj5ez6BxRBW7sN5_ww",
-            "msgtype":"text",
-            "text":
-            {
-                "content":"<a href=\"http://www.5icool.org\">酷站代码网</a>"
-            }
-        }';
+//        $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$ACC_TOKEN.'&openid='.$_SESSION['open_id'];
+//        $msg = file_get_contents($msgUrl);
+//        $wxUser = json_decode($msg);
+//        print_r($wxUser);
+//        print_r($result->access_token);
+//
+//        $data = '{
+//            "touser":"oqi98uEfL2sj5ez6BxRBW7sN5_ww",
+//            "msgtype":"text",
+//            "text":
+//            {
+//                "content":"<a href=\"http://www.5icool.org\">酷站代码网</a>"
+//            }
+//        }';
 //
 ////        "touser":"oqi98uEfL2sj5ez6BxRBW7sN5_ww",
 ////            "msgtype":"text",
@@ -73,21 +75,21 @@ class WXController extends Controller {
 ////                     ]
 ////            }
 //
-        $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        if (curl_errno($curl)) {
-            return 'Errno'.curl_error($curl);
-        }
-        curl_close($curl);
-        print_r($result);
+//        $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+//
+//        $curl = curl_init();
+//        curl_setopt($curl, CURLOPT_URL, $url);
+//        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+//        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+//        curl_setopt($curl, CURLOPT_POST, 1);
+//        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+//        $result = curl_exec($curl);
+//        if (curl_errno($curl)) {
+//            return 'Errno'.curl_error($curl);
+//        }
+//        curl_close($curl);
+//        print_r($result);
 //        $final = json_decode($result);
 //        echo $final;
 
@@ -311,7 +313,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."mycard?target_id=".$target_id."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -322,12 +324,12 @@ class WXController extends Controller {
         $userExtra = $memberModel->query($sql)[0];
         //都为空
         if(empty($target_id) && empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }
 
         if(empty($target_id)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$userExtra['id']);
+            header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$userExtra['id']);
             exit;
         }
 
@@ -416,7 +418,7 @@ class WXController extends Controller {
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
-
+        $this->assign('isShared',$_REQUEST['isShared']);
         $this->assign('userInfo',$userInfo);
         $this->display("mycard");
     }
@@ -435,16 +437,20 @@ class WXController extends Controller {
             echo '微信未授权';
             exit;
         }
+
+        //不是用户去注册
         $memberModel = M();
         $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ui.head_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $memberModel->query($sql)[0];
+
+        //要收藏的名片
+        $target_id = $_REQUEST['target_id'];
+
         if(empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify?collectID=".$target_id);
             exit;
         }
-
-        $target_id = $_REQUEST['target_id'];
 
         if(empty($target_id)){
             $this->error("收藏不能为空");
@@ -460,6 +466,9 @@ class WXController extends Controller {
                 if(!$ret){
                     $this->error("收藏失败!");
                 }
+            }else{
+                header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$target_id);
+                exit;
             }
 
         }else{
@@ -483,13 +492,13 @@ class WXController extends Controller {
         $ACC_TOKEN = $jssdk->getAccessToken();
 
         if($open){
-
+            //推送给对方
             $data = '{
                         "touser":"'.$open['wx_open_id'].'",
                         "msgtype":"text",
                         "text":
                         {
-                            "content":"'.$userExtra['name'].'收藏了你的名片<a href=\"http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id='.$userExtra['id'].'\">点击查看</a>"
+                            "content":"'.$userExtra['name'].'收藏了您的名片<a href=\"'.HTTP_URL_PREFIX.'mycard?isShared=1&target_id='.$userExtra['id'].'\">点击查看</a>"
                         }
                     }';
 
@@ -505,15 +514,38 @@ class WXController extends Controller {
             curl_exec($curl);
             curl_close($curl);
 
+            $sql = "SELECT name FROM kh_user_info WHERE id=".$target_id;
+            $name = $openModel->query($sql)[0]['name'];
+            //推送给自己 这个地方冗余了 等需要的时候再进行封装
+            $data = '{
+                        "touser":"'.$openID.'",
+                        "msgtype":"text",
+                        "text":
+                        {
+                            "content":"您收藏了'.$name.'的名片<a href=\"'.HTTP_URL_PREFIX.'mycard?target_id='.$target_id.'\">点击查看</a>"
+                        }
+                    }';
+
+            $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_exec($curl);
+            curl_close($curl);
         }
 
         //是否订阅了公众号 没订阅去订阅
         $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$ACC_TOKEN.'&openid='.$openID.'&lang=zh_CN';
         $msg = file_get_contents($url);
         if(json_decode($msg)->subscribe == 1){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id);
+            header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$target_id);
         }else{
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/subscribeWX");
+            header("Location: ".HTTP_URL_PREFIX."subscribeWX");
         }
 
     }
@@ -554,7 +586,7 @@ class WXController extends Controller {
             }
         }
 
-        header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$target_id);
+        header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$target_id);
     }
 
     /**
@@ -577,6 +609,12 @@ class WXController extends Controller {
             echo '该用户不存在';
             exit;
         }else{
+
+            //wxJs签名
+            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+            $signPackage = $jssdk->GetSignPackage();
+            $this->assign('signPackage',$signPackage);
+
             $this->assign("userInfo",$userInfo);
             $this->display("contactQRcode");
         }
@@ -603,9 +641,19 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."cardHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
+        }
+
+        //是否订阅了公众号 没订阅去订阅
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
+        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$ACC_TOKEN.'&openid='.$openID.'&lang=zh_CN';
+        $msg = file_get_contents($url);
+        if(json_decode($msg)->subscribe == 0) {
+            header("Location: ".HTTP_URL_PREFIX."subscribeWX");
+            exit;
         }
 
         $findExtraUser = M('kh_user_extra_info');
@@ -631,7 +679,7 @@ class WXController extends Controller {
             $this->display("cardHolder");
 
         }else{
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
         }
 
     }
@@ -656,7 +704,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/modifyCardPage&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."modifyCardPage&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -667,7 +715,7 @@ class WXController extends Controller {
         $userExtra = $findExtraUser->query($sql);
         if(empty($userExtra)){
             //注册登录
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }else{
             //存入信息
@@ -697,7 +745,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/modifyCardPage&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."modifyCardPage&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -707,7 +755,7 @@ class WXController extends Controller {
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $cardsModel->query($sql)[0];
         if(empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }
 
@@ -735,11 +783,41 @@ class WXController extends Controller {
         $userExtra['qq'] = $_REQUEST['qq'];
         $userExtra['wechat'] = $_REQUEST['wechat'];
         $extraRet = $userExtraModel->save($userExtra);
+
+
         if($ret !== false && $extraRet !== false){
             $userModel->commit();
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id=".$user['id']);
+
+            //是否要收藏一下名片
+            $collectID = $_REQUEST['collectID'];
+            if(!empty($collectID)){
+                $cardModel = M('kh_card');
+                $card = $cardModel->where('user_id='.$userExtra['id'].' and target_id='.$collectID)->find();
+                if($card){
+                    if(!$card['delete_flag'] == 0){
+                        $card['delete_flag'] = 0;
+                        $card['update_date'] = time();
+                        $cardModel->save($card);
+                    }
+                }else{
+                    $card = array('user_id'=>$userExtra['id'],'target_id'=>$collectID, 'add_date'=>time());
+                    $cardModel->add($card);
+                }
+            }
+
+            //是否订阅了公众号 没订阅去订阅
+            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+            $ACC_TOKEN = $jssdk->getAccessToken();
+            $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$ACC_TOKEN.'&openid='.$openID.'&lang=zh_CN';
+            $msg = file_get_contents($url);
+            if(json_decode($msg)->subscribe == 0) {
+                header("Location: ".HTTP_URL_PREFIX."subscribeWX");
+                exit;
+            }else{
+                header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$user['id']);
+            }
         }else{
-            echo 'modify fail';
+            echo '修改失败';
             $userModel->rollback();
         }
     }
@@ -764,7 +842,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."cardGroupHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -774,7 +852,7 @@ class WXController extends Controller {
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $cardsModel->query($sql)[0];
         if(empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }
 
@@ -818,7 +896,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$group_id."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."cardGroupApplyDetail?groupID=".$group_id."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -830,12 +908,12 @@ class WXController extends Controller {
 
         //不存在这个人
         if(empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$group_id);
+            header("Location: ".HTTP_URL_PREFIX."cardGroupApplyDetail?groupID=".$group_id);
             exit;
         }else{
             $isMember = $memberModel->where('delete_flag=0 AND group_id='.$group_id.' AND member_id='.$userExtra['id'])->find();
             if(!$isMember){
-                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$group_id);
+                header("Location: ".HTTP_URL_PREFIX."cardGroupApplyDetail?groupID=".$group_id);
                 exit;
             }
         }
@@ -894,7 +972,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$groupID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."cardGroupApplyDetail?groupID=".$groupID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -910,7 +988,7 @@ class WXController extends Controller {
         }else{
             $isMember = $memberModel->where('delete_flag=0 AND group_id='.$groupID.' AND member_id='.$userExtra['id'])->find();
             if($isMember){
-                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupMembers?group_id=".$groupID);
+                header("Location: ".HTTP_URL_PREFIX."cardGroupMembers?group_id=".$groupID);
                 exit;
 //                $this->assign("isMember",'1');
             }else{
@@ -952,7 +1030,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupApplyDetail?groupID=".$groupID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."cardGroupApplyDetail?groupID=".$groupID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -963,7 +1041,7 @@ class WXController extends Controller {
             WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $memberModel->query($sql)[0];
         if(empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }else{
             $member = $memberModel->where('group_id='.$groupID.' AND member_id='.$userExtra['id'])->find();
@@ -992,10 +1070,6 @@ class WXController extends Controller {
         $open = $openModel->query($sql)[0];
         $targetOpenID = $open['wx_open_id'];
 
-//        $TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret;
-//        $json=file_get_contents($TOKEN_URL);
-//        $result=json_decode($json);
-//        $ACC_TOKEN=$result->access_token;
         //获取AccessToken
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $ACC_TOKEN = $jssdk->getAccessToken();
@@ -1006,7 +1080,7 @@ class WXController extends Controller {
                         "msgtype":"text",
                         "text":
                         {
-                            "content":"\"'.$userExtra['name'].'\"加入了您的\"'.$open['group_title'].'\"<a href=\"http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?target_id='.$userExtra['id'].'\">点击查看</a>"
+                            "content":"\"'.$userExtra['name'].'\"加入了您的\"'.$open['group_title'].'\"<a href=\"'.HTTP_URL_PREFIX.'mycard?target_id='.$userExtra['id'].'\">点击查看</a>"
                         }
                     }';
 
@@ -1027,11 +1101,12 @@ class WXController extends Controller {
         $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$ACC_TOKEN.'&openid='.$openID.'&lang=zh_CN';
         $msg = file_get_contents($url);
         if(json_decode($msg)->subscribe == 1){
-            $this->assign("isMember",'1');
-            $this->assign("groupDetail",$groupDetail);
-            $this->display("applyGroup");
+//            $this->assign("isMember",'1');
+//            $this->assign("groupDetail",$groupDetail);
+//            $this->display("applyGroup");
+            header("Location: ".HTTP_URL_PREFIX."cardGroupMembers?group_id=".$groupID);
         }else{
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/subscribeWX");
+            header("Location: ".HTTP_URL_PREFIX."subscribeWX");
         }
     }
 
@@ -1065,7 +1140,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."cardHome&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -1076,7 +1151,7 @@ class WXController extends Controller {
         $userExtra = $memberModel->query($sql)[0];
 
         if(empty($userExtra)){
-            header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }
 
@@ -1100,7 +1175,7 @@ class WXController extends Controller {
             if($memberRet){
 
                 $cardModel->commit();
-                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardGroupDetail?group_id=".$ret);
+                header("Location: ".HTTP_URL_PREFIX."cardGroupMembers?group_id=".$ret);
 
             }else{
                 $cardModel->rollback();
@@ -1154,21 +1229,13 @@ class WXController extends Controller {
      * @brief 手机验证页面
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/userVerify
+     * @param collectID 收藏id
      */
     public function userVerify(){
-
-        $this->display('userVerify');
-
-    }
-
-    /**
-     * @brief 用户验证接口
-     * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WX/usepass
-     */
-    public function userpass(){
         //先授权获取openID
         $openID = $_SESSION['open_id'];
+        $collectID = $_REQUEST['collectID'];
+
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
@@ -1181,7 +1248,53 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userVerify&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify?collectID=".$collectID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $memberModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        //如果系统中存在这个人 跳转到主页
+        if(!empty($userExtra)){
+            header("Location: ".HTTP_URL_PREFIX."cardHome");
+            exit;
+        }
+
+        //收藏的人
+        $this->assign('collectID',$_REQUEST['collectID']);
+
+        $this->display('userVerify');
+
+    }
+
+    /**
+     * @brief 用户验证接口
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/usepass
+     * @param collectID 收藏id
+     */
+    public function userpass(){
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        $collectID = $_REQUEST['collectID'];
+
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify?collectID=".$collectID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -1189,6 +1302,9 @@ class WXController extends Controller {
         $username = $_REQUEST['username'];
         $userModel = M('kh_user_info');
         $user = $userModel->field('id')->where('username='.$username)->find();
+
+        //要收藏的人
+        $this->assign('collectID',$collectID);
         if($user){
             $this->assign('username',$username);
             $this->display('userLogin');
@@ -1202,10 +1318,13 @@ class WXController extends Controller {
      * @brief 用户登录
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/userLogin
+     * @param collectID 收藏id
      */
     public function userLogin(){
         //先授权获取openID
         $openID = $_SESSION['open_id'];
+        $collectID = $_REQUEST['collectID'];
+
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
@@ -1218,7 +1337,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userLogin&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userLogin&collectID=".$collectID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -1227,13 +1346,16 @@ class WXController extends Controller {
         $password = md5($_REQUEST['password']);
         $userModel = M('kh_user_info');
         $user = $userModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
+
+        //要收藏的人
+        $this->assign('collectID',$collectID);
         if($user){
             //绑定微信
             $findExtraUser = M('kh_user_extra_info');
             $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$user['id']);
             $extraRet = $findExtraUser->add($userExtra);
             if($extraRet){
-                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome");
+                header("Location: ".HTTP_URL_PREFIX."cardHome");
             }else{
                 $this->assign('username',$username);
                 $this->display('userLogin');
@@ -1307,12 +1429,15 @@ class WXController extends Controller {
      * @brief 用户注册
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/userRegister
+     * @param collectID 收藏id
      */
     public function userRegister(){
 
         $username = $_REQUEST['username'];
         $password = $_REQUEST['password'];
         $verify = $_REQUEST['verify'];
+        //要收藏的ID
+        $collectID = $_REQUEST['collectID'];
 
         //先授权获取openID
         $code = $_REQUEST['code'];
@@ -1322,7 +1447,7 @@ class WXController extends Controller {
             $user = $userModel->field('id')->where('username='.$username)->find();
             //用户存在
             if($user){
-                header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome");
+                header("Location: ".HTTP_URL_PREFIX."cardHome");
                 return;
             }
 
@@ -1335,7 +1460,7 @@ class WXController extends Controller {
             //openID存入
             $_SESSION['open_id'] = $openID;
         }else{
-            $url = "http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/userRegister?username=".$username."&verify=".$verify."&password=".$_REQUEST['password'];
+            $url = "".HTTP_URL_PREFIX."userRegister?collectID=".$collectID."&username=".$username."&verify=".$verify."&password=".$_REQUEST['password'];
             header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".urlencode($url)."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
             exit;
         }
@@ -1345,6 +1470,9 @@ class WXController extends Controller {
         $sql = 'SELECT * FROM kh_sms WHERE phone_num='.$username.'
         and verify_code='.$verify.' and delete_flag=0 and add_date>'.(time()-60);
         $data = $verifyModel->query($sql)[0];
+
+        //要收藏的人
+        $this->assign('collectID',$collectID);
 
         //验证成功注册
         if($data['id'] > 0){
@@ -1364,7 +1492,8 @@ class WXController extends Controller {
                 $extraRet = $findExtraUser->add($userExtra);
                 if($extraRet){
                     $userModel->commit();
-                    header("Location: http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/cardHome");
+//                    header("Location: ".HTTP_URL_PREFIX."cardHome");
+                    header("Location: ".HTTP_URL_PREFIX."modifyCardPage?collectID=".$collectID);
                 }else{
                     $userModel->rollback();
                     $this->assign('verifyError',2);
