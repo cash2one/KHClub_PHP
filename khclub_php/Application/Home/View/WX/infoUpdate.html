@@ -8,62 +8,13 @@
     <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
     <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
     <script src="__PUBLIC__/js/bootstrap.min.js"></script>
-    <link href="__PUBLIC__/css/ui/card.css" rel="stylesheet">
+    <link href="__PUBLIC__/testCss/ui/card.css?v=2" rel="stylesheet">
     <title>编辑名片</title>
 
-    <script type="text/javascript">
-
-        var intervalCounter = 0;
-        function hideToast()
-        {
-            var alert = document.getElementById("toast");
-            alert.style.opacity = 0;
-            clearInterval(intervalCounter);
-        }
-
-        function drawToast(message)
-        {
-            var alert = document.getElementById("toast");
-            if (alert == null)
-            {
-                var toastHTML = '<div id="toast">' + message + '</div>';
-                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
-            }
-            else
-            {
-                alert.style.opacity = .9;
-                alert.innerHTML = message;
-            }
-            intervalCounter = setInterval("hideToast()", 1000);
-        }
-
-        function save()
-        {
-            if($('#name').val().length < 1){
-                drawToast("姓名不能为空");
-                return;
-            }
-            if($('#company').val().length < 1){
-                drawToast("公司不能为空");
-                return;
-            }
-            if($('#phone').val().length < 1){
-                drawToast("电话不能为空");
-                return;
-            }
-
-            //submit
-            var form = $("#form");
-            form.attr("method", "GET");
-            form.attr("action", "putPersonalInfo");
-            form.submit();
-        }
-
-    </script>
 </head>
 <body>
 
-<form id="form">
+<form id="form" enctype="multipart/form-data">
     <div class="center-block">
         <h4 align="center" class="top_title">KHClub</h4>
         <p class="msg_title lead">基本信息</p>
@@ -115,9 +66,15 @@
             <hr class="modify_bottom_line"/>
         </div>
 
+        <div id="wx_qrcode" class="msg_content clear">
+            <p class="modify_content_title2">微信二维码</p>
+            <img id="qrcode_image" class="wxcode" alt="" src="{$_SESSION['userInfo']['wechat_qrcode']}"/>
+            <input id="qrcode" name="qrcode" type="hidden">
+        </div>
+        <div class="msg_title" ></div>
         <div class="msg_content">
-            <p class="modify_content_title">微信</p>
-            <input class="input-class" maxlength="20" id="wechat" name="wechat" value="{$_SESSION['userInfo']['wechat']}" type="text"  />
+            <p class="modify_content_explain">个人说明</p>
+            <textarea name="signature" class="input-class_explain" placeholder="（20字以内）" rows="5" cols="20" maxlength="20">{$_SESSION['userInfo']['signature']}</textarea>
         </div>
         <div style="margin-bottom: 45px" class="msg_title" ></div>
 
@@ -128,8 +85,14 @@
 
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script src="__PUBLIC__/js/wx/toast.js"></script>
 
 <script>
+    $(function(){
+        $('#wx_qrcode').click(function(){
+            chooseImage();
+        });
+    })
 
     wx.config({
                 debug: false,
@@ -137,11 +100,70 @@
                 timestamp: {$signPackage.timestamp},
             nonceStr: '{$signPackage.nonceStr}',
             signature: '{$signPackage.signature}',
-            jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
-        "onMenuShareQQ", "onMenuShareWeibo" ]
+            jsApiList : [ "chooseImage" , "uploadImage"]
     });
 
     operate.initCloseShare();
+
+    //选择二维码
+    function chooseImage(){
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                var image = document.getElementById('qrcode_image');
+                image.src = localIds[0];
+                localID = localIds[0];
+            }
+        });
+    }
+
+    var localID = '';
+    function save()
+    {
+        if($('#name').val().length < 1){
+            drawToast("姓名不能为空");
+            return;
+        }
+        if($('#company').val().length < 1){
+            drawToast("公司不能为空");
+            return;
+        }
+        if($('#phone').val().length < 1){
+            drawToast("电话不能为空");
+            return;
+        }
+
+        //本地ID
+        if(localID.length > 0) {
+            wx.uploadImage({
+                localId: localID, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    $('#qrcode').val(serverId);
+                    confirmSave();
+                },
+                fail: function (){
+                    drawToast('图片上传失败');
+                }
+            });
+        }else{
+            confirmSave();
+        }
+    }
+
+    //最终提交
+    function confirmSave(){
+        //submit
+        var form = $("#form");
+        form.attr("method", "POST");
+        form.attr("action", "putPersonalInfo");
+        form.submit();
+    }
+
 
 </script>
 </body>

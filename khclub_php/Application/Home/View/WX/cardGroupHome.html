@@ -9,7 +9,7 @@
     <link href="__PUBLIC__/css/ui/card.css" rel="stylesheet">
     <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
     <script src="__PUBLIC__/js/bootstrap.min.js"></script>
-    <title>名片夹</title>
+    <title>群名片夹</title>
 
     <script type="text/javascript">
         $(function () {
@@ -37,7 +37,23 @@
 
 <div style="height: 4rem"></div>
 
-<a href="createCardGroupPage" class="save" >新建圈通讯录</a>
+<a href="createCardGroupPage" class="save" >新建群通讯录</a>
 
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+
+    wx.config({
+            debug: false,
+            appId: '{$signPackage.appId}',
+            timestamp: {$signPackage.timestamp},
+        nonceStr: '{$signPackage.nonceStr}',
+        signature: '{$signPackage.signature}',
+        jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
+        "onMenuShareQQ", "onMenuShareWeibo" ]
+    });
+    operate.initCloseShare();
+
+</script>
 </body>
 </html>

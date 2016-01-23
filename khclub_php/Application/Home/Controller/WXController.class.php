@@ -4,6 +4,7 @@ use Think\Controller;
 Vendor('alisdk.TopSdk');
 Vendor('jssdk');
 
+define("HTTP_HOST", "http://a.pinweihuanqiu.com");
 define("HTTP_URL_PREFIX","http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/");
 
 class WXController extends Controller {
@@ -335,7 +336,8 @@ class WXController extends Controller {
         }
 
         $userModel = M();
-        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc LEFT JOIN kh_user_extra_info ex ON (ex.user_id=uc.id)
+        $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.signature, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat, ex.wechat_qrcode
+              FROM kh_user_info uc LEFT JOIN kh_user_extra_info ex ON (ex.user_id=uc.id)
               WHERE uc.id='.$target_id.' AND uc.delete_flag=0';
         $userInfo = $userModel->query($sql);
         foreach($userInfo as $v){
@@ -393,6 +395,16 @@ class WXController extends Controller {
             } else {
                 $userInfo['wechat'] = $v['wechat'];
             }
+            if (empty($v['signature'])) {
+                $userInfo['signature'] = '暂无信息';
+            } else {
+                $userInfo['signature'] = $v['signature'];
+            }
+            if (empty($v['wechat_qrcode'])) {
+                $userInfo['wechat_qrcode'] = '';
+            } else {
+                $userInfo['wechat_qrcode'] = HTTP_HOST.__ROOT__.substr($v['wechat_qrcode'],1);
+            }
             if ($v['id'] == $userExtra['id']) {
                 $userInfo['ifmy'] = true;
             } else {
@@ -414,13 +426,14 @@ class WXController extends Controller {
                 $userInfo['collect'] = '1';
             }
         }
+        $userInfo['company_name'] = str_replace(array("\r\n", "\r", "\n"), "", $userInfo['company_name']);
 
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('isShared',$_REQUEST['isShared']);
-        $this->assign('userInfo',$userInfo);
+        $this->assign('userInfo', $userInfo);
         $this->display("mycard");
     }
 
@@ -606,6 +619,7 @@ class WXController extends Controller {
         $sql='SELECT uc.id, uc.head_sub_image, uc.name, uc.job, uc.phone_num, uc.e_mail, uc.company_name, uc.address, ex.web, ex.qq, ex.wechat FROM kh_user_info uc LEFT JOIN kh_user_extra_info ex ON (ex.user_id=uc.id)
               WHERE uc.id='.$user_id.' AND uc.delete_flag=0';
         $userInfo = $userModel->query($sql)[0];
+        $userInfo['company_name'] = str_replace(array("\r\n", "\r", "\n"), "", $userInfo['company_name']);
         if(empty($userInfo)){
             echo '该用户不存在';
             exit;
@@ -676,6 +690,12 @@ class WXController extends Controller {
                     $cardList[$i]['head_sub_image'] = __ROOT__.'/Uploads/'.$cardList[$i]['head_sub_image'];
                 }
             }
+
+            //wxJs签名
+            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+            $signPackage = $jssdk->GetSignPackage();
+            $this->assign('signPackage',$signPackage);
+
             $this->assign('cardList',$cardList);
             $this->display("cardHolder");
 
@@ -711,7 +731,8 @@ class WXController extends Controller {
         }
 
         $findExtraUser = M();
-        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.signature, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat, ue.wechat_qrcode
+                FROM kh_user_info ui, kh_user_extra_info ue
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
         $userExtra = $findExtraUser->query($sql);
         if(empty($userExtra)){
@@ -719,9 +740,11 @@ class WXController extends Controller {
             header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }else{
+            $userExtra[0]['wechat_qrcode'] = __ROOT__.substr($userExtra[0]['wechat_qrcode'],1);
             //存入信息
             $_SESSION['userInfo'] = $userExtra[0];
         }
+
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
@@ -754,6 +777,12 @@ class WXController extends Controller {
             }
         }
 
+        //没有名字
+        if(empty($_REQUEST['name'])){
+            header("Location: ".HTTP_URL_PREFIX."cardHome");
+            exit;
+        }
+
         $cardsModel = M();
         $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
                 WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
@@ -774,6 +803,7 @@ class WXController extends Controller {
             return;
         }
 
+        //主表
         $userModel->startTrans();
         $user['name'] = $_REQUEST['name'];
         $user['job'] = $_REQUEST['job'];
@@ -781,19 +811,47 @@ class WXController extends Controller {
         $user['company_name'] = $_REQUEST['company'];
         $user['e_mail'] = $_REQUEST['email'];
         $user['address'] = $_REQUEST['address'];
+        $user['signature'] = $_REQUEST['signature'];
         $ret = $userModel->save($user);
-
+        //从表
         $userExtra['web'] = $_REQUEST['web'];
         $userExtra['qq'] = $_REQUEST['qq'];
         $userExtra['wechat'] = $_REQUEST['wechat'];
+
+//        $userExtra['wechat_qrcode'] = $_REQUEST['qrcode'];
+
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
+        //二维码下载
+        if(!empty($_REQUEST['qrcode'])){
+            $imageUrl = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token='.$ACC_TOKEN.'&media_id='.$_REQUEST['qrcode'];
+            $ch = curl_init($imageUrl);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_NOBODY, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $package = curl_exec($ch);
+            curl_close($ch);
+
+            $filename = './KHCQRCode/'.$user['id'].time().'.png';
+            $local_file = fopen($filename, 'w');
+            if(false !== $local_file){
+                if(false !== fwrite($local_file, $package)){
+                    fclose($local_file);
+                    $userExtra['wechat_qrcode'] = $filename;
+                }
+            }
+
+        }
+
+
         $extraRet = $userExtraModel->save($userExtra);
 
         if($ret !== false && $extraRet !== false){
             $userModel->commit();
 
             //是否订阅了公众号 没订阅去订阅
-            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
-            $ACC_TOKEN = $jssdk->getAccessToken();
             $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$ACC_TOKEN.'&openid='.$openID.'&lang=zh_CN';
             $msg = file_get_contents($url);
             if(json_decode($msg)->subscribe == 0) {
@@ -850,6 +908,11 @@ class WXController extends Controller {
             $memberCount = $memberModel->field('count(1) count')->where('delete_flag=0 AND group_id='.$cards[$i]['id'])->find();
             $cards[$i]['count'] = $memberCount['count'];
         }
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
 
         $this->assign("cards",$cards);
         $this->display("cardGroupHome");
@@ -990,6 +1053,11 @@ class WXController extends Controller {
             $groupDetail['head_sub_image'] = __ROOT__.'/Uploads/'.$groupDetail['head_sub_image'];
         }
 
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
         $this->assign("groupDetail",$groupDetail);
         $this->display("applyGroup");
     }
@@ -1102,6 +1170,10 @@ class WXController extends Controller {
      * http://localhost/khclub_php/index.php/Home/WX/createCardGroupPage
      */
     public function createCardGroupPage(){
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
         $this->display("createCardGroup");
 
     }
@@ -1250,6 +1322,11 @@ class WXController extends Controller {
             exit;
         }
 
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
         //收藏的人
         $this->assign('collectID',$_REQUEST['collectID']);
 
@@ -1288,6 +1365,11 @@ class WXController extends Controller {
         $username = $_REQUEST['username'];
         $userModel = M('kh_user_info');
         $user = $userModel->field('id')->where('username='.$username)->find();
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
 
         //要收藏的人
         $this->assign('collectID',$collectID);
@@ -1328,10 +1410,26 @@ class WXController extends Controller {
             }
         }
 
+        $memberModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        //存在直接登录
+        if(!empty($userExtra)){
+            header("Location: ".HTTP_URL_PREFIX."cardHome");
+            exit;
+        }
+
         $username = $_REQUEST['username'];
         $password = md5($_REQUEST['password']);
         $userModel = M('kh_user_info');
         $user = $userModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
 
         //要收藏的人
         $this->assign('collectID',$collectID);
@@ -1451,11 +1549,27 @@ class WXController extends Controller {
             exit;
         }
 
+        $memberModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        //存在直接登录
+        if(!empty($userExtra)){
+            header("Location: ".HTTP_URL_PREFIX."cardHome");
+            exit;
+        }
+
         $verifyModel = M();
            //查看是否验证成功
         $sql = 'SELECT * FROM kh_sms WHERE phone_num='.$username.'
         and verify_code='.$verify.' and delete_flag=0 and add_date>'.(time()-60);
         $data = $verifyModel->query($sql)[0];
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
 
         //验证成功注册
         if($data['id'] > 0){

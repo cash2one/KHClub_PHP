@@ -1,15 +1,9 @@
 <?php
 namespace Home\Controller;
-use Org\Util\Date;
-use Org\Util\Date1;
 use Org\Util\Easemob;
-use Org\Util\Haha;
 use Org\Util\QRcode;
-use Org\Util\TDea;
-use Org\Util\Yunba;
 use Think\Controller;
 use Think\Exception;
-use Think\Log;
 use Think\Model;
 
 define("KH","kh");

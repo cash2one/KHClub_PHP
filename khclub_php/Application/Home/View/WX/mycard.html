@@ -12,7 +12,12 @@
 
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="__PUBLIC__/css/core/swiper.min.css">
-    <link rel="stylesheet" href="__PUBLIC__/css/share/mycard.css?v=2">
+    <link rel="stylesheet" href="__PUBLIC__/css/share/mycard.css?v=3">
+    <link href="__PUBLIC__/css/ui/card.css?v=3" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
+    <script src="__PUBLIC__/js/qrcode/qrcode.js"></script>
+    <script src="__PUBLIC__/js/qrcode/qrcode_UTF8.js"></script>
+    <script src="__PUBLIC__/js/qrcode/jquery.qrcode.js"></script>
 </head>
 <body>
 <!-- Swiper -->
@@ -23,43 +28,52 @@
 <div class="swiper-container">
     <div class="swiper-wrapper">
         <div class="swiper-slide">
-            <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
-                <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
-                    <else/>
-                    <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
-                </if>
-                <div class="name"><p>{$userInfo.name} / {$userInfo.job}</p></div>
-                <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/tel.png" alt=""><p class="details1">{$userInfo.phone_num}</p></div>
-                <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/dx.png" alt=""><p class="details1">{$userInfo.e_mail}</p></div>
-                <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/gs.png" alt=""><p class="details1">{$userInfo.company_name}</p></div>
-                <div class="clear box"><img class="icon1" src="__PUBLIC__/images/icon/addr.png" alt=""><p class="details1">{$userInfo.address}</p></div>
-                <!--<switch name="userInfo.collect">
-                    <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
-                    <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
-                </switch>-->
-                <!--如果是自己的话 则右上角显示编辑-->
-                <if condition="$userInfo.ifmy eq true">
-                    <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
-                </if>
-                <!-- 分享进来的 -->
-                <if condition="$isShared eq 1">
-                    <a href="cardHome"><img class="home" src="__PUBLIC__/images/icon/home.png" alt=""></a>
-                </if>
+            <if condition="$userInfo.ifmy eq true">
+                <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
+                    <if condition="$userInfo.head_sub_image neq null">
+                        <img class="image" src="{$userInfo.head_sub_image}" alt="">
+                        <else/>
+                        <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
+                    </if>
+                    <div class="name2"><p>{$userInfo.name} / {$userInfo.job}</p></div>
+                    <div id="card_qrcode" style="text-align: center;height: 100px"></div>
+                    <div class="clear box"><img class="tel_icon2 icon1" src="__PUBLIC__/images/icon/tel.png" alt=""><p class="tel_details2"><a href="tel:{$userInfo.phone_num}">{$userInfo.phone_num}</a></p></div>
+                    <div class="clear box"><img class="gs_icon2 icon1" src="__PUBLIC__/images/icon/gs.png" alt=""><p class="gs_details2">{$userInfo.company_name}</p></div>
 
-            </div>
+                </div>
+                <else/>
+                <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
+                    <if condition="$userInfo.head_sub_image neq null">
+                        <img class="image" src="{$userInfo.head_sub_image}" alt="">
+                        <else/>
+                        <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
+                    </if>
+                    <div class="name2"><p>{$userInfo.name} / {$userInfo.job}</p></div>
+                    <div class="clear box"><img class="icon1 tel_icon" src="__PUBLIC__/images/icon/tel.png" alt=""><p class="tel_details"><a href="tel:{$userInfo.phone_num}">{$userInfo.phone_num}</a></p></div>
+                    <div class="clear box"><img class="icon1 gs_icon" src="__PUBLIC__/images/icon/gs.png" alt=""><p class="gs_details">{$userInfo.company_name}</p></div>
+
+                </div>
+            </if>
+
+            <!--如果是自己的话 则右上角显示编辑-->
+            <if condition="$userInfo.ifmy eq true">
+                <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
+            </if>
+            <!-- 分享进来的 -->
+            <if condition="$isShared eq 1">
+                <a href="cardHome"><img class="home" src="__PUBLIC__/images/icon/home.png" alt=""></a>
+            </if>
+
         </div>
         <div class="swiper-slide">
             <div style="width: 90%; height: 100%; background: url('__PUBLIC__/images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
-                <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
-                    <else/>
-                    <img class="image" src="__PUBLIC__/images/icon/head.png" alt="">
-                </if>
-                <div class="name"><p class="content">{$userInfo.name} / {$userInfo.job}</p></div>
-                <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/web.png" alt=""><p class="details2">{$userInfo.web}</p></div>
+                <div style="height: 100px"></div>
+                <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/web.png" alt=""><p class="details2"><a onclick="gotoWeb()">{$userInfo.web}</a></p></div>
+                <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/dx.png" alt=""><p class="details2">{$userInfo.e_mail}</p></div>
+                <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/addr.png" alt=""><p class="signature_details">{$userInfo.address}</p></div>
                 <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/qq.png" alt=""><p class="details2">{$userInfo.qq}</p></div>
-                <div class="clear box"><img class="icon2" src="__PUBLIC__/images/icon/wx.png" alt=""><p class="details2">{$userInfo.wechat}</p></div>
+                <div><span class="signature">签名</span><p class="signature_details">{$userInfo.signature}</p></div>
+
                 <!--如果是自己的话 则右上角显示编辑-->
                 <if condition="$userInfo.ifmy eq true">
                     <a href="modifyCardPage"><img class="bj" src="__PUBLIC__/images/icon/bj.png" alt=""></a>
@@ -96,7 +110,7 @@
         <if condition="$userInfo.collect eq 2">
             <span class="menubox"><a href="userVerify"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/create.png" alt=""/></a></span>
             <else/>
-            <span class="menubox"><a href="tel:{$userInfo.phone_num}"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/telicon.png" alt=""/></a></span>
+            <span class="menubox"><a onclick="wxQrcodeClick()"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/wxicon.png" alt=""/></a></span>
         </if>
 
         <if condition="$userInfo.collect neq 1">
@@ -117,7 +131,7 @@
         <if condition="$userInfo.collect eq 2">
             <div class="menubtbox"><span class="menubt">创建</span></div>
             <else/>
-            <div class="menubtbox"><span class="menubt">电话</span></div>
+            <div class="menubtbox"><span class="menubt">微信</span></div>
         </if>
 
         <if condition="$userInfo.collect neq 1">
@@ -134,11 +148,10 @@
 
 <div style="margin-top: 10px;height: 1px"></div>
 <!-- Swiper JS -->
-<script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
 <script src="__PUBLIC__/js/swiper.jquery.min.js"></script>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="__PUBLIC__/js/wx/wxOperate.js"></script>
-
+<script src="__PUBLIC__/js/wx/toast.js"></script>
 <!-- Initialize Swiper -->
 <script>
 
@@ -202,6 +215,17 @@
         }
     }
 
+    $(function(){
+        $('#card_qrcode').qrcode({
+            render: 'image',
+            "size": 100,
+            "color": "#3a3",
+            fill: '#000',
+            background: '#fff',
+            "text": "http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?isShared=1&target_id={$userInfo.target_id}"
+        });
+    })
+
     wx.config({
                 debug: false,
                 appId: '{$signPackage.appId}',
@@ -218,13 +242,35 @@
     }
 
     var params = {
-        title : "微信云名片", // 分享标题
+        title : "收藏云名片，加入我的人脉圈", // 分享标题
         desc : "{$userInfo.name} | {$userInfo.job}\n{$userInfo.company_name}", // 分享描述
         link : "http://a.pinweihuanqiu.com/khclub_php/index.php/Home/WX/mycard?isShared=1&target_id={$userInfo.target_id}",
         imgUrl : imageUrl // 分享图标
     };
 
     operate.initOpenShare(params);
+
+    //微信二维码
+    function wxQrcodeClick(){
+        var qrcode = "{$userInfo.wechat_qrcode}";
+        if(qrcode.length > 10){
+            wx.previewImage({
+                current: qrcode, // 当前显示图片的http链接
+                urls: [qrcode] // 需要预览的图片http链接列表
+            });
+        }else{
+            drawToast("该用户暂无微信号");
+        }
+    }
+
+    function gotoWeb(){
+        var web = "{$userInfo.web}";
+        if(web.substr(0,4) == "http"){
+            window.location = "{$userInfo.web}";
+        }else{
+            window.location = "http://{$userInfo.web}";
+        }
+    }
 
 </script>
 </body>

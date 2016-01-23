@@ -23,17 +23,38 @@
 <div class="swiper-container">
     <div class="swiper-wrapper">
         <div class="swiper-slide">
-            <div style="width: 90%; height: 100%; background: url('../images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
-                <if condition="$userInfo.head_sub_image neq null">
+            <!-- 他的名片 -->
+            <!--<div style="width: 90%; height: 100%; background: url('../images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
+                &lt;!&ndash;<if condition="$userInfo.head_sub_image neq null">
                     <img class="image" src="{$userInfo.head_sub_image}" alt="">
-                    <else/>
-                    <img class="image" src="../images/icon/head.png" alt="">
-                </if>
+                    <else/>&ndash;&gt;
+                    <img class="image" src="../Uploads/71445775226_sub.jpg" alt="">
+                &lt;!&ndash;</if>&ndash;&gt;
                 <div class="name"><p>刘兴瑞 / 产品经理</p></div>
-                <div class="clear box"><img class="icon1" src="../images/icon/tel.png" alt=""><p class="details1">15040174635</p></div>
-                <div class="clear box"><img class="icon1" src="../images/icon/dx.png" alt=""><p class="details1">256357@qq.com</p></div>
-                <div class="clear box"><img class="icon1" src="../images/icon/gs.png" alt=""><p class="details1">发电机房机电科</p></div>
-                <div class="clear box"><img class="icon1" src="../images/icon/addr.png" alt=""><p class="details1">地方的开发的了快的境况</p></div>
+                <div class="clear box"><img class="icon1 tel_icon" src="../images/icon/tel.png" alt=""><p class="tel_details">15040174635</p></div>
+                <div class="clear box"><img class="icon1 gs_icon" src="../images/icon/gs.png" alt=""><p class="gs_details">发电机房机电科</p></div>
+                &lt;!&ndash;<switch name="userInfo.collect">
+                    <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
+                    <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
+                </switch>&ndash;&gt;
+                <if condition="$userInfo.ifmy eq true">
+                    <a href="modifyCardPage"><img class="bj" src="../images/icon/bj.png" alt=""></a>
+                    <else/>
+                    <a href="#"><img class="home" src="../images/icon/home.png" alt=""></a>
+                </if>
+            </div>-->
+
+            <!-- 我的名片 -->
+            <div style="width: 90%; height: 100%; background: url('../images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
+                <!--<if condition="$userInfo.head_sub_image neq null">
+                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
+                    <else/>-->
+                <img class="image" src="../Uploads/71445775226_sub.jpg" alt="">
+                <!--</if>-->
+                <div class="name2"><p>刘兴瑞 / 产品经理</p></div>
+                <div><img src="../uploads/71445775226_sub.jpg" alt="" width="120px" height="120px"></div>
+                <div class="clear box"><img class="tel_icon2 icon1" src="../images/icon/tel.png" alt=""><p class="tel_details2"><a href="tel:1">15040174635</a></p></div>
+                <div class="clear box"><img class="gs_icon2 icon1" src="../images/icon/gs.png" alt=""><p class="gs_details2">发电机房机电科的</p></div>
                 <!--<switch name="userInfo.collect">
                     <case value="0"><div class="collect1" id="showcollect">收藏成功</div></case>
                     <case value="1"><div class="collect1" id="showcollect">取消收藏</div></case>
@@ -47,15 +68,12 @@
         </div>
         <div class="swiper-slide">
             <div style="width: 90%; height: 100%; background: url('../images/icon/bjcolor.png') no-repeat; background-size: 100% 100%; border-radius: 5px;">
-                <if condition="$userInfo.head_sub_image neq null">
-                    <img class="image" src="{$userInfo.head_sub_image}" alt="">
-                    <else/>
-                    <img class="image" src="../images/icon/head.png" alt="">
-                </if>
-                <div class="name"><p class="content">刘兴瑞 / 产品经理</p></div>
+                <div style="height: 100px"></div>
                 <div class="clear box"><img class="icon2" src="../images/icon/web.png" alt=""><p class="details2">www.khclub1234.com</p></div>
+                <div class="clear box"><img class="icon2" src="../images/icon/dx.png" alt=""><p class="details2">256357@qq.com</p></div>
+                <div class="clear box"><img class="icon2" src="../images/icon/addr.png" alt=""><p class="signature_details">恢复到几号房间号放假复合肥和附件</p></div>
                 <div class="clear box"><img class="icon2" src="../images/icon/qq.png" alt=""><p class="details2">343465665</p></div>
-                <div class="clear box"><img class="icon2" src="../images/icon/wx.png" alt=""><p class="details2">khciub1234</p></div>
+                <div><span class="signature">签名</span><p class="signature_details">地方的开发的了快的境况发的购房款后果的空间更</p></div>
                 <!--<switch name="userInfo.collect">
                     <case value="0"><div class="collect2" id="showcollect">收藏成功</div></case>
                     <case value="1"><div class="collect2" id="showcollect">取消收藏</div></case>
@@ -86,12 +104,12 @@
         <!--取消收藏-->
         <!--<span class="menubox"><a href="#"><img class="menuicon" src="../images/icon/ccicon.png" alt=""/></a></span>-->
 
-        <span class="menubox"><a href="#" id="creates"><img class="menuicon aligncenter" src="../images/icon/create.png" alt=""/></a></span>
+        <span class="menubox"><a href="#"><img class="menuicon aligncenter" src="../images/icon/wxicon.png" alt=""/></a></span>
         <span class="menubox"><a href="#"><img class="menuicon aligncenter" src="../images/icon/qxccicon.png" alt=""/></a></span>
         <span class="menubox"><a href="#"><img class="menuicon aligncenter" src="../images/icon/save.png" alt=""/></a></span>
         <span class="menubox"><a href="#" id="bt"><img class="menuicon aligncenter" src="../images/icon/fxicon.png" alt=""/></a></span>
-        <div class="menubtbox"><span class="menubt">创建</span></div>
-        <div class="menubtbox"><span class="menubt">收藏</span></div>
+        <div class="menubtbox"><span class="menubt">微信</span></div>
+        <div class="menubtbox"><span class="menubt">交换名片</span></div>
         <div class="menubtbox"><span class="menubt">保存</span></div>
         <div class="menubtbox"><span class="menubt">分享</span></div>
     </div>
