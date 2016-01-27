@@ -108,7 +108,7 @@
     <else/>
     <div class="menu1 clear">
         <if condition="$userInfo.collect eq 2">
-            <span class="menubox"><a href="userVerify"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/create.png" alt=""/></a></span>
+            <span class="menubox"><a href="userVerify?sendID={$userInfo.target_id}"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/create.png" alt=""/></a></span>
             <else/>
             <span class="menubox"><a onclick="wxQrcodeClick()"><img class="menuicon aligncenter" src="__PUBLIC__/images/icon/wxicon.png" alt=""/></a></span>
         </if>
