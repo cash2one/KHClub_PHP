@@ -35,47 +35,12 @@ class LoginController extends Controller {
         //用户名密码先写死
         if($username == 'admin' && $password == 'khclub1234'){
             $_SESSION['manager'] = 1;
-            header('location:http://localhost/kh/index.php/Home/WXManager/withdrawRequest');
+            header('Location:'.__ROOT__.'/index.php/Home/WXManager/withdrawRequest');
         }else{
             $this->assign('error','1');
             $this->display('Login');
         }
     }
 
-    /**
-     * @brief 管理系统
-     * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WXManager/withdrawCommit
-     * @param target_id 要提现的账户ID
-     */
-    function withdrawCommit(){
-        //未登录
-        if(empty($_SESSION['manager'])){
-            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/login/login');
-            exit;
-        }
-        $target_id = $_POST['target_id'];
-        if(empty($target_id)){
-            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
-            exit;
-        }
 
-        $withdrawModel = M();
-        $sql = 'UPDATE kh_withdraw_notice SET withdraw_state=1 WHERE user_id="'.$target_id.'"';
-        $withdrawModel->execute($sql);
-
-        //提现
-        $sql = 'UPDATE kh_lucky SET state=2,update_date='.time().',withdraw_date='.time().'
-                WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
-        $num = $withdrawModel->execute($sql);
-        if($num < 1){
-            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
-            exit;
-        }else{
-            //提现成功
-            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
-            exit;
-        }
-
-    }
 }

@@ -76,7 +76,7 @@
                             if(obj.withdraw_state == 1){
                                 listContent = listContent + '<td class="has-withdraw">已结算</td> </tr>';
                             }else{
-                                listContent = listContent + '<td class="withdraw"><a href="withdrawDetail">结算</a></td> </tr>';
+                                listContent = listContent + '<td class="withdraw"><a href="withdrawDetail?user_id='+obj.id+'">结算</a></td> </tr>';
                             }
                         }
                         $("#list").html(listContent);
