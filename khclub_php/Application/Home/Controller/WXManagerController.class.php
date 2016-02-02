@@ -134,6 +134,7 @@ class WXManagerController extends Controller {
         $sql = 'SELECT add_date, amount, send_id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=1
                 ORDER BY add_date DESC LIMIT '.$start.','.$end;
         $user = $userModel->query($sql);
+        $sumAmount = 0;
         for($j=0; $j<count($user); $j++) {
             $id = $user[$j]['send_id'];
             $sql='SELECT name FROM kh_user_info WHERE id='.$id;
@@ -142,6 +143,8 @@ class WXManagerController extends Controller {
             $user[$j]['add_date'] = date('Y-m-d', $user[$j]['add_date']);
             $sumAmount += $user[$j]['amount'];
         }
+        $id = $user_id;
+        $this->assign('id',$id);
         $this->assign('page',$page);
         $this->assign('page_count',$page_count);
         $this->assign('sumAmount',$sumAmount);
@@ -185,6 +188,7 @@ class WXManagerController extends Controller {
         $sql = 'SELECT withdraw_date, amount, send_id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=2
                 ORDER BY add_date DESC LIMIT '.$start.','.$end;
         $user = $userModel->query($sql);
+        $sumAmount = 0;
         for($j=0; $j<count($user); $j++) {
             $id = $user[$j]['send_id'];
             $sql='SELECT name FROM kh_user_info WHERE id='.$id;
@@ -193,6 +197,8 @@ class WXManagerController extends Controller {
             $user[$j]['add_date'] = date('Y-m-d', $user[$j]['add_date']);
             $sumAmount += $user[$j]['amount'];
         }
+        $id = $user_id;
+        $this->assign('id',$id);
         $this->assign('page',$page);
         $this->assign('page_count',$page_count);
         $this->assign('sumAmount',$sumAmount);

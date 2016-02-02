@@ -18,8 +18,8 @@
 <nav style="margin: auto" class="navbar navbar-default">
     <div>
         <ul style="width: 100%" class="nav navbar-nav">
-            <li class="nav-width"><a href="withdrawRequest.html">提现请求</a></li>
-            <li class="nav-width active"><a href="#">用户列表</a></li>
+            <li class="nav-width"><a href="__APP__/Home/WXManager/withdrawRequest">提现请求</a></li>
+            <li class="nav-width active"><a>用户列表</a></li>
         </ul>
     </div>
 </nav>
@@ -38,7 +38,7 @@
         <tr>
             <td class="user-list-cell">{$v.name}</td>
             <td class="user-list-cell">{$v.wx_open_id}</td>
-            <td class="user-list-cell"><a href="withdrawDetail.html">查看</a></td>
+            <td class="user-list-cell"><a href="__APP__/Home/WXManager/withdrawDetail?user_id={$v.id}">查看</a></td>
             <td class="user-list-cell">{$v.amount}</td>
         </tr>
     </volist>
