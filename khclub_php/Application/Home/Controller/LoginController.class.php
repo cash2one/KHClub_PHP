@@ -5,7 +5,6 @@ class LoginController extends Controller {
 
     function index(){
 
-
     }
 
     /**
@@ -41,7 +40,6 @@ class LoginController extends Controller {
             $this->assign('error','1');
             $this->display('Login');
         }
-
     }
 
     /**
@@ -53,12 +51,12 @@ class LoginController extends Controller {
     function withdrawCommit(){
         //未登录
         if(empty($_SESSION['manager'])){
-            header('www.pinweihuanqiu.com/khclub_php/index.php/Home/login/login');
+            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/login/login');
             exit;
         }
         $target_id = $_POST['target_id'];
         if(empty($target_id)){
-            header('www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
+            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
             exit;
         }
 
@@ -71,11 +69,11 @@ class LoginController extends Controller {
                 WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
         $num = $withdrawModel->execute($sql);
         if($num < 1){
-            header('www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
+            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
             exit;
         }else{
             //提现成功
-            header('www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
+            header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
         }
 
     }
