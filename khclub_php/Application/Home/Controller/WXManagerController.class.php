@@ -44,7 +44,7 @@ class WXManagerController extends Controller {
             $count = $requestModel->query($sql)[0]['size'];
             //获取最后一页
             $page_count  = ceil($count/$size);
-            $sql = 'SELECT uc.id, uc.name, wi.add_date, wi.withdraw_state FROM kh_withdraw_notice wi, kh_user_info uc
+            $sql = 'SELECT wi.id, uc.name, wi.add_date, wi.withdraw_state FROM kh_withdraw_notice wi, kh_user_info uc
                     WHERE uc.id = wi.user_id ORDER BY wi.add_date DESC LIMIT '.$start.','.$end;
             $request = $requestModel->query($sql);
             for($j=0; $j<count($request); $j++) {
@@ -109,30 +109,14 @@ class WXManagerController extends Controller {
      */
     public function withdrawDetail(){
         $user_id = $_REQUEST['user_id'];
-        $page = $_REQUEST['page'];
-        $size = $_REQUEST['size'];
-        if(empty($page)){
-            $page = 1;
-        }
-        if(empty($size)){
-            $size = 10;
-        }
-        $start = ($page-1)*$size;
-        $end   = $size;
         $userModel = M();
         $sql = 'SELECT uc.name, ex.wx_open_id FROM kh_user_info uc, kh_user_extra_info ex
                 WHERE uc.id='.$user_id.' AND uc.id=ex.user_id AND uc.delete_flag=0 AND ex.delete_flag=0
                 LIMIT 1 ';
         $user = $userModel->query($sql);
         $userInfo = $user[0];
-        //获取总页数
-        $sql = 'SELECT id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=1
-                ORDER BY add_date DESC';
-        $count = count($userModel->query($sql));
-        //获取最后一页
-        $page_count  = ceil($count/$size);
         $sql = 'SELECT add_date, amount, send_id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=1
-                ORDER BY add_date DESC LIMIT '.$start.','.$end;
+                ORDER BY add_date DESC';
         $user = $userModel->query($sql);
         $sumAmount = 0;
         for($j=0; $j<count($user); $j++) {
@@ -145,8 +129,6 @@ class WXManagerController extends Controller {
         }
         $id = $user_id;
         $this->assign('id',$id);
-        $this->assign('page',$page);
-        $this->assign('page_count',$page_count);
         $this->assign('sumAmount',$sumAmount);
         $this->assign('userInfo',$userInfo);
         $this->assign('user',$user);
@@ -205,42 +187,5 @@ class WXManagerController extends Controller {
         $this->assign('userInfo',$userInfo);
         $this->assign('user',$user);
         $this->display('withdrawRecord');
-    }
-
-    /**
-     * @brief 管理系统
-     * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WXManager/withdrawCommit
-     * @param target_id 要提现的账户ID
-     */
-    function withdrawCommit(){
-        //未登录
-        if(empty($_SESSION['manager'])){
-            header('Location: '.__ROOT__.'/khclub_php/index.php/Home/login/login');
-            exit;
-        }
-        $target_id = $_POST['target_id'];
-        if(empty($target_id)){
-            header('Location: '.__ROOT__.'/khclub_php/index.php/Home/WXManager');
-            exit;
-        }
-
-        $withdrawModel = M();
-        $sql = 'UPDATE kh_withdraw_notice SET withdraw_state=1 WHERE user_id="'.$target_id.'"';
-        $withdrawModel->execute($sql);
-
-        //提现
-        $sql = 'UPDATE kh_lucky SET state=2,update_date='.time().',withdraw_date='.time().'
-                WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
-        $num = $withdrawModel->execute($sql);
-        if($num < 1){
-            header('Location: '.__ROOT__.'/khclub_php/index.php/Home/WXManager');
-            exit;
-        }else{
-            //提现成功
-            header('Location: '.__ROOT__.'/khclub_php/index.php/Home/WXManager');
-            exit;
-        }
-
     }
 }

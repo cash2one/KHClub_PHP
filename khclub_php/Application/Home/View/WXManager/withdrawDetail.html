@@ -80,37 +80,10 @@
     </div>
 </div>
 
-<div style="text-align: center">
-    <if condition="$page neq 1">
-        <a class="next-page" href='__APP__/Home/WXManager/withdrawDetail?user_id={$id}&page={$page-1}'>上一页</a>
-    </if>
-    <php>
-        for($p = 1; $p <= $page_count; $p ++) {
-        if($p == $page){
-        echo '<a class="active-page">'.$p.'</a>';
-        }else{
-        if($p > $page+2 || $p < $page-2){
-        }else{
-        echo '<a class="page" href=\'__APP__/Home/WXManager/withdrawDetail?user_id='.$id.'&page='.$p.'\'>'.$p.'</a>';
-        }
-        }
-        }
-    </php>
-    <if condition="$page neq $page_count">
-        <a class="next-page" href='__APP__/Home/WXManager/withdrawDetail?user_id={$id}&page={$page+1}'>下一页</a>
-    </if>
-</div>
-
 <script type="text/javascript">
 
     $(function(){
 
     })
 
-    function alertWithdraw(){
-        $('#myModal').modal();
-    }
-
-</script>
-</body>
-</html>
+    function
