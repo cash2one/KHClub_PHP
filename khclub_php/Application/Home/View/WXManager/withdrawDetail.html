@@ -27,36 +27,36 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th class="user-list-title">用户名称</th>
-            <th class="user-list-title">OpenID</th>
-            <th class="user-list-title">总结算金额</th>
-            <th class="user-list-title">操作</th>
-        </tr>
+    <tr>
+        <th class="user-list-title">用户名称</th>
+        <th class="user-list-title">OpenID</th>
+        <th class="user-list-title">总结算金额</th>
+        <th class="user-list-title">操作</th>
+    </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="user-list-cell">{$userInfo.name}</td>
-            <td class="user-list-cell">{$userInfo.wx_open_id}</td>
-            <td class="user-list-cell">{$sumAmount}元</td>
-            <td onclick="alertWithdraw()" style="color: red;cursor: pointer" class="user-list-cell">结算</td>
-        </tr>
+    <tr>
+        <td class="user-list-cell">{$userInfo.name}</td>
+        <td class="user-list-cell">{$userInfo.wx_open_id}</td>
+        <td class="user-list-cell">{$sumAmount}元</td>
+        <td onclick="alertWithdraw()" style="color: red;cursor: pointer" class="user-list-cell">结算</td>
+    </tr>
     </tbody>
     <thead>
-        <tr>
-            <th class="user-list-title">金额</th>
-            <th class="user-list-title">日期</th>
-            <th class="user-list-double-title" colspan="2">兑换事件</th>
-        </tr>
+    <tr>
+        <th class="user-list-title">金额</th>
+        <th class="user-list-title">日期</th>
+        <th class="user-list-double-title" colspan="2">兑换事件</th>
+    </tr>
     </thead>
     <tbody>
-        <volist name="user" id="v">
+    <volist name="user" id="v">
         <tr>
             <td class="user-list-cell">{$v.amount}</td>
             <td class="user-list-cell">{$v.add_date}</td>
             <td class="user-list-double-cell" colspan="2">{$userInfo.name}成功分享给{$v.recommended}</td>
         </tr>
-        </volist>
+    </volist>
     </tbody>
 </table>
 
@@ -74,11 +74,15 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-primary" onclick="withdrawConfirm()">确定</button>
             </div>
         </div>
     </div>
 </div>
+
+<form id="form" method="post" action="withdrawCommit">
+    <input type="hidden" id="target_id" name="target_id" value="{$id}">
+</form>
 
 <script type="text/javascript">
 
@@ -86,4 +90,14 @@
 
     })
 
-    function
+    function alertWithdraw(){
+        $('#myModal').modal();
+    }
+
+    function withdrawConfirm(){
+        $('#form').submit();
+    }
+
+</script>
+</body>
+</html>
