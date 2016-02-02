@@ -462,7 +462,7 @@ class WXController extends Controller {
         $target_id = $_REQUEST['target_id'];
 
         if(empty($userExtra)){
-            header("Location: ".HTTP_URL_PREFIX."userVerify?collectID=".$target_id);
+            header("Location: ".HTTP_URL_PREFIX."userVerify?collectID=".$target_id."&sendID=".$target_id);
             exit;
         }
 
@@ -481,7 +481,7 @@ class WXController extends Controller {
                     $this->error("收藏失败!");
                 }
             }else{
-                header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$target_id);
+                header("Location: ".HTTP_URL_PREFIX."mycard?target_id=".$target_id."&send_id=".$target_id);
                 exit;
             }
 
@@ -700,7 +700,7 @@ class WXController extends Controller {
             $this->display("cardHolder");
 
         }else{
-            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            header("Location: ".HTTP_URL_PREFIX."userVerify?sendID=".$_REQUEST['sendID']);
         }
 
     }
@@ -844,7 +844,6 @@ class WXController extends Controller {
             }
 
         }
-
 
         $extraRet = $userExtraModel->save($userExtra);
 
@@ -1265,6 +1264,173 @@ class WXController extends Controller {
     }
 
     /**
+     * @brief 获取未发的红包列表
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/getLuckyMoneyList
+     */
+    public function getLuckyMoneyList(){
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."getLuckyMoneyList&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $memberModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        //如果不存在
+        if(empty($userExtra)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        if(!strstr($userExtra['head_sub_image'], 'http')){
+            $userExtra['head_sub_image'] = __ROOT__.'/Uploads/'.$userExtra['head_sub_image'];
+        }
+
+        $luckyModel = M('kh_lucky');
+        //红包列表
+        $luckyList = $luckyModel->where('user_id='.$userExtra['id'].' AND state=1 AND delete_flag=0')->order('add_date DESC')->select();
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->assign('userInfo', $userExtra);
+        if(count($luckyList) < 1){
+            $this->display('noneRedPacket');
+            exit;
+        }
+        //时间处理
+        for($i=0; $i<count($luckyList); $i++){
+            $luckyList[$i]['add_date'] = date('Y-m-d', $luckyList[$i]['add_date']);
+        }
+
+        $total = $luckyModel->field('SUM(amount) total')->where('state=1 AND delete_flag=0 AND user_id='.$userExtra['id'])->order('add_date DESC')->find();
+        $this->assign('list', $luckyList);
+        if(empty($total['total'])){
+            $total = '0';
+        }else{
+            $total = $total['total'];
+        }
+        $this->assign('total', $total);
+        $this->display('myredPacket');
+
+    }
+
+    /**
+     * @brief 获取已发的红包列表
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/getOverLuckyMoneyList
+     */
+    public function getOverLuckyMoneyList(){
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $memberModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+
+        if(!strstr($userExtra['head_sub_image'], 'http')){
+            $userExtra['head_sub_image'] = __ROOT__.'/Uploads/'.$userExtra['head_sub_image'];
+        }
+
+        //如果不存在
+        if(empty($userExtra)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $luckyModel = M('kh_lucky');
+        //已收红包列表
+        $luckyList = $luckyModel->where('user_id='.$userExtra['id'].' AND state=2 AND delete_flag=0')->order('add_date DESC')->select();
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->assign('userInfo', $userExtra);
+
+        //时间处理
+        for($i=0; $i<count($luckyList); $i++){
+            $luckyList[$i]['add_date'] = date('Y-m-d', $luckyList[$i]['add_date']);
+        }
+
+        $total = $luckyModel->field('SUM(amount) total')->where('state=2 AND delete_flag=0 AND user_id='.$userExtra['id'])->order('add_date DESC')->find();
+        $this->assign('list', $luckyList);
+        if(empty($total['total'])){
+            $total = '0';
+        }else{
+            $total = $total['total'];
+        }
+        $this->assign('total', $total);
+        $this->display('redPacketRecord');
+
+    }
+
+    public function redPacketDetail(){
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        //redPacketDetail?amount={$lucky.amount}&date={$lucky.add_date}&head_sub_image={$userInfo.head_sub_image}&state=1
+        $this->assign('amount',$_REQUEST['amount']);
+        $this->assign('date',$_REQUEST['date']);
+        $this->assign('head_sub_image',$_REQUEST['head_sub_image']);
+        if($_REQUEST['state'] == 1){
+            $this->assign('state','未领取');
+        }else{
+            $this->assign('state','已领取');
+        }
+        $this->display('redPacketDetail');
+    }
+
+    /**
+     * @brief 红包获取方式页面
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/subscribeWX
+     */
+    public function redPacketGain(){
+
+        $this->display('redPacketGain');
+    }
+
+    /**
      * @brief 删除名片群
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WX/deleteCardGroup
@@ -1293,7 +1459,7 @@ class WXController extends Controller {
         //先授权获取openID
         $openID = $_SESSION['open_id'];
         $collectID = $_REQUEST['collectID'];
-
+        $sendID = $_REQUEST['sendID'];
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
@@ -1306,7 +1472,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify?collectID=".$collectID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify?collectID=".$collectID."&sendID=".$sendID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -1329,7 +1495,8 @@ class WXController extends Controller {
 
         //收藏的人
         $this->assign('collectID',$_REQUEST['collectID']);
-
+        //推荐的人
+        $this->assign('sendID',$sendID);
         $this->display('userVerify');
 
     }
@@ -1344,6 +1511,7 @@ class WXController extends Controller {
         //先授权获取openID
         $openID = $_SESSION['open_id'];
         $collectID = $_REQUEST['collectID'];
+        $sendID = $_REQUEST['sendID'];
 
         if(empty($openID)){
             $code = $_REQUEST['code'];
@@ -1357,7 +1525,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify?collectID=".$collectID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".HTTP_URL_PREFIX."userVerify?collectID=".$collectID."&sendID=".$sendID."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -1373,6 +1541,8 @@ class WXController extends Controller {
 
         //要收藏的人
         $this->assign('collectID',$collectID);
+        //推荐的人
+        $this->assign('sendID',$sendID);
         if($user){
             $this->assign('username',$username);
             $this->display('userLogin');
@@ -1430,7 +1600,6 @@ class WXController extends Controller {
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
-
         //要收藏的人
         $this->assign('collectID',$collectID);
         if($user){
@@ -1522,6 +1691,8 @@ class WXController extends Controller {
         $verify = $_REQUEST['verify'];
         //要收藏的ID
         $collectID = $_REQUEST['collectID'];
+        //推荐人的ID
+        $sendID = $_REQUEST['sendID'];
 
         //先授权获取openID
         $code = $_REQUEST['code'];
@@ -1544,7 +1715,7 @@ class WXController extends Controller {
             //openID存入
             $_SESSION['open_id'] = $openID;
         }else{
-            $url = "".HTTP_URL_PREFIX."userRegister?collectID=".$collectID."&username=".$username."&verify=".$verify."&password=".$_REQUEST['password'];
+            $url = HTTP_URL_PREFIX."userRegister?sendID=".$sendID."&collectID=".$collectID."&username=".$username."&verify=".$verify."&password=".$_REQUEST['password'];
             header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa1cc9ce0fd9a1372&redirect_uri=".urlencode($url)."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
             exit;
         }
@@ -1566,10 +1737,9 @@ class WXController extends Controller {
         and verify_code='.$verify.' and delete_flag=0 and add_date>'.(time()-60);
         $data = $verifyModel->query($sql)[0];
 
-        //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
-        $signPackage = $jssdk->GetSignPackage();
-        $this->assign('signPackage',$signPackage);
+        //分配数据
+        $this->assign('collectID', $collectID);
+        $this->assign('sendID', $sendID);
 
         //验证成功注册
         if($data['id'] > 0){
@@ -1579,23 +1749,155 @@ class WXController extends Controller {
             $wxUser = json_decode($msg);
 
             $user = array('username'=>$username, 'password'=>md5($password), 'name'=>$wxUser->nickname, 'phone_num'=>$username,
-                        'sex'=>$wxUser->sex-1, 'head_image'=>$wxUser->headimgurl, 'head_sub_image'=>$wxUser->headimgurl);
+                'sex'=>$wxUser->sex-1, 'head_image'=>$wxUser->headimgurl, 'head_sub_image'=>$wxUser->headimgurl);
             $userModel = M('kh_user_info');
             $userModel->startTrans();
             $retID = $userModel->add($user);
+
+            //wxJs签名
+            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+            $signPackage = $jssdk->GetSignPackage();
+            $this->assign('signPackage',$signPackage);
+
             if($retID){
                 $findExtraUser = M('kh_user_extra_info');
                 $userExtra = array('wx_open_id'=>$openID, 'user_id'=>$retID);
                 $extraRet = $findExtraUser->add($userExtra);
                 if($extraRet){
+                    //注册成功
                     $userModel->commit();
+//                    header("Location: ".HTTP_URL_PREFIX."cardHome");
+
                     //是否要收藏一下名片
                     if(!empty($collectID)){
                         $cardModel = M('kh_card');
                         $card = array('user_id'=>$retID,'target_id'=>$collectID, 'add_date'=>time());
-                        $cardModel->add($card);
+                        $collectRet = $cardModel->add($card);
+                        //收藏成功
+                        if($collectRet){
+                            $openModel = M('kh_user_extra_info');
+                            $open = $openModel->where('user_id="'.$collectID.'"')->find();
+                            //获取AccessToken
+                            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+                            $ACC_TOKEN = $jssdk->getAccessToken();
+
+                            if($open){
+                                //推送给对方
+                                $data = '{
+                                    "touser":"'.$open['wx_open_id'].'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"'.$user['name'].'收藏了您的名片<a href=\"'.HTTP_URL_PREFIX.'mycard?isShared=1&target_id='.$user['id'].'\">点击查看</a>"
+                                    }
+                                }';
+
+                                $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                                $curl = curl_init();
+                                curl_setopt($curl, CURLOPT_URL, $url);
+                                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                                curl_setopt($curl, CURLOPT_POST, 1);
+                                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                                curl_exec($curl);
+                                curl_close($curl);
+
+                                $sql = "SELECT name FROM kh_user_info WHERE id=".$collectID;
+                                $name = $openModel->query($sql)[0]['name'];
+                                //推送给自己 这个地方冗余了 等需要的时候再进行封装
+                                $data = '{
+                                    "touser":"'.$openID.'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"您收藏了'.$name.'的名片<a href=\"'.HTTP_URL_PREFIX.'mycard?target_id='.$collectID.'\">点击查看</a>"
+                                    }
+                                }';
+
+                                $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                                $curl = curl_init();
+                                curl_setopt($curl, CURLOPT_URL, $url);
+                                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                                curl_setopt($curl, CURLOPT_POST, 1);
+                                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                                curl_exec($curl);
+                                curl_close($curl);
+                            }
+                        }
+
                     }
-//                    header("Location: ".HTTP_URL_PREFIX."cardHome");
+
+                    //是否有推荐人，增加红包
+                    if(!empty($sendID)){
+                        //增加红包 注册一块 推荐两块
+                        $luckyModel = M('kh_lucky');
+                        $myLucky = array('user_id'=>$retID,'type'=>'2','amount'=>'1',
+                            'state'=>'1','send_id'=>$retID, 'add_date'=>time());
+                        $sendLucky = array('user_id'=>$sendID,'type'=>'1','amount'=>'2',
+                            'state'=>'1','send_id'=>$retID, 'add_date'=>time());
+                        $luckyModel->add($myLucky);
+                        $luckyModel->add($sendLucky);
+
+                        //红包通知
+                        $openModel = M('kh_user_extra_info');
+                        $open = $openModel->where('user_id="'.$sendID.'"')->find();
+                        //获取AccessToken
+                        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+                        $ACC_TOKEN = $jssdk->getAccessToken();
+
+                        if($open){
+                            //推送给对方
+                            $data = '{
+                                        "touser":"'.$open['wx_open_id'].'",
+                                        "msgtype":"text",
+                                        "text":
+                                        {
+                                            "content":"恭喜你成功推荐'.$user['name'].'成为会员,已拿到现金红包咯,<a href=\"'.HTTP_URL_PREFIX.'getLuckyMoneyList\">点击查看</a>"
+                                        }
+                                    }';
+
+                            $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                            $curl = curl_init();
+                            curl_setopt($curl, CURLOPT_URL, $url);
+                            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                            curl_setopt($curl, CURLOPT_POST, 1);
+                            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                            curl_exec($curl);
+                            curl_close($curl);
+
+                            //推送给自己 这个地方冗余了 等需要的时候再进行封装
+                            $data = '{
+                                        "touser":"'.$openID.'",
+                                        "msgtype":"text",
+                                        "text":
+                                        {
+                                            "content":"恭喜你成为商务圈的会员,已拿到现金红包咯,<a href=\"'.HTTP_URL_PREFIX.'getLuckyMoneyList\">点击查看</a>"
+                                        }
+                                    }';
+
+                            $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                            $curl = curl_init();
+                            curl_setopt($curl, CURLOPT_URL, $url);
+                            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                            curl_setopt($curl, CURLOPT_POST, 1);
+                            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                            curl_exec($curl);
+                            curl_close($curl);
+                        }
+
+                    }
+
                     header("Location: ".HTTP_URL_PREFIX."modifyCardPage?collectID=".$collectID);
                 }else{
                     $userModel->rollback();

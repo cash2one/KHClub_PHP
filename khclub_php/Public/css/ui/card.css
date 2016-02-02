@@ -415,3 +415,18 @@ a:visited {
     background-color: #66CE39;
     margin: 1rem auto auto auto;
 }
+.withdraw-ok {
+    font-size: 16px;
+    float: left;
+    clear: both;
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    color: #ffffff;
+    background-color: #808080;
+    border-color: transparent;
+}

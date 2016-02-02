@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/share/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+    <script type="text/javascript">
+    $(function(){
+        getNoticeInfo();
+    })
+    function getNoticeInfo(){
+        $.ajax({
+            type:'post',
+            dataType:'json',
+            timeout:10000,
+            url:'__URL__/withdrawRequestInfo?' + Math.random(),
+//            data:{page: '1'},
+            success:function(rData){
+                var questInfo = eval(rData)
+                if(questInfo && questInfo.status == 1 ){
+                    var msg = questInfo.result;
+                    var page = Number(msg[0].page);
+//                    var div = document.getElementById('pageone');
+//                    div.setAttribute("className", "next-page");
+//                    $("#pageone").className = 'next-page';
+                    var toastHTML = '<span id="next-page" onclick="page('+page+'-1)">上一页</span>';
+                    document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+                    var page_count = msg[0].page_count;
+                    for(var j=1;j<=page_count;j++){
+                        if(j == page){
+                        var toastHTML = '<span class="active-page">'+j+'</span>';
+                        document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+                        }else{
+                            var toastHTML = '<span class="page" onclick="page('+j+')">'+j+'</span>';
+                            document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+                        }
+                    }
+                    var toastHTML = '<span id="pageend" onclick="page('+page+'+1)">下一页</span>';
+                    document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+                    for(var i=0;i<msg.length;i++)
+                    {
+                        var json = msg[i];
+                        var userName = json.name;
+                        var dates = json.add_date;
+                        var state = json.withdraw_state;
+                        if(state == 0){
+                            state = '已结算';
+                            var tb = document.getElementById("tb");
+                            //添加一个新行，返回"行对象"
+                            var row = tb.insertRow(tb.rows.length);
+                            //向行中添加一个新列，返回"列对象"
+                            var cell = row.insertCell();
+                            cell.className = 'user-name';
+                            cell.innerHTML = userName;
+                            cell = row.insertCell();
+                            cell.className = 'message';
+                            cell.innerHTML = userName+'于'+dates+'申请提现';
+                            cell = row.insertCell();
+                            cell.className = 'has-withdraw';
+                            cell.innerHTML = state;
+                        }else{
+                            state = '结算';
+                            var tb = document.getElementById("tb");
+                            //添加一个新行，返回"行对象"
+                            var row = tb.insertRow(tb.rows.length);
+                            //向行中添加一个新列，返回"列对象"
+                            var cell = row.insertCell();
+                            cell.className = 'user-name';
+                            cell.innerHTML = userName;
+                            cell = row.insertCell();
+                            cell.className = 'message';
+                            cell.innerHTML = userName+'于'+dates+'申请提现';
+                            cell = row.insertCell();
+                            cell.className = 'withdraw';
+                            cell.innerHTML = "<a href='#'>"+state+"</a>";
+                        }
+                    }
+                }
+            },
+            error:function(error){
+                alert(eval(error));
+                return false;
+            }
+        })
+    }
+    function page(a){
+            alert(a);
+    }
+    </script>
+
+</head>
+<body >
+
+<nav style="margin: auto" class="navbar navbar-default">
+    <div>
+        <ul style="width: 100%" class="nav navbar-nav">
+            <li class="nav-width active"><a href="#">提现请求</a></li>
+            <li class="nav-width"><a href="__APP__/Home/WXManager/userList">用户列表</a></li>
+        </ul>
+    </div>
+</nav>
+
+<table class="table" id="tb">
+    <thead>
+    <tr>
+        <th class="user-name-title">用户名称</th>
+        <th class="message-title" colspan="2">消息</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<!--<div style="text-align: center">-->
+    <!--<span class="next-page" onclick="page()">上一页</span>-->
+    <!--<span class="active-page" onclick="page()">1</span>-->
+    <!--<span class="page" onclick="page()">2</span>-->
+    <!--<span class="page" onclick="page()">3</span>-->
+    <!--<span class="page" onclick="page()">4</span>-->
+    <!--<span class="page" onclick="page()">5</span>-->
+    <!--<span class="next-page" onclick="page()">下一页</span>-->
+<!--</div>-->
+
+
+</body>
+</html>

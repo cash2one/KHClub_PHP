@@ -35,7 +35,7 @@ class LoginController extends Controller {
         //用户名密码先写死
         if($username == 'admin' && $password == 'khclub1234'){
             $_SESSION['manager'] = 1;
-            header('www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
+            header('location:http://localhost/kh/index.php/Home/WXManager/withdrawRequest');
         }else{
             $this->assign('error','1');
             $this->display('Login');
@@ -43,7 +43,7 @@ class LoginController extends Controller {
     }
 
     /**
-     * @brief 管理系统登录
+     * @brief 管理系统
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/WXManager/withdrawCommit
      * @param target_id 要提现的账户ID
@@ -74,6 +74,7 @@ class LoginController extends Controller {
         }else{
             //提现成功
             header('Location: www.pinweihuanqiu.com/khclub_php/index.php/Home/WXManager');
+            exit;
         }
 
     }
