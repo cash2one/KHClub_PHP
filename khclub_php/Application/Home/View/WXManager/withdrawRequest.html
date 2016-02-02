@@ -11,87 +11,84 @@
     <link href="__PUBLIC__/css/bootstrap-theme.css" rel="stylesheet">
     <title>管理系统</title>
     <script type="text/javascript">
-    $(function(){
-        getNoticeInfo();
-    })
-    function getNoticeInfo(){
-        $.ajax({
-            type:'post',
-            dataType:'json',
-            timeout:10000,
-            url:'__URL__/withdrawRequestInfo?' + Math.random(),
-//            data:{page: '1'},
-            success:function(rData){
-                var questInfo = eval(rData)
-                if(questInfo && questInfo.status == 1 ){
-                    var msg = questInfo.result;
-                    var page = Number(msg[0].page);
-//                    var div = document.getElementById('pageone');
-//                    div.setAttribute("className", "next-page");
-//                    $("#pageone").className = 'next-page';
-                    var toastHTML = '<span id="next-page" onclick="page('+page+'-1)">上一页</span>';
-                    document.body.insertAdjacentHTML('beforeEnd', toastHTML);
-                    var page_count = msg[0].page_count;
-                    for(var j=1;j<=page_count;j++){
-                        if(j == page){
-                        var toastHTML = '<span class="active-page">'+j+'</span>';
-                        document.body.insertAdjacentHTML('beforeEnd', toastHTML);
-                        }else{
-                            var toastHTML = '<span class="page" onclick="page('+j+')">'+j+'</span>';
-                            document.body.insertAdjacentHTML('beforeEnd', toastHTML);
-                        }
-                    }
-                    var toastHTML = '<span id="pageend" onclick="page('+page+'+1)">下一页</span>';
-                    document.body.insertAdjacentHTML('beforeEnd', toastHTML);
-                    for(var i=0;i<msg.length;i++)
-                    {
-                        var json = msg[i];
-                        var userName = json.name;
-                        var dates = json.add_date;
-                        var state = json.withdraw_state;
-                        if(state == 0){
-                            state = '已结算';
-                            var tb = document.getElementById("tb");
-                            //添加一个新行，返回"行对象"
-                            var row = tb.insertRow(tb.rows.length);
-                            //向行中添加一个新列，返回"列对象"
-                            var cell = row.insertCell();
-                            cell.className = 'user-name';
-                            cell.innerHTML = userName;
-                            cell = row.insertCell();
-                            cell.className = 'message';
-                            cell.innerHTML = userName+'于'+dates+'申请提现';
-                            cell = row.insertCell();
-                            cell.className = 'has-withdraw';
-                            cell.innerHTML = state;
-                        }else{
-                            state = '结算';
-                            var tb = document.getElementById("tb");
-                            //添加一个新行，返回"行对象"
-                            var row = tb.insertRow(tb.rows.length);
-                            //向行中添加一个新列，返回"列对象"
-                            var cell = row.insertCell();
-                            cell.className = 'user-name';
-                            cell.innerHTML = userName;
-                            cell = row.insertCell();
-                            cell.className = 'message';
-                            cell.innerHTML = userName+'于'+dates+'申请提现';
-                            cell = row.insertCell();
-                            cell.className = 'withdraw';
-                            cell.innerHTML = "<a href='#'>"+state+"</a>";
-                        }
-                    }
-                }
-            },
-            error:function(error){
-                alert(eval(error));
-                return false;
-            }
+        $(function(){
+            getNoticeInfo(1);
         })
-    }
-    function page(a){
-            alert(a);
-    }
+        function getNoticeInfo(tmpPage){
+            var page = tmpPage;
+            if(page < 1){
+                page = 1;
+            }
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                timeout:10000,
+                url:'__URL__/withdrawRequestInfo?' + Math.random(),
+                data:{page: page},
+                success:function(rData){
+                    var questInfo = eval(rData)
+                    if(questInfo && questInfo.status == 1 ){
+                        var result = questInfo.result;
+                        var pageCount = Number(result.page_count);
+                        var list = result.list;
+
+                        //游标当前的位置
+                        var currentPositon = page%5;
+                        if(currentPositon == 0){
+                            currentPositon = 5;
+                        }
+                        var firstPostion = page - currentPositon;
+
+                        var displayCount = 5;
+                        //判断是不是最后一页
+                        if(firstPostion+5 > pageCount){
+                            displayCount = pageCount - firstPostion;
+                        }
+
+                        var pageHtml = '';
+                        if(page > 1){
+                            pageHtml += '<span onclick="getNoticeInfo('+(page-1)+')" class="next-page">上一页</span>';
+                        }
+
+                        //中间的内容
+                        for(var i=1; i<=displayCount; i++){
+                            if(i != currentPositon){
+                                pageHtml += '<span onclick="getNoticeInfo('+(firstPostion+i)+')" class="page">'+(firstPostion+i)+'</span>';
+                            }else{
+                                //被选中的
+                                pageHtml += '<span class="active-page">'+(firstPostion+i)+'</span>';
+                            }
+                        }
+
+                        if(page < pageCount){
+                            pageHtml += '<span onclick="getNoticeInfo('+(page+1)+')" class="next-page">下一页</span>';
+                        }
+                        $('#pageHolder').html(pageHtml);
+
+                        //内容
+                        var listContent = '';
+                        for(var i=0;i<list.length;i++)
+                        {
+                            var obj = list[i];
+                            listContent = listContent + '<tr> <td class="user-name">'+obj.name+'</td> ' +
+                            '<td class="message">'+obj.name+'于'+obj.add_date+'申请提现</td> ';
+
+                            if(obj.withdraw_state == 1){
+                                listContent = listContent + '<td class="has-withdraw">已结算</td> </tr>';
+                            }else{
+                                listContent = listContent + '<td class="withdraw"><a href="withdrawDetail">结算</a></td> </tr>';
+                            }
+                        }
+                        $("#list").html(listContent);
+                    }
+                },
+                error:function(error){
+                    alert(eval(error));
+                    return false;
+                }
+            })
+        }
+
     </script>
 
 </head>
@@ -113,21 +110,14 @@
         <th class="message-title" colspan="2">消息</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="list">
 
     </tbody>
 </table>
 
-<!--<div style="text-align: center">-->
-    <!--<span class="next-page" onclick="page()">上一页</span>-->
-    <!--<span class="active-page" onclick="page()">1</span>-->
-    <!--<span class="page" onclick="page()">2</span>-->
-    <!--<span class="page" onclick="page()">3</span>-->
-    <!--<span class="page" onclick="page()">4</span>-->
-    <!--<span class="page" onclick="page()">5</span>-->
-    <!--<span class="next-page" onclick="page()">下一页</span>-->
-<!--</div>-->
+<div id="pageHolder" style="text-align: center">
 
+</div>
 
 </body>
 </html>

@@ -30,10 +30,10 @@ class WXManagerController extends Controller {
             $page = $_REQUEST['page'];
             $size = $_REQUEST['size'];
             if(empty($page)){
-                $page = 2;
+                $page = 1;
             }
             if(empty($size)){
-                $size = 2;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -50,13 +50,14 @@ class WXManagerController extends Controller {
             for($j=0; $j<count($request); $j++) {
                 $request[$j]['add_date'] = date('Y年m月d日', $request[$j]['add_date']);
             }
-            $request[0]['page'] = $page;
-            $request[0]['page_count'] = $page_count;
-            returnJson(1,"查询成功", $request);
+
+            $result = array('list'=>$request, 'page'=>$page, 'page_count'=>$page_count);
+
+            returnJson(1,"查询成功", $result);
 
         }catch (Exception $e) {
 
-            returnJson(0,"数据异常=_=", $e);
+            returnJson(0,"数据异常", $e);
         }
     }
 
