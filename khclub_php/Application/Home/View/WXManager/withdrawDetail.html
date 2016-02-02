@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/share/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+
+
+</head>
+<body >
+
+<nav style="margin: auto" class="navbar navbar-default">
+    <div>
+        <ul style="width: 100%" class="nav navbar-nav">
+            <a style="width: 10%;text-align: center" class="navbar-brand" href="withdrawRequest.html">商务圈</a>
+            <li class="nav-detail-width active"><a href="#">兑换详情</a></li>
+            <li class="nav-detail-width"><a href="withdrawRecord.html">兑换记录</a></li>
+        </ul>
+    </div>
+</nav>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="user-list-title">用户名称</th>
+            <th class="user-list-title">OpenID</th>
+            <th class="user-list-title">总结算金额</th>
+            <th class="user-list-title">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="user-list-cell">{$userInfo.name}</td>
+            <td class="user-list-cell">{$userInfo.wx_open_id}</td>
+            <td class="user-list-cell">{$sumAmount}元</td>
+            <td onclick="alertWithdraw()" style="color: red;cursor: pointer" class="user-list-cell">结算</td>
+        </tr>
+    </tbody>
+    <thead>
+        <tr>
+            <th class="user-list-title">金额</th>
+            <th class="user-list-title">日期</th>
+            <th class="user-list-double-title" colspan="2">兑换事件</th>
+        </tr>
+    </thead>
+    <tbody>
+        <volist name="user" id="v">
+        <tr>
+            <td class="user-list-cell">{$v.amount}</td>
+            <td class="user-list-cell">{$v.add_date}</td>
+            <td class="user-list-double-cell" colspan="2">{$userInfo.name}成功分享给{$v.recommended}</td>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">红包提现</h4>
+            </div>
+            <div class="modal-body">
+                刘兴瑞当前累计红包：{$sumAmount}元 <br>
+                为他发红包？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center">
+    <if condition="$page neq 1">
+        <a class="next-page" href="__APP__/Home/WXManager/withdrawDetail?page={$page-1}">上一页</a>
+    </if>
+    <php>
+        for($p = 1; $p <= $page_count; $p ++) {
+        if($p == $page){
+        echo '<a class="active-page">'.$p.'</a>';
+        }else{
+        if($p > $page+2 || $p < $page-2){
+        }else{
+        echo '<a class="page" href="__APP__/Home/WXManager/withdrawDetail?page='.$p.'">'.$p.'</a>';
+        }
+        }
+        }
+    </php>
+    <if condition="$page neq $page_count">
+        <a class="next-page" href="__APP__/Home/WXManager/withdrawDetail?page={$page+1}">下一页</a>
+    </if>
+</div>
+
+<script type="text/javascript">
+
+    $(function(){
+
+    })
+
+    function alertWithdraw(){
+        $('#myModal').modal();
+    }
+
+</script>
+</body>
+</html>
