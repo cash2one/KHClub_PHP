@@ -1401,6 +1401,37 @@ class WXController extends Controller {
 
     }
 
+    /**
+     * @brief 红包提现
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/WX/redPacketWithdraw
+     */
+    public function redPacketWithdraw(){
+        //先获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            returnJson(0,'请刷新页面');
+            exit;
+        }
+
+        $memberModel = M();
+        $sql = 'SELECT ui.id, ui.name, ui.job, ui.phone_num, ui.e_mail, ui.company_name, ui.address, ui.head_sub_image, ue.web, ue.qq, ue.wechat FROM kh_user_info ui, kh_user_extra_info ue
+                WHERE ui.id=ue.user_id AND ui.delete_flag=0 AND ue.wx_open_id="'.$openID.'"';
+        $userExtra = $memberModel->query($sql)[0];
+        if(empty($userExtra)){
+            returnJson(0,'请刷新页面');
+            exit;
+        }
+        $notice = array('user_id'=>$userExtra['id'],'withdraw_state'=>'0', 'add_date'=>time());
+        $noticeModel = M('kh_withdraw_notice');
+        $ret = $noticeModel->add($notice);
+        if($ret){
+            returnJson(1,'申请成功');
+        }else{
+            returnJson(0,'申请失败');
+        }
+    }
+
     public function redPacketDetail(){
 
         //wxJs签名

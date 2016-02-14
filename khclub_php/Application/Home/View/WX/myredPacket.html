@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
     <title>我的红包</title>
-    <link rel="stylesheet" href="__PUBLIC__/css/share/redPacket.css">
+    <link rel="stylesheet" href="__PUBLIC__/testCss/share/redPacket.css">
     <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
     <script src="__PUBLIC__/js/bootstrap.min.js"></script>
     <script src="__PUBLIC__/js/jquery-1.8.1.min.js"></script>
@@ -38,9 +38,50 @@
     <div class="wire"></div>
 </volist>
 
+
+<a onclick="withdraw()" class="save" >全部提现</a>
+
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="__PUBLIC__/js/wx/wxOperate.js"></script>
 <script>
+
+    var reqWithdraw = 0;
+
+    //提现
+    function withdraw(){
+
+//        alert("__URL__/redPacketWithdraw");
+//        return;
+
+        if(reqWithdraw == 1){
+            return;
+        }
+        var ret = confirm('您可提现一共11元');
+        if(ret){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                url: "__URL__/redPacketWithdraw?" + Math.random(),
+                success: function (rData) {
+                    var response = eval(rData);
+                    if (response && response.status == 1) {
+                        $(".save").addClass("withdraw-ok").removeClass('save');
+                        $(".save").html('申请成功');
+                        reqWithdraw = 1;
+                    }else{
+                        alert('提现失败，请重试');
+                    }
+                },
+                error: function (error) {
+                    alert(eval(error));
+                    //alert('您好、当前服务器正忙、请稍后……');
+                    return false;
+                }
+            })
+        }
+
+    }
 
     wx.config({
                 debug: false,

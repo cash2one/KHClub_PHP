@@ -44,7 +44,7 @@ class WXManagerController extends Controller {
             $count = $requestModel->query($sql)[0]['size'];
             //获取最后一页
             $page_count  = ceil($count/$size);
-            $sql = 'SELECT wi.id, uc.name, wi.add_date, wi.withdraw_state FROM kh_withdraw_notice wi, kh_user_info uc
+            $sql = 'SELECT uc.id, uc.name, wi.add_date, wi.withdraw_state FROM kh_withdraw_notice wi, kh_user_info uc
                     WHERE uc.id = wi.user_id ORDER BY wi.add_date DESC LIMIT '.$start.','.$end;
             $request = $requestModel->query($sql);
             for($j=0; $j<count($request); $j++) {
