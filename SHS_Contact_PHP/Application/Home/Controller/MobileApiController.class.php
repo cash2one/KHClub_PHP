@@ -1,6 +1,6 @@
 <?php
 namespace Home\Controller;
-use think\Controller;
+use Think\Controller;
 use Think\Exception;
 import('Org.Taobao.top.TopClient');
 import('Org.Taobao.top.ResultSet');
@@ -59,7 +59,7 @@ class MobileApiController extends Controller{
     public function registerUser(){
         try{
             $username = $_REQUEST['username'];
-            $password = md5($_REQUEST['password']);
+            $password = $_REQUEST['password'];
             $code = $_REQUEST['code'];
             $userModel = M('mk_user_info');
             //查看手机是否注册
@@ -166,7 +166,7 @@ class MobileApiController extends Controller{
     public function findPwdUser(){
         try{
             $username = $_REQUEST['username'];
-            $password = md5($_REQUEST['password']);
+            $password = $_REQUEST['password'];
             $code = $_REQUEST['code'];
             $userModel = M('mk_user_info');
             //判断该手机是否存在
@@ -193,7 +193,7 @@ class MobileApiController extends Controller{
                 $userInfo['update_date'] = time();
                 $userId=$userModel ->where('username='.$username)->save($userInfo);
                 $user = $userModel ->field('id,username,login_token')->where('id='.$userId)->find();
-                if($user) {
+                if($userId) {
                     returnJson(1, '密码修改成功！', $user);
                     return;
                 }else{
@@ -264,14 +264,14 @@ class MobileApiController extends Controller{
     /**
      * @brief 用户登录
      * 接口地址
-     * http://114.215.95.23/SHS_Contact_PHP/index.php/Home/MobileApi/loginUser?username=18697942051&password=123456
+     * http://114.215.95.23/SHS_Contact_PHP/index.php/Home/MobileApi/loginUser?username=18697942051&password=e10adc3949ba59abbe56e057f20f883e
      * @param username 用户名(手机号码)
      * @param password 密码
      */
     public function loginUser(){
         try{
             $username = $_REQUEST['username'];
-            $password = md5($_REQUEST['password']);
+            $password = $_REQUEST['password'];
 
             $userModel = M('mk_user_info');
             $user = $userModel->field('id,username,delete_flag')->where("username='%s' and password='%s'",array($username,$password))->find();
@@ -291,6 +291,38 @@ class MobileApiController extends Controller{
 
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 同步通讯录列表
+     * 接口地址
+     * http://114.215.95.23/SHS_Contact_PHP/index.php/Home/MobileApi/contactList?mobile=18697942051,13510038306
+     * @param mobile 手机号码
+     * @param login_token 登录令牌
+     */
+    public function contactList(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $mobile = $_REQUEST['mobile'];
+            $mobileArr = explode(',',$mobile);
+            $listEntity = array();
+            foreach($mobileArr as $mobiles){
+                $contactModel = M('mk_user_info');
+                $idEntity = $contactModel->where('mobile='.$mobiles)->field('id,mobile')->select();
+                if($idEntity){
+                    array_push($listEntity,$idEntity);
+                }
+            }
+            $mobile = array();
+            for($i=0; $i<count($listEntity); $i++){
+                $mobile['list'][$i] = $listEntity[$i][0];
+            }
+            $mobile['login_token'] = $login_token;
+            returnJson(1,'通讯列表！',$mobile);
+        }catch (Exception $e){
+            returnJson(0,'数据异常！');
+            return;
         }
     }
 }
