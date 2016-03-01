@@ -297,14 +297,23 @@ class MobileApiController extends Controller{
     /**
      * @brief 同步通讯录列表
      * 接口地址
-     * http://114.215.95.23/SHS_Contact_PHP/index.php/Home/MobileApi/contactList?mobile=18697942051,13510038306
+     * http://114.215.95.23/SHS_Contact_PHP/index.php/Home/MobileApi/contactList?mobile=18697942051,13510038306&user_id=5&login_token=MTg2OTc5NDIwNTExNDU2MzA4NzYy
      * @param mobile 手机号码
      * @param login_token 登录令牌
+     * @param user_id 用户id
      */
     public function contactList(){
         try{
+            $user_id = $_REQUEST['user_id'];
             $login_token = $_REQUEST['login_token'];
             $mobile = $_REQUEST['mobile'];
+            //检查登录token是否过期
+            $userModel = M('mk_user_info');
+            $user = $userModel->where("id='%s' and login_token='%s'",array($user_id,$login_token))->find();
+            if(!$user){
+                returnJson(0,'登录过期！');
+                return;
+            }
             $mobileArr = explode(',',$mobile);
             $listEntity = array();
             foreach($mobileArr as $mobiles){
@@ -315,10 +324,13 @@ class MobileApiController extends Controller{
                 }
             }
             $mobile = array();
-            for($i=0; $i<count($listEntity); $i++){
-                $mobile['list'][$i] = $listEntity[$i][0];
+            if($listEntity == false){
+                $mobile['list'] = '';
+            }else{
+                for($i=0; $i<count($listEntity); $i++){
+                    $mobile['list'][$i] = $listEntity[$i][0];
+                }
             }
-            $mobile['login_token'] = $login_token;
             returnJson(1,'通讯列表！',$mobile);
         }catch (Exception $e){
             returnJson(0,'数据异常！');
