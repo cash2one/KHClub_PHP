@@ -1,0 +1,359 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+#toast
+{
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 1px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
+
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
+}
+.privlege_box{
+    height: 50px;
+}
+.numerical{
+    float: left;
+    width: 24px;
+    height: 24px;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+    line-height: 26px;
+    margin-top: 13px;
+    margin-left: 10px;
+    background-color: #0f0f0f;
+    border-radius: 100%;
+}
+.privlege{
+    height: 50px;
+    font-size: 14px;
+    margin-left: 40px;
+    padding-top: 18px;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.Wait{
+    font-size: 20px;
+    text-align: center;
+    margin-top: 200px;
+}
+.list_box{
+    height: 60px;
+}
+.genre{
+    float: left;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 60px;
+    margin-left: 10px;
+}
+
+
+.worth{
+    float: right;
+    font-size: 17px;
+    color: #000000;
+    line-height: 60px;
+    margin-right: 10px;
+}
+.add{
+    margin-top: 30px;
+    height: 40px;
+    background-color: #ffffff;
+}
+.head_box{
+    width: 90%;
+    height: 240px;
+    border-radius: 15px;
+    margin: 15px auto auto auto;
+    background-color: #0f0f0f;
+}
+.logo{
+    width: 120px;
+    display: block;
+    margin: 20px auto auto auto;
+}
+.name{
+    font-size: 16px;
+    color: #ffffff;
+    margin: 20px auto 15px auto;
+    text-align: center;
+}
+.num{
+    font-size: 16px;
+    color: #ffffff;
+    text-align: center;
+}
+.myCard{
+    color: #000000;
+}
+.car{
+    margin-top: 30px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 40px;
+    padding-left: 5%;
+    background-color: #ffffff;
+}
+.cars{
+    float: left;
+}
+.carFrame{
+    padding-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+.carToken{
+    font-size: 16px;
+    color: #999999;
+    margin-left: 10px;
+}
+.add_car{
+    font-size: 16px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}
+
+.yueb{
+    position:absolute;
+    text-align:right;
+    font-size: 18px;
+    line-height: 60px;
+    width:65%;
+    padding-left: 5px;
+}
+
+.input-class {
+    width: 65%;
+    margin-left: 30px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    text-align: right;
+    height: 55px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
+.car_input-class {
+    width: 65%;
+    margin-left: -45px;
+    padding-top: 10px;
+    padding-left: 20px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    text-align: right;
+    height: 35px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
+.state_name{
+    float: left;
+    width: 33.33%;
+    font-size: 18px;
+    line-height: 60px;
+    text-indent: 10px;
+}
+.state_card{
+    float: left;
+    width: 33.33%;
+    color: #000000;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 60px;
+    text-align: center;
+}
+.state{
+    float: left;
+    width: 33.33%;
+    color: #ff3a31;
+    font-size: 18px;
+    line-height: 60px;
+    text-indent: 10%;
+}
+.arrow{
+    float: left;
+    width: 33.33%;
+    margin-top: 15px;
+}
+.image{
+    display: block;
+    width: 14px;
+    margin-top: 3px;
+    margin-left: 80%;
+}
+.state_info{
+    padding-top: 10px;
+    font-size: 14px;
+    color: #cecece;
+    line-height: 20px;
+    margin: 0 10px 0 10px;
+}
+.menu_box{
+    font-size: 16px;
+    float: left;
+    clear: both;
+    text-align: center;
+    color: #000000;
+    /*padding: 1rem;*/
+    width: 100%;
+    height: 50px;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #fafafa;
+    border-color: transparent;
+}
+.menu{
+    display: block;
+    float: left;
+    color: #474747;
+    line-height: 50px;
+    width: 25%;
+    height: 100%;
+}
+.audit{
+    width: 100%;
+    height: 30px;
+    color: red;
+    font-size: 20px;
+    text-align: center;
+    line-height: 40px;
+    padding-top: 5px;
+    margin: 30px auto 30px auto;
+}
+.car_logo{
+    width:40px;
+    margin: 10px auto 10px 20px;
+    float: left;
+}
+.car_name{
+    float: left;
+    margin: 20px auto 20px 10px;
+ }
+.wire2{
+    position: fixed;
+    bottom:50px;
+    left: 0px;
+    z-index: 9999;
+    width: 100%;
+    height: 1px;
+    background-color: #bdbdbd;
+}
+.wire2_left{
+    position: fixed;
+    bottom:0px;
+    left: 25%;
+    z-index: 9999;
+    width: 1px;
+    height: 50px;
+    background-color: #bdbdbd;
+}
+.wire2_center{
+    position: fixed;
+    bottom:0px;
+    left: 50%;
+    z-index: 9999;
+    width: 1px;
+    height: 50px;
+    background-color: #bdbdbd;
+}
+.wire2_right{
+    position: fixed;
+    bottom:0px;
+    left: 75%;
+    z-index: 9999;
+    width: 1px;
+    height: 50px;
+    background-color: #bdbdbd;
+}
+.images{
+    float: right;
+    width: 14px;
+    margin-top: 8px;
+    margin-right: 20px;
+}
+.select_images{
+    position:absolute;
+    right:0px;
+    width: 14px;
+    margin-top: 20px;
+    margin-right: 18px;
+}
+.ts{
+    height: 70px;
+    color: #000000;
+    font-size: 18px;
+    line-height: 70px;
+    margin-left: 15px;
+}
+.input_box{
+    height: 60px;
+    background-color: #ffffff;
+}
+.name_input-class{
+    width: 50%;
+    padding-top: 10px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    height: 40px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
+.pos_box{
+    margin: 60px 10px auto 10px;
+}
+.btn-submit{
+    display: block;
+    width: 100%;
+    height: 45px;
+    border-radius: 2px;
+    background-color: #0f0f0f;
+    line-height: 45px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>添加爱车</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carSteward.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript">
+
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+
+        function save()
+        {
+            if($('#name').val().length < 1){
+                drawToast("姓名不能为空");
+                return;
+            }
+            if($('#mobile').val().length < 1){
+                drawToast("电话不能为空");
+                return;
+            }
+            if($('#plate_number').val().length < 1){
+                drawToast("车牌不能为空");
+                return;
+            }
+            if($('#vehicle_number').val().length < 1){
+                drawToast("车架号不能为空");
+                return;
+            }
+
+            //submit
+            var form = $("#form");
+            form.attr("method", "POST");
+            form.attr("action", "applyCar");
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+<form id="form">
+    <div class="list_box clear">
+        <div class="genre">姓名</div>
+        <input class="input-class" maxlength="30" id="name" name="name" type="text" placeholder="（必填）" value="{$_SESSION['name']}" />
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="genre">电话</div>
+        <input class="input-class" maxlength="30" id="mobile" name="mobile" type="text" placeholder="（必填）" value="{$_SESSION['mobile']}"/>
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="genre">车牌</div>
+        <div class="yueb">粤B：</div>
+        <input class="input-class" maxlength="5" id="plate_number" name="plate_number" type="text" placeholder="（必填）" value="{$_SESSION['plate_number']}" />
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="cars">
+            <div class="carFrame">车架号</div>
+            <div class="carToken">车辆识别代码</div>
+        </div>
+        <input class="car_input-class" maxlength="30" id="vehicle_number" name="vehicle_number" type="text" placeholder="（必填）" value="{$_SESSION['vehicle_number']}"/>
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear" id="carType">
+        <div class="genre">车型</div>
+        <img class="select_images" src="__PUBLIC__/icon/arrow.png" alt="" width="20px">
+        <input class="input-class" maxlength="30" name="car_type" type="text" readonly="true" value="{$_SESSION['car_type']}"/>
+        <input class="input-class" maxlength="30" name="car_type_code" type="hidden" value="{$_SESSION['car_type_code']}"/>
+    </div>
+    <div class="wire"></div>
+    <a onclick="save()" class="add_car">申请</a>
+</form>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+
+    wx.config({
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : []
+    });
+    operate.initCloseShare();
+
+    $(function(){
+       $('#carType').click(function(){
+            location.href="carBrands?name="+$('#name').val()+"&mobile="+$('#mobile').val()+"&plate_number="
+            +$('#plate_number').val()+"&vehicle_number="+$('#vehicle_number').val();
+       })
+    });
+
+</script>
+</body>
+</html>

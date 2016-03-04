@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
     <title>账号验证</title>
-    <link rel="stylesheet" href="../css/share/userVerify.css">
+    <link rel="stylesheet" href="../css/share/userVerify.css?v=1">
     <script src="../js/jquery-1.8.1.min.js"></script>
     <script>
         var intervalCounter = 0;
@@ -47,10 +47,14 @@
         }
     </script>
 </head>
-<body style="background-color: #2E2E2D">
+<body >
     <form id="form">
         <div class="ts">请填写手机号</div>
-        <div class="tel"><input type="text" id="username" name="username"  style=" margin: 0;padding: 0 2% 0 2%; height:40px; width: 96%; font-size: 16px; border-radius: 3px;"/></div>
+        <div class="tel">
+            <span style="width: 10%">+86</span>
+            <input type="text" id="username" name="username" class="mobile" />
+        </div>
+        <div class="line"></div>
         <!--<a onclick="save()" class="btn-submit"/>下一步</a>-->
         <a href="../view/userRegister.html" class="btn-submit"/>下一步</a>
     </form>

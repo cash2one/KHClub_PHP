@@ -1381,8 +1381,12 @@ class WXController extends Controller {
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
-
         $this->assign('userInfo', $userExtra);
+
+        if(count($luckyList) < 1){
+            $this->display('noneRedPacketRecord');
+            exit;
+        }
 
         //时间处理
         for($i=0; $i<count($luckyList); $i++){
@@ -1863,23 +1867,44 @@ class WXController extends Controller {
 
                     }
 
+                    $myLucky = array('user_id'=>$retID,'type'=>'2','amount'=>'1',
+                        'state'=>'1','send_id'=>$retID, 'add_date'=>time());
+                    //增加红包 注册一块 推荐两块
+                    $luckyModel = M('kh_lucky');
+                    $luckyModel->add($myLucky);
+                    //推送给自己 这个地方冗余了 等需要的时候再进行封装
+                    $data = '{
+                                        "touser":"'.$openID.'",
+                                        "msgtype":"text",
+                                        "text":
+                                        {
+                                            "content":"恭喜你成为商务圈的会员,已拿到1元现金红包咯,<a href=\"'.HTTP_URL_PREFIX.'getLuckyMoneyList\">点击查看</a>"
+                                        }
+                                    }';
+                    //获取AccessToken
+                    $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+                    $ACC_TOKEN = $jssdk->getAccessToken();
+                    $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                    $curl = curl_init();
+                    curl_setopt($curl, CURLOPT_URL, $url);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                    curl_setopt($curl, CURLOPT_POST, 1);
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_exec($curl);
+                    curl_close($curl);
+
                     //是否有推荐人，增加红包
                     if(!empty($sendID)){
-                        //增加红包 注册一块 推荐两块
-                        $luckyModel = M('kh_lucky');
-                        $myLucky = array('user_id'=>$retID,'type'=>'2','amount'=>'1',
-                            'state'=>'1','send_id'=>$retID, 'add_date'=>time());
                         $sendLucky = array('user_id'=>$sendID,'type'=>'1','amount'=>'2',
                             'state'=>'1','send_id'=>$retID, 'add_date'=>time());
-                        $luckyModel->add($myLucky);
                         $luckyModel->add($sendLucky);
 
                         //红包通知
                         $openModel = M('kh_user_extra_info');
                         $open = $openModel->where('user_id="'.$sendID.'"')->find();
-                        //获取AccessToken
-                        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
-                        $ACC_TOKEN = $jssdk->getAccessToken();
 
                         if($open){
                             //推送给对方
@@ -1888,7 +1913,7 @@ class WXController extends Controller {
                                         "msgtype":"text",
                                         "text":
                                         {
-                                            "content":"恭喜你成功推荐'.$user['name'].'成为会员,已拿到现金红包咯,<a href=\"'.HTTP_URL_PREFIX.'getLuckyMoneyList\">点击查看</a>"
+                                            "content":"恭喜你成功推荐'.$user['name'].'成为会员,已拿到2元现金红包咯,<a href=\"'.HTTP_URL_PREFIX.'getLuckyMoneyList\">点击查看</a>"
                                         }
                                     }';
 
@@ -1904,27 +1929,6 @@ class WXController extends Controller {
                             curl_exec($curl);
                             curl_close($curl);
 
-                            //推送给自己 这个地方冗余了 等需要的时候再进行封装
-                            $data = '{
-                                        "touser":"'.$openID.'",
-                                        "msgtype":"text",
-                                        "text":
-                                        {
-                                            "content":"恭喜你成为商务圈的会员,已拿到现金红包咯,<a href=\"'.HTTP_URL_PREFIX.'getLuckyMoneyList\">点击查看</a>"
-                                        }
-                                    }';
-
-                            $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
-
-                            $curl = curl_init();
-                            curl_setopt($curl, CURLOPT_URL, $url);
-                            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-                            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-                            curl_setopt($curl, CURLOPT_POST, 1);
-                            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                            curl_exec($curl);
-                            curl_close($curl);
                         }
 
                     }

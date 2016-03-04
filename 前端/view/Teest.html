@@ -1,0 +1,21 @@
+<html>
+
+<body>
+<style type="text/css">
+
+</style>
+
+    <input id="test" type="file" value="test">
+<a onclick="test()">sfdsfds</a>
+<img src="" id="img">
+<script type="text/javascript">
+    function test(){
+        var test = document.getElementById('test');
+        alert(test.value);
+        test.value = "gagag";
+        var imag = document.getElementById('img');
+        imag.src = test.value;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>品牌选择</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carSteward.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+
+<foreach name="cars" item="car" key="k" >
+    <empty name="car.sub">
+        <a href="applyCarView?brand={$k}&type=0" class="myCard">
+        <else />
+        <a href="carBrandTypes?type={$k}" class="myCard">
+    </empty>
+            <div class="list_box clear">
+                <img src="__PUBLIC__/logo/{$k+1}.png" alt="" class="car_logo">
+                <span class="car_name">{$car.name}</span>
+                <img class="select_images" src="__PUBLIC__/icon/arrow.png" alt="" width="20px">
+            </div>
+        </a>
+    <div class="wire"></div>
+</foreach>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+
+    wx.config({
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : []
+    });
+    operate.initCloseShare();
+
+</script>
+</body>
+</html>

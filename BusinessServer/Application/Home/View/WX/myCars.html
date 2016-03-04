@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>我的爱车</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carSteward.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+</head>
+
+<body>
+
+<volist name="list" id="car">
+    <a class="myCard">
+        <div class="list_box clear" value="{$car.id}">
+            <if condition="$car.state eq 1">
+                    <div class="state_name">{$car.car_type}</div>
+                    <div class="state_card">{$car.plate_number}</div>
+                    <div class="state">正在审核</div>
+                <elseif condition="$car.state eq 2"/>
+                    <div class="state_name">{$car.car_type}</div>
+                    <div class="state_card">{$car.plate_number}</div>
+                    <div class="arrow"><img class="image" src="__PUBLIC__/icon/arrow.png" alt="" width="20px"></div>
+                <elseif condition="$car.state eq 3"/>
+                    <div class="state_name">{$car.car_type}</div>
+                    <div class="state_card">{$car.plate_number}</div>
+                    <div class="state">未通过</div>
+            </if>
+        </div>
+    </a>
+    <div class="wire"></div>
+</volist>
+
+<if condition="$isAdd eq 1">
+    <a href="userhome" class="add_car">查看会员</a>
+    <else/>
+    <a href="applyCarView" class="add_car">添加爱车</a>
+</if>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+
+    wx.config({
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : []
+    });
+    operate.initCloseShare();
+</script>
+</body>
+
+<script type="text/javascript">
+
+    $(function(){
+        $('.list_box').click(function(){
+            window.location.href='carInfo?car_id='+$(this).attr('value');
+        });
+    });
+
+</script>
+
+</html>
