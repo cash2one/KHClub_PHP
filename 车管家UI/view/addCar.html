@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>添加爱车</title>
+    <link rel="stylesheet" href="../css/share/carSteward.css">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript">
+
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+
+        function save()
+        {
+            if($('#username').val().length < 1){
+                drawToast("姓名不能为空");
+                return;
+            }
+            if($('#phone').val().length < 1){
+                drawToast("电话不能为空");
+                return;
+            }
+            if($('#card').val().length < 1){
+                drawToast("车牌不能为空");
+                return;
+            }
+            if($('#carFrame').val().length < 1){
+                drawToast("车架号不能为空");
+                return;
+            }
+
+            //submit
+            var form = $("#form");
+            form.attr("method", "GET");
+            form.attr("action", "addCare");
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+<form id="form">
+    <div class="list_box clear">
+        <div class="genre">姓名</div>
+        <input class="input-class" maxlength="30" id="username" name="username" type="text" placeholder="（必填）" />
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="genre">电话</div>
+        <input class="input-class" maxlength="30" id="phone" name="phone" type="text" placeholder="（必填）" />
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="genre">车牌</div>
+        <div class="yueb">粤B：</div>
+        <input class="plate-input-class" maxlength="5" id="plate_number" name="plate_number" type="text" placeholder="（必填）" />
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="cars">
+            <div class="carFrame">车架号</div>
+            <div class="carToken">车辆识别代码</div>
+        </div>
+        <input class="car_input-class" maxlength="30" id="carFrame" name="carFrame" type="text" placeholder="（必填）" />
+    </div>
+    <div class="wire"></div>
+    <a href="carBrand.html" class="myCard"><div class="list_box clear">
+        <div class="genre">车型</div>
+        <img class="select_images" src="../images/icon/arrow.png" alt="" width="20px">
+        <input class="input-class" maxlength="30" name="username" type="text" placeholder="（必填）" />
+    </div></a>
+    <div class="wire"></div>
+    <a onclick="save()" class="add_car">申请</a>
+</form>
+</body>
+</html>
