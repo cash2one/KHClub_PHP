@@ -564,5 +564,240 @@ class WXController extends Controller {
         $this->assign('brand', $type);
         $this->display('carBrandTypes');
     }
+
+    /**
+     * @brief 商店列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getShops
+     *
+     */
+    public function getShops(){
+        $model = M('biz_shop');
+        $shops = $model->where('delete_flag=0')->select();
+
+        $this->assign('shops', $shops);
+        $this->display('');
+    }
+
+    /**
+     * @brief 商店详情
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getShopDetail
+     * @param shop_id 车id
+     *
+     */
+    public function getShopDetail(){
+
+        $shop_id = $_REQUEST['shop_id'];
+
+        $model = M('biz_shop');
+        $shop = $model->where('delete_flag=0 AND id='.$shop_id)->find();
+
+        $goodsModel = M('biz_shop_goods');
+        $goods = $goodsModel->where('delete_flag=0 AND shop_id='.$shop_id)->find();
+
+        $this->assign('shop', $shop);
+        $this->assign('goods', $goods);
+        $this->display('');
+    }
+
+    /**
+     * @brief 选择我的车
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/choiceMyCar
+     * @param shop_id 商店ID
+     * @param goods_id 商品ID
+     *
+     */
+    public function choiceMyCar(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $carModel = M('biz_car');
+        $list = $carModel->where('state=2 AND delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('list',$list);
+        $this->assign('shop_id', $_REQUEST['shop_id']);
+        $this->assign('goods_id', $_REQUEST['goods_id']);
+        $this->display('');
+    }
+
+    /**
+     * @brief 创建订单
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/createOrder
+     * @param shop_id 商店ID
+     * @param goods_id 商品ID
+     * @param car_id 汽车ID
+     */
+    public function createOrder(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $shop_id = $_REQUEST['shop_id'];
+        $goods_id = $_REQUEST['goods_id'];
+        $car_id = $_REQUEST['car_id'];
+
+        $model = M('biz_shop');
+        $shop = $model->where('delete_flag=0 AND id='.$shop_id)->find();
+        $goodsModel = M('biz_shop_goods');
+        $goods = $goodsModel->where('delete_flag=0 AND id='.$goods_id)->find();
+        $carModel = M('biz_car');
+        $car = $carModel->where('delete_flag=0 AND id='.$car_id)->find();
+
+        //内部订单生成规则 goodsID+user_id+time()
+        $bizOrder = $goods_id.$user['user_id'].time();
+
+        $openId = $_SESSION['open_id'];
+
+        $tools = new \JsApiPay();
+        //统一下单
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody("test");
+        $input->SetAttach("test");
+        $input->SetOut_trade_no($bizOrder);
+        $input->SetTotal_fee("1");
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("test");
+        $input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $order = \WxPayApi::unifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        $orderModel = M('biz_order');
+        $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
+                        'open_id'=>$openId, 'total_fee'=>$goods['discount_price'],'out_trade_no'=>$bizOrder, 'car_id'=>$car_id);
+        $ret = $orderModel->add($newOrder);
+        if(!$ret){
+            echo '订单生成失败';
+            exit;
+        }
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('shop',$shop);
+        $this->assign('goods',$goods);
+        $this->assign('car',$car);
+        $this->assign('order',$newOrder);
+        $this->assign('jsApiParameters', $jsApiParameters);
+        $this->display('');
+    }
+
+
+    /**
+     * @brief 获取订单列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getOrderList
+     *
+     */
+    public function getOrderList(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $orderModel = M('biz_order');
+        $list = $orderModel->where('delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('list',$list);
+        $this->assign('shop_id', $_REQUEST['shop_id']);
+        $this->assign('goods_id', $_REQUEST['goods_id']);
+        $this->display('myCars');
+    }
+
+
+    /**
+     * @brief 获取订单详情
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getOrderDetail
+     * @param order_id
+     */
+    public function getOrderDetail(){
+
+        $order_id = $_REQUEST['order_id'];
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        //订单详情 商家信息 商品信息 购买车辆
+        $orderModel = M('biz_order');
+        $order = $orderModel->where('delete_flag=0 AND user_id="'.$user['user_id'].'" AND order_id="'.$order_id.'"')->find();
+        $model = M('biz_shop');
+        $shop = $model->where('delete_flag=0 AND id='.$order['shop_id'])->find();
+        $goodsModel = M('biz_shop_goods');
+        $goods = $goodsModel->where('delete_flag=0 AND id='.$order['goods_id'])->find();
+        $carModel = M('biz_car');
+        $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->assign('shop',$shop);
+        $this->assign('goods',$goods);
+        $this->assign('car',$car);
+        $this->assign('order',$order);
+
+        $this->display('');
+    }
+
+    /**
+     * @brief 记录列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getRecordList
+     *
+     */
+    public function getRecordList(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $model = M();
+        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date FROM biz_car c, biz_order o, biz_shop s
+                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0 AND o.state=2';
+        $list = $model->query($sql);
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->assign('list',$list);
+        $this->display('myCars');
+    }
+
 }
 
