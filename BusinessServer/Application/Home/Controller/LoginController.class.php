@@ -10,7 +10,7 @@ class LoginController extends Controller {
     /**
      * @brief 管理系统登录页面
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/login/login
+     * http://114.215.95.23/BusinessServer/index.php/Home/login/login
      */
     function login(){
         $this->display('Login');
@@ -19,7 +19,7 @@ class LoginController extends Controller {
     /**
      * @brief 管理系统登录
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/login/loginVerify
+     * http://114.215.95.23/BusinessServer/index.php/Home/login/loginVerify
      * @param username 用户名
      * @param password 密码 6-24位
      */

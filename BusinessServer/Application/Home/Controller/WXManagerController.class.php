@@ -1,228 +1,219 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: lixiaohang
- * Date: 16/1/29
- * Time: 10:32
+ * User: khclub
+ * Date: 2016/3/7
+ * Time: 10:11
  */
 namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
 
-class WXManagerController extends Controller {
-
-    public function withdrawRequest(){
-
-        $this->display("withdrawRequest");
-
-    }
+class WXManagerController extends Controller{
     /**
-     * @brief 提现请求详情
+     * @brief 车辆审核状态
      * 接口地址
-     * http://114.215.95.23/khclub_php/index.php/Home/WXManager/withdrawRequest
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/carAudit?user_id=13&state=3
+     * @param id  汽车ID
+     * @param state 状态
+     * @param search 搜索内容 1为用户 2为汽车
+     */
+    public function carAudit(){
+        try{
+            $car = array();
+            $id = $_REQUEST['id'];
+            $search = $_REQUEST['search'];
+            $mobile = $_REQUEST['mobile'];
+            $car['state'] = $_REQUEST['state'];
+            $carModel = M('biz_car');
+            $carModel->where('id='.$id)->save($car);
+            if($search == 1){
+                header("Location: searchUser?mobile=".$mobile);
+                return;
+            }else if($search == 2){
+                header("Location: searchCar?mobile=".$mobile);
+                return;
+            }else{
+                header("Location: checkHome");
+            }
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 检查车辆首页
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/SHS_Contact_PHP/index.php/Home/WXManager/checkHome
      * @param page  页码
      * @param size 每页数量
      */
-
-    public function withdrawRequestInfo(){
+    public function checkHome(){
         try{
-
             $page = $_REQUEST['page'];
             $size = $_REQUEST['size'];
             if(empty($page)){
                 $page = 1;
             }
             if(empty($size)){
-                $size = 10;
+                $size = 20;
             }
             $start = ($page-1)*$size;
             $end   = $size;
-            //获取总页数
-            $requestModel = M();
-            $sql = 'SELECT COUNT(wi.id) size FROM kh_withdraw_notice wi, kh_user_info uc
-                    WHERE uc.id = wi.user_id ORDER BY wi.add_date DESC';
-            $count = $requestModel->query($sql)[0]['size'];
-            //获取最后一页
-            $page_count  = ceil($count/$size);
-            $sql = 'SELECT uc.id, uc.name, wi.add_date, wi.withdraw_state FROM kh_withdraw_notice wi, kh_user_info uc
-                    WHERE uc.id = wi.user_id ORDER BY wi.add_date DESC, wi.withdraw_state DESC LIMIT '.$start.','.$end;
-            $request = $requestModel->query($sql);
-            for($j=0; $j<count($request); $j++) {
-                $request[$j]['add_date'] = date('Y年m月d日', $request[$j]['add_date']);
+            $carNumModel = M();
+            $sql = 'SELECT id FROM biz_car WHERE state=1';
+            $count = count($carNumModel->query($sql));
+            if($count == false){
+                $count = 1;
             }
-
-            $result = array('list'=>$request, 'page'=>$page, 'page_count'=>$page_count);
-
-            returnJson(1,"查询成功", $result);
-
-        }catch (Exception $e) {
-
-            returnJson(0,"数据异常", $e);
+            $page_count  = ceil($count/$size);
+            $carModel = M('biz_car');
+            $carInfo = $carModel->where('state=1')->field('id,name,mobile,plate_number,vehicle_number,car_type,state,add_date')->limit($start,$end)->select();
+            for($j=0;$j<count($carInfo);$j++){
+                $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('carInfo',$carInfo);
+            $this->display('checkHome');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
         }
     }
 
     /**
-     * @brief 提现请求详情
+     * @brief 会员信息
      * 接口地址
-     * http://114.215.95.23/khclub_php/index.php/Home/WXManager/userList
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/searchHome
      * @param page  页码
      * @param size 每页数量
      */
-    public function userList(){
-        $page = $_REQUEST['page'];
-        $size = $_REQUEST['size'];
-        if(empty($page)){
-            $page = 1;
+    public function searchHome(){
+        try{
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $carNumModel = M();
+            $sql = 'SELECT COUNT(ca.mobile) FROM biz_user_info us, biz_car ca
+                    WHERE us.user_id=ca.user_id GROUP BY ca.user_id';
+            $count = count($carNumModel->query($sql));
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $userModel = M();
+            $sql = 'SELECT us.user_id, us.username, COUNT(ca.mobile) carnum, us.add_date FROM biz_user_info us, biz_car ca
+                    WHERE us.user_id=ca.user_id GROUP BY ca.user_id LIMIT '.$start.','.$end;
+            $userInfo = $userModel->query($sql);
+            for($j=0;$j<count($userInfo);$j++){
+                $userInfo[$j]['add_date'] = date('Y-m-d',$userInfo[$j]['add_date']);
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('userInfo',$userInfo);
+            $this->display('searchHome');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
         }
-        if(empty($size)){
-            $size = 10;
-        }
-        $start = ($page-1)*$size;
-        $end   = $size;
-        $userModel = M();
-        //获取总页数
-        $sql = 'SELECT COUNT(amount) FROM kh_user_info uc, kh_user_extra_info ex, kh_lucky lu
-                WHERE uc.id=ex.user_id AND uc.id=lu.user_id AND uc.delete_flag=0 AND ex.delete_flag=0 AND lu.state=1 GROUP BY uc.id
-                ORDER BY amount DESC';
-        $count = count($userModel->query($sql));
-        //获取最后一页
-        $page_count  = ceil($count/$size);
-        $sql = 'SELECT uc.id, uc.name, ex.wx_open_id, SUM(amount) amount FROM kh_user_info uc, kh_user_extra_info ex, kh_lucky lu
-                WHERE uc.id=ex.user_id AND uc.id=lu.user_id AND uc.delete_flag=0 AND ex.delete_flag=0 AND lu.state=1 GROUP BY uc.id
-                ORDER BY amount DESC LIMIT '.$start.','.$end;
-        $user = $userModel->query($sql);
-
-        $this->assign('page',$page);
-        $this->assign('page_count',$page_count);
-        $this->assign('user',$user);
-
-        $this->display('userList');
     }
 
     /**
-     * @brief 提现请求详情
+     * @brief 搜索用户
      * 接口地址
-     * http://114.215.95.23/khclub_php/index.php/Home/WXManager/withdrawDetail
-     * @param user_id 用户id
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/searchCar?mobile=18697942051
+     * @param mobile 用户电话
      * @param page  页码
      * @param size 每页数量
      */
-    public function withdrawDetail(){
-        $user_id = $_REQUEST['user_id'];
-        $userModel = M();
-        $sql = 'SELECT uc.name, ex.wx_open_id FROM kh_user_info uc, kh_user_extra_info ex
-                WHERE uc.id='.$user_id.' AND uc.id=ex.user_id AND uc.delete_flag=0 AND ex.delete_flag=0
-                LIMIT 1 ';
-        $user = $userModel->query($sql);
-        $userInfo = $user[0];
-        $sql = 'SELECT add_date, amount, send_id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=1
-                ORDER BY add_date DESC';
-        $user = $userModel->query($sql);
-        $sumAmount = 0;
-        for($j=0; $j<count($user); $j++) {
-            $id = $user[$j]['send_id'];
-            $sql='SELECT name FROM kh_user_info WHERE id='.$id;
-            $recommended = $userModel->query($sql);
-            $user[$j]['recommended'] = $recommended[0]['name'];
-            $user[$j]['add_date'] = date('Y-m-d', $user[$j]['add_date']);
-            $sumAmount += $user[$j]['amount'];
+    public function searchCar(){
+        try{
+            $mobile = $_REQUEST['mobile'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $carNumModel = M();
+            $sql = 'SELECT id FROM biz_car WHERE state!=0 AND mobile='.$mobile;
+            $count = count($carNumModel->query($sql));
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $carModel = M('biz_car');
+            $carInfo = $carModel->where('mobile='.$mobile.' and state!=0')->field('id,name,mobile,plate_number,vehicle_number,car_type,state,add_date,state')->limit($start,$end)->select();
+            for($j=0;$j<count($carInfo);$j++){
+                $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('carInfo',$carInfo);
+            $this->display('searchCar');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
         }
-        $id = $user_id;
-        $this->assign('id',$id);
-        $this->assign('sumAmount',$sumAmount);
-        $this->assign('userInfo',$userInfo);
-        $this->assign('user',$user);
-        $this->display('withdrawDetail');
     }
 
     /**
-     * @brief 提现请求详情
+     * @brief 查找用户车辆信息
      * 接口地址
-     * http://114.215.95.23/khclub_php/index.php/Home/WXManager/withdrawRecord
-     * @param user_id 用户id
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/searchUser?mobile=18697942051
+     * @param mobile 用户电话
      * @param page  页码
      * @param size 每页数量
      */
-    public function withdrawRecord(){
-        $user_id = $_REQUEST['user_id'];
-        $page = $_REQUEST['page'];
-        $size = $_REQUEST['size'];
-        if(empty($page)){
-            $page = 1;
-        }
-        if(empty($size)){
-            $size = 10;
-        }
-        $start = ($page-1)*$size;
-        $end   = $size;
-        $userModel = M();
-        $sql = 'SELECT uc.name, ex.wx_open_id FROM kh_user_info uc, kh_user_extra_info ex
-                WHERE uc.id='.$user_id.' AND uc.id=ex.user_id AND uc.delete_flag=0 AND ex.delete_flag=0
-                LIMIT 1 ';
-        $user = $userModel->query($sql);
-        $userInfo = $user[0];
-        //获取总页数
-        $sql = 'SELECT id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=2
-                ORDER BY add_date DESC';
-        $count = count($userModel->query($sql));
-        //获取最后一页
-        $page_count  = ceil($count/$size);
-        $sql = 'SELECT withdraw_date, amount, send_id FROM kh_lucky lu WHERE user_id='.$user_id.' AND delete_flag=0 AND state=2
-                ORDER BY add_date DESC LIMIT '.$start.','.$end;
-        $user = $userModel->query($sql);
-        $sumAmount = 0;
-        for($j=0; $j<count($user); $j++) {
-            $id = $user[$j]['send_id'];
-            $sql='SELECT name FROM kh_user_info WHERE id='.$id;
-            $recommended = $userModel->query($sql);
-            $user[$j]['recommended'] = $recommended[0]['name'];
-            $user[$j]['add_date'] = date('Y-m-d', $user[$j]['add_date']);
-            $sumAmount += $user[$j]['amount'];
-        }
-        $id = $user_id;
-        $this->assign('id',$id);
-        $this->assign('page',$page);
-        $this->assign('page_count',$page_count);
-        $this->assign('sumAmount',$sumAmount);
-        $this->assign('userInfo',$userInfo);
-        $this->assign('user',$user);
-        $this->display('withdrawRecord');
-    }
+    public function searchUser(){
+        try{
+            $mobile = $_REQUEST['mobile'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('username='.$mobile)->find();
+            if($user){
+                $carNumModel = M();
+                $sql = 'SELECT id FROM biz_car WHERE state!=0 and user_id='.$user['user_id'];
+                $count = count($carNumModel->query($sql));
+                if($count == false){
+                    $count = 1;
+                }
+                $page_count  = ceil($count/$size);
+                $carModel = M('biz_car');
+                $carInfo = $carModel->where('user_id='.$user['user_id'].' and state!=0')->field('id,name,mobile,plate_number,vehicle_number,car_type,add_date,state')->limit($start,$end)->select();
 
-    /**
-     * @brief 管理系统
-     * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WXManager/withdrawCommit
-     * @param target_id 要提现的账户ID
-     */
-    function withdrawCommit(){
-
-        //未登录
-        if(empty($_SESSION['manager'])){
-            header('Location: '.__ROOT__.'/index.php/Home/login/login');
-            exit;
+                for($j=0;$j<count($carInfo);$j++){
+                    $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
+                    $carInfo[$j]['tel'] = $mobile;
+                }
+            }else{
+                $carInfo = '';
+                $page_count = 1;
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('carInfo',$carInfo);
+            $this->display('searchUser');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
         }
-        $target_id = $_POST['target_id'];
-        if(empty($target_id)){
-            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawDetail?user_id='.$target_id);
-            exit;
-        }
-
-        $withdrawModel = M();
-        $sql = 'UPDATE kh_withdraw_notice SET withdraw_state=1 WHERE user_id="'.$target_id.'"';
-        $withdrawModel->execute($sql);
-        //提现
-        $sql = 'UPDATE kh_lucky SET state=2,update_date='.time().',withdraw_date='.time().'
-                WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
-        $num = $withdrawModel->execute($sql);
-        if($num < 1){
-            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawRecord?user_id='.$target_id);
-            exit;
-        }else{
-            //提现成功
-            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawRecord?user_id='.$target_id);
-            exit;
-        }
-
     }
 }

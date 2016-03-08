@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+
+</head>
+
+<script type="text/javascript">
+
+    function searchPerson(){
+        var mobile = $('#mobile').val();
+        if(mobile == false){
+            alert('请输入电话号码！');
+            return;
+        }
+        if(isNaN(mobile)){
+            alert('请输入电话号码！');
+            return;
+        }
+        location.href = "__APP__/Home/WXManager/searchUser.html?mobile="+mobile;
+    }
+
+    function searchCar(){
+        var mobile = $('#mobile').val();
+        if(mobile == false){
+            alert('请输入电话号码！');
+            return;
+        }
+        if(isNaN(mobile)){
+            alert('请输入电话号码！');
+            return;
+        }
+        location.href = "__APP__/Home/WXManager/searchCar.html?mobile="+mobile;
+    }
+</script>
+
+<body>
+
+<table class="table table-min-width" >
+    <thead>
+         <tr>
+            <td colspan="3">
+                <div class="home-head">
+                    <h3 class="table-title">车主车辆审核系统</h3>
+                    <input type="text" id="mobile" class="form-control top-search-input" placeholder="请输入电话号码" maxlength="11">
+                    <button onclick="searchCar()" style="margin-left: 15px" type="button" class="btn btn-info">找车</button>
+                    <button onclick="searchPerson()" style="margin-left: 5px" type="button" class="btn btn-info">找人</button>
+                </div>
+            </td>
+         </tr>
+    </thead>
+    <thead>
+    <tr>
+        <th class="user-list-title">日期</th>
+        <th class="user-list-title">车辆</th>
+        <th class="user-list-title">电话</th>
+    </tr>
+    </thead>
+    <tbody>
+        <volist name="userInfo" id="v">
+        <tr>
+            <td class="user-list-cell">{$v.add_date}</td>
+            <td class="user-list-cell">{$v.carnum}</td>
+            <td class="user-list-cell"><a href="__APP__/Home/WXManager/searchUser.html?mobile={$v.username}">{$v.username}</a></td>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+
+<div class="page-content">
+    <if condition="$page neq 1">
+        <a class="next-page" href="__APP__/Home/WXManager/checkHome?page={$page-1}">上一页</a>
+    </if>
+    <php>
+        for($p = 1; $p <= $page_count; $p ++) {
+        if($p == $page){
+            if(!($page == 1 && $page_count==1)){
+                echo '<a class="active-page">'.$p.'</a>';
+            }
+        }else{
+        if($p > $page+2 || $p < $page-2){
+        }else{
+        echo '<a class="page" href="__APP__/Home/WXManager/checkHome?page='.$p.'">'.$p.'</a>';
+        }
+        }
+        }
+    </php>
+    <if condition="$page neq $page_count">
+        <a class="next-page" href="__APP__/Home/WXManager/checkHome?page={$page+1}">下一页</a>
+    </if>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+
+</head>
+<body>
+
+<table class="table table-min-width" >
+    <thead>
+         <tr>
+            <td colspan="7">
+                <div class="home-head">
+                    <h3 class="table-title">车主车辆审核系统</h3>
+                </div>
+            </td>
+         </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th class="user-list-title">日期</th>
+            <th class="user-list-title">车主</th>
+            <th class="user-list-title">电话</th>
+            <th class="user-list-title">车牌</th>
+            <th class="user-list-title">车架号</th>
+            <th class="user-list-title">车型</th>
+            <th class="user-list-title">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    <volist name="carInfo" id="v">
+        <tr>
+            <td class="user-list-cell">{$v.add_date}</td>
+            <td class="user-list-cell">{$v.name}</td>
+            <td class="user-list-cell">{$v.mobile}</td>
+            <td class="user-list-cell">{$v.plate_number}</td>
+            <td class="user-list-cell">{$v.vehicle_number}</td>
+            <td class="user-list-cell">{$v.car_type}</td>
+            <if condition="($v.state eq 1)">
+                <td class="user-list-cell">
+                    <a href="__APP__/Home/WXManager/carAudit?id={$v.id}&state=3&search=2&mobile={$v.mobile}" class="refuse">拒绝</a>
+                    <a  href="__APP__/Home/WXManager/carAudit?id={$v.id}&state=2&search=2&mobile={$v.mobile}">通过</a>
+                </td>
+                <elseif condition="($v.state eq 3)"/>
+                <td class="user-list-cell">
+                    未通过
+                </td>
+                <else/>
+                <td class="user-list-cell">
+                    已通过
+                </td>
+            </if>
+        </tr>
+    </volist>
+    </tbody>
+</table>
+
+<div class="page-content">
+    <if condition="$page neq 1">
+        <a class="next-page" href="__APP__/Home/WXManager/checkHome?page={$page-1}">上一页</a>
+    </if>
+    <php>
+        for($p = 1; $p <= $page_count; $p ++) {
+        if($p == $page){
+            if(!($page == 1 && $page_count==1)){
+                echo '<a class="active-page">'.$p.'</a>';
+            }
+        }else{
+        if($p > $page+2 || $p < $page-2){
+        }else{
+        echo '<a class="page" href="__APP__/Home/WXManager/checkHome?page='.$p.'">'.$p.'</a>';
+        }
+        }
+        }
+    </php>
+    <if condition="$page neq $page_count">
+        <a class="next-page" href="__APP__/Home/WXManager/checkHome?page={$page+1}">下一页</a>
+    </if>
+</div>
+
+</body>
+</html>
