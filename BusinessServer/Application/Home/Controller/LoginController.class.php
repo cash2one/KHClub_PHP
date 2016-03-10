@@ -35,7 +35,7 @@ class LoginController extends Controller {
         //用户名密码先写死
         if($username == 'admin' && $password == 'khclub1234'){
             $_SESSION['manager'] = 1;
-            header('Location:'.__ROOT__.'/index.php/Home/WXManager/withdrawRequest');
+            header('Location:'.__ROOT__.'/index.php/Home/WXManager/checkHome');
         }else{
             $this->assign('error','1');
             $this->display('Login');

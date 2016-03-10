@@ -457,7 +457,7 @@ class WXController extends Controller {
 
         //增加
         $apply = array('user_id'=>$user['user_id'],'name'=>$name, 'mobile'=>$mobile, 'plate_number'=>$plate_number
-                       ,'vehicle_number'=>$vehicle_number, 'car_type'=>$car_type, 'state'=>1, 'car_type_code'=>$car_type_code);
+                       ,'vehicle_number'=>$vehicle_number, 'car_type'=>$car_type, 'state'=>1, 'car_type_code'=>$car_type_code, 'add_date'=>time());
         $carModel = M('biz_car');
         $ret = $carModel->add($apply);
 
@@ -695,7 +695,7 @@ class WXController extends Controller {
 
         $orderModel = M('biz_order');
         $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
-            'open_id'=>$openId, 'total_fee'=>$goods['discount_price'],'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time());
+            'open_id'=>$openId, 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time());
         $ret = $orderModel->add($newOrder);
         if(!$ret){
             echo '订单生成失败';
@@ -732,7 +732,7 @@ class WXController extends Controller {
         $orderModel = M();
         $sql = 'SELECT o.id, s.shop_name, o.state FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
-                AND delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY state,add_date';
+                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
         $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -762,12 +762,13 @@ class WXController extends Controller {
         if($order){
             $order['state'] = ORDER_HAS_PAY;
             $order['update_date'] = time();
+            $order['pay_date'] = time();
             $orderModel->save($order);
         }
 
         $sql = 'SELECT o.id, s.shop_name, o.state FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
-                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'"';
+                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
         $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -907,6 +908,8 @@ class WXController extends Controller {
             $order['nonce_str'] = $result["nonce_str"];
             $order['sign'] = $result["sign"];
             $order['state'] = ORDER_HAS_PAY;
+            $order['update_date'] = time();
+            $order['pay_date'] = time();
             $model->save($order);
         }
     }
@@ -920,7 +923,6 @@ class WXController extends Controller {
         $input->SetTransaction_id($transaction_id);
         $data = \WxPayApi::orderQuery($input);
         print_r($data);
-        exit();
     }
 
     public function orderTest(){

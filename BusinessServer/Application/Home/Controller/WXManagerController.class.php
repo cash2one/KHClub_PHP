@@ -9,6 +9,8 @@ namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
 
+Vendor('jssdk');
+
 class WXManagerController extends Controller{
     /**
      * @brief 车辆审核状态
@@ -27,6 +29,38 @@ class WXManagerController extends Controller{
             $car['state'] = $_REQUEST['state'];
             $carModel = M('biz_car');
             $carModel->where('id='.$id)->save($car);
+
+            //审核通过推送通知
+            if($car['state'] == CAR_CHECK_OK){
+                $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+                $ACC_TOKEN = $jssdk->getAccessToken();
+
+                $sql = 'SELECT ui.wx_open_id FROM biz_user_info ui, biz_car c WHERE c.user_id=ui.user_id AND c.id='.$id;
+                $openID = $carModel->query($sql)[0]['wx_open_id'];
+                if($openID){
+                    $data = '{
+                                    "touser":"'.$openID.'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"您的爱车已通过审核,<a href=\"'.HTTP_URL_PREFIX.'userVerify\">点击查看</a>"
+                                    }
+                                }';
+
+                    $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                    $curl = curl_init();
+                    curl_setopt($curl, CURLOPT_URL, $url);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                    curl_setopt($curl, CURLOPT_POST, 1);
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_exec($curl);
+                    curl_close($curl);
+                }
+            }
+
             if($search == 1){
                 header("Location: searchUser?mobile=".$mobile);
                 return;
