@@ -10,7 +10,25 @@
 </head>
 
 <body style="background-color: #ebebeb">
-<div class="Wait">正在开发，敬请原谅</div>
+
+<volist name="list" id="order">
+    <a href="getRecordDetail?order_id={$order.id}">
+        <div class="ticket clear">
+            <div class="ticket_left">
+                <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+            </div>
+            <div class="ticket_center">
+                <div class="store_name">{$order.shop_name}</div>
+                <div class="tel">{$order.mobile}</div>
+                <div class="date">{$order.use_date}</div>
+            </div>
+            <div class="ticket_right">
+                <img class="state_image" src="../images/221446476438.jpg" alt="">
+            </div>
+        </div>
+    </a>
+</volist>
+
 <div class="menu_box clear">
     <a href="privilegeHome" class="menu">特权</a>
     <a class="menu" style="background-color: #cccccc">记录</a>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>消费详情</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/consumption.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+</head>
+<body style="background-color: #ebebeb">
+<div style="height: 10px"></div>
+<div class="genre_box">
+    <div class="spot"></div>
+    <div class="genre">爱车----{$car.car_type}</div>
+</div>
+<div class="wire"></div>
+<div class="genre_box">
+    <div class="spot"></div>
+    <div class="genre">日期----{$order.use_date}</div>
+</div>
+<div class="wire"></div>
+<div class="genre_box">
+    <div class="spot"></div>
+    <div class="genre">商家----{$shop.shop_name}</div>
+</div>
+<div class="wire"></div>
+<div class="genre_box">
+    <div class="spot"></div>
+    <div class="genre">联系电话----{$shop.shop_phone}</div>
+</div>
+<div class="wire"></div>
+<div class="genre_box">
+    <div class="spot"></div>
+    <div class="genre">服务项目</div>
+</div>
+<div class="clear">
+    <div class="wire2"></div>
+    <div class="values">洗车  {$order.total_fee}</div>
+</div>
+<div class="genre_box">
+    <div class="spot"></div>
+    <div class="genre">合计</div>
+</div>
+<div class="total_box clear">
+    <div class="original_price">原价  {$goods.original_price}元</div>
+    <div class="actually_paid">实付  {$order.total_fee}元</div>
+</div>
+</body>
+</html>

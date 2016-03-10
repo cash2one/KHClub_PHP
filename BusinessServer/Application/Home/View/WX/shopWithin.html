@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>店内</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carTicket.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+</head>
+<body style="background-color: #ebebeb">
+<div class="images" style="background-image:url('__ROOT__/Uploads/{$shop.shop_image}'); background-size:100%;">
+    <div class="navigate clear">
+        <span class="navigate_carStore">{$shop.shop_name}</span>
+        <span class="navigate_distance"></span>
+    </div>
+</div>
+<div class="address">地址 &nbsp;&nbsp;{$shop.address}</div>
+<div class="wire"></div>
+<div class="tel">电话 &nbsp;&nbsp;<a href="tel:{$shop.shop_phone}">{$shop.shop_phone}</a></div>
+<div class="wire"></div>
+<div>
+    <div class="services">服务项目</div>
+    <div>
+        <div class="item">洗车</div>
+        <div class="primary">原价:&nbsp;<del>{$goods.original_price}</del></div>
+        <div class="vip">会员价:&nbsp;<span class="vip_price">{$goods.discount_price}</span></div>
+        <div class="buy"><a href="choiceMyCar?shop_id={$shop.id}&goods_id={$goods.id}">购买</a></div>
+    </div>
+</div>
+<div style="height: 120px"></div>
+<a href="tel:{$shop.shop_phone}" class="add_car">联系管家</a>
+</body>
+
+</html>

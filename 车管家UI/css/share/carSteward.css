@@ -22,7 +22,7 @@ body{
     padding: 10px 0 ;
     text-align:center;
     opacity: .9;
-    
+
     -webkit-transition: opacity 0.5s ease-out;
     -moz-transition: opacity 0.5s ease-out;
     -ms-transition: opacity 0.5s ease-out;
@@ -30,7 +30,7 @@ body{
     transition: opacity 0.5s ease-out;
 }
 .privlege_box{
-    height: 50px;
+    height: 60px;
 }
 .numerical{
     float: left;
@@ -40,16 +40,23 @@ body{
     font-size: 14px;
     text-align: center;
     line-height: 26px;
-    margin-top: 13px;
+    margin-top: 20px;
     margin-left: 10px;
     background-color: #0f0f0f;
     border-radius: 100%;
 }
-.privlege{
-    height: 50px;
-    font-size: 14px;
+.privlege_type{
+    color: #000000;
+    font-size: 16px;
+    padding-top: 20px;
     margin-left: 40px;
-    padding-top: 18px;
+}
+.privlege{
+    height: 60px;
+    color: #000000;
+    font-size: 18px;
+    line-height: 60px;
+    margin-left: 60px;
 }
 .wire{
     margin-left: 10px;
@@ -72,8 +79,6 @@ body{
     line-height: 60px;
     margin-left: 10px;
 }
-
-
 .worth{
     float: right;
     font-size: 17px;
@@ -113,7 +118,7 @@ body{
     color: #000000;
 }
 .car{
-    margin-top: 30px;
+    margin-top: 10px;
     height: 40px;
     font-size: 18px;
     line-height: 40px;
@@ -151,30 +156,9 @@ body{
     background-color: #0f0f0f;
     border-color: transparent;
 }
-
-.yueb{
-    float: left;
-    text-align:right;
-    font-size: 18px;
-    line-height: 60px;
-    margin-left: 35px;
-    width: 45%;
-}
-
-.plate-input-class {
-    width: 20%;
-    margin-bottom: 5px;
-    font-size: 18px;
-    text-align: right;
-    height: 55px;
-    border-style: none none solid none;
-    border-bottom-color: transparent;
-    background-color: transparent;
-}
-
 .input-class {
     width: 65%;
-    margin-left: 30px;
+    margin-left: 55px;
     padding-left: 5px;
     margin-bottom: 5px;
     font-size: 18px;
@@ -188,7 +172,7 @@ body{
     width: 65%;
     margin-left: -45px;
     padding-top: 10px;
-    padding-left: 20px;
+    padding-left: 50px;
     margin-bottom: 5px;
     font-size: 18px;
     text-align: right;
@@ -281,7 +265,7 @@ body{
 .car_name{
     float: left;
     margin: 20px auto 20px 10px;
-}
+ }
 .wire2{
     position: fixed;
     bottom:50px;
@@ -325,13 +309,33 @@ body{
     margin-right: 20px;
 }
 .select_images{
-    position:absolute;
-    right:0px;
+    float: right;
     width: 14px;
-    margin-top: 20px;
-    margin-right: 18px;
+    margin-top: 18px;
+    margin-right: 20px;
 }
-
+.ts{
+    height: 70px;
+    color: #000000;
+    font-size: 18px;
+    line-height: 70px;
+    margin-left: 15px;
+}
+.input_box{
+    height: 60px;
+    background-color: #ffffff;
+}
+.name_input-class{
+    width: 50%;
+    padding-top: 10px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    height: 40px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
 .pos_box{
     margin: 60px 10px auto 10px;
 }
@@ -346,4 +350,58 @@ body{
     font-size: 18px;
     text-align: center;
     cursor: pointer;
+}
+.merchant_logo{
+    float: left;
+    width: 50px;
+    border-radius: 100%;
+    margin: 5px 10px;
+}
+.ticket{
+    width: 90%;
+    color: #000000;
+    height: 150px;
+    border-radius: 5px;
+    margin: 10px auto;
+    background-color: #ffffff;
+}
+.ticket_image{
+    width: 100px;
+    border-radius: 100%;
+    margin: 25px auto 25px 10px;
+}
+.ticket_left{
+    float: left;
+    width: 33.33%;
+}
+.ticket_center{
+    float: left;
+    width: 53.33%;
+}
+.ticket_right{
+    float: left;
+    width: 13.33%;
+}
+.state_image{
+    width: 30px;
+    margin-top: 60px;
+    border-radius: 100%;
+}
+.store_name{
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+.tel{
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20px;
+}
+.date{
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20px;
 }

@@ -10,7 +10,7 @@ class LoginController extends Controller {
     /**
      * @brief 管理系统登录页面
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/login/login
+     * http://localhost/SHS_Contact_PHP/index.php/Home/login/login
      */
     function login(){
         $this->display('Login');

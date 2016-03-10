@@ -1,13 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Think
- * Date: 2015/5/4
- * Time: 23:06
- */
 
-//电话正则
-define('PHONE_MATCH','/^((17[0-9])|(13[0-9])|(14[0-9])|(15[0-9])|(18[0,0-9]))\d{8}$/');
+define("HTTP_HOST", "http://a.pinweihuanqiu.com"); //a.pinweihuanqiu.com
+define("HTTP_URL_PREFIX","http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/WX/");
+
+//审核状态 0是取消审核 1是正在审核 2是通过审核 3是未通过审核
+define("CAR_CHECK_CANCEL", "0");
+define("CAR_CHECKING", "1");
+define("CAR_CHECK_OK", "2");
+define("CAR_CHECK_FAIL", "3");
+
+//订单状态 0未付款 1已付款 2已使用 3已失效
+define("ORDER_NO_PAY", "0");
+define("ORDER_HAS_PAY", "1");
+define("ORDER_HAS_USE", "2");
+define("ORDER_EXPIRE", "3");
 
 
 /**

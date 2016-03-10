@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>我的电子券</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carTicket.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+
+</head>
+<body>
+
+<volist name="list" id="order">
+    <a href="getOrderDetail?order_id={$order.id}">
+        <div class="ticket clear">
+            <div class="ticket_left">
+                <img class="ticket_image" src="../images/221446476438.jpg" alt="">
+                <div class="store_name">{$order.shop_name}</div>
+            </div>
+            <div class="ticket_center">
+                <div class="ticket_type">洗车券</div>
+            </div>
+            <div class="ticket_right">
+                <div class="discount"><span class="number">5</span>折</div>
+                <img class="state_image" src="../images/221446476438.jpg" alt="">
+                <img class="examine_image" src="../images/221446476438.jpg" alt="">
+            </div>
+            <!--<img class="examine_image" src="../images/221446476438.jpg" alt="">-->
+        </div>
+    </a>
+</volist>
+
+
+</body>
+</html>

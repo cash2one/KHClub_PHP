@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>选择爱车</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carTicket.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+<volist name="list" id="car">
+    <a href="createOrder?car_id={$car.id}&goods_id={$goods_id}&shop_id={$shop_id}" class="myCard">
+        <div class="list_box clear">
+            <div class="car_name">{$car.name}</div>
+            <div class="state_card">{$car.plate_number}</div>
+        </div>
+    </a>
+    <div class="wire"></div>
+</volist>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+    wx.config({
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : []
+    });
+    operate.initCloseShare();
+</script>
+
+</body>
+</html>

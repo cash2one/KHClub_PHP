@@ -30,7 +30,7 @@ body{
     transition: opacity 0.5s ease-out;
 }
 .privlege_box{
-    height: 50px;
+    height: 60px;
 }
 .numerical{
     float: left;
@@ -40,16 +40,23 @@ body{
     font-size: 14px;
     text-align: center;
     line-height: 26px;
-    margin-top: 13px;
+    margin-top: 20px;
     margin-left: 10px;
     background-color: #0f0f0f;
     border-radius: 100%;
 }
-.privlege{
-    height: 50px;
-    font-size: 14px;
+.privlege_type{
+    color: #000000;
+    font-size: 16px;
+    padding-top: 20px;
     margin-left: 40px;
-    padding-top: 18px;
+}
+.privlege{
+    height: 60px;
+    color: #000000;
+    font-size: 18px;
+    line-height: 60px;
+    margin-left: 60px;
 }
 .wire{
     margin-left: 10px;
@@ -72,7 +79,6 @@ body{
     line-height: 60px;
     margin-left: 10px;
 }
-
 
 .worth{
     float: right;
@@ -113,7 +119,7 @@ body{
     color: #000000;
 }
 .car{
-    margin-top: 30px;
+    margin-top: 10px;
     height: 40px;
     font-size: 18px;
     line-height: 40px;
@@ -356,4 +362,58 @@ body{
     font-size: 18px;
     text-align: center;
     cursor: pointer;
+}
+.merchant_logo{
+    float: left;
+    width: 50px;
+    border-radius: 100%;
+    margin: 5px 10px;
+}
+.ticket{
+    width: 90%;
+    color: #000000;
+    height: 150px;
+    border-radius: 5px;
+    margin: 10px auto;
+    background-color: #ffffff;
+}
+.ticket_image{
+    width: 100px;
+    border-radius: 100%;
+    margin: 25px auto 25px 10px;
+}
+.ticket_left{
+    float: left;
+    width: 33.33%;
+}
+.ticket_center{
+    float: left;
+    width: 53.33%;
+}
+.ticket_right{
+    float: left;
+    width: 13.33%;
+}
+.state_image{
+    width: 30px;
+    margin-top: 60px;
+    border-radius: 100%;
+}
+.store_name{
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+.tel{
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20px;
+}
+.date{
+    font-size: 18px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20px;
 }

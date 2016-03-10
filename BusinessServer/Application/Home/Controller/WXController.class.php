@@ -1,17 +1,20 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+
+require THINK_PATH.'Library/Vendor/wxpay/lib/WxPay.Api.php';
+require THINK_PATH.'Library/Vendor/wxpay/WxPay.JsApiPay.php';
+
 Vendor('alisdk.TopSdk');
 Vendor('jssdk');
+Vendor('wxpay.notify');
 
-define("HTTP_HOST", "http://114.215.95.23"); //a.pinweihuanqiu.com
-define("HTTP_URL_PREFIX","http://114.215.95.23/BusinessServer/index.php/Home/WX/");
 
 class WXController extends Controller {
-    //wxd5db3b57ffdfafb3 2ccd9fe700dda9b0e9db40212dba1f4b
-    private $WX_APPID = 'wxd5db3b57ffdfafb3';
-    private $WX_APPSecret = '2ccd9fe700dda9b0e9db40212dba1f4b';
-    //wxa1cc9ce0fd9a1372 d734cd2152eb5557a78477ed09136196
+    //wxd5db3b57ffdfafb3 2ccd9fe700dda9b0e9db40212dba1f4b 测试用
+    private $WX_APPID = 'wx5764fdc7f223e062';
+    private $WX_APPSecret = 'ef6373955987b110fef9c0108ae15a02';
+
     public function index(){
 
     }
@@ -25,7 +28,6 @@ class WXController extends Controller {
     public function subscribeWX(){
 
         $this->display('subscribeWX');
-
     }
 
     /**
@@ -40,7 +42,7 @@ class WXController extends Controller {
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
-                    $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
                 $openID = json_decode($content)->openid;
                 if(empty($openID)){
                     echo '不好意思，您微信未授权openID';
@@ -256,7 +258,7 @@ class WXController extends Controller {
         $verifyModel = M();
            //查看是否验证成功
         $sql = 'SELECT * FROM biz_sms WHERE phone_num='.$username.'
-        and verify_code='.$verify.' and delete_flag=0 and add_date>'.(time()-60);
+        and verify_code='.$verify.' and delete_flag=0 and add_date>'.(time()-180);
         $data = $verifyModel->query($sql)[0];
 
         //验证成功注册
@@ -329,12 +331,23 @@ class WXController extends Controller {
             header("Location: ".HTTP_URL_PREFIX."userVerify");
             exit;
         }
+
+        $model = M();
+        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date FROM biz_car c, biz_order o, biz_shop s
+                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE;
+        $list = $model->query($sql);
+        for($i=0; $i<count($list); $i++){
+            $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
+        }
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
+        $this->assign('list',$list);
         $this->display('record');
     }
+
+
 
     /**
      * @brief 跳到特权主页
@@ -572,11 +585,12 @@ class WXController extends Controller {
      *
      */
     public function getShops(){
+
         $model = M('biz_shop');
         $shops = $model->where('delete_flag=0')->select();
-
         $this->assign('shops', $shops);
-        $this->display('');
+        $this->display('carStore');
+
     }
 
     /**
@@ -584,7 +598,6 @@ class WXController extends Controller {
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WX/getShopDetail
      * @param shop_id 车id
-     *
      */
     public function getShopDetail(){
 
@@ -598,7 +611,7 @@ class WXController extends Controller {
 
         $this->assign('shop', $shop);
         $this->assign('goods', $goods);
-        $this->display('');
+        $this->display('shopWithin');
     }
 
     /**
@@ -619,7 +632,7 @@ class WXController extends Controller {
         }
 
         $carModel = M('biz_car');
-        $list = $carModel->where('state=2 AND delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
+        $list = $carModel->where('state='.CAR_CHECK_OK.' AND delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
 
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -628,7 +641,7 @@ class WXController extends Controller {
         $this->assign('list',$list);
         $this->assign('shop_id', $_REQUEST['shop_id']);
         $this->assign('goods_id', $_REQUEST['goods_id']);
-        $this->display('');
+        $this->display('selectCar');
     }
 
     /**
@@ -667,14 +680,14 @@ class WXController extends Controller {
         $tools = new \JsApiPay();
         //统一下单
         $input = new \WxPayUnifiedOrder();
-        $input->SetBody("test");
-        $input->SetAttach("test");
+        $input->SetBody("洗车");
+        $input->SetAttach("深圳");
         $input->SetOut_trade_no($bizOrder);
-        $input->SetTotal_fee("1");
+        $input->SetTotal_fee($goods['discount_price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
+        $input->SetGoods_tag($bizOrder);
+        $input->SetNotify_url("http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/WX/wxNotify");
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = \WxPayApi::unifiedOrder($input);
@@ -682,7 +695,7 @@ class WXController extends Controller {
 
         $orderModel = M('biz_order');
         $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
-                        'open_id'=>$openId, 'total_fee'=>$goods['discount_price'],'out_trade_no'=>$bizOrder, 'car_id'=>$car_id);
+            'open_id'=>$openId, 'total_fee'=>$goods['discount_price'],'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time());
         $ret = $orderModel->add($newOrder);
         if(!$ret){
             echo '订单生成失败';
@@ -697,7 +710,7 @@ class WXController extends Controller {
         $this->assign('car',$car);
         $this->assign('order',$newOrder);
         $this->assign('jsApiParameters', $jsApiParameters);
-        $this->display('');
+        $this->display('ticketDetails');
     }
 
 
@@ -716,18 +729,54 @@ class WXController extends Controller {
             exit;
         }
 
-        $orderModel = M('biz_order');
-        $list = $orderModel->where('delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
-
+        $orderModel = M();
+        $sql = 'SELECT o.id, s.shop_name, o.state FROM biz_order o, biz_shop s
+                WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
+                AND delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY state,add_date';
+        $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('list',$list);
-        $this->assign('shop_id', $_REQUEST['shop_id']);
-        $this->assign('goods_id', $_REQUEST['goods_id']);
-        $this->display('myCars');
+        $this->display('myTicket');
     }
+
+    /**
+     * @brief 支付成功
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/paySuccessList
+     *
+     */
+    public function paySuccessAndGetOrderList(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $orderModel = M('biz_order');
+        $order = $orderModel->where('out_trade_no="'.$_REQUEST['out_trade_no'].'"')->find();
+        if($order){
+            $order['state'] = ORDER_HAS_PAY;
+            $order['update_date'] = time();
+            $orderModel->save($order);
+        }
+
+        $sql = 'SELECT o.id, s.shop_name, o.state FROM biz_order o, biz_shop s
+                WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
+                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'"';
+        $list = $orderModel->query($sql);
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('list',$list);
+        $this->display('myTicket');
+    }
+
 
 
     /**
@@ -749,13 +798,15 @@ class WXController extends Controller {
 
         //订单详情 商家信息 商品信息 购买车辆
         $orderModel = M('biz_order');
-        $order = $orderModel->where('delete_flag=0 AND user_id="'.$user['user_id'].'" AND order_id="'.$order_id.'"')->find();
+        $order = $orderModel->where('delete_flag=0 AND user_id="'.$user['user_id'].'" AND id="'.$order_id.'"')->find();
         $model = M('biz_shop');
         $shop = $model->where('delete_flag=0 AND id='.$order['shop_id'])->find();
         $goodsModel = M('biz_shop_goods');
         $goods = $goodsModel->where('delete_flag=0 AND id='.$order['goods_id'])->find();
         $carModel = M('biz_car');
         $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
+
+        $order['use_date'] = date('Y-m-d', $order['use_date']);
 
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -766,17 +817,19 @@ class WXController extends Controller {
         $this->assign('goods',$goods);
         $this->assign('car',$car);
         $this->assign('order',$order);
+        $this->assign('isDetail',1);
 
-        $this->display('');
+        $this->display('ticketDetails');
     }
 
+
     /**
-     * @brief 记录列表
+     * @brief 单辆车消费记录列表
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WX/getRecordList
-     *
+     * @param car_id 汽车id
      */
-    public function getRecordList(){
+    public function getCarRecordList(){
 
         $user = getWXUser();
         //如果系统中不存在这个人跳转到注册
@@ -785,9 +838,11 @@ class WXController extends Controller {
             exit;
         }
 
+        $car_id = $_REQUEST['car_id'];
+
         $model = M();
         $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date FROM biz_car c, biz_order o, biz_shop s
-                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0 AND o.state=2';
+                WHERE c.id='.$car_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0';
         $list = $model->query($sql);
 
         //wxJs签名
@@ -796,7 +851,101 @@ class WXController extends Controller {
         $this->assign('signPackage',$signPackage);
 
         $this->assign('list',$list);
-        $this->display('myCars');
+        $this->display('');
+    }
+
+    /**
+     * @brief 记录列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getRecordList
+     * @param order_id 订单id
+     */
+    public function getRecordDetail(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $order_id = $_REQUEST['order_id'];
+
+        $model = M();
+        $sql = 'SELECT * FROM biz_car c, biz_order o, biz_shop s
+                WHERE o.id='.$order_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id
+                AND o.car_id=c.id AND o.delete_flag=0';
+        $record = $model->query($sql)[0];
+
+        //wxJs签名
+        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->assign('record',$record);
+        $this->display('consumptionDetails');
+    }
+
+
+    /**
+     * @brief 微信支付回调通知
+     */
+    public function wxNotify(){
+
+        $notify = new \PayNotifyCallBack();
+        $notify->Handle(false);
+
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $result = \WxPayResults::Init($xml);
+
+        $out_trade_no = $result['out_trade_no'];
+        $model = M('biz_order');
+        $order = $model->where('out_trade_no="'.$out_trade_no.'"')->find();
+        //订单成功
+        if($order){
+            $order['transaction_id'] = $result["transaction_id"];
+            $order['nonce_str'] = $result["nonce_str"];
+            $order['sign'] = $result["sign"];
+            $order['state'] = ORDER_HAS_PAY;
+            $model->save($order);
+        }
+    }
+
+
+    public function queryOrder(){
+
+        //订单号
+        $transaction_id = $_GET['orderID'];
+        $input = new \WxPayOrderQuery();
+        $input->SetTransaction_id($transaction_id);
+        $data = \WxPayApi::orderQuery($input);
+        print_r($data);
+        exit();
+    }
+
+    public function orderTest(){
+
+        $openId = $_SESSION['open_id'];
+
+        $tools = new \JsApiPay();
+        //统一下单
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody("test");
+        $input->SetAttach("test");
+        $input->SetOut_trade_no(time());
+        $input->SetTotal_fee("1");
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("test");
+        $input->SetNotify_url("http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/WX/wxNotify");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $order = \WxPayApi::unifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        print_r($jsApiParameters);
+        $this->assign('jsApiParameters', $jsApiParameters);
+        $this->display('ticketDetails');
     }
 
 }

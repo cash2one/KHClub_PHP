@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>账号验证</title>
+    <link rel="stylesheet" href="../css/share/carSteward.css">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script>
+
+        var input;
+
+        $(function () {
+            input = $("#yzm");
+
+            if('{$verifyError}' == 1){
+                drawToast('验证码错误!');
+            }else if('{$verifyError}' == 2){
+                drawToast('注册失败');
+            }else{
+                //获取验证码
+                getVerify();
+            }
+
+        })
+
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+
+        function save()
+        {
+            if($('#yzm').val().length < 4){
+                drawToast("验证码有误");
+                return;
+            }
+
+            if($('#password').val().length < 6){
+                drawToast("密码不能少于6位");
+                return;
+            }
+
+            //submit
+            var form = $("#form");
+            form.attr("method", "GET");
+            form.attr("action", "userRegister");
+            form.submit();
+        }
+
+        var onGoing = false;
+        var index = 60;//时间
+        function start()
+        {
+            document.getElementById("timeSpan").innerHTML = index;
+            document.getElementById("dates").style.display="block";
+            index--;
+            if(index < 0) {
+                //清空定时器
+                document.getElementById("dates").style.display="none";
+                index = 60;
+                onGoing = false;
+                $("#resend").attr('class','resend-verify');
+            }
+            else {
+                //开启计时
+                setTimeout("start()",1000);
+                $("#resend").attr('class','wait-verify');
+            }
+
+        }
+
+        function getVerify(){
+            if(onGoing == false){
+                onGoing = true;
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    timeout: 10000,
+                    url: "__URL__/requestSms?" + Math.random(),
+                    data: { phone_num : '{$username}' },
+                    success: function (rData) {
+                        var result = eval(rData);
+                        if(result.status == 1){
+                            start();
+                        }else{
+                            document.getElementById("dates").style.display="none";
+                            index = 60;
+                            onGoing = false;
+                            $("#resend").attr('class','resend-verify');
+                            drawToast('短信发送失败');
+
+                        }
+                    },
+                    error: function (error) {
+                        document.getElementById("dates").style.display="none";
+                        index = 60;
+                        onGoing = false;
+                        $("#resend").attr('class','resend-verify');
+                        drawToast('服务器异常');
+                        //alert('您好、当前服务器正忙、请稍后……');
+                        return false;
+                    }
+                })
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div class="ts">验证码已发送至13426788997手机上</div>
+<form id="form" >
+    <input type="hidden" name="username" value="{$username}">
+    <div class="input_box">
+        <input class="name_input-class" id="yzm" name="yzm" class="verify" maxlength="4" type="text" placeholder="请输入验证码" />
+        <span id="dates"><span id="timeSpan">60</span>s</span>
+        <a id="resend" href="#" class="wait-verify" onclick="getVerify()">重新发送验证码</a>
+    </div>
+    <div class="wire"></div>
+    <div class="input_box">
+        <input class="name_input-class" name="password" id="password" type="password" placeholder="请输入密码" />    </div>
+    <div class="pos_box"><a onclick="save()" class="btn-submit"/>下一步</a></div>
+    <input type="hidden" name="collectID" value="{$collectID}">
+    <input type="hidden" name="sendID" value="{$sendID}">
+</form>
+
+</body>
+</html>
