@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="__PUBLIC__/css/wx/carTicket.css">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
-<body style="background-color: #ebebeb">
+
+<body style="background-color: #f1f1f1">
 
 <volist name="shops" id="shop">
     <a href="getShopDetail?shop_id={$shop.id}">
@@ -16,6 +17,7 @@
             <img class="merchant_logo" src="__ROOT__/Uploads/{$shop.shop_image_thumb}" alt="">
             <div class="content_box">
                 <div class="carStore">{$shop.shop_name}</div>
+                <img class="addr_images" src="__PUBLIC__/icon/address.png" alt="">
                 <div class="addr">{$shop.address}</div>
                 <div class="distance"></div>
             </div>

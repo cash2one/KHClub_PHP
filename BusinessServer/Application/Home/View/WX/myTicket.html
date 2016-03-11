@@ -15,20 +15,25 @@
     <a href="getOrderDetail?order_id={$order.id}">
         <div class="ticket clear">
             <div class="ticket_left">
-                <img class="ticket_image" src="../images/221446476438.jpg" alt="">
-                <div class="store_name">{$order.shop_name}</div>
+                <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
             </div>
             <div class="ticket_center">
-                <div class="ticket_type">洗车券</div>
+                <div class="store_name">{$order.shop_name}</div>
+            </div>
+            <div class="ticket_coupon">
+                <img class="coupon" src="__PUBLIC__/icon/coupon.png" alt="">
             </div>
             <div class="ticket_right">
-                <div class="discount"><span class="number">5</span>折</div>
-                <img class="state_image" src="../images/221446476438.jpg" alt="">
-                <img class="examine_image" src="../images/221446476438.jpg" alt="">
+                <div class="discount"><span class="number">{$order.OFF}</span>折</div>
             </div>
-            <!--<img class="examine_image" src="../images/221446476438.jpg" alt="">-->
+            <if condition="$order.state eq 1">
+                <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
+                <else/>
+                <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
+            </if>
         </div>
     </a>
+
 </volist>
 
 

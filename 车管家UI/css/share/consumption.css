@@ -11,22 +11,32 @@ body{
     clear: both;
 }
 .genre_box{
-    height: 30px;
+    height: 60px;
 }
 .spot{
     float: left;
-    width: 15px;
-    height: 15px;
+    width: 9px;
+    height: 9px;
     border-radius: 100%;
-    margin-top: 8px;
-    margin-left: 10px;
-    background-color: #3366ff;
+    margin-top: 24px;
+    margin-left: 15px;
+    background-color: #0f0f0f;
 }
 .genre{
     float: left;
-    font-size: 18px;
-    line-height: 30px;
+    height: 60px;
+    width: 30%;
+    color: #646464;
+    font-size: 16px;
+    line-height: 60px;
     padding-left: 10px;
+}
+.values{
+    float: left;
+    height: 60px;
+    width: 50%;
+    line-height: 60px;
+    font-size: 16px;
 }
 .wire{
     width: 1px;
@@ -41,24 +51,29 @@ body{
     margin-left: 18px;
     background-color: #e3e3e3;
 }
-.values{
-    float: left;
-    width: 70%;
-    font-size: 16px;
-    margin-top: 5px;
-    margin-left: 15px;
-}
 .total_box{
     margin-top: 5px;
 }
 .original_price{
     float: left;
     font-size: 16px;
-    margin-left: 35px;
-    width: 40%;
+    line-height: 60px;
+    width: 30%;
 }
 .actually_paid{
     float: left;
+    color: #d52828;
     font-size: 16px;
-    width: 40%;
+    padding-left: 10px;
+    line-height: 60px;
+    width: 25%;
+}
+.vertical_bar{
+    position: fixed;
+    top:0px;
+    left: 19px;
+    z-index: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #000000;
 }

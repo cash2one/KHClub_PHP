@@ -9,42 +9,39 @@
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 <body style="background-color: #ebebeb">
-<div style="height: 10px"></div>
 <div class="genre_box">
     <div class="spot"></div>
-    <div class="genre">爱车----{$record.car_type}</div>
+    <div class="genre">爱车</div>
+    <div class="values">{$record.car_type}</div>
 </div>
-<div class="wire"></div>
 <div class="genre_box">
     <div class="spot"></div>
-    <div class="genre">日期----{$record.use_date}</div>
+    <div class="genre">日期</div>
+    <div class="values">{$record.use_date}</div>
 </div>
-<div class="wire"></div>
 <div class="genre_box">
     <div class="spot"></div>
-    <div class="genre">商家----{$record.shop_name}</div>
+    <div class="genre">商家</div>
+    <div class="values">{$record.shop_name}</div>
 </div>
-<div class="wire"></div>
 <div class="genre_box">
     <div class="spot"></div>
-    <div class="genre">联系电话----{$record.shop_phone}</div>
+    <div class="genre">联系电话</div>
+    <div class="values">{$record.shop_phone}</div>
 </div>
-<div class="wire"></div>
 <div class="genre_box">
     <div class="spot"></div>
     <div class="genre">服务项目</div>
+    <div class="values">洗车  {$record.total_fee}元</div>
 </div>
-<div class="clear">
-    <div class="wire2"></div>
-    <div class="values">洗车  {$record.total_fee}</div>
-</div>
+
 <div class="genre_box">
     <div class="spot"></div>
     <div class="genre">合计</div>
+    <div class="original_price">原价:{$record.original_price}元</div>
+    <div class="actually_paid">实付:{$record.total_fee}元</div>
 </div>
-<div class="total_box clear">
-    <div class="original_price">原价  {$record.original_price}元</div>
-    <div class="actually_paid">实付  {$record.total_fee}元</div>
-</div>
+<div class="vertical_bar"></div>
+
 </body>
 </html>

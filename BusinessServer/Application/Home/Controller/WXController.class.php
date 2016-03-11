@@ -695,12 +695,14 @@ class WXController extends Controller {
 
         $orderModel = M('biz_order');
         $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
-            'open_id'=>$openId, 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time());
+                     'open_id'=>$openId, 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],
+                     'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time(), 'type'=>1);
         $ret = $orderModel->add($newOrder);
         if(!$ret){
             echo '订单生成失败';
             exit;
         }
+        $newOrder['OFF'] = number_format(10*$newOrder['total_fee']/$newOrder['original_price'], 1);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
@@ -730,9 +732,10 @@ class WXController extends Controller {
         }
 
         $orderModel = M();
-        $sql = 'SELECT o.id, s.shop_name, o.state FROM biz_order o, biz_shop s
+        $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
+                FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
-                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
+                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -766,7 +769,8 @@ class WXController extends Controller {
             $orderModel->save($order);
         }
 
-        $sql = 'SELECT o.id, s.shop_name, o.state FROM biz_order o, biz_shop s
+        $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
+                FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
                 AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
         $list = $orderModel->query($sql);
@@ -808,6 +812,7 @@ class WXController extends Controller {
         $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
 
         $order['use_date'] = date('Y-m-d', $order['use_date']);
+        $order['OFF'] = number_format(10*$order['total_fee']/$order['original_price'], 1);
 
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -827,7 +832,7 @@ class WXController extends Controller {
     /**
      * @brief 单辆车消费记录列表
      * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/WX/getRecordList
+     * http://localhost/BusinessServer/index.php/Home/WX/getCarRecordList
      * @param car_id 汽车id
      */
     public function getCarRecordList(){
@@ -846,13 +851,17 @@ class WXController extends Controller {
                 WHERE c.id='.$car_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0';
         $list = $model->query($sql);
 
+        for($i=0; $i<count($list); $i++){
+            $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
+        }
+
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
         $this->assign('list',$list);
-        $this->display('');
+        $this->display('singleRecord');
     }
 
     /**

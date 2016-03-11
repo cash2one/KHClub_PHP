@@ -8,28 +8,44 @@
     <link rel="stylesheet" href="__PUBLIC__/css/wx/carTicket.css">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
-<body style="background-color: #ebebeb">
+<body style="background-color: #f1f1f1">
 <div class="images" style="background-image:url('__ROOT__/Uploads/{$shop.shop_image}'); background-size:100%;">
     <div class="navigate clear">
+    </div>
+    <div class="addr_distance">
         <span class="navigate_carStore">{$shop.shop_name}</span>
         <span class="navigate_distance"></span>
     </div>
 </div>
-<div class="address">地址 &nbsp;&nbsp;{$shop.address}</div>
-<div class="wire"></div>
-<div class="tel">电话 &nbsp;&nbsp;<a href="tel:{$shop.shop_phone}">{$shop.shop_phone}</a></div>
-<div class="wire"></div>
-<div>
-    <div class="services">服务项目</div>
-    <div>
-        <div class="item">洗车</div>
-        <div class="primary">原价:&nbsp;<del>{$goods.original_price}</del></div>
-        <div class="vip">会员价:&nbsp;<span class="vip_price">{$goods.discount_price}</span></div>
-        <div class="buy"><a href="choiceMyCar?shop_id={$shop.id}&goods_id={$goods.id}">购买</a></div>
+
+<div class="box">
+    <div class="address clear">
+        <div class="addr_name">地址</div>
+        <div class="type_addr">{$shop.address}</div>
+    </div>
+    <div class="wire"></div>
+    <div class="type_box clear">
+        <div class="type_name">联系电话</div>
+        <div class="type_content"><a href="tel:{$shop.shop_phone}">{$shop.shop_phone}</a></div>
+    </div>
+    <div class="wire"></div>
+    <div class="type_box clear">
+        <div class="type_name">服务项目</div>
+        <div class="type_content">洗车</div>
+    </div>
+    <div class="wire"></div>
+    <div class="type_box clear">
+        <div class="primary">原价:&nbsp;￥{$goods.original_price}</div>
+        <div class="vip">会员价:&nbsp;￥{$goods.discount_price}</div>
+        <div class="buy"><a class="purchase" href="choiceMyCar?shop_id={$shop.id}&goods_id={$goods.id}">购买</a></div>
     </div>
 </div>
+
 <div style="height: 120px"></div>
 <a href="tel:{$shop.shop_phone}" class="add_car">联系管家</a>
+
 </body>
 
 </html>
+
+
