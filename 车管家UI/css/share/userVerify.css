@@ -1,0 +1,66 @@
+a{text-decoration:none;}
+input{border: none}
+body{
+    padding: 0;
+    margin: 0;
+}
+.ts{
+    display: block;
+    width: 95%;
+    height: 45px;
+    margin: 0px auto auto auto;
+    line-height: 45px;
+    font-size: 16px;
+    color: #0f0f0f;
+}
+.line{
+    background-color: #e3e3e3;
+    height: 1px;
+    width: 95%;
+    margin: 0px auto auto auto;
+}
+.tel{
+    display: block;
+    width: 95%;
+    margin: 0px auto auto auto;
+}
+.mobile{
+
+    margin-left: 10px;
+    height:40px;
+    width: 80%;
+    font-size: 16px;
+    border-radius: 1px;
+}
+.btn-submit{
+    display: block;
+    width: 95%;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #0f0f0f;
+    margin: 30px auto 1rem auto;
+    line-height: 40px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+}
+#toast
+{
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 0px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
+
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
+}
