@@ -29,6 +29,7 @@
         <div class="type_content"><a href="tel:{$shop.shop_phone}">{$shop.shop_phone}</a></div>
     </div>
     <div class="wire"></div>
+
     <div class="type_box clear">
         <div class="type_name">服务项目</div>
         <div class="type_content">洗车</div>
@@ -42,9 +43,57 @@
 </div>
 
 <div style="height: 120px"></div>
-<a href="tel:{$shop.shop_phone}" class="add_car">联系管家</a>
+<a href="tel:0755-84356032" class="add_car">联系管家</a>
 
 </body>
+
+<script>
+
+    $(function(){
+        getLocation();
+    });
+
+    var curPosition;
+
+    function getLocation()
+    {
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+    }
+
+    function showPosition(position)
+    {
+        curPosition = position;
+        $('.navigate_distance').html(GetDistance({$shop.latitude},{$shop.longitude})+"km");
+    }
+
+    function Rad(d){
+        return d * Math.PI / 180.0;//经纬度转换成三角函数中度分表形式。
+    }
+    //计算距离，参数分别为第一点的纬度，经度；第二点的纬度，经度
+    function GetDistance(lat1,lng1){
+
+        if(!curPosition){
+            return;
+        }
+
+        var lat2=curPosition.coords.latitude,lng2=curPosition.coords.longitude;
+
+        var radLat1 = Rad(lat1);
+        var radLat2 = Rad(lat2);
+        var a = radLat1 - radLat2;
+        var  b = Rad(lng1) - Rad(lng2);
+        var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+                Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+        s = s *6378.137 ;// EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000; //输出为公里
+        s=s.toFixed(2);
+        return s;
+    }
+
+</script>
 
 </html>
 

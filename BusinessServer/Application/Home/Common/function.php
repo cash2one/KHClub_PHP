@@ -124,3 +124,15 @@ function getWXUser()
     $user = $model->query($sql)[0];
     return $user;
 }
+
+//获取微信用户
+function getShopUser()
+{
+    //先授权获取openID
+    $openID = $_SESSION['open_id'];
+
+    $model = M();
+    $sql = 'SELECT server_id FROM biz_shop_register WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
+    $user = $model->query($sql)[0];
+    return $user;
+}

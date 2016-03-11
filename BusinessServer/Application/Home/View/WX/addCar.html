@@ -47,8 +47,8 @@
                 drawToast("车牌不能为空");
                 return;
             }
-            if($('#vehicle_number').val().length < 1){
-                drawToast("车架号不能为空");
+            if($('#car_type').val().length < 1){
+                drawToast("车型不能为空");
                 return;
             }
 
@@ -83,13 +83,13 @@
             <div class="carFrame">车架号</div>
             <div class="carToken">车辆识别代码</div>
         </div>
-        <input class="car_input-class" maxlength="30" id="vehicle_number" name="vehicle_number" type="text" placeholder="（必填）" value="{$_SESSION['vehicle_number']}"/>
+        <input class="car_input-class" maxlength="30" id="vehicle_number" name="vehicle_number" type="text" value="{$_SESSION['vehicle_number']}"/>
     </div>
     <div class="wire"></div>
     <div class="list_box clear" id="carType">
         <div class="genre">车型</div>
         <img class="select_images" src="__PUBLIC__/icon/arrow.png" alt="" width="20px">
-        <input class="input-class" maxlength="30" name="car_type" type="text" readonly="true" value="{$_SESSION['car_type']}"/>
+        <input class="input-class" maxlength="30" id="car_type" name="car_type" type="text" placeholder="（必填）" readonly="true" value="{$_SESSION['car_type']}"/>
         <input class="input-class" maxlength="30" name="car_type_code" type="hidden" value="{$_SESSION['car_type_code']}"/>
     </div>
     <div class="wire"></div>

@@ -450,7 +450,7 @@ class WXController extends Controller {
         $car_type_code = $_REQUEST['car_type_code'];
 
         //|| empty($car_type)
-        if(empty($name) || empty($mobile) || empty($plate_number) || empty($vehicle_number)){
+        if(empty($name) || empty($mobile) || empty($plate_number) || empty($car_type)){
             header("Location: ".HTTP_URL_PREFIX."addCar?empty=1");
             exit;
         }
@@ -715,7 +715,6 @@ class WXController extends Controller {
         $this->display('ticketDetails');
     }
 
-
     /**
      * @brief 获取订单列表
      * 接口地址
@@ -734,8 +733,8 @@ class WXController extends Controller {
         $orderModel = M();
         $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
-                WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
-                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
+                WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
+                AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -771,8 +770,8 @@ class WXController extends Controller {
 
         $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
-                WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.'
-                AND o.delete_flag=0 AND user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
+                WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
+                AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
         $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
@@ -848,7 +847,7 @@ class WXController extends Controller {
 
         $model = M();
         $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date FROM biz_car c, biz_order o, biz_shop s
-                WHERE c.id='.$car_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0';
+                WHERE c.id='.$car_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE;;
         $list = $model->query($sql);
 
         for($i=0; $i<count($list); $i++){

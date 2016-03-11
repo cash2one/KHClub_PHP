@@ -85,8 +85,9 @@
                     if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                         window.location = 'paySuccessAndGetOrderList?out_trade_no={$order.out_trade_no}'
                     }else{
-                        WeixinJSBridge.log(res.err_msg);
-                        alert(res.err_code+res.err_desc+res.err_msg);
+//                        WeixinJSBridge.log(res.err_msg);
+//                        alert(res.err_code+res.err_desc+res.err_msg);
+
                     }
                 }
         );
