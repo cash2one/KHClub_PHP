@@ -1,0 +1,32 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.hint{
+    margin-top: 60px;
+    color: #646464;
+    font-size: 22px;
+    text-align: center;
+}
+.add_car{
+    font-size: 18px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin-top: 80px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}

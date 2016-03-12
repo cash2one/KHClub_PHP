@@ -2,6 +2,7 @@
 
 define("HTTP_HOST", "http://a.pinweihuanqiu.com"); //a.pinweihuanqiu.com
 define("HTTP_URL_PREFIX","http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/WX/");
+define("HTTP_SHOP_URL_PREFIX","http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/Shop/");
 
 //审核状态 0是取消审核 1是正在审核 2是通过审核 3是未通过审核
 define("CAR_CHECK_CANCEL", "0");
@@ -132,7 +133,7 @@ function getShopUser()
     $openID = $_SESSION['open_id'];
 
     $model = M();
-    $sql = 'SELECT server_id FROM biz_shop_register WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
+    $sql = 'SELECT id, server_id, shop_name FROM biz_shop WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
     $user = $model->query($sql)[0];
     return $user;
 }

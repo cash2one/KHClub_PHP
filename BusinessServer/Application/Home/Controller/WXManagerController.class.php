@@ -12,6 +12,10 @@ use Think\Exception;
 Vendor('jssdk');
 
 class WXManagerController extends Controller{
+
+    private $WX_APPID = 'wx5764fdc7f223e062';
+    private $WX_APPSecret = 'ef6373955987b110fef9c0108ae15a02';
+
     /**
      * @brief 车辆审核状态
      * 接口地址

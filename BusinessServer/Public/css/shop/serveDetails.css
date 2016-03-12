@@ -1,0 +1,139 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.ticket{
+    width: 95%;
+    height: 150px;
+    color: #000000;
+    border-radius: 5px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    position: relative;
+}
+.ticket_image{
+    width: 60px;
+    border-radius: 100%;
+    margin: 45px auto auto 10px;
+}
+.store_name{
+    color: #000000;
+    font-size: 16px;
+    line-height: 150px;
+    overflow: hidden;
+}
+.coupon{
+    width: 28px;
+    margin-top: 64px;
+    margin-left: 5px;
+}
+.box{
+    background-color: #ffffff;
+}
+.genre_box{
+    height: 45px;
+    width: 100%;
+}
+.ticket_left{
+    float: left;
+    width: 80px;
+}
+.ticket_center{
+    float: left;
+    width: 33.33%;
+}
+.ticket_coupon{
+    float: left;
+    width: 30px;
+}
+.ticket_right{
+    float: right;
+    width: 23.33%;
+}
+.number{
+    font-size: 30px;
+}
+.discount{
+    color: #e52828;
+    font-size: 16px;
+    text-align: right;
+    line-height: 150px;
+    margin-right: 10px;
+}
+.state_image{
+    width: 60px;
+    margin-top: 30px;
+    margin-left: 30%;
+    border-radius: 100%;
+}
+.genre{
+    width: 45%;
+    float: left;
+    color: #646464;
+    font-size: 16px;
+    line-height: 45px;
+    padding-left: 10px;
+}
+.values{
+    float: right;
+    font-size: 16px;
+    line-height: 45px;
+    text-align: right;
+    padding-right: 10px;
+}
+.payment_hint{
+    font-size: 16px;
+    text-align: center;
+    margin: 40px auto 20px auto;
+}
+.barcode_box{
+    width: 200px;
+    margin: 60px auto;
+}
+.barcode {
+    width: 200px;
+}
+.wire2{
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 100%;
+    border: 1px dashed #e3e3e3;
+}
+.examine_image{
+    width: 40px;
+    position: absolute;
+    z-index: 9999;
+    top: 0px;
+    right: 0px;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.add_car{
+    font-size: 18px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}

@@ -695,8 +695,8 @@ class WXController extends Controller {
 
         $orderModel = M('biz_order');
         $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
-                     'open_id'=>$openId, 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],
-                     'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time(), 'type'=>1);
+                          'open_id'=>$openId, 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],
+                          'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time(), 'type'=>1, 'server_id'=>$shop['server_id']);
         $ret = $orderModel->add($newOrder);
         if(!$ret){
             echo '订单生成失败';
@@ -771,7 +771,7 @@ class WXController extends Controller {
         $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
-                AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date';
+                AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
         //wxJs签名
         $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);

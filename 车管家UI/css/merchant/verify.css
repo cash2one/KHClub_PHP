@@ -1,0 +1,49 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.hint{
+    margin: 10px 10px;
+    font-size: 16px;
+    color: #949494;
+}
+.add_car{
+    font-size: 18px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin-top: 40px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}
+.list_box{
+    margin-top: 60px;
+    height: 60px;
+}
+.genre{
+    float: left;
+    font-size: 18px;
+    line-height: 60px;
+    margin-left: 30px;
+}
+.input-class {
+    width: 60%;
+    margin-top: 15px;
+    margin-left: 15px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
+}

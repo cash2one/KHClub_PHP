@@ -1,0 +1,47 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.ticket{
+    width: 95%;
+    height: 150px;
+    color: #000000;
+    border-radius: 5px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    position: relative;
+}
+.name{
+    float: left;
+    width: 30%;
+    height: 150px;
+    font-size: 20px;
+    line-height: 150px;
+    padding-left: 10%;
+}
+.users{
+    float: right;
+    width: 60%;
+    height: 150px;
+}
+.carBrand{
+    height: 75px;
+    font-size: 20px;
+    line-height: 75px;
+    padding-left: 30px;
+    padding-top: 10px;
+}
+.tel{
+    height: 65px;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-left: 30px;
+}
