@@ -15,17 +15,21 @@ body{
     font-size: 16px;
     color: #949494;
 }
+.box{
+    width: 90%;
+    margin: 30px auto;
+    border-radius: 5px;
+}
 .add_car{
     font-size: 18px;
     float: left;
     clear: both;
     font-size: 18px;
-    line-height: 45px;
+    line-height: 40px;
     text-align: center;
     color: #ffffff;
-    height: 45px;
+    height: 40px;
     width: 100%;
-    margin-top: 40px;
     background-color: #0f0f0f;
     border-color: transparent;
 }
@@ -46,4 +50,21 @@ body{
     padding-left: 5px;
     margin-bottom: 5px;
     font-size: 18px;
+}
+.viewTrade{
+    font-size: 18px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #0f0f0f;
+    border-color: transparent;
 }

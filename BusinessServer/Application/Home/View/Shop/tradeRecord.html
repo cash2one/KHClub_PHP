@@ -9,34 +9,19 @@
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 <body>
-<a href="searchOrderDetails.html"><div class="ticket clear">
-    <div class="name">张三张三</div>
-    <div class="users">
-        <div class="carBrand">粤B12345</div>
-        <div class="tel">15672989738</div>
-    </div>
-</div></a>
-<a href="searchOrderDetails.html"><div class="ticket clear">
-    <div class="name">张三张三</div>
-    <div class="users">
-        <div class="carBrand">粤B12345</div>
-        <div class="tel">15672989738</div>
-    </div>
-</div></a>
-<a href="searchOrderDetails.html"><div class="ticket clear">
-    <div class="name">张三张三</div>
-    <div class="users">
-        <div class="carBrand">粤B12345</div>
-        <div class="tel">15672989738</div>
-    </div>
-</div></a>
-<a href="searchOrderDetails.html"><div class="ticket clear">
-    <div class="name">张三张三</div>
-    <div class="users">
-        <div class="carBrand">粤B12345</div>
-        <div class="tel">15672989738</div>
-    </div>
-</div></a>
-<div style="height: 50px"></div>
+
+    <volist name="userInfo" id="v">
+        <a href="serveDetails?order_id={$v.id}">
+            <div class="ticket clear">
+            <div class="name">{$v.name}</div>
+            <div class="users">
+                <div class="carBrand">{$v.plate_number}</div>
+                <div class="tel">{$v.mobile}</div>
+            </div>
+            </div>
+        </a>
+    </volist>
+    <div style="height: 50px"></div>
+
 </body>
 </html>
