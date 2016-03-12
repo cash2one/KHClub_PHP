@@ -245,5 +245,54 @@ class ShopController extends Controller {
        }
     }
 
+    /**
+     * @brief 查找商家已经服务过的用户
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXManager/shopServeRecord?goods_id=1
+     * @param shop_id 商家ID
+     */
+    public function shopServeRecord(){
+        try{
+            $shop_id = $_REQUEST['shop_id'];
+            if(empty($shop_id)){
+                returnJson(0,'商家ID不能为空！');
+                return;
+            }
+            $shopModel = M();
+            $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.mobile FROM biz_order od, biz_car ca
+                    WHERE od.shop_id='.$shop_id.' and od.state=2 AND od.car_id=ca.id';
+            $userInfo = $shopModel->query($sql);
+            $this->assign('userInfo',$userInfo);
+            $this->display('tradeRecord');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 服务详情
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXManager/ServeDetails?order_id=1
+     * @param order_id 订单ID
+     */
+    public function ServeDetails(){
+        try{
+            $order_id = $_REQUEST['order_id'];
+            if(empty($order_id)){
+                returnJson(0,'订单ID不能为空！');
+                return;
+            }
+            $orderModel = M();
+            $sql = 'SELECT od.state, od.nonce_str, ca.name, ca.mobile, ca.car_type, ca.plate_number,
+                    go.goods_name , go.discount_price, sh.shop_name
+                    FROM biz_order od, biz_car ca, biz_shop_goods go, biz_shop sh
+                    WHERE od.id='.$order_id.' AND od.car_id=ca.id AND od.shop_id=sh.id ';
+            $orderInfo = $orderModel->query($sql);
+            $this->assign('orderInfo',$orderInfo);
+            $this->display('serveDetails');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
 }
 
