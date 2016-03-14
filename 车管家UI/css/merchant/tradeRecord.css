@@ -10,38 +10,52 @@ body{
     overflow: hidden;
     clear: both;
 }
-.ticket{
-    width: 95%;
-    height: 150px;
-    color: #000000;
-    border-radius: 5px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    position: relative;
+.details_box{
+    margin-top: 20px;
 }
-.name{
+.spot{
     float: left;
-    width: 30%;
-    height: 150px;
-    font-size: 20px;
-    line-height: 150px;
-    padding-left: 10%;
+    width: 9px;
+    height: 9px;
+    margin-top: 55px;
+    margin-left: 25px;
+    border-radius: 100%;
+    background-color: #000000;
 }
-.users{
+.ticket{
     float: right;
-    width: 60%;
-    height: 150px;
+    width: 75%;
+    color: #000000;
+    height: 120px;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: #f1f1f1;
 }
-.carBrand{
-    height: 75px;
-    font-size: 20px;
-    line-height: 75px;
-    padding-left: 30px;
-    padding-top: 10px;
+.genre_box{
+    height: 40px;
+    width: 100%;
 }
-.tel{
-    height: 65px;
-    font-size: 20px;
-    padding-top: 10px;
-    padding-left: 30px;
+.genre{
+    width: 45%;
+    float: left;
+    color: #646464;
+    font-size: 16px;
+    line-height: 40px;
+    padding-left: 10px;
+}
+.values{
+    float: right;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: right;
+    padding-right: 10px;
+}
+.vertical_bar{
+    position: fixed;
+    top:0px;
+    left: 29px;
+    z-index: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #000000;
 }
