@@ -222,6 +222,7 @@ body{
 }
 .ticket_image{
     width: 60px;
+    height: 60px;
     border-radius: 100%;
     margin: 45px auto auto 10px;
 }
