@@ -25,11 +25,12 @@ body{
 }
 .merchant_logo{
     float: left;
-    width: 100px;
-    height: 80px;
-    border-radius: 1px;
-    margin-top: 20px;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    margin-top: 15px;
     margin-left: 10px;
+    background-position:center;
 }
 .content_box{
     color: #000000;
