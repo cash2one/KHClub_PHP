@@ -97,38 +97,21 @@ body{
     height: 40px;
     background-color: #ffffff;
 }
-.head_box{
-    width: 90%;
-    height: 240px;
-    border-radius: 15px;
-    margin: 15px auto auto auto;
-    background-color: #0f0f0f;
-}
 .logo{
-    width: 120px;
-    display: block;
-    margin: 20px auto auto auto;
-}
-.name{
-    font-size: 16px;
-    color: #ffffff;
-    margin: 20px auto 15px auto;
-    text-align: center;
-}
-.num{
-    font-size: 16px;
-    color: #ffffff;
-    text-align: center;
+    width: 100%;
+    height: 240px;
+    background-size: 100%;
+    background-image: url("../../images/icon/logo.png");
+    background-position: center;
 }
 .myCard{
     color: #000000;
 }
 .car{
-    margin-top: 10px;
-    height: 40px;
+    height: 50px;
     font-size: 18px;
-    line-height: 40px;
-    padding-left: 5%;
+    line-height: 50px;
+    padding-left: 10px;
     background-color: #ffffff;
 }
 .cars{
@@ -320,7 +303,7 @@ body{
 .images{
     float: right;
     width: 14px;
-    margin-top: 8px;
+    margin-top: 13px;
     margin-right: 20px;
 }
 .select_images{
