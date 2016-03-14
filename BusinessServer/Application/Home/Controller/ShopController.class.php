@@ -247,17 +247,22 @@ class ShopController extends Controller {
     }
 
     /**
-     * @brief 查找商家已经服务过的用户
+     * @brief 查找商家已经服务过的订单
      * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/WXManager/shopServeRecord?goods_id=1
+     * http://localhost/BusinessServer/index.php/Home/WXManager/shopServeRecord
      */
     public function shopServeRecord(){
         try{
             $shop = getShopUser();
             $shopModel = M();
-            $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.mobile FROM biz_order od, biz_car ca
+            $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.mobile, od.use_date FROM biz_order od, biz_car ca
                     WHERE od.verify_shop_id='.$shop['id'].' and od.state='.ORDER_HAS_USE.' AND od.car_id=ca.id ORDER BY od.use_date DESC';
             $userInfo = $shopModel->query($sql);
+
+            for($i=0; $i<count($userInfo); $i++){
+                $userInfo[$i]['use_date'] = date('Y-m-d', $userInfo[$i]['use_date']);
+            }
+
             $this->assign('userInfo',$userInfo);
             $this->display('tradeRecord');
         }catch (Exception $e){

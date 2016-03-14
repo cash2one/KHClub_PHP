@@ -11,15 +11,23 @@
 <body>
 
     <volist name="userInfo" id="v">
-        <a href="serveDetails?order_id={$v.id}">
-            <div class="ticket clear">
-            <div class="name">{$v.name}</div>
-            <div class="users">
-                <div class="carBrand">{$v.plate_number}</div>
-                <div class="tel">{$v.mobile}</div>
-            </div>
-            </div>
-        </a>
+        <div class="details_box clear">
+            <div class="spot"></div>
+            <a href="serveDetails?order_id={$v.id}"><div class="ticket">
+                <div class="genre_box">
+                    <div class="genre">姓名</div>
+                    <div class="values">{$v.name}</div>
+                </div>
+                <div class="genre_box">
+                    <div class="genre">车牌号</div>
+                    <div class="values">{$v.plate_number}</div>
+                </div>
+                <div class="genre_box">
+                    <div class="genre">日期</div>
+                    <div class="values">{$v.use_date}</div>
+                </div>
+            </div></a>
+        </div>
     </volist>
     <div style="height: 50px"></div>
 
