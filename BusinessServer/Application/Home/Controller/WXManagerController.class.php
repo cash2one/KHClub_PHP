@@ -13,9 +13,6 @@ Vendor('jssdk');
 
 class WXManagerController extends Controller{
 
-    private $WX_APPID = 'wx5764fdc7f223e062';
-    private $WX_APPSecret = 'ef6373955987b110fef9c0108ae15a02';
-
     /**
      * @brief 车辆审核状态
      * 接口地址
@@ -36,7 +33,7 @@ class WXManagerController extends Controller{
 
             //审核通过推送通知
             if($car['state'] == CAR_CHECK_OK){
-                $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+                $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
                 $ACC_TOKEN = $jssdk->getAccessToken();
 
                 $sql = 'SELECT ui.wx_open_id FROM biz_user_info ui, biz_car c WHERE c.user_id=ui.user_id AND c.id='.$id;

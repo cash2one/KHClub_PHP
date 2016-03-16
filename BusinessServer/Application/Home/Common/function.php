@@ -1,8 +1,13 @@
 <?php
+//wx5764fdc7f223e062 ef6373955987b110fef9c0108ae15a02 正式
+//wxd5db3b57ffdfafb3 2ccd9fe700dda9b0e9db40212dba1f4b 测试用
+define("WX_APPID", "wxd5db3b57ffdfafb3"); //a.pinweihuanqiu.com
+define("WX_APPSecret","2ccd9fe700dda9b0e9db40212dba1f4b");
 
 define("HTTP_HOST", "http://a.pinweihuanqiu.com"); //a.pinweihuanqiu.com
-define("HTTP_URL_PREFIX","http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/WX/");
-define("HTTP_SHOP_URL_PREFIX","http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/Shop/");
+define("HTTP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/WX/");
+define("HTTP_SHOP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/Shop/");
+define("HTTP_PROXY_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/Proxy/");
 
 //审核状态 0是取消审核 1是正在审核 2是通过审核 3是未通过审核
 define("CAR_CHECK_CANCEL", "0");
@@ -119,6 +124,9 @@ function getWXUser()
 {
     //先授权获取openID
     $openID = $_SESSION['open_id'];
+    if(empty($openID)){
+        return null;
+    }
 
     $model = M();
     $sql = 'SELECT user_id FROM biz_user_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
@@ -126,14 +134,83 @@ function getWXUser()
     return $user;
 }
 
-//获取微信用户
+//获取商家用户
 function getShopUser()
 {
     //先授权获取openID
     $openID = $_SESSION['open_id'];
-
+    if(empty($openID)){
+        return null;
+    }
     $model = M();
     $sql = 'SELECT id, server_id, shop_name FROM biz_shop WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
     $user = $model->query($sql)[0];
     return $user;
+}
+
+//获取代理用户
+function getProxyUser()
+{
+    //先授权获取openID
+    $openID = $_SESSION['open_id'];
+    if(empty($openID)){
+        return null;
+    }
+    $model = M();
+    $sql = 'SELECT * FROM biz_proxy_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
+    $user = $model->query($sql)[0];
+    return $user;
+}
+
+
+/**
+ * @brief 申请带参数的微信二维码
+ * 接口地址
+ * http://localhost/BusinessServer/index.php/Home/WXProxy/applyQrcode
+ */
+function applyQrcode(){
+
+    $user = getProxyUser();
+
+    //审核通过推送通知
+    $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+    $ACC_TOKEN = $jssdk->getAccessToken();
+
+    $data = '{
+                "action_name":"QR_LIMIT_STR_SCENE",
+                "action_info":
+                {"scene": {"scene_id": '.$user['user_id'].'}}
+             }';
+
+    $url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".$ACC_TOKEN;
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($curl);
+    curl_close($curl);
+    $qrcodeRet = json_decode($result, true);
+    print_r($qrcodeRet);
+    if(!empty($qrcodeRet['errcode'])){
+        echo '二维码获取失败';
+        exit;
+    }
+    $package = file_get_contents("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$qrcodeRet['ticket']);
+
+    $filename = './ProxyQrcode/'.$user['user_id'].'.png';
+    $local_file = fopen($filename, 'w');
+    if(false !== $local_file){
+        if(false !== fwrite($local_file, $package)){
+            fclose($local_file);
+            //代理用户表
+            $model = M('biz_proxy_info');
+            $user['share_qrcode'] = $filename;
+            $user['update_date'] = time();
+            $model->save($user);
+        }
+    }
 }

@@ -11,9 +11,6 @@ Vendor('wxpay.notify');
 
 
 class WXController extends Controller {
-    //wxd5db3b57ffdfafb3 2ccd9fe700dda9b0e9db40212dba1f4b 测试用
-    private $WX_APPID = 'wx5764fdc7f223e062';
-    private $WX_APPSecret = 'ef6373955987b110fef9c0108ae15a02';
 
     public function index(){
 
@@ -42,7 +39,7 @@ class WXController extends Controller {
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
-                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
                 $openID = json_decode($content)->openid;
                 if(empty($openID)){
                     echo '不好意思，您微信未授权openID';
@@ -51,7 +48,7 @@ class WXController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->WX_APPID."&redirect_uri=".HTTP_URL_PREFIX."userVerify&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_URL_PREFIX."userVerify&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -67,7 +64,7 @@ class WXController extends Controller {
         }
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -88,7 +85,7 @@ class WXController extends Controller {
         $user = $userModel->field('id')->where('username='.$username)->find();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -127,7 +124,7 @@ class WXController extends Controller {
         $user = $userModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -231,7 +228,7 @@ class WXController extends Controller {
                 return;
             }
 
-            $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+            $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
             $openID = json_decode($content)->openid;
             if(empty($openID)){
                 echo '不好意思，您微信未授权openID';
@@ -241,7 +238,7 @@ class WXController extends Controller {
             $_SESSION['open_id'] = $openID;
         }else{
             $url = HTTP_URL_PREFIX."userRegister?username=".$username."&verify=".$verify."&password=".$_REQUEST['password'];
-            header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->WX_APPID."&redirect_uri=".urlencode($url)."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+            header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".urlencode($url)."&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
             exit;
         }
 
@@ -273,7 +270,7 @@ class WXController extends Controller {
             $retID = $userModel->add($user);
 
             //wxJs签名
-            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+            $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
             $signPackage = $jssdk->GetSignPackage();
             $this->assign('signPackage',$signPackage);
 
@@ -310,7 +307,7 @@ class WXController extends Controller {
         }
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('mobile', $user['mobile']);
@@ -340,7 +337,7 @@ class WXController extends Controller {
             $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
         }
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('list',$list);
@@ -364,7 +361,7 @@ class WXController extends Controller {
             exit;
         }
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->display('steward');
@@ -385,7 +382,7 @@ class WXController extends Controller {
             exit;
         }
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->display('privilege');
@@ -415,7 +412,7 @@ class WXController extends Controller {
         }
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -469,7 +466,7 @@ class WXController extends Controller {
         $_SESSION['car_type_code'] = '';
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         if($ret){
@@ -499,7 +496,7 @@ class WXController extends Controller {
         $list = $carModel->where('delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('isAdd',$_REQUEST['isAdd']);
@@ -522,7 +519,7 @@ class WXController extends Controller {
         $car = $carModel->where('delete_flag=0 AND id="'.$car_id.'"')->find();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('car',$car);
@@ -547,7 +544,7 @@ class WXController extends Controller {
         $carsList = json_decode($cars, true);
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -569,7 +566,7 @@ class WXController extends Controller {
         $type = $_REQUEST["type"];
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -635,7 +632,7 @@ class WXController extends Controller {
         $list = $carModel->where('state='.CAR_CHECK_OK.' AND delete_flag=0 AND user_id="'.$user['user_id'].'"')->select();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('list',$list);
@@ -704,7 +701,7 @@ class WXController extends Controller {
         }
         $newOrder['OFF'] = number_format(10*$newOrder['total_fee']/$newOrder['original_price'], 1);
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('shop',$shop);
@@ -737,7 +734,7 @@ class WXController extends Controller {
                 AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('list',$list);
@@ -774,7 +771,7 @@ class WXController extends Controller {
                 AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('list',$list);
@@ -814,7 +811,7 @@ class WXController extends Controller {
         $order['OFF'] = number_format(10*$order['total_fee']/$order['original_price'], 1);
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -855,7 +852,7 @@ class WXController extends Controller {
         }
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -887,7 +884,7 @@ class WXController extends Controller {
         $record = $model->query($sql)[0];
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 

@@ -6,9 +6,6 @@ Vendor('jssdk');
 
 class ShopController extends Controller {
 
-    private $WX_APPID = 'wx5764fdc7f223e062';
-    private $WX_APPSecret = 'ef6373955987b110fef9c0108ae15a02';
-
     public function index(){
 
     }
@@ -24,7 +21,7 @@ class ShopController extends Controller {
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
-                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
                 $openID = json_decode($content)->openid;
                 if(empty($openID)){
                     echo '不好意思，您微信未授权openID';
@@ -33,7 +30,7 @@ class ShopController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->WX_APPID."&redirect_uri=".HTTP_SHOP_URL_PREFIX."shopEnter&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_SHOP_URL_PREFIX."shopEnter&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -47,7 +44,7 @@ class ShopController extends Controller {
         }
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -68,7 +65,7 @@ class ShopController extends Controller {
         $user = $userModel->field('id')->where('username='.$username)->find();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -103,7 +100,7 @@ class ShopController extends Controller {
         $shop = $shopModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -132,7 +129,7 @@ class ShopController extends Controller {
     public function shopHome(){
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -152,7 +149,7 @@ class ShopController extends Controller {
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
-                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
                 $openID = json_decode($content)->openid;
                 if(empty($openID)){
                     echo '不好意思，您微信未授权openID';
@@ -161,7 +158,7 @@ class ShopController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->WX_APPID."&redirect_uri=".HTTP_SHOP_URL_PREFIX."shopEnter&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_SHOP_URL_PREFIX."shopEnter&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -182,7 +179,7 @@ class ShopController extends Controller {
         $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
 
         //wxJs签名
-        $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
@@ -207,7 +204,7 @@ class ShopController extends Controller {
         if(empty($openID)){
             $code = $_REQUEST['code'];
             if(!empty($code)){
-                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$this->WX_APPID."&secret=".$this->WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
                 $openID = json_decode($content)->openid;
                 if(empty($openID)){
                     echo '不好意思，您微信未授权openID';
@@ -216,7 +213,7 @@ class ShopController extends Controller {
                 //openID存入
                 $_SESSION['open_id'] = $openID;
             }else{
-                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->WX_APPID."&redirect_uri=".HTTP_SHOP_URL_PREFIX."shopEnter&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_SHOP_URL_PREFIX."shopEnter&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
                 exit;
             }
         }
@@ -295,7 +292,7 @@ class ShopController extends Controller {
             $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
 
             //wxJs签名
-            $jssdk = new \JSSDK($this->WX_APPID, $this->WX_APPSecret);
+            $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
             $signPackage = $jssdk->GetSignPackage();
             $this->assign('signPackage',$signPackage);
 
