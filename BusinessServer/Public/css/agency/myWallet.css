@@ -22,23 +22,30 @@ body{
 .genre_box{
     height: 60px;
     width: 100%;
-    color: #000000;
 }
 .genre{
-    width: 45%;
+
     float: left;
+    width: 22%;
     color: #646464;
-    font-size: 16px;
+    font-size: 15px;
     padding-left: 10px;
     padding-top: 10px;
 }
 .num{
-    font-size: 34px;
+    font-size: 28px;
     color: red;
+}
+.source{
+    float: left;
+    width: 47%;
+    font-size: 15px;
+    line-height: 60px;
+    text-align: center;
 }
 .values{
     float: right;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 60px;
     text-align: right;
     padding-right: 10px;

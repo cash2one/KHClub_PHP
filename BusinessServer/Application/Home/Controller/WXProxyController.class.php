@@ -212,12 +212,18 @@ class WXProxyController extends Controller {
         $tradeList = $model->query($sql);
 
         for($i=0; $i<count($tradeList); $i++){
+            if(strlen($tradeList[$i]['name']) > 0){
+                $tradeList[$i]['content'] = $tradeList[$i]['name'].'推荐了新用户';
+            }else{
+                $tradeList[$i]['content'] = '你推荐了新用户';
+            }
+
             $tradeList[$i]['add_date'] = date('Y-m-d', $tradeList[$i]['add_date']);
         }
 
         if(count($tradeList) > 0){
 
-            $total = $model->field('SUM(amount) total')->where('user_id='.$user['user_id'].' AND state=0')->find();
+            $total = $model->field('SUM(amount) total')->where('user_id='.$user['user_id'].' AND state=1')->find();
             $this->assign('total', $total['total']);
             $this->assign('tradeList', $tradeList);
             $this->display('myWallet');
@@ -234,19 +240,9 @@ class WXProxyController extends Controller {
     }
 
     /**
-     * @brief 申请带参数的微信二维码
-     * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/WXProxy/applyQrcode
-     */
-    public function applyQrcode(){
-
-        applyQrcode();
-    }
-
-    /**
      * @brief 交易提现
      * 接口地址
-     * http://localhost/khclub_php/index.php/Home/WXProxy/tradeWithdraw
+     * http://localhost/BusinessServer/index.php/Home/WXProxy/tradeWithdraw
      */
     public function tradeWithdraw(){
 
@@ -259,6 +255,82 @@ class WXProxyController extends Controller {
         }else{
             returnJson(0,'申请失败');
         }
+    }
+
+    /**
+     * @brief 交易提现
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXProxy/shareQrcode
+     */
+    public function shareQrcode(){
+
+        $user_id = $_REQUEST['user_id'];
+        if(empty($user_id)){
+            echo '分享异常';
+            exit;
+        }
+        $model = M();
+        $sql = 'SELECT * FROM biz_proxy_info WHERE delete_flag=0 AND user_id="'.$user_id.'"';
+        $user = $model->query($sql)[0];
+        $user['share_qrcode'] = __ROOT__.substr($user['share_qrcode'], 1);
+
+        //wxJs签名
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('user', $user);
+        $this->display('qrcode');
+    }
+
+    /**
+     * @brief 申请带参数的微信二维码 测试用
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXProxy/applyQrcode
+     */
+    public function applyQrcode(){
+//        $user = getProxyUser();
+//        $user['user_id']=1;
+//
+//        //审核通过推送通知
+//        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+//        $ACC_TOKEN = $jssdk->getAccessToken();
+//
+//        $data = '{
+//                    "action_name":"QR_LIMIT_SCENE",
+//                    "action_info":
+//                    {"scene": {"scene_id": '.$user['user_id'].'}}
+//                }';
+//
+//        $url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".$ACC_TOKEN;
+//
+//        $curl = curl_init();
+//        curl_setopt($curl, CURLOPT_URL, $url);
+//        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+//        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+//        curl_setopt($curl, CURLOPT_POST, 1);
+//        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+//        $result = curl_exec($curl);
+//        curl_close($curl);
+//        $qrcodeRet = json_decode($result, true);
+//        if(!empty($qrcodeRet['errcode'])){
+//            echo '二维码获取失败';
+//            exit;
+//        }
+//        $package = file_get_contents("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$qrcodeRet['ticket']);
+//
+//        $filename = './ProxyQrcode/'.$user['user_id'].'.png';
+//        $local_file = fopen($filename, 'w');
+//        if(false !== $local_file){
+//            if(false !== fwrite($local_file, $package)){
+//                fclose($local_file);
+//                //代理用户表
+//                $model = M('biz_proxy_info');
+//                $user['share_qrcode'] = $filename;
+//                $user['update_date'] = time();
+//                $model->save($user);
+//            }
+//        }
     }
 
 }
