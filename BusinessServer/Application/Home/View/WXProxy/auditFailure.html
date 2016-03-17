@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
-    <title>特权</title>
-    <link rel="stylesheet" href="__PUBLIC__/css/wx/carSteward.css">
+    <title>审核失败</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/agency/auditFailure.css">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
-<body style="background-color: #ebebeb">
-
-<div class="box">
-    <a href="getShops">
-        <div class="privlege_box clear">
-            <img class="merchant_logo" src="__PUBLIC__/icon/carWash.png" alt="">
-            <div class="privlege">会员洗车</div>
-        </div>
-    </a>
-    <div class="wire"></div>
+<body>
+<div class="list_box clear">
+    <div class="genre">姓名</div>
+    <div class="worth">{$user.name}</div>
 </div>
-
-<div class="menu_box clear">
-    <a class="menu" style="background-color: #e9e9e9">特权</a>
-    <a href="recordHome" class="menu">记录</a>
-    <a href="userHome" class="menu">会员</a>
-    <a href="stewardHome" class="menu">管家</a>
+<div class="wire"></div>
+<div class="list_box clear">
+    <div class="genre">电话</div>
+    <div class="worth">{$user.mobile}</div>
 </div>
-<div class="wire2"></div>
-<div class="wire2_left"></div>
-<div class="wire2_center"></div>
-<div class="wire2_right"></div>
+<div class="wire"></div>
+<div class="list_box clear">
+    <div class="genre">公司</div>
+    <div class="worth">{$user.company}</div>
+</div>
+<div class="wire"></div>
+<div class="list_box clear">
+    <div class="genre">职位</div>
+    <div class="worth">{$user.position}</div>
+</div>
+<div class="wire"></div>
+<div class="audit">审核失败</div>
+<a href="applyProxyPage" class="add_car">重新提交</a>
+</body>
 
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="__PUBLIC__/js/wx/wxOperate.js"></script>
@@ -45,5 +47,5 @@
     });
     operate.initCloseShare();
 </script>
-</body>
+
 </html>

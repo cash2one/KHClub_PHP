@@ -1,0 +1,74 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.list_box{
+    height: 60px;
+}
+.genre{
+    float: left;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 60px;
+    margin-left: 10px;
+}
+.input-class {
+    width: 65%;
+    padding-left: 25px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    height: 55px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
+.add_car{
+    font-size: 16px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}
+#toast
+{
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 1px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
+
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>暂无代理</title>
+    <link rel="stylesheet" href="../css/agency/notAgency.css">
+    <script src="../js/jquery-1.8.1.min.js"></script>
+    <script type="application/javascript">
+        jQuery(function($){
+            var shade=document.getElementById("shade");
+            var share=document.getElementById("share");
+            var agency=document.getElementById("agency");
+            agency.onclick=function()
+            {
+                shade.style.display="block";
+                share.style.display="block";
+            }
+            shade.onclick=function()
+            {
+                shade.style.display="none";
+                share.style.display="none";
+            }
+            share.onclick=function()
+            {
+                shade.style.display="none";
+                share.style.display="none";
+            }
+        })
+    </script>
+</head>
+<body>
+<div class="shade" id="shade"></div>
+<div class="share" id="share" style="background: url('../images/fx.png') no-repeat top right">点击右上角菜单分享</div>
+<div class="not">暂无代理</div>
+<a id="agency" class="recommendAgency">推荐代理</a>
+</body>
+</html>

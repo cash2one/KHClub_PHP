@@ -38,7 +38,7 @@ class WXProxyController extends Controller {
         $user = getProxyUser();
 
         //如果系统中存在这个人 跳转到主页
-        if($user['state'] != 1){
+        if($user['state'] == 1){
             header("Location: ".HTTP_PROXY_URL_PREFIX."proxyHome");
             exit;
         }
@@ -48,7 +48,32 @@ class WXProxyController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('user', $user);
-        $this->display('becomeProxy');
+
+        if(empty($user)){
+            $this->display('addAgency');
+            exit;
+        }
+
+        if($user['state'] == 0){
+            $this->display('agencyDetails');
+        }else if($user['state'] == 2){
+            $this->display('auditFailure');
+        }
+    }
+
+    /**
+     * @brief 申请代理入口
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXProxy/applyProxyPage
+     */
+    public function applyProxyPage(){
+
+        //wxJs签名
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+
+        $this->display('addAgency');
     }
 
     /**
@@ -65,6 +90,10 @@ class WXProxyController extends Controller {
         //重新提交
         if($user['state'] == 2){
 
+            $user['name'] = $_REQUEST['name'];
+            $user['mobile'] = $_REQUEST['mobile'];
+            $user['company'] = $_REQUEST['company'];
+            $user['position'] =  $_REQUEST['position'];
             $user['state'] = 0;
             $user['update_date'] = time();
             $model = M('biz_proxy_info');
@@ -92,7 +121,16 @@ class WXProxyController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('user', $user);
-        $this->display('becomeProxy');
+        $this->display('agencyDetails');
+    }
+
+    /**
+     * @brief 推荐说明
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXProxy/recommendExplain
+     */
+    public function recommendExplain(){
+        $this->display('recommendExplain');
     }
 
     /**
@@ -109,7 +147,7 @@ class WXProxyController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('user', $user);
-        $this->display('');
+        $this->display('agencyHome');
     }
 
     /**
@@ -117,7 +155,7 @@ class WXProxyController extends Controller {
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WXProxy/proxyCheckPage
      */
-    public function proxyCheckPage(){
+    public function proxyCheckSuccess(){
 
         $user = getProxyUser();
 
@@ -126,7 +164,7 @@ class WXProxyController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('user', $user);
-        $this->display('');
+        $this->display('auditPass');
     }
 
     /**
@@ -146,8 +184,17 @@ class WXProxyController extends Controller {
             $proxyList[$i]['add_date'] = date('Y-m-d', $proxyList[$i]['add_date']);
         }
 
-        $this->assign('proxyList', $proxyList);
-        $this->display('');
+        if(count($proxyList) > 0){
+            $this->assign('proxyList', $proxyList);
+            $this->display('myAgency');
+        }else{
+            //wxJs签名
+            $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+            $signPackage = $jssdk->GetSignPackage();
+            $this->assign('signPackage',$signPackage);
+            $this->assign('user', $user);
+            $this->display('notAgency');
+        }
     }
 
     /**
@@ -160,16 +207,30 @@ class WXProxyController extends Controller {
         $user = getProxyUser();
 
         $model = M('biz_proxy_trade');
-        $sql = 'SELECT * FROM biz_proxy_trade pt, biz_proxy_info p
-                WHERE pt.user_id='.$user['user_id'].' AND pt.lower_proxy_id=p.user_id ORDER BY pt.add_date DESC';
+        $sql = 'SELECT * FROM biz_proxy_trade pt LEFT JOIN biz_proxy_info p ON(pt.lower_proxy_id=p.user_id)
+                WHERE pt.user_id='.$user['user_id'].' ORDER BY pt.add_date DESC';
         $tradeList = $model->query($sql);
 
         for($i=0; $i<count($tradeList); $i++){
-            $tradeList[$i]['add_date'] = date('Y-m-d H:i:s', $tradeList[$i]['add_date']);
+            $tradeList[$i]['add_date'] = date('Y-m-d', $tradeList[$i]['add_date']);
         }
 
-        $this->assign('tradeList', $tradeList);
-        $this->display('');
+        if(count($tradeList) > 0){
+
+            $total = $model->field('SUM(amount) total')->where('user_id='.$user['user_id'].' AND state=0')->find();
+            $this->assign('total', $total['total']);
+            $this->assign('tradeList', $tradeList);
+            $this->display('myWallet');
+        }else{
+
+            //wxJs签名
+            $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+            $signPackage = $jssdk->GetSignPackage();
+            $this->assign('signPackage',$signPackage);
+            $this->assign('user', $user);
+            $this->display('notEarnings');
+        }
+
     }
 
     /**

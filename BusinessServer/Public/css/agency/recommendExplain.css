@@ -1,0 +1,39 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.numerical{
+    float: left;
+    width: 24px;
+    height: 24px;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+    line-height: 26px;
+    margin-top: 20px;
+    margin-left: 10px;
+    background-color: #0f0f0f;
+    border-radius: 100%;
+}
+.privlege_type{
+    color: #000000;
+    font-size: 18px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 50px;
+    margin-right: 10px;
+}

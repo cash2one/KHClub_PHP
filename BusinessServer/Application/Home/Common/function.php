@@ -4,10 +4,10 @@
 define("WX_APPID", "wxd5db3b57ffdfafb3"); //a.pinweihuanqiu.com
 define("WX_APPSecret","2ccd9fe700dda9b0e9db40212dba1f4b");
 
-define("HTTP_HOST", "http://a.pinweihuanqiu.com"); //a.pinweihuanqiu.com
+define("HTTP_HOST", "http://114.215.95.23"); //a.pinweihuanqiu.com
 define("HTTP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/WX/");
 define("HTTP_SHOP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/Shop/");
-define("HTTP_PROXY_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/Proxy/");
+define("HTTP_PROXY_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/WXProxy/");
 
 //审核状态 0是取消审核 1是正在审核 2是通过审核 3是未通过审核
 define("CAR_CHECK_CANCEL", "0");

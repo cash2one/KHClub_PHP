@@ -1,0 +1,62 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.list_box{
+    height: 60px;
+}
+.genre{
+    float: left;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 60px;
+    margin-left: 10px;
+}
+.worth{
+    float: right;
+    font-size: 17px;
+    color: #000000;
+    line-height: 60px;
+    margin-right: 10px;
+}
+.audit{
+    width: 100%;
+    height: 30px;
+    color: red;
+    font-size: 20px;
+    text-align: center;
+    line-height: 40px;
+    padding-top: 5px;
+    margin: 30px auto 30px auto;
+}
+.state_info{
+    padding-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #cecece;
+    line-height: 20px;
+    margin: 0 10px 0 10px;
+}
+.hint_box{
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.hint{
+    margin-left: 10px;
+    font-size: 14px;
+    color: #646464;
+}
