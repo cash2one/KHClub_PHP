@@ -26,27 +26,26 @@ body{
 .genre{
 
     float: left;
-    width: 25%;
+    width: 22%;
     color: #646464;
-    font-size: 16px;
+    font-size: 15px;
     padding-left: 10px;
     padding-top: 10px;
 }
 .num{
-    font-size: 34px;
+    font-size: 28px;
     color: red;
 }
 .source{
     float: left;
-    width: 40%;
-    font-size: 16px;
+    width: 47%;
+    font-size: 15px;
     line-height: 60px;
     text-align: center;
-    padding-right: 10px;
 }
 .values{
     float: right;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 60px;
     text-align: right;
     padding-right: 10px;
