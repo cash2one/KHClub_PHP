@@ -1,0 +1,27 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.top_content{
+    font-size: 16px;
+    margin: 20px 10px 10px 10px;
+}
+.barcode_box{
+    width: 200px;
+    margin: 20px auto;
+}
+.barcode {
+    width: 200px;
+}
+.bottom_content{
+    font-size: 16px;
+    margin: 10px 10px auto 10px;
+}

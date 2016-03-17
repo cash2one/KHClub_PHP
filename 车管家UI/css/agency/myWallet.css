@@ -22,11 +22,11 @@ body{
 .genre_box{
     height: 60px;
     width: 100%;
-    color: #000000;
 }
 .genre{
-    width: 45%;
+
     float: left;
+    width: 25%;
     color: #646464;
     font-size: 16px;
     padding-left: 10px;
@@ -35,6 +35,14 @@ body{
 .num{
     font-size: 34px;
     color: red;
+}
+.source{
+    float: left;
+    width: 40%;
+    font-size: 16px;
+    line-height: 60px;
+    text-align: center;
+    padding-right: 10px;
 }
 .values{
     float: right;
