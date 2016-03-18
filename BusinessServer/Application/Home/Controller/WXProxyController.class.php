@@ -207,7 +207,7 @@ class WXProxyController extends Controller {
         $user = getProxyUser();
 
         $model = M('biz_proxy_trade');
-        $sql = 'SELECT * FROM biz_proxy_trade pt LEFT JOIN biz_proxy_info p ON(pt.lower_proxy_id=p.user_id)
+        $sql = 'SELECT pt.amount, pt.add_date, p.name FROM biz_proxy_trade pt LEFT JOIN biz_proxy_info p ON(pt.lower_proxy_id=p.user_id)
                 WHERE pt.user_id='.$user['user_id'].' ORDER BY pt.add_date DESC';
         $tradeList = $model->query($sql);
 

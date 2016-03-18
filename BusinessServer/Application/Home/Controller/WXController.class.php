@@ -221,7 +221,7 @@ class WXController extends Controller {
         if(!empty($code)){
 
             $userModel = M('biz_user_info');
-            $user = $userModel->field('id')->where('username='.$username)->find();
+            $user = $userModel->field('user_id')->where('username='.$username)->find();
             //用户存在
             if($user){
                 header("Location: ".HTTP_URL_PREFIX."userHome");

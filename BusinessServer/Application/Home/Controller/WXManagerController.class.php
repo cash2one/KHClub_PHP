@@ -60,6 +60,70 @@ class WXManagerController extends Controller{
                     curl_exec($curl);
                     curl_close($curl);
                 }
+
+                //这里判断是否这是一个被推荐的新用户的第一辆车 如果是则为推荐的代理者增加收益
+                $car = $carModel->find($id);
+                //判断是被推荐的用户
+                $userModel = M('biz_user_info');
+                $user = $userModel->where('user_id='.$car['user_id'])->find();
+
+                $shareModel = M('biz_proxy_share');
+                $share = $shareModel->where('share_open_id="'.$user['wx_open_id'].'"')->find();
+                //不为空
+                if(!empty($share)){
+                    //判断是否是第一辆车
+                    $cars = $carModel->where('state='.CAR_CHECK_OK.' AND user_id="'.$car['user_id'].'"')->select();
+                    if(count($cars) == 1 && $cars[0]['id'] == $id){
+                        //是第一辆车 增加收益
+                        $tradeModel = M('biz_proxy_trade');
+
+                        //查看是否存在了
+                        $oldTrade = $tradeModel->where('user_id='.$user['user_id'])->find();
+                        if(empty($oldTrade)){
+                            //增加一级收益
+                            $firstLevel = array('user_id'=>$share['user_id'], 'level'=>1, 'amount'=>'20', 'state'=>1,
+                                'register_id'=>$user['user_id'], 'add_date'=>time());
+                            $tradeModel->add($firstLevel);
+                            //查看上级代理
+                            $proxyModel = M('biz_proxy_info');
+                            $proxy = $proxyModel->where('user_id='.$share['user_id'])->find();
+                            if(!empty($proxy['higher_proxy_id'])){
+                                //增加二级收益
+                                $secondLevel = array('user_id'=>$proxy['higher_proxy_id'], 'lower_proxy_id'=>$share['user_id'], 'level'=>2,
+                                    'amount'=>'10', 'state'=>1, 'register_id'=>$user['user_id'], 'add_date'=>time());
+                                $tradeModel->add($secondLevel);
+                            }
+
+                            //消息通知
+                            $proxyOpenID = $proxy['wx_open_id'];
+                            if($proxyOpenID){
+                                $data = '{
+                                    "touser":"'.$proxyOpenID.'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"您获得一份收益,<a href=\"'.HTTP_PROXY_URL_PREFIX.'myTradeList\">点击查看</a>"
+                                    }
+                                }';
+
+                                $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                                $curl = curl_init();
+                                curl_setopt($curl, CURLOPT_URL, $url);
+                                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                                curl_setopt($curl, CURLOPT_POST, 1);
+                                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                                curl_exec($curl);
+                                curl_close($curl);
+                            }
+                        }
+
+                    }
+                }
+
+
             }
 
             if($search == 1){
