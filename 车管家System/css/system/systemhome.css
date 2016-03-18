@@ -1,9 +1,7 @@
 
 
 .table-min-width{
-    min-width: 1200px;
-    max-width: 1200px;
-    margin: auto;
+    width: 1000px;
 }
 
 .user-list-title{
@@ -24,9 +22,10 @@
     margin-right:35px;
 }
 
-.home-head{
-    padding-top: 10px;
+.table-head{
+    text-align: right;
 }
+
 .table-title{
     margin-left: 40%;
     display: inline;
@@ -39,6 +38,7 @@
 }
 
 .page-content{
+    width: 1000px;
     text-align: center;
     margin-top: 20px
 }

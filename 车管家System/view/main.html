@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>车管家</title>
+
+    <!-- Bootstrap core CSS -->
+    <script src="../js/jquery-2.2.0.min.js" ></script>
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        .nav-sidebar > .active > a,
+        .nav-sidebar > .active > a:hover,
+        .nav-sidebar > .active > a:focus {
+            color: #fff;
+            background-color: #428bca;
+        }
+
+
+    </style>
+
+</head>
+
+<body style="width:1200px;">
+
+<h3 style="text-align: center">品位环球管理系统</h3>
+<hr/>
+<div>
+    <div style="width: 140px;height: 600px; float: left;padding-right: 2px; border-right: solid #808080 1px">
+        <ul class="nav nav-sidebar">
+            <li class="active"><a href="checkHome.html" target="mainframe">车辆申请</a></li>
+            <li><a href="proxyApply.html" target="mainframe">代理申请</a></li>
+            <li><a href="proxy.html" target="mainframe">代理者</a></li>
+            <li><a href="withdrawRequest.html" target="mainframe">提现申请</a></li>
+        </ul>
+    </div>
+
+    <div id="main" style="width:1000px;height: 600px; float:left;">
+        <iframe name="mainframe" style="width: 1000px;height: 600px;" src="checkHome.html" frameborder="0" scrolling="no">
+        </iframe>
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    $(function(){
+        $("li").click(function(){
+            $("li").removeClass("active");
+            $(this).addClass("active");
+        });
+    });
+</script>
+
+</html>
+
+
