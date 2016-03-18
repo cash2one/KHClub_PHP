@@ -13,18 +13,8 @@
 
     <!-- Bootstrap core CSS -->
     <script src="../js/jquery-2.2.0.min.js" ></script>
+    <link href="../css/system/main.css" rel="stylesheet">
     <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-
-    <style type="text/css">
-        .nav-sidebar > .active > a,
-        .nav-sidebar > .active > a:hover,
-        .nav-sidebar > .active > a:focus {
-            color: #fff;
-            background-color: #428bca;
-        }
-
-
-    </style>
 
 </head>
 
@@ -33,7 +23,8 @@
 <h3 style="text-align: center">品位环球管理系统</h3>
 <hr/>
 <div>
-    <div style="width: 140px;height: 600px; float: left;padding-right: 2px; border-right: solid #808080 1px">
+
+    <div class="nav-frame">
         <ul class="nav nav-sidebar">
             <li class="active"><a href="checkHome.html" target="mainframe">车辆申请</a></li>
             <li><a href="proxyApply.html" target="mainframe">代理申请</a></li>
@@ -42,10 +33,11 @@
         </ul>
     </div>
 
-    <div id="main" style="width:1000px;height: 600px; float:left;">
-        <iframe name="mainframe" style="width: 1000px;height: 600px;" src="checkHome.html" frameborder="0" scrolling="no">
+    <div id="main" class="nav-body" style="float:left;">
+        <iframe name="mainframe" class="nav-body" src="checkHome.html" frameborder="0" scrolling="no">
         </iframe>
     </div>
+
 </div>
 
 </body>
