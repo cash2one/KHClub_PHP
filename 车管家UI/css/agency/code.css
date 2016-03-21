@@ -12,7 +12,10 @@ body{
 }
 .top_content{
     font-size: 16px;
-    margin: 20px 10px 10px 10px;
+    text-align: center;
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .barcode_box{
     width: 200px;
@@ -21,7 +24,32 @@ body{
 .barcode {
     width: 200px;
 }
-.bottom_content{
-    font-size: 16px;
-    margin: 10px 10px auto 10px;
+
+.steward_box{
+    width: 95%
+}
+.privlege_type{
+    color: #000000;
+    font-size: 18px;
+    padding-top: 10px;
+    margin-left: 40px;
+}
+.numerical{
+    float: left;
+    width: 24px;
+    height: 24px;
+    color: #ffffff;
+    font-size: 14px;
+    text-align: center;
+    line-height: 26px;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: #0f0f0f;
+    border-radius: 100%;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
 }

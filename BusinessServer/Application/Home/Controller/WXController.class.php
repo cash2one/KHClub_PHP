@@ -59,7 +59,7 @@ class WXController extends Controller {
 
         //如果系统中存在这个人 跳转到主页
         if(!empty($user)){
-            header("Location: ".HTTP_URL_PREFIX."userHome");
+            header("Location: ".HTTP_URL_PREFIX."privilegeHome");
             exit;
         }
 
@@ -82,7 +82,7 @@ class WXController extends Controller {
 
         $username = $_REQUEST['username'];
         $userModel = M('biz_user_info');
-        $user = $userModel->field('id')->where('username='.$username)->find();
+        $user = $userModel->field('user_id')->where('username='.$username)->find();
 
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
@@ -260,12 +260,8 @@ class WXController extends Controller {
 
         //验证成功注册
         if($data['id'] > 0){
-            //注册逻辑
-            $msgUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.json_decode($content)->access_token.'&openid='.$openID;
-            $msg = file_get_contents($msgUrl);
-            $wxUser = json_decode($msg);
-            $user = array('username'=>$username, 'password'=>md5($password), 'name'=>$wxUser->nickname,
-                            'phone_num'=>$username, 'wx_open_id'=>$openID, 'add_date'=>time());
+            $user = array('username'=>$username, 'password'=>md5($password),
+                    'mobile'=>$username, 'wx_open_id'=>$openID, 'add_date'=>time());
             $userModel = M('biz_user_info');
             $retID = $userModel->add($user);
 
@@ -878,8 +874,8 @@ class WXController extends Controller {
         $order_id = $_REQUEST['order_id'];
 
         $model = M();
-        $sql = 'SELECT * FROM biz_car c, biz_order o, biz_shop s
-                WHERE o.id='.$order_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id
+        $sql = 'SELECT * FROM biz_car c, biz_order o, biz_shop s, biz_shop_goods sg
+                WHERE sg.id=o.goods_id AND o.id='.$order_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id
                 AND o.car_id=c.id AND o.delete_flag=0';
         $record = $model->query($sql)[0];
         $record['use_date'] = date('Y-m-d', $record['use_date']);

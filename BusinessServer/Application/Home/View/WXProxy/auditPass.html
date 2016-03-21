@@ -82,10 +82,10 @@
     });
 
     var params = {
-        title : "test", // 分享标题
-        desc : "test", // 分享描述
-        link : "xxxxxxxx",
-        imgUrl : "" // 分享图标
+        title : "品位环球", // 分享标题
+        desc : "{$user.name}在“品位环球”，一个高端车辆车主管家式服务平台，期待您的加入", // 分享描述
+        link : "{$Think.const.HTTP_HOST}/BusinessServer/index.php/Home/WXProxy/shareQrcode?user_id={$user.user_id}",
+        imgUrl : "http://114.215.95.23/BusinessServer/Public/icon/carWash.png" // 分享图标
     };
 
     operate.initOpenShare(params);

@@ -18,8 +18,8 @@ class WXReceiverController extends Controller {
         Log::write(json_encode($result),'INFO');
 
         //通过分享订阅
-        if($result['Event'] == 'subscribe'){
-            $model = M('biz_proxy_info');
+        if(!empty($result['Event'])){
+            $model = M('biz_proxy_share');
             $share = $model->where('share_open_id="'.$result['FromUserName'].'"')->find();
             if(empty($share)){
                 $share = array('share_open_id'=>$result['FromUserName'], 'user_id'=>$result['EventKey'], 'add_date'=>time());

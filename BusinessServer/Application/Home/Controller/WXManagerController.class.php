@@ -530,8 +530,109 @@ class WXManagerController extends Controller{
             $proxy['state'] = $_POST['state'];
             $proxyModel = M('biz_proxy_info');
             $yes = $proxyModel->save($proxy);
+
+            $model = M();
+
             if($yes){
                 returnJson(1,'审核成功！');
+
+                //申请二维码
+                $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+                $ACC_TOKEN = $jssdk->getAccessToken();
+                $sql = 'SELECT * FROM biz_proxy_info WHERE delete_flag=0 AND user_id='.$proxy['user_id'];
+                $user = $model->query($sql)[0];
+                $openID = $user['wx_open_id'];
+
+                if($proxy['state'] == 1){
+
+                    //生成二维码
+                    $data = '{
+                                "action_name":"QR_LIMIT_SCENE",
+                                "action_info":
+                                {"scene": {"scene_id": '.$user['user_id'].'}}
+                             }';
+
+                    $url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".$ACC_TOKEN;
+
+                    $curl = curl_init();
+                    curl_setopt($curl, CURLOPT_URL, $url);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                    curl_setopt($curl, CURLOPT_POST, 1);
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    $result = curl_exec($curl);
+                    curl_close($curl);
+                    $qrcodeRet = json_decode($result, true);
+                    if(!empty($qrcodeRet['errcode'])){
+                        exit;
+                    }
+                    $package = file_get_contents("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$qrcodeRet['ticket']);
+
+                    $filename = './ProxyQrcode/'.$user['user_id'].'.png';
+                    $local_file = fopen($filename, 'w');
+                    if(false !== $local_file){
+                        if(false !== fwrite($local_file, $package)){
+                            fclose($local_file);
+                            //代理用户表
+                            $model = M('biz_proxy_info');
+                            $user['share_qrcode'] = $filename;
+                            $user['update_date'] = time();
+                            $model->save($user);
+                        }
+                    }
+
+                    if($openID){
+                        $data = '{
+                                    "touser":"'.$openID.'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"您的代理申请成功,<a href=\"'.HTTP_PROXY_URL_PREFIX.'proxyCheckSuccess\">点击查看</a>"
+                                    }
+                                 }';
+
+                        $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL, $url);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                        curl_setopt($curl, CURLOPT_POST, 1);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                        curl_exec($curl);
+                        curl_close($curl);
+                    }
+
+                }else{
+
+                    //推送消息
+                    if($openID){
+                        $data = '{
+                                    "touser":"'.$openID.'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"您的代理申请失败,<a href=\"'.HTTP_PROXY_URL_PREFIX.'proxyEnter\">点击查看</a>"
+                                    }
+                                 }';
+
+                        $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL, $url);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                        curl_setopt($curl, CURLOPT_POST, 1);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                        curl_exec($curl);
+                        curl_close($curl);
+                    }
+
+                }
+
             }else{
                 returnJson(0,'审核失败！');
             }

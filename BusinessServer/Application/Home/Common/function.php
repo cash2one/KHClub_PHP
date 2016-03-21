@@ -1,10 +1,16 @@
 <?php
 //wx5764fdc7f223e062 ef6373955987b110fef9c0108ae15a02 正式
 //wxd5db3b57ffdfafb3 2ccd9fe700dda9b0e9db40212dba1f4b 测试用
-define("WX_APPID", "wxd5db3b57ffdfafb3"); //a.pinweihuanqiu.com
-define("WX_APPSecret","2ccd9fe700dda9b0e9db40212dba1f4b");
 
-define("HTTP_HOST", "http://114.215.95.23"); //a.pinweihuanqiu.com
+//测试地址
+//define("WX_APPID", "wxd5db3b57ffdfafb3");
+//define("WX_APPSecret","2ccd9fe700dda9b0e9db40212dba1f4b");
+//define("HTTP_HOST", "http://114.215.95.23");
+
+define("WX_APPID", "wx5764fdc7f223e062"); //a.pinweihuanqiu.com
+define("WX_APPSecret","ef6373955987b110fef9c0108ae15a02");
+define("HTTP_HOST", "http://a.pinweihuanqiu.com"); //a.pinweihuanqiu.com
+
 define("HTTP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/WX/");
 define("HTTP_SHOP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/Shop/");
 define("HTTP_PROXY_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/WXProxy/");
