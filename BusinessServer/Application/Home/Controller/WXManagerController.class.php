@@ -315,4 +315,229 @@ class WXManagerController extends Controller{
             returnJson(0,'数据异常！',$e);
         }
     }
+
+    ///////////////////////////////////////////////.代理.//////////////////////////////////////////////////////
+
+    /**
+     * @brief 入口
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/main
+     *
+     */
+    public function main(){
+        $this->display('main');
+    }
+
+    /**
+     * @brief 代理申请详情
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/proxyApply
+     * @param page 页码
+     * @param size 每页数量
+     */
+    public function proxyApply(){
+        try {
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $proxyModel = M('biz_proxy_info');
+            $count=count($proxyModel->field("user_id")->where('state=0 and delete_flag=0')->order('add_date desc')->select());
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $proxyInfo = $proxyModel->field("user_id, name, mobile, company, position,add_date")->where('state=0 and delete_flag=0')->order('add_date desc')->limit($start,$end)->select();
+            for($i=0;$i<count($proxyInfo);$i++){
+                $proxyInfo[$i]['add_date'] = date('Y-m-d',$proxyInfo[$i]['add_date']);
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('proxyInfo',$proxyInfo);
+            $this->display('proxyApply');
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 代理详情
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/proxy
+     * @param page 页码
+     * @param size 每页数量
+     */
+    public function proxy(){
+        try {
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $proxyModel = M();
+            $sql = 'SELECT user_id position FROM biz_proxy_info
+                    WHERE state=1 AND delete_flag=0 ORDER BY add_date DESC';
+            $count = count($proxyModel->query($sql));
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $sql = 'SELECT user_id, name, mobile, company, position FROM biz_proxy_info
+                    WHERE state=1 AND delete_flag=0 ORDER BY add_date DESC LIMIT '.$start.','.$end;
+            $proxyInfo = $proxyModel->query($sql);
+            for($i=0;$i<count($proxyInfo);$i++){
+                $sql = 'SELECT SUM(amount) amount FROM biz_proxy_trade WHERE user_id='.$proxyInfo[$i]['user_id'].' AND state=1';
+                $amount = $proxyModel->query($sql);
+                $proxyInfo[$i]['amount'] = $amount[0]['amount'];
+                $proxyInfo[$i]['add_date'] = date('Y-m-d',$proxyInfo[$i]['add_date']);
+
+            }
+            for($i=0;$i<count($proxyInfo);$i++){
+                if($proxyInfo[$i]['amount'] == null){
+                    $proxyInfo[$i]['amount'] = '无';
+                }
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('proxyInfo',$proxyInfo);
+            $this->display('proxy');
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 金额详情
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/proxyDetails?user_id=3
+     * @param user_id 代理id
+     * @param page 页码
+     * @param size 每页数量
+     */
+    public function proxyDetails(){
+        try {
+            $user_id = $_REQUEST['user_id'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $proxyModel = M('biz_proxy_info');
+            $proxyInfo = $proxyModel->field("user_id, name, mobile, company, position")->where('user_id='.$user_id)->find();
+            $amountModel = M('biz_proxy_trade');
+            $count = count($amountModel->field('amount')->where('user_id='.$user_id.' and delete_flag=0')->select());
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $amountInfo = $amountModel->field('amount,state,add_date,lower_proxy_id')->where('user_id='.$user_id.' and delete_flag=0')->limit($start,$end)->select();
+            for($i=0;$i<count($amountInfo);$i++){
+                if($amountInfo[$i]['lower_proxy_id'] == null){
+                    $amountInfo[$i]['lower_proxy_name'] = '你';
+                    $amountInfo[$i]['add_date'] = date('Y-m-d',$amountInfo[$i]['add_date']);
+                }else{
+                    $lower_proxy_name = $proxyModel->field("name")->where('user_id='.$amountInfo[$i]['lower_proxy_id'])->find();
+                    $amountInfo[$i]['lower_proxy_name'] = $lower_proxy_name['name'];
+                    $amountInfo[$i]['add_date'] = date('Y-m-d',$amountInfo[$i]['add_date']);
+                }
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('proxyInfo',$proxyInfo);
+            $this->assign('amountInfo',$amountInfo);
+            $this->display('proxyDetails');
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 提现申请
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/withdrawRequest
+     * @param page 页码
+     * @param size 每页数量
+     */
+    public function withdrawRequest(){
+        try {
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 20;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $proxyModel = M();
+            $sql = 'SELECT fo.user_id FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
+                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
+                    GROUP BY tr.user_id ORDER BY fo.add_date DESC';
+            $count = count($proxyModel->query($sql));
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $sql = 'SELECT fo.user_id, fo.name, fo.mobile, fo.company, fo.position, SUM(tr.amount) amount, wi.withdraw_state
+                    FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
+                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
+                    GROUP BY tr.user_id ORDER BY fo.add_date DESC';
+            $proxyInfo = $proxyModel->query($sql);
+            for($i=0;$i<count($proxyInfo);$i++){
+                $proxyInfo[$i]['add_date'] = date('Y-m-d',$proxyInfo[$i]['add_date']);
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('proxyInfo',$proxyInfo);
+            $this->display('withdrawRequest');
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 代理审核
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/proxyAudit?user_id=4&state=1
+     * @param user_id 代理id
+     * @param state 审核状态 1为审核通过 2为不通过
+     */
+    public function proxyAudit(){
+        try {
+            $proxy = array();
+            $proxy['user_id'] = $_POST['user_id'];
+            $proxy['state'] = $_POST['state'];
+            $proxyModel = M('biz_proxy_info');
+            $yes = $proxyModel->save($proxy);
+            if($yes){
+                returnJson(1,'审核成功！');
+            }else{
+                returnJson(0,'审核失败！');
+            }
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
 }

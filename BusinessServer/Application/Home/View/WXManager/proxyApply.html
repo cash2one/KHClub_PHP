@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+    <script type="text/javascript">
+
+        function getUserInfo(act) {
+            if(act == "yes")
+            {
+               var user_id = $("#user_id").val();
+               var state = $("#yes").val();
+            }
+            else
+            {
+                var user_id = $("#user_id").val();
+                var state = $("#no").val();
+            }
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                timeout: 10000,
+                url: "__URL__/proxyAudit?",
+                data : "user_id="+user_id+"&state="+state,
+                success: function (rData) {
+                    var userInfo = eval(rData);
+                    if (userInfo && userInfo.status == 1) {
+                        location.reload();
+                    }
+                },
+                error: function (error) {
+                    alert(eval(error));
+                    return false;
+                }
+            })
+        }
+    </script>
+
+</head>
+<body>
+
+<table class="table table-min-width" >
+    <thead>
+        <tr>
+            <th class="user-list-title">日期</th>
+            <th class="user-list-title">姓名</th>
+            <th class="user-list-title">电话</th>
+            <th class="user-list-title">公司</th>
+            <th class="user-list-title">职业</th>
+            <th class="user-list-title">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <volist name="proxyInfo" id="v">
+        <tr id="user">
+            <td class="user-list-cell">{$v.add_date}</td>
+            <td class="user-list-cell">{$v.name}</td>
+            <td class="user-list-cell">{$v.mobile}</td>
+            <td class="user-list-cell">{$v.company}</td>
+            <td class="user-list-cell">{$v.position}</td>
+            <td class="user-list-cell">
+                <a onclick="getUserInfo('no')" class="refuse">拒绝</a>
+                <input type="hidden" id="user_id" value="{$v.user_id}">
+                <input type="hidden" id="yes" value="2">
+                <input type="hidden" id="no" value="1">
+                <a onclick="getUserInfo('yes')">通过</a>
+            </td>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+
+<div class="page-content">
+    <if condition="$page neq 1">
+        <a class="next-page" href="__APP__/Home/WXManager/proxyApply?page={$page-1}">上一页</a>
+    </if>
+    <php>
+        for($p = 1; $p <= $page_count; $p ++) {
+        if($p == $page){
+        if(!($page == 1 && $page_count==1)){
+        echo '<a class="active-page">'.$p.'</a>';
+        }
+        }else{
+        if($p > $page+2 || $p < $page-2){
+        }else{
+        echo '<a class="page" href="__APP__/Home/WXManager/proxyApply?page='.$p.'">'.$p.'</a>';
+        }
+        }
+        }
+    </php>
+    <if condition="$page neq $page_count">
+        <a class="next-page" href="__APP__/Home/WXManager/proxyApply?page={$page+1}">下一页</a>
+    </if>
+</div>
+
+</body>
+</html>
