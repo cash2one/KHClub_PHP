@@ -78,7 +78,7 @@ class WXManagerController extends Controller{
                         $tradeModel = M('biz_proxy_trade');
 
                         //查看是否存在了
-                        $oldTrade = $tradeModel->where('user_id='.$user['user_id'])->find();
+                        $oldTrade = $tradeModel->where('register_id='.$user['user_id'])->find();
                         if(empty($oldTrade)){
                             //增加一级收益
                             $firstLevel = array('user_id'=>$share['user_id'], 'level'=>1, 'amount'=>'20', 'state'=>1,
