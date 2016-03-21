@@ -1,0 +1,19 @@
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: #fff;
+    background-color: #428bca;
+}
+
+.nav-frame{
+    width: 140px;
+    height: 600px;
+    float: left;
+    padding-right: 2px;
+    border-right: solid #808080 1px;
+}
+
+.nav-body{
+    width:1000px;
+    height: 600px;
+}
