@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js" ></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+</head>
+<body>
+
+<table class="table table-min-width" >
+    <thead>
+        <tr>
+            <th class="user-list-title">{$proxyInfo.name}</th>
+            <th class="user-list-title">{$proxyInfo.mobile}</th>
+            <th class="user-list-title">{$proxyInfo.company}</th>
+            <th class="user-list-title">{$proxyInfo.position}</th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th class="user-list-title">日期</th>
+            <th class="user-list-title">金额</th>
+            <th class="user-list-title">事件</th>
+            <th class="user-list-title">状态</th>
+        </tr>
+    </thead>
+    <tbody>
+        <volist name="amountInfo" id="v">
+        <tr>
+            <td class="user-list-cell">{$v.add_date}</td>
+            <td class="user-list-cell" style="color: red">{$v.amount}</td>
+            <td class="user-list-cell">{$v.lower_proxy_name}推荐了一名新用户</td>
+            <if condition="($v.state eq 2)">
+                <td class="user-list-cell" style="color: red">已结算</td>
+            <else/>
+                <td class="user-list-cell">未结算</td>
+            </if>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+
+<div class="page-content">
+    <if condition="$page neq 1">
+        <a class="next-page" href="__APP__/Home/WXManager/proxyDetails?user_id={$proxyInfo.user_id}&page={$page-1}">上一页</a>
+    </if>
+    <php>
+        for($p = 1; $p <= $page_count; $p ++) {
+        if($p == $page){
+        if(!($page == 1 && $page_count==1)){
+        echo '<a class="active-page">'.$p.'</a>';
+        }
+        }else{
+        if($p > $page+2 || $p < $page-2){
+        }else{
+        echo '<a class="page" href="__APP__/Home/WXManager/proxyDetails?user_id='.$proxyInfo['user_id'].'&page='.$p.'">'.$p.'</a>';
+        }
+        }
+        }
+    </php>
+    <if condition="$page neq $page_count">
+        <a class="next-page" href="__APP__/Home/WXManager/proxyDetails?user_id={$proxyInfo.user_id}&page={$page+1}">下一页</a>
+    </if>
+</div>
+
+</body>
+</html>
