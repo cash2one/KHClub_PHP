@@ -443,12 +443,12 @@ class WXManagerController extends Controller{
             $proxyModel = M('biz_proxy_info');
             $proxyInfo = $proxyModel->field("user_id, name, mobile, company, position")->where('user_id='.$user_id)->find();
             $amountModel = M('biz_proxy_trade');
-            $count = count($amountModel->field('amount')->where('user_id='.$user_id.' and delete_flag=0')->select());
+            $count = count($amountModel->field('amount')->where('user_id='.$user_id.' and delete_flag=0')->order('state asc, add_date desc')->select());
             if($count == false){
                 $count = 1;
             }
             $page_count  = ceil($count/$size);
-            $amountInfo = $amountModel->field('amount,state,add_date,lower_proxy_id')->where('user_id='.$user_id.' and delete_flag=0')->limit($start,$end)->select();
+            $amountInfo = $amountModel->field('amount,state,add_date,lower_proxy_id')->where('user_id='.$user_id.' and delete_flag=0')->order('state asc, add_date desc')->limit($start,$end)->select();
             for($i=0;$i<count($amountInfo);$i++){
                 if($amountInfo[$i]['lower_proxy_id'] == null){
                     $amountInfo[$i]['lower_proxy_name'] = '你';
