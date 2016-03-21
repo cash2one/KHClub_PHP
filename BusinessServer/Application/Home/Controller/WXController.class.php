@@ -882,6 +882,7 @@ class WXController extends Controller {
                 WHERE o.id='.$order_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id
                 AND o.car_id=c.id AND o.delete_flag=0';
         $record = $model->query($sql)[0];
+        $record['use_date'] = date('Y-m-d', $record['use_date']);
 
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
