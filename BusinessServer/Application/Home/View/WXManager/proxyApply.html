@@ -11,24 +11,23 @@
     <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
     <title>管理系统</title>
     <script type="text/javascript">
-
-        function getUserInfo(act) {
-            if(act == "yes")
-            {
-               var user_id = $("#user_id").val();
-               var state = $("#yes").val();
-            }
-            else
-            {
-                var user_id = $("#user_id").val();
-                var state = $("#no").val();
-            }
+        function yes(se){
+            var user_id = se;
+            var state = $("#yes").val();
+            getUserInfo(user_id,state);
+        }
+        function no(se){
+            var user_id = se;
+            var state = $("#no").val();
+            getUserInfo(user_id,state);
+        }
+        function getUserInfo(act,sta) {
             $.ajax({
                 type: "post",
                 dataType: "json",
                 timeout: 10000,
                 url: "__URL__/proxyAudit?",
-                data : "user_id="+user_id+"&state="+state,
+                data : "user_id="+act+"&state="+sta,
                 success: function (rData) {
                     var userInfo = eval(rData);
                     if (userInfo && userInfo.status == 1) {
@@ -66,11 +65,10 @@
             <td class="user-list-cell">{$v.company}</td>
             <td class="user-list-cell">{$v.position}</td>
             <td class="user-list-cell">
-                <a onclick="getUserInfo('no')" class="refuse">拒绝</a>
-                <input type="hidden" id="user_id" value="{$v.user_id}">
+                <a onclick="no('{$v.user_id}')" class="refuse">拒绝</a>
                 <input type="hidden" id="yes" value="1">
                 <input type="hidden" id="no" value="2">
-                <a onclick="getUserInfo('yes')">通过</a>
+                <a onclick="yes('{$v.user_id}')">通过</a>
             </td>
         </tr>
         </volist>
