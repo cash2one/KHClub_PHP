@@ -4,7 +4,7 @@ a{
 body{
     margin: 0;
     padding: 0;
-    background-color: #fafafa;
+    background-color: #f1f1f1;
 }
 .clear{
     overflow: hidden;
@@ -18,6 +18,9 @@ body{
     margin-right: 10px;
     height: 1px;
     background-color: #e3e3e3;
+}
+.box{
+    background-color: #ffffff;
 }
 .list_box{
     height: 60px;
@@ -38,13 +41,10 @@ body{
 }
 .audit{
     width: 100%;
-    height: 40px;
-    color: red;
+    color: #e52828;
     font-size: 20px;
     text-align: center;
-    line-height: 40px;
-    margin-top: 80px;
-    background-color: #ffffff;
+    margin: 40px auto 40px auto;
 }
 .menu_box{
     font-size: 16px;

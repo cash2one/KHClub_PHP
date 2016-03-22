@@ -4,15 +4,15 @@ a{
 body{
     margin: 0;
     padding: 0;
-    background-color: #fafafa;
+    background-color: #f1f1f1;
 }
 .clear{
     overflow: hidden;
     clear: both;
 }
 .wire{
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
     height: 1px;
     background-color: #e3e3e3;
 }
@@ -20,21 +20,22 @@ body{
     background-color: #ffffff;
 }
 .genre_box{
-    height: 45px;
+    height: 60px;
     width: 100%;
 }
 .genre{
     width: 45%;
     float: left;
-    color: #646464;
-    font-size: 16px;
-    line-height: 45px;
-    padding-left: 10px;
+    color: #000000;
+    font-size: 20px;
+    line-height: 60px;
+    padding-left: 15px;
 }
 .values{
     float: right;
-    font-size: 16px;
-    line-height: 45px;
+    color: #646464;
+    font-size: 18px;
+    line-height: 60px;
     text-align: right;
-    padding-right: 10px;
+    padding-right: 15px;
 }
