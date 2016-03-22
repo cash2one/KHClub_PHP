@@ -1,0 +1,55 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.number{
+    float: left;
+    margin-top: 20px;
+    margin-left: 15px;
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+    font-size: 16px;
+    border-radius: 100%;
+    text-align: center;
+    line-height: 20px;
+    background-color: #0f0f0f;
+}
+.details{
+    margin-left: 45px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 15px;
+    font-size: 18px;
+    color: #000000;
+}
+.add_car{
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}
