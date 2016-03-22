@@ -1,0 +1,26 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.barcode_box{
+    width: 260px;
+    height: 260px;
+    margin: 80px auto auto auto;
+}
+.barcode{
+    width: 260px;
+    height: 260px;
+}
+.payment_hint{
+    font-size: 16px;
+    color: #949494;
+    margin: 60px 10px 80px 10px;
+}
