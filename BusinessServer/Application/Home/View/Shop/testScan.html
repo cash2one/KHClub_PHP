@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>效验</title>
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+
+</head>
+<body>
+
+<button onclick="testScan()">扫描测试</button>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+    wx.config({
+                debug: true,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : [ "scanQRCode" ]
+    });
+
+    function testScan(){
+        wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                alert(result);
+            }
+        });
+
+    }
+
+</script>
+</body>
+</html>

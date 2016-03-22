@@ -9,32 +9,36 @@
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 <body>
-<div class="list_box clear">
-    <div class="genre">姓名</div>
-    <div class="worth">{$user.name}</div>
-</div>
-<div class="wire"></div>
-<div class="list_box clear">
-    <div class="genre">电话</div>
-    <div class="worth">{$user.mobile}</div>
-</div>
-<div class="wire"></div>
-<div class="list_box clear">
-    <div class="genre">公司</div>
-    <div class="worth">{$user.company}</div>
-</div>
-<div class="wire"></div>
-<div class="list_box clear">
-    <div class="genre">职位</div>
-    <div class="worth">{$user.position}</div>
-</div>
-<div class="wire"></div>
-<div class="audit">正在审核</div>
-<div class="state_info">您的个人信息会在1——2个工作日内审核通过</div>
-<a href="recommendExplain"><div class="hint_box">
-    <img src="../images/221446476438.jpg" alt="" width="10px" height="10px">
-    <span class="hint">如何成功推荐会员</span>
-</div></a>
+    <div class="box">
+        <div class="list_box clear">
+            <div class="genre">姓名</div>
+            <div class="worth">{$user.name}</div>
+        </div>
+        <div class="wire"></div>
+        <div class="list_box clear">
+            <div class="genre">电话</div>
+            <div class="worth">{$user.mobile}</div>
+        </div>
+        <div class="wire"></div>
+        <div class="list_box clear">
+            <div class="genre">公司</div>
+            <div class="worth">{$user.company}</div>
+        </div>
+        <div class="wire"></div>
+        <div class="list_box clear">
+            <div class="genre">职位</div>
+            <div class="worth">{$user.position}</div>
+        </div>
+    </div>
+
+    <div class="audit">正在审核</div>
+    <div class="state_info">您的个人信息会在1——2个工作日内审核通过</div>
+    <a href="recommendExplain">
+        <div class="hint_box">
+        <div class="icon">?</div>
+        <span class="hint">如何成功推荐会员</span>
+        </div>
+    </a>
 
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="__PUBLIC__/js/wx/wxOperate.js"></script>

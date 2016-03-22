@@ -952,5 +952,30 @@ class WXController extends Controller {
         $this->display('ticketDetails');
     }
 
+
+    /**
+     * @brief 商店列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/otherServer
+     *
+     */
+    public function otherServer(){
+
+        $category = $_REQUEST['category'];
+
+        if($category == 1){
+            $this->display('carBeauty');
+        }else if($category == 2){
+            $this->display('onlineVisits');
+        }else if($category == 3){
+            $this->display('insuranceConsult');
+        }else if($category == 4){
+            $this->display('roadsideAssistance');
+        }else if($category == 5){
+            $this->display('carMaintenance');
+        }
+
+    }
+
 }
 

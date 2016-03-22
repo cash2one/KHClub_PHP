@@ -106,7 +106,15 @@ class WXProxyController extends Controller {
             $company = $_REQUEST['company'];
             $position = $_REQUEST['position'];
 
-            $user = array('wx_open_id'=>$openID, 'name'=>$name, 'mobile'=>$mobile,
+            $higher_proxy_id = 0;
+            $shareModel = M('biz_proxy_share');
+            //判断是否存在代理
+            $share = $shareModel->where('share_open_id="'.$openID.'"')->find();
+            if(!empty($share)){
+                $higher_proxy_id = $share['user_id'];
+            }
+
+            $user = array('wx_open_id'=>$openID, 'name'=>$name, 'mobile'=>$mobile, 'higher_proxy_id'=>$higher_proxy_id,
                           'company'=>$company, 'position'=>$position, 'add_date'=>time(), 'state'=>0);
             $model = M('biz_proxy_info');
             $ret = $model->add($user);
@@ -299,6 +307,7 @@ class WXProxyController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('user', $user);
+        $this->assign('type', $_REQUEST['type']);
         $this->display('qrcode');
     }
 

@@ -246,7 +246,7 @@ class ShopController extends Controller {
     /**
      * @brief 查找商家已经服务过的订单
      * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/WXManager/shopServeRecord
+     * http://localhost/BusinessServer/index.php/Home/Shop/shopServeRecord
      */
     public function shopServeRecord(){
         try{
@@ -270,7 +270,7 @@ class ShopController extends Controller {
     /**
      * @brief 服务详情
      * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/WXManager/ServeDetails?order_id=1
+     * http://localhost/BusinessServer/index.php/Home/Shop/ServeDetails?order_id=1
      * @param order_id 订单ID
      */
     public function serveDetails(){
@@ -306,6 +306,14 @@ class ShopController extends Controller {
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
         }
+    }
+
+    public function testScan(){
+
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->display('testScan');
     }
 }
 

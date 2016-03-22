@@ -8,27 +8,60 @@ class IndexController extends Controller {
 
     public function index(){
 
+    }
+
+    public function setMenu(){
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $ACC_TOKEN = $jssdk->getAccessToken();
         $json = '{
-            "button": [
-                {
-                    "name": "会员尊享",
-                    "type": "view",
-                    "url": "http://114.215.95.23/BusinessServer/index.php/Home/WX/userVerify"
-                },
-                {
-                    "name": "我是商家",
-                    "type": "view",
-                    "url": "http://114.215.95.23/BusinessServer/index.php/Home/Shop/shopEnter"
-                },
-                {
-                    "name": "成为代理",
-                    "type": "view",
-                    "url": "http://114.215.95.23/BusinessServer/index.php/Home/WXProxy/proxyEnter"
-                }
-            ]
-        }';
+                  "button" : [
+                    {
+                      "name" : "会员专享",
+                      "type" : "view",
+                      "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify"
+                    },
+                    {
+                      "name" : "品味环球",
+                      "sub_button" : [
+                        {
+                          "key" : "KEY_ME",
+                          "name" : "关于我们",
+                          "type" : "click"
+                        },
+                        {
+                          "key" : "KEY_INTRO",
+                          "name" : "特权介绍",
+                          "type" : "click"
+                        },
+                        {
+                          "key" : "KEY_VIP",
+                          "name" : "会员条件",
+                          "type" : "click"
+                        },
+                        {
+                          "key" : "KEY_MANAGER",
+                          "name" : "豪车管家",
+                          "type" : "click"
+                        }
+                      ]
+                    },
+                    {
+                      "name" : "商家代理",
+                      "sub_button" : [
+                        {
+                          "name" : "商家专区",
+                          "type" : "view",
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/Shop/shopEnter"
+                        },
+                        {
+                          "name" : "我是代理",
+                          "type" : "view",
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WXProxy/proxyEnter"
+                        }
+                      ]
+                    }
+                  ]
+                }';
 
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$ACC_TOKEN;
 
@@ -42,8 +75,24 @@ class IndexController extends Controller {
         $result = curl_exec($curl);
         curl_close($curl);
         print_r($result);
+    }
+
+    public function clearMenu(){
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
+        $url = 'https://api.weixin.qq.com/cgi-bin/menu/delete?access_token='.$ACC_TOKEN;
+        echo file_get_contents($url);
 
     }
+
+    public function searchMenu(){
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
+        $url = 'https://api.weixin.qq.com/cgi-bin/menu/get?access_token='.$ACC_TOKEN;
+        echo file_get_contents($url);
+
+    }
+
 
 }
 

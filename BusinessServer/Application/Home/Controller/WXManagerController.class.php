@@ -123,7 +123,6 @@ class WXManagerController extends Controller{
                     }
                 }
 
-
             }
 
             if($search == 1){
@@ -531,7 +530,7 @@ class WXManagerController extends Controller{
             $proxyModel = M('biz_proxy_info');
             $yes = $proxyModel->save($proxy);
 
-            $model = M();
+            $model = M('biz_proxy_info');
 
             if($yes){
                 returnJson(1,'审核成功！');
@@ -575,7 +574,6 @@ class WXManagerController extends Controller{
                         if(false !== fwrite($local_file, $package)){
                             fclose($local_file);
                             //代理用户表
-                            $model = M('biz_proxy_info');
                             $user['share_qrcode'] = $filename;
                             $user['update_date'] = time();
                             $model->save($user);
@@ -589,6 +587,31 @@ class WXManagerController extends Controller{
                                     "text":
                                     {
                                         "content":"您的代理申请成功,<a href=\"'.HTTP_PROXY_URL_PREFIX.'proxyCheckSuccess\">点击查看</a>"
+                                    }
+                                 }';
+
+                        $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL, $url);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                        curl_setopt($curl, CURLOPT_POST, 1);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                        curl_exec($curl);
+                        curl_close($curl);
+                    }
+
+                    //推送给上级代理
+                    if($user['higher_proxy_id']){
+                        $higherUser = $model->find($user['higher_proxy_id']);
+                        $data = '{
+                                    "touser":"'.$higherUser['wx_open_id'].'",
+                                    "msgtype":"text",
+                                    "text":
+                                    {
+                                        "content":"恭喜你推荐'.$user['name'].'成为代理,<a href=\"'.HTTP_PROXY_URL_PREFIX.'myProxyList\">点击查看</a>"
                                     }
                                  }';
 

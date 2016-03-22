@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
-    <title>付款</title>
+    <title>推荐</title>
     <link rel="stylesheet" href="__PUBLIC__/css/agency/code.css">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 
@@ -15,21 +15,50 @@
     <div class="barcode_box">
         <div class="barcode_box"><img class="barcode" src="{$user.share_qrcode}" alt=""></div>
     </div>
-    <div class="steward_box" style="margin-top: 10px;">
-        <div class="numerical">1</div>
-        <div class="privlege_type">加入品位环球，成为代理后，你推荐成功一个会员后可获得20积分（1积分=1元）</div>
-    </div>
-    <div class="wire" style="margin-top: 8px"></div>
-    <div class="steward_box">
-        <div class="numerical">2</div>
-        <div class="privlege_type">加入品位环球，成为会员后，推荐你的代理者可通过你获得20积分（1积分=1元）</div>
-    </div>
-    <div class="wire" style="margin-top: 8px"></div>
-    <div class="steward_box">
-        <div class="numerical">3</div>
-        <div class="privlege_type">加入品位环球，成为代理后，你推荐的代理成功推荐一个会员后，你可获得10积分（1积分=1元）</div>
-    </div>
-    <div class="wire" style="margin-top: 8px"></div>
+    <if condition="$type eq 1">
+            <div class="steward_box" style="margin-top: 10px;">
+                <div class="numerical">1</div>
+                <div class="privlege_type">注册成为“品位•环球”尊贵的会员，您将享有平台内所有联盟商家提供的会员VIP礼遇，无需另外办理门店会员卡。</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+            <div class="steward_box">
+                <div class="numerical">2</div>
+                <div class="privlege_type">豪车管家24小时电话问诊及资讯，专业的豪车管家将为您提供一切关于您爱车的最佳解决方案。</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+            <div class="steward_box">
+                <div class="numerical">3</div>
+                <div class="privlege_type">会员卡价格享受爱车精洗项目，无需再办理门店会员卡。此礼遇适用于全平台联盟商家。</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+            <div class="steward_box">
+                <div class="numerical">4</div>
+                <div class="privlege_type">豪车维修与保养将由专业的豪车管家为您一站式打理，轻松，高效的完成每一个环节。</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+            <div class="steward_box">
+                <div class="numerical">5</div>
+                <div class="privlege_type">“品位•环球”作为第三方服务平台将为本平台所有联盟商家的服务及产品做质量担保，杜绝任何虚假，伪劣产品，为会员权益提供双重保证。</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+        <else/>
+            <div class="steward_box" style="margin-top: 10px;">
+                <div class="numerical">1</div>
+                <div class="privlege_type">加入品位环球，成为代理后，你推荐成功一个会员后可获得20积分（1积分=1元）</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+            <div class="steward_box">
+                <div class="numerical">2</div>
+                <div class="privlege_type">加入品位环球，成为会员后，推荐你的代理者可通过你获得20积分（1积分=1元）</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+            <div class="steward_box">
+                <div class="numerical">3</div>
+                <div class="privlege_type">加入品位环球，成为代理后，你推荐的代理成功推荐一个会员后，你可获得10积分（1积分=1元）</div>
+            </div>
+            <div class="wire" style="margin-top: 8px"></div>
+    </if>
+
 
 </body>
 </html>

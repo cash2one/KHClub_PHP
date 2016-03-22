@@ -6,7 +6,7 @@ use Think\Log;
 require THINK_PATH.'Library/Vendor/wxpay/lib/WxPay.Api.php';
 
 //define("TOKEN", "pinweihuanqiu");
-define("TOKEN", "test");
+//define("TOKEN", "test");
 
 class WXReceiverController extends Controller {
 
@@ -18,13 +18,54 @@ class WXReceiverController extends Controller {
         Log::write(json_encode($result),'INFO');
 
         //通过分享订阅
-        if(!empty($result['Event'])){
+        if($result['Event'] == 'subscribe' || $result['Event'] == 'SCAN'){
+            if(empty($result['EventKey'])){
+                exit;
+            }
+
             $model = M('biz_proxy_share');
             $share = $model->where('share_open_id="'.$result['FromUserName'].'"')->find();
             if(empty($share)){
-                $share = array('share_open_id'=>$result['FromUserName'], 'user_id'=>$result['EventKey'], 'add_date'=>time());
+
+                $eventKey = $result['EventKey'];
+                $eventKey = str_replace('qrscene_', '' ,$eventKey);
+
+                $share = array('share_open_id'=>$result['FromUserName'], 'user_id'=>$eventKey, 'add_date'=>time());
                 $model->add($share);
             }
+            echo '';
+            return;
+        }
+
+        if($result['Event'] == 'CLICK' && $result['MsgType'] == 'event'){
+
+            if($result['EventKey'] == 'KEY_ME'){
+                $content = '“品味•环球”专为高端商务人士打造的私人尊享服务平台，提供覆盖精英生活衣食住行方方面面的专属生活服务。专业，专注，高效的为用户带来超越期待的体验和感受。关注公众号，成为会员即可获取私人管家24小时资讯服务与协助等会员特权服务。';
+            }else if($result['EventKey'] == 'KEY_MANAGER'){
+                $content = '“豪车管家”是“品味•环球”旗下专为中高端车车主提供全方位车管家服务的商务管家平台，从洗车、保养、维修、线上诊断，到保险业务等，我们都将有专人为您提供服务。现已开通4008693911官方服务电话，期待您的来电。';
+            }else if($result['EventKey'] == 'KEY_VIP'){
+                $content = "拥有深圳市车牌的以下品牌车车主：\n1. 奔驰\n2. 宝马\n3. 奥迪\n4. 保时捷\n5. 路虎\n6. 兰博基尼\n7. 宾利\n8. 劳斯劳斯\n9. 法拉利\n10. 玛莎拉蒂\n"
+                            ."【“品味•环球”其它城市及区域服务平台正在筹建中，敬请期待。】\n现已开通4008693911官方服务电话，期待您的来电。";
+            }else if($result['EventKey'] == 'KEY_INTRO'){
+                $content = "注册成为“品味•环球”尊贵的会员，您将享有平台内所有联盟商家提供的会员VIP礼遇，无需另外办理门店会员卡。\n".
+                           "礼遇包括：\n".
+                            "1、豪车管家24小时电话问诊及资讯，专业的豪车管家将为您提供一切关于您爱车的最佳解决方案。\n".
+                            "2、会员卡价格享受爱车精洗项目，无需再办理门店会员卡。此礼遇适用于全平台联盟商家。\n".
+                            "3、豪车维修与保养将由专业的豪车管家为您一站式打理，轻松，高效的完成每一个环节。\n".
+                            "4、“品味•环球”作为第三方服务平台将为本平台所有联盟商家的服务及产品做质量担保，杜绝任何虚假，伪劣产品，为会员权益提供双重保证。\n";
+            }else{
+                echo '';
+                exit;
+            }
+
+            //反馈
+            echo '<xml>
+              <ToUserName><![CDATA['.$result['FromUserName'].']]></ToUserName>
+              <FromUserName><![CDATA['.$result['ToUserName'].']]></FromUserName>
+              <CreateTime>'.time().'</CreateTime>
+              <MsgType><![CDATA[text]]></MsgType>
+              <Content><![CDATA['.$content.']]></Content>
+              </xml>';
         }
 
 //        $echoStr = $_GET["echostr"];
