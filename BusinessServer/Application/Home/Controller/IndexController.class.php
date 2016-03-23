@@ -21,7 +21,7 @@ class IndexController extends Controller {
                       "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify"
                     },
                     {
-                      "name" : "品味环球",
+                      "name" : "品位环球",
                       "sub_button" : [
                         {
                           "key" : "KEY_ME",
