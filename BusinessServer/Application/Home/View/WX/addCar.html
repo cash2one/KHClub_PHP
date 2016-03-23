@@ -52,6 +52,11 @@
                 return;
             }
 
+            if($('#vehicle_number').val().length < 1){
+                drawToast("车架号不能为空");
+                return;
+            }
+
             //submit
             var form = $("#form");
             form.attr("method", "POST");
@@ -83,7 +88,7 @@
             <div class="carFrame">车架号</div>
             <div class="carToken">车辆识别代码</div>
         </div>
-        <input class="car_input-class" maxlength="30" id="vehicle_number" name="vehicle_number" type="text" value="{$_SESSION['vehicle_number']}"/>
+        <input class="car_input-class" maxlength="30" id="vehicle_number" name="vehicle_number" type="text" placeholder="（必填）" value="{$_SESSION['vehicle_number']}"/>
     </div>
     <div class="wire"></div>
     <div class="list_box clear" id="carType">

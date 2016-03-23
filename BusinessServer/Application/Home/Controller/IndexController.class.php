@@ -46,7 +46,7 @@ class IndexController extends Controller {
                       ]
                     },
                     {
-                      "name" : "商家代理",
+                      "name" : "联盟商家",
                       "sub_button" : [
                         {
                           "name" : "商家专区",

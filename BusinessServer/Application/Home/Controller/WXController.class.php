@@ -443,7 +443,7 @@ class WXController extends Controller {
         $car_type_code = $_REQUEST['car_type_code'];
 
         //|| empty($car_type)
-        if(empty($name) || empty($mobile) || empty($plate_number) || empty($car_type)){
+        if(empty($name) || empty($mobile) || empty($plate_number) || empty($car_type) || empty($vehicle_number)){
             header("Location: ".HTTP_URL_PREFIX."addCar?empty=1");
             exit;
         }
