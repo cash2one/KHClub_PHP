@@ -26,15 +26,15 @@
     </script>
 </head>
 <body>
-<div class="hint">请输入用户提供的校验码，以便与您确认为用户服务和向平台收款</div>
 <form id="form">
     <div class="list_box clear">
-        <div class="genre">效验码</div>
-        <input class="input-class" maxlength="30" id="code" name="code" />
+        <input class="input-class" maxlength="30" id="code" name="code" type="text" placeholder="请输入校验码" />
     </div>
+    <div class="wire"></div>
     <div class="box clear"><a onclick="save()" class="add_car">验证</a></div>
 </form>
-<div class="wire"></div>
+<div class="hint">请输入用户提供的校验码，以便与您确认为用户服务和向平台收款</div>
+<div style="height: 40px"></div>
 <div class="box clear"><a onclick="scan()" class="add_car">扫码验证</a></div>
 <div class="hint">请扫码用户提供的二维码，以便与您确认为用户服务和向平台收款</div>
 <a href="verifyDetails.html">验证失败</a>
