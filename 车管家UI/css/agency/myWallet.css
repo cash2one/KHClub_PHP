@@ -33,7 +33,7 @@ body{
 }
 .genre{
     float: left;
-    width: 40%;
+    width: 20%;
     color: #e52828;
     font-size: 20px;
     line-height: 70px;
@@ -41,7 +41,7 @@ body{
 }
 .source_box{
     float: right;
-    width: 50%;
+    width: 70%;
 }
 .source{
     color: #323232;

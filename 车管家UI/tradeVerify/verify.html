@@ -20,6 +20,9 @@
             form.attr("action", "verify");
             form.submit();
         }
+        function scan(){
+            alert(1111111);
+        }
     </script>
 </head>
 <body>
@@ -29,10 +32,13 @@
         <div class="genre">效验码</div>
         <input class="input-class" maxlength="30" id="code" name="code" />
     </div>
-    <div class="box clear"><a href="verify.html" onclick="save()" class="add_car">验证</a></div>
-    <a href="verifyDetails.html" class="add_car">验证失败</a>
-    <a href="serveDetails.html"  class="add_car">验证成功</a>
-    <a href="serveDetails.html"  class="viewTrade">查看所有交易</a>
+    <div class="box clear"><a onclick="save()" class="add_car">验证</a></div>
 </form>
+<div class="wire"></div>
+<div class="box clear"><a onclick="scan()" class="add_car">扫码验证</a></div>
+<div class="hint">请扫码用户提供的二维码，以便与您确认为用户服务和向平台收款</div>
+<a href="verifyDetails.html">验证失败</a>
+<a href="serveDetails.html">验证成功</a>
+<a href="tradeRecord.html"  class="viewTrade">查看所有交易</a>
 </body>
 </html>
