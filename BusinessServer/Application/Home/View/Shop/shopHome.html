@@ -20,34 +20,56 @@
             form.attr("action", "searchOrder");
             form.submit();
         }
+
+        function scan(){
+            wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    if(result.substring(0,3) == 'biz'){
+                        var order = result.substring(3);
+
+                        $("#code").val(order);
+                        var form = $("#form");
+                        form.attr("method", "POST");
+                        form.attr("action", "searchOrder");
+                        form.submit();
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body>
-<div class="hint">请输入用户提供的校验码，以便与您确认为用户服务和向平台收款</div>
-<form id="form">
-    <div class="list_box clear">
-        <div class="genre">效验码</div>
-        <input class="input-class" maxlength="30" id="code" name="out_trade_no" />
-    </div>
+    <form id="form">
+        <div class="list_box clear">
+            <input class="input-class" maxlength="30" id="code" name="out_trade_no" type="text" placeholder="请输入校验码" />
+        </div>
+        <div class="wire"></div>
+        <div class="box clear"><a onclick="verify()" class="add_car">验证</a></div>
+    </form>
+    <div class="hint">请输入用户提供的校验码，以便与您确认为用户服务和向平台收款</div>
+    <div style="height: 40px"></div>
+    <div class="box clear"><a onclick="scan()" class="add_car">扫码验证</a></div>
+    <div class="hint">请扫码用户提供的二维码，以便与您确认为用户服务和向平台收款</div>
 
-    <div class="box clear"><a onclick="verify()" class="add_car">验证</a></div>
     <a href="shopServeRecord"  class="viewTrade">查看所有交易</a>
-</form>
-
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
-<script>
-
-    wx.config({
-                debug: false,
-                appId: '{$signPackage.appId}',
-                timestamp: {$signPackage.timestamp},
-            nonceStr: '{$signPackage.nonceStr}',
-            signature: '{$signPackage.signature}',
-            jsApiList : [ "onMenuShareTimeline", "onMenuShareAppMessage",
-        "onMenuShareQQ", "onMenuShareWeibo" ]
-    });
-    operate.initCloseShare();
-</script>
 </body>
+
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+    <script>
+
+        wx.config({
+                    debug: false,
+                    appId: '{$signPackage.appId}',
+                    timestamp: {$signPackage.timestamp},
+                nonceStr: '{$signPackage.nonceStr}',
+                signature: '{$signPackage.signature}',
+                jsApiList : [ "scanQRCode" ]
+        });
+        operate.initCloseShare();
+    </script>
+
 </html>

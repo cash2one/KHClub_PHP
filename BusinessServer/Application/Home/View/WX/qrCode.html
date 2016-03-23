@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>付款</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/qrCode.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <script src="__PUBLIC__/js/qrcode/qrcode.js"></script>
+    <script src="__PUBLIC__/js/qrcode/qrcode_UTF8.js"></script>
+    <script src="__PUBLIC__/js/qrcode/jquery.qrcode.js"></script>
+
+    <script type="text/javascript">
+
+        $(function(){
+            $('#container').qrcode({
+                render: 'image',
+                "size": 250,
+                "color": "#3a3",
+                "text": "biz{$out_trade_no}"
+            });
+        })
+
+    </script>
+
+</head>
+<body>
+<div class="barcode_box"><div class="barcode" id="container"></div></div>
+<div class="payment_hint">校验码或校验二维码须提供给商家，以便于商家确认为您服务</div>
+</body>
+</html>

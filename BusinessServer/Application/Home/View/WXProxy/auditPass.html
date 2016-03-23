@@ -17,11 +17,31 @@
             {
                 shade.style.display="block";
                 share.style.display="block";
+
+                var params = {
+                    title : "品位环球", // 分享标题
+                    desc : "精英代理人招募中，期待你的加入", // 分享描述
+                    link : "{$Think.const.HTTP_HOST}/BusinessServer/index.php/Home/WXProxy/shareQrcode?type=2&user_id={$user.user_id}",
+                    imgUrl : "{$Think.const.HTTP_HOST}/BusinessServer/Public/icon/carWash.png" // 分享图标
+                };
+
+                operate.initOpenShare(params);
+
             }
             user.onclick=function()
             {
                 shade.style.display="block";
                 share.style.display="block";
+
+                var params = {
+                    title : "品位环球", // 分享标题
+                    desc : "您的商务私人管家服务平台。定制生活，从此开始。", // 分享描述
+                    link : "{$Think.const.HTTP_HOST}/BusinessServer/index.php/Home/WXProxy/shareQrcode?type=1&user_id={$user.user_id}",
+                    imgUrl : "{$Think.const.HTTP_HOST}/BusinessServer/Public/icon/carWash.png" // 分享图标
+                };
+
+                operate.initOpenShare(params);
+
             }
             shade.onclick=function()
             {
@@ -38,7 +58,7 @@
 </head>
 <body>
 <div class="shade" id="shade"></div>
-<div class="share" id="share" style="background: url('__PUBLIC__/icon/fx.png') no-repeat top right">点击右上角菜单分享</div>
+<div class="share" id="share" style="background: url('__PUBLIC__/icon/share.png') no-repeat top right">点击右上角菜单分享</div>
 <div class="list_box clear">
     <div class="genre">姓名</div>
     <div class="worth">{$user.name}</div>
@@ -83,9 +103,9 @@
 
     var params = {
         title : "品位环球", // 分享标题
-        desc : "{$user.name}在“品位环球”，一个高端车辆车主管家式服务平台，期待您的加入", // 分享描述
-        link : "{$Think.const.HTTP_HOST}/BusinessServer/index.php/Home/WXProxy/shareQrcode?user_id={$user.user_id}",
-        imgUrl : "http://114.215.95.23/BusinessServer/Public/icon/carWash.png" // 分享图标
+        desc : "您的商务私人管家服务平台。定制生活，从此开始。", // 分享描述
+        link : "{$Think.const.HTTP_HOST}/BusinessServer/index.php/Home/WXProxy/shareQrcode?type=1&user_id={$user.user_id}",
+        imgUrl : "{$Think.const.HTTP_HOST}/BusinessServer/Public/icon/carWash.png" // 分享图标
     };
 
     operate.initOpenShare(params);

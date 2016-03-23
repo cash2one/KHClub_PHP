@@ -820,6 +820,17 @@ class WXController extends Controller {
         $this->display('ticketDetails');
     }
 
+    /**
+     * @brief 创建订单
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/createOrder
+     * @param out_trade_no 校验码
+     */
+    public function orderQrcode(){
+
+        $this->assign('out_trade_no', $_REQUEST['out_trade_no']);
+        $this->display('qrCode');
+    }
 
     /**
      * @brief 单辆车消费记录列表

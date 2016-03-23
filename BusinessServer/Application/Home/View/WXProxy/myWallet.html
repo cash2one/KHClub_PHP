@@ -10,17 +10,22 @@
 </head>
 <body>
 
-<div class="box">
     <volist name="tradeList" id="trade">
-        <div class="genre_box">
-            <div class="genre"><span class="num">{$trade.amount}</span>积分</div>
-            <div class="source">{$trade.content}</div>
-            <div class="values">{$trade.add_date}</div>
+        <div class="box">
+            <div class="genre_box clear">
+                <div class="genre">{$trade.amount}积分</div>
+                <div class="source_box">
+                    <div class="source">{$trade.content}</div>
+                    <div class="values">{$trade.add_date}</div>
+                </div>
+            </div>
         </div>
         <div class="wire"></div>
     </volist>
-</div>
-<div class="add_car">当前收益<span class="num">{$total}</span>积分</div>
+
+    <div class="wire1"></div>
+    <div style="height: 50px"></div>
+    <div class="add_car">当前收益<span class="num">{$total}</span>积分</div>
 
 </body>
 </html>
