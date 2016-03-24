@@ -154,7 +154,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -194,7 +194,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -239,7 +239,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -281,7 +281,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -342,7 +342,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -381,7 +381,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -435,7 +435,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
@@ -484,7 +484,7 @@ class WXManagerController extends Controller{
                 $page = 1;
             }
             if(empty($size)){
-                $size = 20;
+                $size = 10;
             }
             $start = ($page-1)*$size;
             $end   = $size;
