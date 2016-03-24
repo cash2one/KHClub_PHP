@@ -55,7 +55,7 @@
 
 <div class="page-content">
     <if condition="$page neq 1">
-        <a class="next-page" href="__APP__/Home/WXManager/checkHome?page={$page-1}">上一页</a>
+        <a class="next-page" href="__APP__/Home/WXManager/searchCar?page={$page-1}">上一页</a>
     </if>
     <php>
         for($p = 1; $p <= $page_count; $p ++) {
@@ -66,13 +66,13 @@
         }else{
         if($p > $page+2 || $p < $page-2){
         }else{
-        echo '<a class="page" href="__APP__/Home/WXManager/checkHome?page='.$p.'">'.$p.'</a>';
+        echo '<a class="page" href="__APP__/Home/WXManager/searchCar?page='.$p.'">'.$p.'</a>';
         }
         }
         }
     </php>
     <if condition="$page neq $page_count">
-        <a class="next-page" href="__APP__/Home/WXManager/checkHome?page={$page+1}">下一页</a>
+        <a class="next-page" href="__APP__/Home/WXManager/searchCar?page={$page+1}">下一页</a>
     </if>
 </div>
 
