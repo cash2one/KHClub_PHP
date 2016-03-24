@@ -328,12 +328,15 @@ body{
 .arrows{
     display: inline;
     float: right;
-    padding-top: 5px;
+    width:15px;
+    padding-top: 10px;
     margin-right: 10px;
 }
 .code{
     display: inline;
     float: right;
-    padding-top: 2px;
+    width:25px;
+    height:25px;
+    padding-top: 10px;
     margin-right: 15px;
 }
