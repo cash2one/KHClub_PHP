@@ -308,12 +308,5 @@ class ShopController extends Controller {
         }
     }
 
-    public function testScan(){
-
-        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
-        $signPackage = $jssdk->GetSignPackage();
-        $this->assign('signPackage',$signPackage);
-        $this->display('testScan');
-    }
 }
 
