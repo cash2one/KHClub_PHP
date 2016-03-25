@@ -208,7 +208,7 @@ class WXManagerController extends Controller{
             $page_count  = ceil($count/$size);
             $userModel = M();
             $sql = 'SELECT us.user_id, us.username, COUNT(ca.mobile) carnum, us.add_date FROM biz_user_info us, biz_car ca
-                    WHERE us.user_id=ca.user_id GROUP BY ca.user_id LIMIT '.$start.','.$end;
+                    WHERE us.user_id=ca.user_id GROUP BY ca.user_id ORDER BY us.add_date DESC LIMIT '.$start.','.$end;
             $userInfo = $userModel->query($sql);
             for($j=0;$j<count($userInfo);$j++){
                 $userInfo[$j]['add_date'] = date('Y-m-d',$userInfo[$j]['add_date']);
