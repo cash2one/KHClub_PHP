@@ -664,4 +664,40 @@ class WXManagerController extends Controller{
             returnJson(0,'数据异常！',$e);
         }
     }
+
+
+    /**
+     * @brief 为代理提现
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXManager/withdrawCommit
+     * @param target_id 要提现的账户ID
+     */
+    function withdrawCommit(){
+
+        //未登录
+        if(empty($_SESSION['manager'])){
+            header('Location: '.__ROOT__.'/index.php/Home/login/login');
+            exit;
+        }
+        $target_id = $_POST['target_id'];
+        if(empty($target_id)){
+            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawDetail?user_id='.$target_id);
+            exit;
+        }
+
+        $withdrawModel = M();
+        //提现
+        $sql = 'UPDATE biz_proxy_trade SET state=2,update_date='.time().',withdraw_date='.time().'
+                WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
+        $num = $withdrawModel->execute($sql);
+        if($num < 1){
+            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawRecord?user_id='.$target_id);
+            exit;
+        }else{
+            //提现成功
+            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawRecord?user_id='.$target_id);
+            exit;
+        }
+
+    }
 }
