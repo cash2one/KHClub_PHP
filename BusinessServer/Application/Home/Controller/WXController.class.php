@@ -392,6 +392,7 @@ class WXController extends Controller {
      *
      */
     public function applyCarView(){
+
         //处理选择的车型
         $brand = $_REQUEST['brand'];
         $type = $_REQUEST['type'];
