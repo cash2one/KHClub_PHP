@@ -37,13 +37,13 @@ class ServerProviderController extends Controller{
      * @brief 管理系统登录
      * 接口地址
      * http://localhost/khclub_php/index.php/Home/ServerProvider/loginVerify
-     * @param mobile 用户名
+     * @param username 用户名
      * @param password 密码 6-24位
      */
     function loginVerify(){
-        $mobile = $_POST['mobile'];
+        $username = $_POST['username'];
         $password = $_POST['password'];
-        $userInfo = M("biz_server_provider")->field('server_id,username,password,mobile')->where("mobile='%s' and password='%s'",array($mobile,$password))->find();
+        $userInfo = M("biz_server_provider")->field('server_id,username,password,mobile')->where("username='%s' and password='%s'",array($username,$password))->find();
         if(!empty($userInfo)){
             $_SESSION["user"] = $userInfo;
             header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/index');
