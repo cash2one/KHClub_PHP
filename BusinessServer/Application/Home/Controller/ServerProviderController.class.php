@@ -10,11 +10,19 @@ use Think\Controller;
 use Think\Exception;
 
 class ServerProviderController extends Controller{
+    function index(){
+        if($_SESSION["user"] == null){
+            header('Location:'.__ROOT__.'/index.php/Home/ServerProviderLogin/login');
+            exit;
+        }else{
+            header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/main');
+        }
+    }
 
     /**
      * @brief 总部首页
      * 接口地址
-     * http://114.215.95.23/BusinessServer/index.php/Home/ServerProvider/main
+     * http://192.168.0.104/SHS_Contact_PHP/index.php/Home/ServerProvider/main
      * @param server_id 服务商id
      */
     public function main(){
@@ -63,7 +71,7 @@ class ServerProviderController extends Controller{
     /**
      * @brief 商店所有交易
      * 接口地址
-     * http://114.215.95.23/BusinessServer/index.php/Home/ServerProvider/shopRecord
+     * http://192.168.0.104/SHS_Contact_PHP/index.php/Home/ServerProvider/shopRecord?verify_shop_id=1
      * @param verify_shop_id 商店id
      */
     public function shopRecord(){
@@ -85,10 +93,16 @@ class ServerProviderController extends Controller{
             $start = ($page-1)*$size;
             $end   = $size;
             $orderModel = M();
-            $sql = 'SELECT od.id FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
+            $sql = 'SELECT od.id, od.total_fee FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
                     WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
                     ORDER BY od.use_date DESC';
-            $count = count($orderModel->query($sql));
+            $money = $orderModel->query($sql);
+            $sumMoney = '';
+            for($i=0;$i<count($money);$i++){
+                $sumMoney += ($money[$i]['total_fee']);
+            }
+            $count = count($money);
+            $sumCar = $count;
 
             if($count == false){
                 $count = 1;
@@ -99,17 +113,14 @@ class ServerProviderController extends Controller{
                     WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
                     ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $orderInfo = $orderModel->query($sql);
-            $sumMoney = '';
             for($i=0;$i<count($orderInfo);$i++){
                 $orderInfo[$i]['use_date'] = date('Y-m-d',$orderInfo[$i]['use_date']);
-                    $sumMoney += ($orderInfo[$i]['total_fee']);
             }
             if($sumMoney == ''){
                 $sumMoney = '0';
             }
             $shop = M('biz_shop')->field('shop_name')->where('id='.$verify_shop_id)->find();
             $shop_name = $shop['shop_name'];
-            $sumCar = count($orderInfo);
             $this->assign('verify_shop_id',$verify_shop_id);
             $this->assign('shop_name',$shop_name);
             $this->assign('sumMoney',$sumMoney);
@@ -126,7 +137,7 @@ class ServerProviderController extends Controller{
     /**
      * @brief 商店当天所有交易
      * 接口地址
-     * http://114.215.95.23/BusinessServer/index.php/Home/ServerProvider/shopToday
+     * http://192.168.0.104/SHS_Contact_PHP/index.php/Home/ServerProvider/shopToday?verify_shop_id=1
      * @param verify_shop_id 商店id
      */
     public function shopToday(){
@@ -149,10 +160,16 @@ class ServerProviderController extends Controller{
             $start = ($page-1)*$size;
             $end   = $size;
             $orderModel = M();
-            $sql = 'SELECT od.id FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
+            $sql = 'SELECT od.id, od.total_fee FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
                     WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
                     AND od.use_date>'.$today.' ORDER BY od.use_date DESC';
-            $count = count($orderModel->query($sql));
+            $money = $orderModel->query($sql);
+            $sumMoney = '';
+            for($i=0;$i<count($money);$i++){
+                $sumMoney += ($money[$i]['total_fee']);
+            }
+            $count = count($money);
+            $sumCar = $count;
 
             if($count == false){
                 $count = 1;
@@ -163,17 +180,14 @@ class ServerProviderController extends Controller{
                     WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
                     AND od.use_date>'.$today.' ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $orderInfo = $orderModel->query($sql);
-            $sumMoney = '';
             for($i=0;$i<count($orderInfo);$i++){
                 $orderInfo[$i]['use_date'] = date('Y-m-d',$orderInfo[$i]['use_date']);
-                $sumMoney += ($orderInfo[$i]['total_fee']);
             }
             if($sumMoney == ''){
                 $sumMoney = '0';
             }
             $shop = M('biz_shop')->field('shop_name')->where('id='.$verify_shop_id)->find();
             $shop_name = $shop['shop_name'];
-            $sumCar = count($orderInfo);
             $this->assign('verify_shop_id',$verify_shop_id);
             $this->assign('shop_name',$shop_name);
             $this->assign('sumMoney',$sumMoney);
@@ -190,7 +204,7 @@ class ServerProviderController extends Controller{
     /**
      * @brief 服务商家所有交易
      * 接口地址
-     * http://114.215.95.23/BusinessServer/index.php/Home/ServerProvider/allRecord
+     * http://192.168.0.104/SHS_Contact_PHP/index.php/Home/ServerProvider/allRecord?server_id=1
      * @param server_id 服务商id
      */
     public function allRecord(){

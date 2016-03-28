@@ -14,16 +14,11 @@
 
 </head>
 
-<!--<script type="text/javascript">
-    $(function(){
-        $(".shop-td-title").click(function(){
-            location.href = "shopRecord.html";
-        });
-    })
-
-
-
-</script>-->
+<script type="text/javascript">
+    function show(e){
+        location.href = "shopRecord?verify_shop_id="+e;
+    }
+</script>
 
 <body>
 
@@ -59,7 +54,7 @@
         <tbody>
             <volist name="shop" id="v">
             <tr>
-                <td class="user-list-cell shop-td-title"><a href="shopRecord?verify_shop_id={$v.id}">{$v.shop_name}</a></td>
+                <td class="user-list-cell shop-td-title" onclick="show('{$v.id}')">{$v.shop_name}</td>
                 <td class="user-list-cell">{$v.use_date}</td>
                 <td class="user-list-cell">{$v.moneyNum}</td>
                 <td class="user-list-cell">{$v.carNum}</td>
