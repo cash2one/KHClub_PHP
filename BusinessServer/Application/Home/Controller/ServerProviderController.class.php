@@ -10,12 +10,46 @@ use Think\Controller;
 use Think\Exception;
 
 class ServerProviderController extends Controller{
+    /**
+     * @brief 管理系统登录页面
+     * 接口地址
+     * http://localhost/SHS_Contact_PHP/index.php/Home/ServerProvider/index
+     */
     function index(){
         if($_SESSION["user"] == null){
-            header('Location:'.__ROOT__.'/index.php/Home/ServerProviderLogin/login');
+            header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/login');
             exit;
         }else{
             header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/main');
+        }
+    }
+
+    /**
+     * @brief 管理系统登录页面
+     * 接口地址
+     * http://localhost/SHS_Contact_PHP/index.php/Home/ServerProvider/login
+     */
+    function login(){
+        $this->display('Login');
+    }
+
+    /**
+     * @brief 管理系统登录
+     * 接口地址
+     * http://localhost/khclub_php/index.php/Home/ServerProvider/loginVerify
+     * @param mobile 用户名
+     * @param password 密码 6-24位
+     */
+    function loginVerify(){
+        $mobile = $_POST['mobile'];
+        $password = $_POST['password'];
+        $userInfo = M("biz_server_provider")->field('server_id,username,password,mobile')->where("mobile='%s' and password='%s'",array($mobile,$password))->find();
+        if(!empty($userInfo)){
+            $_SESSION["user"] = $userInfo;
+            header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/index');
+        }else{
+            $this->assign('error','1');
+            $this->display('Login');
         }
     }
 
@@ -29,7 +63,7 @@ class ServerProviderController extends Controller{
         try {
             if($_SESSION["user"] == null){
                 $this->assign('error','1');
-                header('Location:'.__ROOT__.'/index.php/Home/ServerProviderLogin/login');
+                header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/login');
                 exit;
             }
             $today = strtotime(date('Y-m-d'));
@@ -78,7 +112,7 @@ class ServerProviderController extends Controller{
         try {
             if($_SESSION["user"] == null){
                 $this->assign('error','1');
-                header('Location:'.__ROOT__.'/index.php/Home/ServerProviderLogin/login');
+                header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/login');
                 exit;
             }
             $verify_shop_id = $_REQUEST['verify_shop_id'];
@@ -144,7 +178,7 @@ class ServerProviderController extends Controller{
         try {
             if($_SESSION["user"] == null){
                 $this->assign('error','1');
-                header('Location:'.__ROOT__.'/index.php/Home/ServerProviderLogin/login');
+                header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/login');
                 exit;
             }
             $today = strtotime(date('Y-m-d'));
@@ -211,7 +245,7 @@ class ServerProviderController extends Controller{
         try {
             if($_SESSION["user"] == null){
                 $this->assign('error','1');
-                header('Location:'.__ROOT__.'/index.php/Home/ServerProviderLogin/login');
+                header('Location:'.__ROOT__.'/index.php/Home/ServerProvider/login');
                 exit;
             }
             $server_id = $_SESSION['user']['server_id'];
