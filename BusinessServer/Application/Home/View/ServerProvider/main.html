@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js" ></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/shopAdmin/systemhome.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/shopAdmin/serverProvider.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+
+</head>
+
+<!--<script type="text/javascript">
+    $(function(){
+        $(".shop-td-title").click(function(){
+            location.href = "shopRecord.html";
+        });
+    })
+
+
+
+</script>-->
+
+<body>
+
+    <table class="table table-min-width table-position-class" >
+        <thead>
+        <tr>
+            <td colspan="5">
+                <div>
+                    <div class="car-quantity-shell">
+                        <span class="car-decorate-font">一共服务车辆</span>
+                        <span class="car-server-quantity">{$sumCar}</span>
+                        <span class="car-decorate-font">辆</span>
+                    </div>
+
+                    <div class="car-money-shell">
+                        <span class="car-decorate-font">共计</span>
+                        <span class="car-server-money">{$sumMoney}</span>
+                        <span class="car-decorate-font">元</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+            <th class="user-list-title">我的店</th>
+            <th class="user-list-title">日期</th>
+            <th class="user-list-title">交易额</th>
+            <th class="user-list-title">车辆</th>
+            <th class="user-list-title">详情</th>
+        </tr>
+        </thead>
+        <tbody>
+            <volist name="shop" id="v">
+            <tr>
+                <td class="user-list-cell shop-td-title"><a href="shopRecord?verify_shop_id={$v.id}">{$v.shop_name}</a></td>
+                <td class="user-list-cell">{$v.use_date}</td>
+                <td class="user-list-cell">{$v.moneyNum}</td>
+                <td class="user-list-cell">{$v.carNum}</td>
+                <td class="user-list-cell"><a href="shopToday?verify_shop_id={$v.id}">查看</a></td>
+            </tr>
+            </volist>
+        </tbody>
+    </table>
+
+    <a class="look-up-all" href="allRecord.html">查看所有服务</a>
+
+</body>
+</html>

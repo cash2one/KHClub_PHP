@@ -1,0 +1,59 @@
+.table-position-class {
+    margin:10px auto;
+}
+
+.car-quantity-shell{
+    display: inline;margin-left: 180px
+}
+
+.car-decorate-font{
+    font-size: 18px
+}
+
+.car-server-quantity{
+    font-size: 24px;
+    color: blue
+}
+
+.car-server-money{
+    font-size: 24px;
+    color: red
+}
+
+.car-money-shell{
+    display: inline;
+    margin-left: 210px
+}
+
+.shop-td-title{
+    background-color: purple;
+    color: #ffffff;
+}
+
+.look-up-all{
+    text-align: center;
+    margin: 20px auto;
+    width: 1000px;
+    background-color: blue;
+    color: #ffffff;
+    padding: 10px 10px;
+    display: block
+}
+
+.shop-left-top-title{
+    background-color: blue;
+    font-size: 15px;
+    display: inline;
+    color: #ffffff;
+    padding: 7px;
+    margin-left: 10px
+}
+
+.shop-car-quantity-shell{
+    display: inline;
+    margin-left: 80px
+}
+.shop-car-money-shell{
+    display: inline;
+    margin-left: 210px
+}

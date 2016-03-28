@@ -1,0 +1,61 @@
+
+
+.table-min-width{
+    width: 1000px;
+}
+
+.user-list-title{
+    width: 200px;
+    text-align: center;
+    font-size: 20px;
+    border-right: solid 1px #808080;
+}
+
+.user-list-cell{
+    text-align: center;
+    width: 200px;
+    border-right: solid 1px #808080;
+}
+
+.refuse{
+    color: red;
+    margin-right:35px;
+}
+
+.table-head{
+    text-align: right;
+}
+
+.table-title{
+    margin-left: 40%;
+    display: inline;
+}
+
+.top-search-input{
+    margin-left: 13%;
+    width: 200px;
+    display: inline;
+}
+
+.page-content{
+    width: 1000px;
+    text-align: center;
+    margin-top: 20px
+}
+
+.next-page{
+    padding: 5px;
+    color: #4a4a4c;
+}
+.active-page{
+    padding: 4px;
+    color: red
+}
+.page{
+    padding: 4px;
+}
+
+.nav-detail-width{
+    width: 45%;
+    text-align: center
+}
