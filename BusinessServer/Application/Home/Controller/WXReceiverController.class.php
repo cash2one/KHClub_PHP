@@ -40,7 +40,8 @@ class WXReceiverController extends Controller {
         if($result['Event'] == 'CLICK' && $result['MsgType'] == 'event'){
 
             if($result['EventKey'] == 'KEY_ME'){
-                $content = '“品味•环球”专为高端商务人士打造的私人尊享服务平台，提供覆盖精英生活衣食住行方方面面的专属生活服务。专业，专注，高效的为用户带来超越期待的体验和感受。关注公众号，成为会员即可获取私人管家24小时资讯服务与协助等会员特权服务。';
+                //关于我们部分暂时不需要了
+                $content = '“品味•环球”专为高端商务人士打造的私人尊享服务平台，提供覆盖精英生活衣食住行方方面面的专属生活服务。专业，专注，高效的为用户带来超越期待的体验和感受。关注公众号，成为会员即可获取私人管家24小时资讯服务与协助等会员特权服务。<a href="http://c.eqxiu.com/s/27ULUB5f">详情请点击</a>';
             }else if($result['EventKey'] == 'KEY_MANAGER'){
                 $content = '“豪车管家”是“品味•环球”旗下专为中高端车车主提供全方位车管家服务的商务管家平台，从洗车、保养、维修、线上诊断，到保险业务等，我们都将有专人为您提供服务。现已开通4008693911官方服务电话，期待您的来电。';
             }else if($result['EventKey'] == 'KEY_VIP'){

@@ -24,9 +24,9 @@ class IndexController extends Controller {
                       "name" : "品位环球",
                       "sub_button" : [
                         {
-                          "key" : "KEY_ME",
+                          "url" : "http://c.eqxiu.com/s/27ULUB5f",
                           "name" : "关于我们",
-                          "type" : "click"
+                          "type" : "view"
                         },
                         {
                           "key" : "KEY_INTRO",
