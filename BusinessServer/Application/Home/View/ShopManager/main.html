@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/shopManager.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+
+    <title>管理系统</title>
+
+</head>
+
+<script type="text/javascript">
+
+</script>
+
+<body>
+
+    <table class="table table-min-width table-position-class" >
+        <thead>
+        <tr>
+            <td colspan="5">
+                <div>
+                    <form id="search" action="searchOrder" method="get">
+                        <input name="out_trade_no" id="order" type="text" class="form-control input-order" placeholder="请输入客户提供的校验码以完成确认服务" maxlength="40" required="required">
+                        <button type="submit" class="btn btn-info button-order">校验</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+            <th class="user-list-title">我的店</th>
+            <th class="user-list-title">日期</th>
+            <th class="user-list-title">交易额</th>
+            <th class="user-list-title">车辆</th>
+            <th class="user-list-title">详情</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            <volist name="list" id="order">
+                <tr>
+                    <td class="user-list-cell shop-td-title">{$user.shop_name}</td>
+                    <td class="user-list-cell">{$order.use_date}</td>
+                    <td class="user-list-cell">{$order.total_fee}</td>
+                    <td class="user-list-cell">{$order.plate_number}</td>
+                    <td class="user-list-cell"><a href="orderDetails?order_id={$order.id}">查看</a></td>
+                </tr>
+            </volist>
+
+        </tbody>
+    </table>
+
+    <div class="page-content" style="margin: 20px auto">
+        <if condition="$page neq 1">
+            <a class="next-page" href="__APP__/Home/ShopManager/main?page={$page-1}">上一页</a>
+        </if>
+        <php>
+            for($p = 1; $p <= $page_count; $p ++) {
+            if($p == $page){
+            if(!($page == 1 && $page_count==1)){
+            echo '<a class="active-page">'.$p.'</a>';
+            }
+            }else{
+            if($p > $page+2 || $p < $page-2){
+            }else{
+            echo '<a class="page" href="__APP__/Home/ShopManager/main?page='.$p.'">'.$p.'</a>';
+            }
+            }
+            }
+        </php>
+        <if condition="$page neq $page_count">
+            <a class="next-page" href="__APP__/Home/ShopManager/main?page={$page+1}">下一页</a>
+        </if>
+    </div>
+
+    <a class="look-up-all" href="allRecord">查看全部</a>
+
+</body>
+</html>
