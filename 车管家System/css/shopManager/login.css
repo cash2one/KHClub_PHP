@@ -1,0 +1,33 @@
+.login-error{
+    width: 440px;
+    position: absolute;
+    margin-top: 10px;
+    color: red;
+}
+
+.login-frame{
+    border-radius: 5px;
+    background-color: #e3e3e3;
+    width: 440px;
+    height: 270px;
+    margin:50px auto;
+    text-align: center;
+}
+
+.login-input{
+    width: 300px;
+}
+
+.login-username{
+    margin-top: 40px
+}
+
+.login-password{
+    margin-top: 15px
+}
+
+.login-btn{
+    width: 300px;
+    margin-top: 40px;
+}
+

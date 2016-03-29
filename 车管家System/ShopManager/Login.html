@@ -11,27 +11,24 @@
 
     <title>车管家</title>
 
-    <!-- Bootstrap core CSS -->
-    <script src="../js/jquery-2.2.0.min.js" ></script>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/system/login.css" rel="stylesheet">
+    <link href="../css/shopManager/common.css" rel="stylesheet">
+    <link href="../css/shopManager/login.css" rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="container">
-
-    <form action="main.html" method="post" class="form-signin">
-        <label for="inputUsername" class="sr-only">用户名</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="用户名" required autofocus>
-        <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
-        <div class="login-error">用户名或密码错误</div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-    </form>
-
-</div>
+    <div class="container">
+        <img src="../images/logo.png" style="width: 100%"/>
+        <div class="login-frame">
+            <form action="main.html" method="post" >
+                <input class="login-input login-username" type="text"  placeholder="账号" required autofocus>
+                <input class="login-input login-password" type="password" placeholder="密码" required>
+                <div class="login-error">用户名或密码错误</div>
+                <button class="btn-default login-btn" type="submit">登录</button>
+            </form>
+        </div>
+    </div>
 
 </body>
 </html>

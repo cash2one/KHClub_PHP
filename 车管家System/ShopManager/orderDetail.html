@@ -5,11 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
     <script src="../js/jquery-2.2.0.min.js" ></script>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/system/systemhome.css" rel="stylesheet">
-    <link href="../css/system/shopManager.css" rel="stylesheet">
-    <script src="../js/bootstrap.min.js"></script>
-    <link href="../css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+
+    <link href="../css/shopManager/common.css" rel="stylesheet">
+    <link href="../css/shopManager/checkOrder.css" rel="stylesheet">
+
     <title>管理系统</title>
 
 </head>
@@ -17,32 +16,34 @@
 
 <body>
 
-    <table class="table table-min-width table-position-class" >
-        <thead>
-            <tr>
-                <th class="user-list-title">姓名</th>
-                <th class="user-list-title">车牌号</th>
-                <th class="user-list-title">服务</th>
-                <th class="user-list-title">商家</th>
-                <th class="user-list-title">金额</th>
-                <th class="user-list-title">车型</th>
-                <th class="user-list-title">日期</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="user-list-cell">刘兴瑞</td>
-                <td class="user-list-cell">粤B12345</td>
-                <td class="user-list-cell">洗车</td>
-                <td class="user-list-cell">深国投广场店</td>
-                <td class="user-list-cell">50</td>
-                <td class="user-list-cell">宝马3系</td>
-                <td class="user-list-cell">2016-02-23</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <img src="../images/logo.png" style="width: 100%"/>
 
-    <a class="confirm-order" href="main.html">点击返回主页</a>
+        <table class="table-border">
+            <tr class="table-head-tr">
+                <th class="table-th">姓名</th>
+                <th class="table-th">车牌号</th>
+                <th class="table-th">服务</th>
+                <th class="table-th">商家</th>
+                <th class="table-th">金额</th>
+                <th class="table-th">车型</th>
+                <th class="table-th">日期</th>
+            </tr>
+            <tr>
+                <td class="table-td-odd">刘兴瑞</td>
+                <td class="table-td-odd">粤B12345</td>
+                <td class="table-td-odd">洗车</td>
+                <td class="table-td-odd">深国投广场店</td>
+                <td class="table-td-odd">50</td>
+                <td class="table-td-odd">宝马3系</td>
+                <td class="table-td-odd">2016-02-23</td>
+            </tr>
+        </table>
+
+        <a class="btn-default confirm-order" href="main.html">点击返回主页</a>
+    </div>
+
+
 
 </body>
 </html>
