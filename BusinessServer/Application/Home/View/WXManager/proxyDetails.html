@@ -31,16 +31,16 @@
         </thead>
         <tbody>
             <volist name="amountInfo" id="v">
-            <tr>
-                <td class="user-list-cell">{$v.add_date}</td>
-                <td class="user-list-cell" style="color: red">{$v.amount}</td>
-                <td class="user-list-cell">{$v.lower_proxy_name}推荐了一名新用户</td>
-                <if condition="($v.state eq 2)">
-                    <td class="user-list-cell" style="color: red">已结算</td>
-                <else/>
-                    <td class="user-list-cell">未结算</td>
-                </if>
-            </tr>
+                <tr>
+                    <td class="user-list-cell">{$v.add_date}</td>
+                    <td class="user-list-cell" style="color: red">{$v.amount}</td>
+                    <td class="user-list-cell">{$v.lower_proxy_name}推荐了一名新用户</td>
+                    <if condition="($v.state eq 2)">
+                        <td class="user-list-cell" style="color: red">已结算</td>
+                        <else/>
+                        <td class="user-list-cell">未结算</td>
+                    </if>
+                </tr>
             </volist>
         </tbody>
     </table>
