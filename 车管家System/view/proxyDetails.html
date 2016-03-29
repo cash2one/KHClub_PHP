@@ -17,7 +17,7 @@
 <table class="table table-min-width" >
     <thead>
         <tr>
-            <th class="user-list-title">张三</th>
+            <th class="user-list-title"><a onclick="alertWithdraw()">张三</a></th>
             <th class="user-list-title">13888888888</th>
             <th class="user-list-title">狮虎兽科技</th>
             <th class="user-list-title">CEO</th>
@@ -105,5 +105,34 @@
     <span class="next-page">下一页</span>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">红包提现</h4>
+            </div>
+            <div class="modal-body">
+                刘兴瑞当前累计红包：10元 <br>
+                为他发红包？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
+
+<script type="text/javascript">
+
+    function alertWithdraw(){
+        $('#myModal').modal();
+    }
+
+</script>
+
 </html>

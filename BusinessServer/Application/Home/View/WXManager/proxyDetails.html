@@ -12,62 +12,98 @@
     <title>管理系统</title>
 </head>
 <body>
+    <table class="table table-min-width" >
+        <thead>
+            <tr>
+                <th class="user-list-title"><a onclick="alertWithdraw()">{$proxyInfo.name}</a></th>
+                <th class="user-list-title">{$proxyInfo.mobile}</th>
+                <th class="user-list-title">{$proxyInfo.company}</th>
+                <th class="user-list-title">{$proxyInfo.position}</th>
+            </tr>
+        </thead>
+        <thead>
+            <tr>
+                <th class="user-list-title">日期</th>
+                <th class="user-list-title">金额</th>
+                <th class="user-list-title">事件</th>
+                <th class="user-list-title">状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="amountInfo" id="v">
+            <tr>
+                <td class="user-list-cell">{$v.add_date}</td>
+                <td class="user-list-cell" style="color: red">{$v.amount}</td>
+                <td class="user-list-cell">{$v.lower_proxy_name}推荐了一名新用户</td>
+                <if condition="($v.state eq 2)">
+                    <td class="user-list-cell" style="color: red">已结算</td>
+                <else/>
+                    <td class="user-list-cell">未结算</td>
+                </if>
+            </tr>
+            </volist>
+        </tbody>
+    </table>
 
-<table class="table table-min-width" >
-    <thead>
-        <tr>
-            <th class="user-list-title">{$proxyInfo.name}</th>
-            <th class="user-list-title">{$proxyInfo.mobile}</th>
-            <th class="user-list-title">{$proxyInfo.company}</th>
-            <th class="user-list-title">{$proxyInfo.position}</th>
-        </tr>
-    </thead>
-    <thead>
-        <tr>
-            <th class="user-list-title">日期</th>
-            <th class="user-list-title">金额</th>
-            <th class="user-list-title">事件</th>
-            <th class="user-list-title">状态</th>
-        </tr>
-    </thead>
-    <tbody>
-        <volist name="amountInfo" id="v">
-        <tr>
-            <td class="user-list-cell">{$v.add_date}</td>
-            <td class="user-list-cell" style="color: red">{$v.amount}</td>
-            <td class="user-list-cell">{$v.lower_proxy_name}推荐了一名新用户</td>
-            <if condition="($v.state eq 2)">
-                <td class="user-list-cell" style="color: red">已结算</td>
-            <else/>
-                <td class="user-list-cell">未结算</td>
-            </if>
-        </tr>
-        </volist>
-    </tbody>
-</table>
+    <div class="page-content">
+        <if condition="$page neq 1">
+            <a class="next-page" href="__APP__/Home/WXManager/proxyDetails?user_id={$proxyInfo.user_id}&page={$page-1}">上一页</a>
+        </if>
+        <php>
+            for($p = 1; $p <= $page_count; $p ++) {
+            if($p == $page){
+            if(!($page == 1 && $page_count==1)){
+            echo '<a class="active-page">'.$p.'</a>';
+            }
+            }else{
+            if($p > $page+2 || $p < $page-2){
+            }else{
+            echo '<a class="page" href="__APP__/Home/WXManager/proxyDetails?user_id='.$proxyInfo['user_id'].'&page='.$p.'">'.$p.'</a>';
+            }
+            }
+            }
+        </php>
+        <if condition="$page neq $page_count">
+            <a class="next-page" href="__APP__/Home/WXManager/proxyDetails?user_id={$proxyInfo.user_id}&page={$page+1}">下一页</a>
+        </if>
+    </div>
 
-<div class="page-content">
-    <if condition="$page neq 1">
-        <a class="next-page" href="__APP__/Home/WXManager/proxyDetails?user_id={$proxyInfo.user_id}&page={$page-1}">上一页</a>
-    </if>
-    <php>
-        for($p = 1; $p <= $page_count; $p ++) {
-        if($p == $page){
-        if(!($page == 1 && $page_count==1)){
-        echo '<a class="active-page">'.$p.'</a>';
-        }
-        }else{
-        if($p > $page+2 || $p < $page-2){
-        }else{
-        echo '<a class="page" href="__APP__/Home/WXManager/proxyDetails?user_id='.$proxyInfo['user_id'].'&page='.$p.'">'.$p.'</a>';
-        }
-        }
-        }
-    </php>
-    <if condition="$page neq $page_count">
-        <a class="next-page" href="__APP__/Home/WXManager/proxyDetails?user_id={$proxyInfo.user_id}&page={$page+1}">下一页</a>
-    </if>
-</div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">红包提现</h4>
+                </div>
+                <div class="modal-body">
+                    {$proxyInfo.name}当前累计未结算收益：{$total}元 <br>
+                    为他结算？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="withdrawConfirm()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="form" method="post" action="withdrawCommit">
+        <input type="hidden" id="target_id" name="target_id" value="{$proxyInfo.user_id}">
+    </form>
 
 </body>
+
+<script type="text/javascript">
+
+    function alertWithdraw(){
+        $('#myModal').modal();
+    }
+
+    function withdrawConfirm(){
+        $('#form').submit();
+    }
+
+</script>
+
 </html>

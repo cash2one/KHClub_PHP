@@ -458,57 +458,15 @@ class WXManagerController extends Controller{
                     $amountInfo[$i]['add_date'] = date('Y-m-d',$amountInfo[$i]['add_date']);
                 }
             }
+
+            $leftMoney = $amountModel->field("CASE WHEN SUM(amount) > 0 THEN SUM(amount) ELSE 0 END total")->where('delete_flag=0 AND state=1 AND user_id='.$user_id)->find();
+
             $this->assign('page',$page);
             $this->assign('page_count',$page_count);
+            $this->assign('total', $leftMoney['total']);
             $this->assign('proxyInfo',$proxyInfo);
             $this->assign('amountInfo',$amountInfo);
             $this->display('proxyDetails');
-
-        }catch (Exception $e){
-            returnJson(0,'数据异常！',$e);
-        }
-    }
-
-    /**
-     * @brief 提现申请
-     * 接口地址
-     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/withdrawRequest
-     * @param page 页码
-     * @param size 每页数量
-     */
-    public function withdrawRequest(){
-        try {
-            $page = $_REQUEST['page'];
-            $size = $_REQUEST['size'];
-            if(empty($page)){
-                $page = 1;
-            }
-            if(empty($size)){
-                $size = 10;
-            }
-            $start = ($page-1)*$size;
-            $end   = $size;
-            $proxyModel = M();
-            $sql = 'SELECT fo.user_id FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
-                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
-                    GROUP BY tr.user_id ORDER BY fo.add_date DESC';
-            $count = count($proxyModel->query($sql));
-            if($count == false){
-                $count = 1;
-            }
-            $page_count  = ceil($count/$size);
-            $sql = 'SELECT fo.user_id, fo.name, fo.mobile, fo.company, fo.position, SUM(tr.amount) amount, wi.withdraw_state
-                    FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
-                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
-                    GROUP BY tr.user_id ORDER BY fo.add_date DESC';
-            $proxyInfo = $proxyModel->query($sql);
-            for($i=0;$i<count($proxyInfo);$i++){
-                $proxyInfo[$i]['add_date'] = date('Y-m-d',$proxyInfo[$i]['add_date']);
-            }
-            $this->assign('page',$page);
-            $this->assign('page_count',$page_count);
-            $this->assign('proxyInfo',$proxyInfo);
-            $this->display('withdrawRequest');
 
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
@@ -667,6 +625,52 @@ class WXManagerController extends Controller{
 
 
     /**
+     * @brief 提现申请
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/withdrawRequest
+     * @param page 页码
+     * @param size 每页数量
+     */
+    public function withdrawRequest(){
+        try {
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $proxyModel = M();
+            $sql = 'SELECT fo.user_id FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
+                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
+                    GROUP BY tr.user_id ORDER BY fo.add_date DESC';
+            $count = count($proxyModel->query($sql));
+            if($count == false){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $sql = 'SELECT fo.user_id, fo.name, fo.mobile, fo.company, fo.position, SUM(tr.amount) amount, wi.withdraw_state
+                    FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
+                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
+                    GROUP BY tr.user_id ORDER BY fo.add_date DESC LIMIT '.$start.','.$end;
+            $proxyInfo = $proxyModel->query($sql);
+            for($i=0;$i<count($proxyInfo);$i++){
+                $proxyInfo[$i]['add_date'] = date('Y-m-d',$proxyInfo[$i]['add_date']);
+            }
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('proxyInfo',$proxyInfo);
+            $this->display('withdrawRequest');
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
      * @brief 为代理提现
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WXManager/withdrawCommit
@@ -675,15 +679,15 @@ class WXManagerController extends Controller{
     function withdrawCommit(){
 
         //未登录
-        if(empty($_SESSION['manager'])){
+        if(!isset($_SESSION['manager'])){
             header('Location: '.__ROOT__.'/index.php/Home/login/login');
             exit;
         }
-        $target_id = $_POST['target_id'];
-        if(empty($target_id)){
-            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawDetail?user_id='.$target_id);
+        if(!isset($_POST['target_id'])){
+            header('Location: '.__ROOT__.'/index.php/Home/WXManager/proxy');
             exit;
         }
+        $target_id = $_POST['target_id'];
 
         $withdrawModel = M();
         //提现
@@ -691,11 +695,11 @@ class WXManagerController extends Controller{
                 WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
         $num = $withdrawModel->execute($sql);
         if($num < 1){
-            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawRecord?user_id='.$target_id);
+            header('Location: '.__ROOT__.'/index.php/Home/WXManager/proxyDetails?user_id='.$target_id);
             exit;
         }else{
             //提现成功
-            header('Location: '.__ROOT__.'/index.php/Home/WXManager/withdrawRecord?user_id='.$target_id);
+            header('Location: '.__ROOT__.'/index.php/Home/WXManager/proxyDetails?user_id='.$target_id);
             exit;
         }
 
