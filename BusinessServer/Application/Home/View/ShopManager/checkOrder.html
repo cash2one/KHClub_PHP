@@ -5,11 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js" ></script>
-    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
-    <link href="__PUBLIC__/css/system/shopManager.css" rel="stylesheet">
-    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
-    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/shopManager/common.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/shopManager/checkOrder.css" rel="stylesheet">
     <title>管理系统</title>
 
 </head>
@@ -25,53 +22,43 @@
 
 <body>
 
-    <table class="table table-min-width table-position-class" >
-        <thead>
-        <tr>
-            <td colspan="7">
-                <div>
-                    <form id="search" action="searchOrder" method="get">
-                        <input name="out_trade_no" id="order" type="text" class="form-control input-order" placeholder="请输入客户提供的校验码以完成确认服务" maxlength="40" required="required">
-                        <button type="submit" class="btn btn-info button-order">校验</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        </thead>
-        <if condition="$fail neq true">
-            <thead>
-            <tr>
-                <th class="user-list-title">姓名</th>
-                <th class="user-list-title">车牌号</th>
-                <th class="user-list-title">服务</th>
-                <th class="user-list-title">商家</th>
-                <th class="user-list-title">金额</th>
-                <th class="user-list-title">车型</th>
-                <th class="user-list-title">日期</th>
+    <div class="container">
+        <img src="__PUBLIC__/icon/managerBack.png" style="width: 100%"/>
+        <div class="search-frame">
+            <form id="search" action="searchOrder" method="get">
+                <input name="out_trade_no" type="text" class="search-input" placeholder="请输入客户提供的校验码以完成确认服务" maxlength="40" required="required">
+                <button class="btn-default search-btn" type="submit" >校验</button>
+            </form>
+        </div>
+        <table class="table-border">
+            <tr class="table-head-tr">
+                <th class="table-th">姓名</th>
+                <th class="table-th">车牌号</th>
+                <th class="table-th">服务</th>
+                <th class="table-th">商家</th>
+                <th class="table-th">金额</th>
+                <th class="table-th">车型</th>
+                <th class="table-th">日期</th>
             </tr>
-            </thead>
-            <tbody>
             <tr>
-                <td class="user-list-cell">{$car.name}</td>
-                <td class="user-list-cell">{$car.plate_number}</td>
-                <td class="user-list-cell">{$goods.goods_name}</td>
-                <td class="user-list-cell">{$user.shop_name}</td>
-                <td class="user-list-cell">{$order.total_fee}</td>
-                <td class="user-list-cell">{$car.car_type}</td>
-                <td class="user-list-cell">{$order.pay_date}</td>
+                <td class="table-td-odd">{$car.name}</td>
+                <td class="table-td-odd">{$car.plate_number}</td>
+                <td class="table-td-odd">{$goods.goods_name}</td>
+                <td class="table-td-odd">{$user.shop_name}</td>
+                <td class="table-td-odd">{$order.total_fee}</td>
+                <td class="table-td-odd">{$car.car_type}</td>
+                <td class="table-td-odd">{$order.pay_date}</td>
             </tr>
-            </tbody>
+        </table>
+        <if condition="$fail eq true">
+            <div class="verify-error">校验码错误或不可用</div>
+            <else/>
+            <form id="form" method="post" action="confirmOrder">
+                <input name="order_id" value="{$order.id}" type="hidden">
+            </form>
+            <a class="btn-default confirm-order" onclick="submit()">确认服务</a>
         </if>
-    </table>
-
-    <if condition="$fail eq true">
-        <h3 style="text-align: center">校验码错误或不可用</h3>
-        <else/>
-        <form id="form" method="post" action="confirmOrder">
-            <input name="order_id" value="{$order.id}" type="hidden">
-        </form>
-        <a class="confirm-order" onclick="submit()">确认服务</a>
-    </if>
+    </div>
 
 </body>
 </html>

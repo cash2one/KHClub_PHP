@@ -4,91 +4,90 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
-    <script src="__PUBLIC__/js/jquery-2.2.0.min.js" ></script>
-    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
-    <link href="__PUBLIC__/css/system/shopManager.css" rel="stylesheet">
-    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
-    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+
+    <link href="__PUBLIC__/css/shopManager/common.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/shopManager/allRecord.css" rel="stylesheet">
+
     <title>管理系统</title>
 
 </head>
 
-<script type="text/javascript">
-
-
-</script>
-
 <body>
 
-    <table class="table table-min-width table-position-class">
-        <thead>
-        <tr>
-            <td colspan="6">
-                <div>
-
-                    <div class="shop-left-top-title">{$user.shop_name}</div>
-
-                    <div class="shop-car-quantity-shell">
-                        <span class="car-decorate-font">一共服务车辆</span>
-                        <span class="car-server-quantity">{$count}</span>
-                        <span class="car-decorate-font">辆</span>
-                    </div>
-
-                    <div class="shop-car-money-shell">
-                        <span class="car-decorate-font">共计</span>
-                        <span class="car-server-money">{$total}</span>
-                        <span class="car-decorate-font">元</span>
-                    </div>
+    <div class="container">
+        <img src="__PUBLIC__/icon/managerBack.png" style="width: 100%"/>
+        <div class="top-frame">
+            <div class="shop-left-top-title">
+                {$user.shop_name}
+            </div>
+            <div class="shop-car-top-frame">
+                <div class="shop-car-shell shop-car-quantity-shell">
+                    <span class="car-decorate-font">一共服务车辆</span>
+                    <span class="car-server-quantity">{$count}</span>
+                    <span class="car-decorate-font">辆</span>
                 </div>
-            </td>
-        </tr>
-        </thead>
-        <thead>
-        <tr>
-            <th class="user-list-title">姓名</th>
-            <th class="user-list-title">车牌号</th>
-            <th class="user-list-title">服务</th>
-            <th class="user-list-title">金额</th>
-            <th class="user-list-title">车型</th>
-            <th class="user-list-title">日期</th>
-        </tr>
-        </thead>
-        <tbody>
+                <div class="shop-car-shell">
+                    <span class="car-decorate-font">共计</span>
+                    <span class="car-server-money">{$total}</span>
+                    <span class="car-decorate-font">元</span>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+        <table class="table-border">
+            <tr class="table-head-tr">
+                <th class="table-th">姓名</th>
+                <th class="table-th">车牌号</th>
+                <th class="table-th">服务</th>
+                <th class="table-th">金额</th>
+                <th class="table-th">车型</th>
+                <th class="table-th">日期</th>
+            </tr>
             <volist name="list" id="order">
-                <tr>
-                    <td class="user-list-cell">{$order.name}</td>
-                    <td class="user-list-cell">{$order.plate_number}</td>
-                    <td class="user-list-cell">精洗</td>
-                    <td class="user-list-cell">{$order.total_fee}</td>
-                    <td class="user-list-cell">{$order.car_type}</td>
-                    <td class="user-list-cell">{$order.use_date}</td>
-                </tr>
+                <if condition="$i % 2 eq 1">
+                    <tr>
+                        <td class="table-td-odd">{$order.name}</td>
+                        <td class="table-td-odd">{$order.plate_number}</td>
+                        <td class="table-td-odd">精洗</td>
+                        <td class="table-td-odd">{$order.total_fee}</td>
+                        <td class="table-td-odd">{$order.car_type}</td>
+                        <td class="table-td-odd">{$order.use_date}</td>
+                    </tr>
+                    <else/>
+                    <tr>
+                        <td class="table-td-even">{$order.name}</td>
+                        <td class="table-td-even">{$order.plate_number}</td>
+                        <td class="table-td-even">精洗</td>
+                        <td class="table-td-even">{$order.total_fee}</td>
+                        <td class="table-td-even">{$order.car_type}</td>
+                        <td class="table-td-even">{$order.use_date}</td>
+                    </tr>
+                </if>
             </volist>
-        </tbody>
-    </table>
+        </table>
 
-    <div class="page-content" style="margin: 20px auto">
-        <if condition="$page neq 1">
-            <a class="next-page" href="__APP__/Home/ShopManager/allRecord?page={$page-1}">上一页</a>
-        </if>
-        <php>
-            for($p = 1; $p <= $page_count; $p ++) {
-            if($p == $page){
-            if(!($page == 1 && $page_count==1)){
-            echo '<a class="active-page">'.$p.'</a>';
-            }
-            }else{
-            if($p > $page+2 || $p < $page-2){
-            }else{
-            echo '<a class="page" href="__APP__/Home/ShopManager/allRecord?page='.$p.'">'.$p.'</a>';
-            }
-            }
-            }
-        </php>
-        <if condition="$page neq $page_count">
-            <a class="next-page" href="__APP__/Home/ShopManager/allRecord?page={$page+1}">下一页</a>
-        </if>
+        <div class="page-content">
+            <if condition="$page neq 1">
+                <a class="next-page" href="__APP__/Home/ShopManager/allRecord?page={$page-1}">上一页</a>
+            </if>
+            <php>
+                for($p = 1; $p <= $page_count; $p ++) {
+                if($p == $page){
+                if(!($page == 1 && $page_count==1)){
+                echo '<a class="active-page">'.$p.'</a>';
+                }
+                }else{
+                if($p > $page+2 || $p < $page-2){
+                }else{
+                echo '<a class="page" href="__APP__/Home/ShopManager/allRecord?page='.$p.'">'.$p.'</a>';
+                }
+                }
+                }
+            </php>
+            <if condition="$page neq $page_count">
+                <a class="next-page" href="__APP__/Home/ShopManager/allRecord?page={$page+1}">下一页</a>
+            </if>
+        </div>
     </div>
 
 </body>

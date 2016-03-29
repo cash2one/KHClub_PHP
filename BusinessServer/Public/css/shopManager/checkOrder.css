@@ -1,0 +1,28 @@
+.search-frame{
+    margin-top: 20px;
+}
+
+.search-input{
+    float: left;
+    width: 850px
+}
+
+.search-btn{
+    width: 165px;
+}
+
+.confirm-order {
+    margin-top: 70px;
+    line-height: 35px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    color: #ffffff;
+}
+
+.verify-error{
+    margin-top: 70px;
+    text-align: center;
+    font-size: 14px;
+    color: #000000;
+}

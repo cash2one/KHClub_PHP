@@ -1,0 +1,21 @@
+.search-frame{
+    margin-top: 20px;
+}
+
+.search-input{
+    float: left;
+    width: 850px
+}
+
+.search-btn{
+    width: 165px;
+}
+
+.look-up-all {
+    line-height: 35px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    color: #ffffff;
+}
+
