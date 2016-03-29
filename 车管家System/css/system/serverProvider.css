@@ -1,59 +1,168 @@
-.table-position-class {
-    margin:10px auto;
+a{
+    text-decoration: none;
 }
-
-.car-quantity-shell{
-    display: inline;margin-left: 180px
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
 }
-
-.car-decorate-font{
-    font-size: 18px
+.box{
+    margin: auto;
+    width: 1024px;
 }
-
-.car-server-quantity{
-    font-size: 24px;
-    color: blue
+.clear{
+    overflow: hidden;
+    clear: both;
 }
-
-.car-server-money{
-    font-size: 24px;
-    color: red
+.head{
+    width: 1024px;
+    height: 150px;
+    background-image: url("../../images/picture.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    margin: auto;
 }
-
-.car-money-shell{
-    display: inline;
-    margin-left: 210px
+.quantity{
+    margin-top: 20px;
+    border: 1px solid #c1c1c1;
+    background-color: #ffffff;
+    border-radius: 5px;
+    width: 1022px;
+    height: 50px;
 }
-
-.shop-td-title{
-    background-color: purple;
-    color: #ffffff;
-}
-
-.look-up-all{
+.car-quantity{
+    float: left;
+    width: 510px;
+    height: 50px;
+    color: #323232;
+    font-size: 16px;
+    line-height: 50px;
     text-align: center;
-    margin: 20px auto;
-    width: 1000px;
-    background-color: blue;
-    color: #ffffff;
-    padding: 10px 10px;
-    display: block
+ }
+.money-quantity{
+    float: left;
+    width: 512px;
+    height: 50px;
+    color: #323232;
+    font-size: 16px;
+    line-height: 50px;
+    text-align: center;
 }
-
-.shop-left-top-title{
-    background-color: blue;
-    font-size: 15px;
-    display: inline;
+.carNum{
+    color: #5a98de;
+}
+.moneyNum{
+    color: #d52828;
+}
+.table-position-class{
+    width: 1024px;
+    margin-top: 20px;
+    border: 1px solid #c1c1c1;
+}
+.list_title{
+    color: #000000;
+    font-size: 18px;
+    height: 50px;
+    background-color: #d9d8d8;
+}
+.list_single{
+    color: #646464;
+    font-size: 14px;
+    height: 40px;
+    background-color: #ffffff;
+}
+.list_double{
+    color: #646464;
+    font-size: 14px;
+    height: 40px;
+    background-color: #efefef;
+}
+.shop-td-title{
+    cursor: pointer;
+    color: #5a98de;
+}
+.btn{
+    display: block;
+    height: 40px;
+    width: 1024px;
+    margin-top: 20px;
+    border-color: transparent;
+    background-color: #5a98de;
+    font-size: 16px;
     color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 2px;
+}
+.quantity_box{
+    margin-top: 20px;
+    width: 1022px;
+}
+.shop{
+    float: left;
+    width: 260px;
+    height: 50px;
+    color: #323232;
+    border-radius: 5px;
+    background-color: #5a98de;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 50px;
+    text-align: center;
+}
+.shop_quantity{
+    float: right;
+    width: 720px;
+    border: 1px solid #c1c1c1;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+.shop_car-quantity{
+    float: left;
+    width: 360px;
+    height: 50px;
+    color: #323232;
+    font-size: 16px;
+    line-height: 50px;
+    text-align: center;
+}
+.shop_money-quantity{
+    float: left;
+    width: 360px;
+    height: 50px;
+    color: #323232;
+    font-size: 16px;
+    line-height: 50px;
+    text-align: center;
+}
+.page-content{
+    display: block;
+    width: 270px;
+    text-align: center;
+    margin-top: 20px
+}
+.next-page{
+    float: left;
     padding: 7px;
-    margin-left: 10px
+    color: #646464;
+    font-size: 14px;
 }
-
-.shop-car-quantity-shell{
-    display: inline;
-    margin-left: 80px
+.active-page{
+    float: left;
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    background-color: #5a98de;
 }
-.shop-car-money-shell{
-    display: inline;
-    margin-left: 210px
+.page{
+    float: left;
+    display: block;
+    width: 30px;
+    height: 30px;
+    color: #646464;
+    font-size: 14px;
+    line-height: 30px;
 }

@@ -10,28 +10,26 @@
     <meta name="author" content="">
 
     <title>车管家</title>
-
-    <!-- Bootstrap core CSS -->
     <script src="../js/jquery-2.2.0.min.js" ></script>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../css/system/login.css" rel="stylesheet">
 
 </head>
 
 <body>
+<div class="box">
+<div class="head"></div>
 
 <div class="container">
 
-    <form action="main.html" method="post" class="form-signin">
-        <label for="inputUsername" class="sr-only">用户名</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="用户名" required autofocus>
-        <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
+    <form action="main.html" method="post">
+        <div style="height: 20px"></div>
+        <input type="text" id="inputUsername" class="form-username" placeholder="用户名" required autofocus>
+        <input type="password" id="inputPassword" class="form-password" placeholder="密码" required>
         <div class="login-error">用户名或密码错误</div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        <button class="btn" type="submit">登录</button>
     </form>
 
 </div>
-
+</div>
 </body>
 </html>
