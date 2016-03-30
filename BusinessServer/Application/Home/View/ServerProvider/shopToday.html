@@ -5,6 +5,103 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js" ></script>
+    <link href="__PUBLIC__/css/serverProvider/serverProvider.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <title>管理系统</title>
+
+</head>
+
+<script type="text/javascript">
+
+
+</script>
+
+<body>
+<div class="head"></div>
+<div class="box">
+    <div class="quantity_box clear">
+        <div class="shop">{$shop_name}</div>
+        <div class="shop_quantity">
+            <div class="shop_car-quantity">一共服务车辆<span class="carNum">{$sumCar}</span>辆</div>
+            <div class="shop_money-quantity">共计<span class="moneyNum">{$sumMoney}</span>元</div>
+            <div class="wire"></div>
+        </div>
+    </div>
+    <table class="table-position-class" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr class="list_title">
+            <th class="user-list-title">姓名</th>
+            <th class="user-list-title">车牌号</th>
+            <th class="user-list-title">服务</th>
+            <th class="user-list-title">金额</th>
+            <th class="user-list-title">车型</th>
+            <th class="user-list-title">日期</th>
+        </tr>
+        </thead>
+        <tbody align="center">
+        <volist name="orderInfo" id="v">
+        <if condition="$i % 2 eq 1">
+        <tr class="list_single">
+            <td class="user-list-cell">{$v.name}</td>
+            <td class="user-list-cell">{$v.plate_number}</td>
+            <td class="user-list-cell">{$v.goods_name}</td>
+            <td class="user-list-cell">{$v.total_fee}</td>
+            <td class="user-list-cell">{$v.car_type}</td>
+            <td class="user-list-cell">{$v.use_date}</td>
+        </tr>
+        <else/>
+        <tr class="list_double">
+            <td class="user-list-cell">{$v.name}</td>
+            <td class="user-list-cell">{$v.plate_number}</td>
+            <td class="user-list-cell">{$v.goods_name}</td>
+            <td class="user-list-cell">{$v.total_fee}</td>
+            <td class="user-list-cell">{$v.car_type}</td>
+            <td class="user-list-cell">{$v.use_date}</td>
+        </tr>
+        </if>
+        </volist>
+        </tbody>
+    </table>
+
+    <div class="page-content clear" style="margin: 20px auto">
+        <if condition="$page neq 1">
+            <a class="next-page" href="__APP__/Home/ServerProvider/shopToday?verify_shop_id={$verify_shop_id}&page={$page-1}">上一页</a>
+        </if>
+        <php>
+            for($p = 1; $p <= $page_count; $p ++) {
+            if($p == $page){
+            if(!($page == 1 && $page_count==1)){
+            echo '<a class="active-page">'.$p.'</a>';
+            }
+            }else{
+            if($p > $page+2 || $p < $page-2){
+            }else{
+            echo '<a class="page" href="__APP__/Home/ServerProvider/shopToday?verify_shop_id='.$verify_shop_id.'&page='.$p.'">'.$p.'</a>';
+            }
+            }
+            }
+        </php>
+        <if condition="$page neq $page_count">
+            <a class="next-page" href="__APP__/Home/ServerProvider/shopToday?verify_shop_id={$verify_shop_id}&page={$page+1}">下一页</a>
+        </if>
+    </div>
+</div>
+<div style="height: 60px"></div>
+</body>
+</html>
+
+
+
+
+
+<!--
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js" ></script>
     <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/shopAdmin/systemhome.css" rel="stylesheet">
     <link href="__PUBLIC__/css/shopAdmin/serverProvider.css" rel="stylesheet">
@@ -93,4 +190,4 @@
         </if>
     </div>
 </body>
-</html>
+</html>-->

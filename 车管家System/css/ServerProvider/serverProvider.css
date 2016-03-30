@@ -97,6 +97,7 @@ body{
 .quantity_box{
     margin-top: 20px;
     width: 1022px;
+    position: relative;
 }
 .shop{
     float: left;
@@ -116,6 +117,7 @@ body{
     border: 1px solid #c1c1c1;
     background-color: #ffffff;
     border-radius: 5px;
+    position: relative;
 }
 .shop_car-quantity{
     float: left;
@@ -136,33 +138,42 @@ body{
     text-align: center;
 }
 .page-content{
-    display: block;
-    width: 270px;
+    width: 100%;
     text-align: center;
-    margin-top: 20px
+    margin: 30px auto;
 }
+
 .next-page{
-    float: left;
-    padding: 7px;
-    color: #646464;
     font-size: 14px;
+    padding: 5px;
+    color: #646464;
 }
 .active-page{
-    float: left;
-    display: block;
-    color: #ffffff;
+    display:inline-block;
+    padding: 2px;
+    min-width: 18px;
+    min-height: 18px;
+    line-height: 18px;
     font-size: 14px;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
+    color: #ffffff;
     background-color: #5a98de;
 }
 .page{
-    float: left;
-    display: block;
-    width: 30px;
-    height: 30px;
-    color: #646464;
+    display:inline-block;
+    padding: 2px;
+    min-width: 18px;
+    min-height: 18px;
+    line-height: 18px;
     font-size: 14px;
-    line-height: 30px;
+    color: #646464;
+}
+.wire{
+    margin-top: 10px;
+    width: 1px;
+    height: 30px;
+    background-color: #c1c1c1;
+    position: absolute;
+    left: 50%;
+    z-index: 9999;
+
 }
