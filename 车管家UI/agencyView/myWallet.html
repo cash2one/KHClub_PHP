@@ -7,6 +7,35 @@
     <title>我的钱包</title>
     <link rel="stylesheet" href="../css/agency/myWallet.css">
     <script src="../js/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript">
+
+        var intervalCounter = 0;
+        function hideToast()
+        {
+            var alert = document.getElementById("toast");
+            alert.style.opacity = 0;
+            clearInterval(intervalCounter);
+        }
+
+        function drawToast(message)
+        {
+            var alert = document.getElementById("toast");
+            if (alert == null)
+            {
+                var toastHTML = '<div id="toast">' + message + '</div>';
+                document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+            }
+            else
+            {
+                alert.style.opacity = .9;
+                alert.innerHTML = message;
+            }
+            intervalCounter = setInterval("hideToast()", 1000);
+        }
+        function save(){
+            drawToast("申请成功");
+        }
+    </script>
 </head>
 <body>
 <div class="box">
@@ -95,8 +124,8 @@
         </div>
     </div>
 </div>
-<div class="wire1"></div>
+<div class="earnings">当前收益<span class="num">80</span>积分</div>
 <div style="height: 50px"></div>
-<div class="add_car">当前收益<span class="num">80</span>积分</div>
+<div onclick="save()" class="add_car">提现</div>
 </body>
 </html>
