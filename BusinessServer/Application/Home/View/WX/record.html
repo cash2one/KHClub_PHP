@@ -15,21 +15,40 @@
     <div class="details_box clear">
         <div class="date">{$order.use_date}</div>
         <div class="spot"></div>
-        <a href="getRecordDetail?order_id={$order.id}">
-            <div class="ticket">
-                <div class="ticket_left">
-                    <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+        <if condition="$order.goods_id neq 0">
+            <a href="getRecordDetail?order_id={$order.id}">
+                <div class="ticket">
+                    <div class="ticket_left">
+                        <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+                    </div>
+                    <div class="ticket_center">
+                        <div style="height: 10px"></div>
+                        <div class="store_name">{$order.shop_name}</div>
+                        <div class="tel">{$order.mobile}</div>
+                    </div>
+                    <div class="ticket_right">
+                        <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
+                    </div>
                 </div>
-                <div class="ticket_center">
-                    <div class="store_name">{$order.shop_name}</div>
-                    <div class="tel">{$order.mobile}</div>
+            </a>
+            <else/>
+            <a>
+                <div class="ticket">
+                    <div class="ticket_left">
+                        <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+                    </div>
+                    <div class="ticket_center">
+                        <div class="store_name">{$order.shop_name}</div>
+                        <div class="tel">{$order.shop_phone}</div>
+                        <div class="money">{$order.total_fee}元</div>
+                    </div>
+                    <div class="ticket_right">
+                        <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
+                    </div>
+                </div>
+            </a>
+        </if>
 
-                </div>
-                <div class="ticket_right">
-                    <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
-                </div>
-            </div>
-        </a>
     </div>
 </volist>
 

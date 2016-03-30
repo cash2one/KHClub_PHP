@@ -326,8 +326,9 @@ class WXController extends Controller {
         }
 
         $model = M();
-        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date FROM biz_car c, biz_order o, biz_shop s
-                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE;
+        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date,o.goods_id, s.shop_phone, o.total_fee
+                FROM biz_shop s, biz_order o LEFT JOIN biz_car c ON(o.car_id=c.id)
+                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE;
         $list = $model->query($sql);
         for($i=0; $i<count($list); $i++){
             $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
@@ -339,7 +340,6 @@ class WXController extends Controller {
         $this->assign('list',$list);
         $this->display('record');
     }
-
 
 
     /**
@@ -588,6 +588,31 @@ class WXController extends Controller {
     }
 
     /**
+     * @brief 商店列表（自助买单用）
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getBillShops
+     *
+     */
+    public function getBillShops(){
+
+        $category = 1;
+        if(isset($_REQUEST['category'])){
+            $category = $_REQUEST['category'];
+        }
+
+        $model = M('biz_shop');
+        $shops = $model->where('delete_flag=0')->select();
+        //wxJs签名
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('shops', $shops);
+
+        $this->assign('category', $category);
+        $this->display('carStoreBill');
+    }
+
+    /**
      * @brief 商店详情
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WX/getShopDetail
@@ -606,6 +631,54 @@ class WXController extends Controller {
         $this->assign('shop', $shop);
         $this->assign('goods', $goods);
         $this->display('shopWithin');
+    }
+
+    /**
+     * @brief 商店详情（自助买单用）
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getBillShopDetail
+     *
+     */
+    public function getBillShopDetail(){
+
+        $shop_id = $_REQUEST['shop_id'];
+
+        $this->assign('shop_id', $shop_id);
+
+        $category = 1;
+        if(isset($_REQUEST['category'])){
+            $category = $_REQUEST['category'];
+        }
+
+        if($category == 1){
+            $this->display('carBeauty');
+        }else if($category == 2){
+            $this->display('onlineVisits');
+        }else if($category == 3){
+            $this->display('insuranceConsult');
+        }else if($category == 4){
+            $this->display('roadsideAssistance');
+        }else if($category == 5){
+            $this->display('carMaintenance');
+        }
+    }
+
+
+    /**
+     * @brief 自助买单页面
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/showShopPay
+     *
+     */
+    public function showShopPay(){
+
+        $shop_id = $_REQUEST['shop_id'];
+        $model = M('biz_shop');
+        $shop = $model->where('delete_flag=0 AND id='.$shop_id)->find();
+
+        $this->assign('shop', $shop);
+        $this->display('pay');
+
     }
 
     /**
@@ -674,14 +747,14 @@ class WXController extends Controller {
         $tools = new \JsApiPay();
         //统一下单
         $input = new \WxPayUnifiedOrder();
-        $input->SetBody("洗车");
-        $input->SetAttach("深圳");
+        $input->SetBody($goods['goods_name']);
+        $input->SetAttach($shop['shop_name'].$shop['id']);
         $input->SetOut_trade_no($bizOrder);
         $input->SetTotal_fee($goods['discount_price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag($bizOrder);
-        $input->SetNotify_url("http://a.pinweihuanqiu.com/BusinessServer/index.php/Home/WX/wxNotify");
+        $input->SetNotify_url(HTTP_URL_PREFIX."wxNotify");
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = \WxPayApi::unifiedOrder($input);
@@ -710,6 +783,66 @@ class WXController extends Controller {
     }
 
     /**
+     * @brief ajax 创建自助买单订单
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/createOrder
+     * @param shop_id 商店ID
+     * @param amount 金额
+     */
+    public function createBillOrder(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        if(!isset($_REQUEST['shop_id']) || empty($_REQUEST['shop_id']) || !isset($_REQUEST['amount']) || empty($_REQUEST['amount'])){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $shop_id = $_REQUEST['shop_id'];
+        $amount = $_REQUEST['amount'];
+
+        $model = M('biz_shop');
+        $shop = $model->where('delete_flag=0 AND id='.$shop_id)->find();
+
+        //内部订单生成规则 goodsID+user_id+time()
+        $bizOrder = "0".$user['user_id'].time();
+
+        $openId = $_SESSION['open_id'];
+
+        $tools = new \JsApiPay();
+        //统一下单
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody("支付");
+        $input->SetAttach($shop['shop_name'].$shop['id']);
+        $input->SetOut_trade_no($bizOrder);
+        $input->SetTotal_fee($amount*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag($bizOrder);
+        $input->SetNotify_url(HTTP_URL_PREFIX."wxNotify");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $order = \WxPayApi::unifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        $orderModel = M('biz_order');
+        $newOrder = array('shop_id'=>$shop_id,'goods_id'=>'0','user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
+            'open_id'=>$openId, 'original_price'=>$amount, 'total_fee'=>$amount,
+            'out_trade_no'=>$bizOrder, 'car_id'=>'0', 'add_date'=>time(), 'type'=>1, 'server_id'=>$shop['server_id']);
+        $ret = $orderModel->add($newOrder);
+        if(!$ret){
+            returnJson(0, '');
+        }else{
+            returnJson(1, '', array('jsApiParameters'=>$jsApiParameters, 'order'=>$newOrder));
+        }
+    }
+
+    /**
      * @brief 获取订单列表
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WX/getOrderList
@@ -725,11 +858,16 @@ class WXController extends Controller {
         }
 
         $orderModel = M();
-        $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
+        $sql = 'SELECT o.id, s.shop_name, o.goods_id, o.state, o.total_fee, o.pay_date, s.shop_phone, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
                 AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
+
+        for($i=0; $i<count($list); $i++){
+            $list[$i]['pay_date'] = date('Y-m-d', $list[$i]['pay_date']);
+        }
+
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
@@ -756,17 +894,28 @@ class WXController extends Controller {
         $orderModel = M('biz_order');
         $order = $orderModel->where('out_trade_no="'.$_REQUEST['out_trade_no'].'"')->find();
         if($order){
-            $order['state'] = ORDER_HAS_PAY;
             $order['update_date'] = time();
             $order['pay_date'] = time();
+            if($order['goods_id'] == 0){
+                $order['state']=ORDER_HAS_USE;
+                $order['use_date']=time();
+                $order['verify_shop_id']=$order['shop_id'];
+            }else{
+                $order['state'] = ORDER_HAS_PAY;
+            }
             $orderModel->save($order);
         }
 
-        $sql = 'SELECT o.id, s.shop_name, o.state, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
+        $sql = 'SELECT o.id, s.shop_name, o.goods_id, o.state, o.total_fee, o.pay_date, s.shop_phone, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
                 WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
                 AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
+
+        for($i=0; $i<count($list); $i++){
+            $list[$i]['pay_date'] = date('Y-m-d', $list[$i]['pay_date']);
+        }
+
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
@@ -774,8 +923,6 @@ class WXController extends Controller {
         $this->assign('list',$list);
         $this->display('myTicket');
     }
-
-
 
     /**
      * @brief 获取订单详情
@@ -851,7 +998,7 @@ class WXController extends Controller {
         $car_id = $_REQUEST['car_id'];
 
         $model = M();
-        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date FROM biz_car c, biz_order o, biz_shop s
+        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date, o.goods_id, s.shop_phone, o.total_fee FROM biz_car c, biz_order o, biz_shop s
                 WHERE c.id='.$car_id.' AND o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.car_id=c.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE;;
         $list = $model->query($sql);
 
@@ -921,9 +1068,16 @@ class WXController extends Controller {
             $order['transaction_id'] = $result["transaction_id"];
             $order['nonce_str'] = $result["nonce_str"];
             $order['sign'] = $result["sign"];
-            $order['state'] = ORDER_HAS_PAY;
+
             $order['update_date'] = time();
             $order['pay_date'] = time();
+            if($order['goods_id'] == 0){
+                $order['state']=ORDER_HAS_USE;
+                $order['use_date']=time();
+                $order['verify_shop_id']=$order['shop_id'];
+            }else{
+                $order['state'] = ORDER_HAS_PAY;
+            }
             $model->save($order);
         }
     }

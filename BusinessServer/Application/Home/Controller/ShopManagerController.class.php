@@ -7,7 +7,7 @@ Vendor('jssdk');
 class ShopManagerController extends Controller {
 
     public function index(){
-        if(isset($_SESSION['user'])){
+        if(isset($_SESSION['shop'])){
             header('Location:'.__ROOT__.'/index.php/Home/ShopManager/main');
             exit;
         }
@@ -15,7 +15,7 @@ class ShopManagerController extends Controller {
     }
 
     function login(){
-        if($_SESSION['user']){
+        if($_SESSION['shop']){
             header('Location:'.__ROOT__.'/index.php/Home/ShopManager/main');
             exit;
         }
@@ -43,7 +43,7 @@ class ShopManagerController extends Controller {
 
         //用户存在
         if($user){
-            $_SESSION['user'] = $user;
+            $_SESSION['shop'] = $user;
             header('Location:'.__ROOT__.'/index.php/Home/ShopManager/main');
         }else{
             $this->assign('error','1');
@@ -61,11 +61,11 @@ class ShopManagerController extends Controller {
     public function main(){
         try{
 
-            if(!isset($_SESSION['user'])){
+            if(!isset($_SESSION['shop'])){
                 header('Location:'.__ROOT__.'/index.php/Home/ShopManager/login');
                 exit;
             }
-            $user = $_SESSION['user'];
+            $user = $_SESSION['shop'];
 
             if(!isset($_REQUEST['page'])){
                 $page = 1;
@@ -124,11 +124,11 @@ class ShopManagerController extends Controller {
     public function allRecord(){
         try{
 
-            if(!isset($_SESSION['user'])){
+            if(!isset($_SESSION['shop'])){
                 header('Location:'.__ROOT__.'/index.php/Home/ShopManager/login');
                 exit;
             }
-            $user = $_SESSION['user'];
+            $user = $_SESSION['shop'];
 
             if(!isset($_REQUEST['page'])){
                 $page = 1;
@@ -191,11 +191,11 @@ class ShopManagerController extends Controller {
         }
         $out_trade_no = $_REQUEST['out_trade_no'];
 
-        if(!isset($_SESSION['user'])){
+        if(!isset($_SESSION['shop'])){
             header('Location:'.__ROOT__.'/index.php/Home/ShopManager/login');
             exit;
         }
-        $user = $_SESSION['user'];
+        $user = $_SESSION['shop'];
 
         $model = M('biz_order');
         $order = $model->where('server_id='.$user['server_id'].' AND out_trade_no="'.$out_trade_no.'" AND state='.ORDER_HAS_PAY)->find();
@@ -233,11 +233,11 @@ class ShopManagerController extends Controller {
         }
         $order_id = $_POST['order_id'];
 
-        if(!isset($_SESSION['user'])){
+        if(!isset($_SESSION['shop'])){
             header('Location:'.__ROOT__.'/index.php/Home/ShopManager/login');
             exit;
         }
-        $user = $_SESSION['user'];
+        $user = $_SESSION['shop'];
 
         $model = M('biz_order');
         $order = $model->where('server_id='.$user['server_id'].' AND id="'.$order_id.'" AND state='.ORDER_HAS_PAY)->find();
@@ -272,11 +272,11 @@ class ShopManagerController extends Controller {
             }
             $order_id = $_REQUEST['order_id'];
 
-            if(!isset($_SESSION['user'])){
+            if(!isset($_SESSION['shop'])){
                 header('Location:'.__ROOT__.'/index.php/Home/ShopManager/login');
                 exit;
             }
-            $user = $_SESSION['user'];
+            $user = $_SESSION['shop'];
 
             //订单必须是同一服务商才能查询
             $orderModel = M('biz_order');

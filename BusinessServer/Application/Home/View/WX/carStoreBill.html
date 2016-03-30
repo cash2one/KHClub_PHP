@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>车店</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carTicket.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+</head>
+
+<body style="background-color: #f1f1f1">
+
+<volist name="shops" id="shop">
+    <a href="getBillShopDetail?shop_id={$shop.id}&category={$category}">
+        <div class="store_box clear">
+            <img class="merchant_logo" src="__ROOT__/Uploads/{$shop.shop_image_thumb}" alt="">
+            <div class="content_box">
+                <div class="carStore">{$shop.shop_name}</div>
+                <img class="addr_images" src="__PUBLIC__/icon/address.png" alt="">
+                <div class="addr">{$shop.address}</div>
+                <div class="distance"></div>
+            </div>
+        </div>
+    </a>
+    <div class="wire"></div>
+</volist>
+
+</body>
+
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="__PUBLIC__/js/wx/wxOperate.js"></script>
+<script>
+
+    wx.config({
+                debug: false,
+                appId: '{$signPackage.appId}',
+                timestamp: {$signPackage.timestamp},
+            nonceStr: '{$signPackage.nonceStr}',
+            signature: '{$signPackage.signature}',
+            jsApiList : []
+    });
+    operate.initCloseShare();
+</script>
+
+<script>
+
+    $(function(){
+        getLocation();
+    });
+
+    var curPosition;
+
+    function getLocation()
+    {
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+    }
+
+    function showPosition(position)
+    {
+        curPosition = position;
+
+        <php>
+            for($i=0; $i<count($shops); $i++){
+                $shop = $shops[$i];
+                echo "$('.distance').get($i).innerHTML=GetDistance(".$shop['latitude'].",".$shop['longitude'].")+'km';";
+            }
+        </php>
+    }
+
+    function Rad(d){
+        return d * Math.PI / 180.0;//经纬度转换成三角函数中度分表形式。
+    }
+    //计算距离，参数分别为第一点的纬度，经度；第二点的纬度，经度
+    function GetDistance(lat1,lng1){
+
+        if(!curPosition){
+            return;
+        }
+
+        var lat2=curPosition.coords.latitude,lng2=curPosition.coords.longitude;
+
+        var radLat1 = Rad(lat1);
+        var radLat2 = Rad(lat2);
+        var a = radLat1 - radLat2;
+        var  b = Rad(lng1) - Rad(lng2);
+        var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+                Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+        s = s *6378.137 ;// EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000; //输出为公里
+        s=s.toFixed(2);
+        return s;
+    }
+
+</script>
+
+</html>

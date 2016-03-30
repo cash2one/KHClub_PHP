@@ -28,4 +28,43 @@
     <div class="add_car">当前收益<span class="num">{$total}</span>积分</div>
 
 </body>
+
+<script>
+
+    var reqWithdraw = 0;
+
+    //提现
+    function withdraw(){
+
+        if(reqWithdraw == 1){
+            return;
+        }
+        var ret = confirm('您可提现一共{$total}元');
+        if(ret){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout: 10000,
+                url: "__URL__/redPacketWithdraw?" + Math.random(),
+                success: function (rData) {
+                    var response = eval(rData);
+                    if (response && response.status == 1) {
+                        $(".save").addClass("withdraw-ok").removeClass('save').html('申请成功');
+                        reqWithdraw = 1;
+                    }else{
+                        alert('提现失败，请重试');
+                    }
+                },
+                error: function (error) {
+                    alert(eval(error));
+                    //alert('您好、当前服务器正忙、请稍后……');
+                    return false;
+                }
+            })
+        }
+
+    }
+
+</script>
+
 </html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <title>支付</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/pay.css">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+
+    <script type="text/javascript">
+        function money(){
+            var money = $("#money").val();
+            if(isNaN(money)){
+                alert('请输入金额！');
+                return;
+            }
+            $("#num").html('&nbsp;'+money+'&nbsp;');
+        }
+    </script>
+</head>
+<body>
+<div class="shopName">{$shop.shop_name}</div>
+<div class="money_box">
+    <span class="money">金额￥</span>
+    <input class="input-class" onblur="money()" maxlength="30" id="money" name="money" type="number" placeholder="请输入消费金额" />
+</div>
+<div class="consumption">共消费<span id="num" class="num">&nbsp;0&nbsp;</span>元</div>
+<div style="height: 40px"></div>
+<a class="pay" onclick="pay()">去支付</a>
+</body>
+
+<script type="text/javascript">
+
+    var reqWithdraw = 0;
+
+    //提现
+    function pay(){
+        var money = $("#money").val();
+        if(money == ''){
+            return;
+        }
+        if(reqWithdraw == 1){
+            return;
+        }
+        reqWithdraw = 1;
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            timeout: 10000,
+            data : "shop_id={$shop.id}&amount="+$("#money").val(),
+            url: "__URL__/createBillOrder?" + Math.random(),
+            success: function (rData) {
+                var response = eval(rData);
+                var jsApi = eval("("+rData.result.jsApiParameters+")");
+                if (response && response.status == 1) {
+                    WeixinJSBridge.invoke(
+                            'getBrandWCPayRequest',
+                            jsApi,
+                            function(res){
+                                //支付成功
+                                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                                    window.location = 'paySuccessAndGetOrderList?out_trade_no='+response.result.out_trade_no;
+                                }else{
+                                    reqWithdraw = 0;
+//                                    WeixinJSBridge.log(res.err_msg);
+//                                    alert(res.err_code+res.err_desc+res.err_msg);
+                                }
+                            }
+                    );
+
+                }else{
+                    reqWithdraw = 0;
+                    alert('支付调用失败，请重试');
+                }
+            },
+            error: function (error) {
+                reqWithdraw = 0;
+                alert(eval(error));
+                //alert('您好、当前服务器正忙、请稍后……');
+                return false;
+            }
+        })
+
+
+    }
+
+
+//    function jsApiCall()
+//    {
+//        WeixinJSBridge.invoke(
+//                'getBrandWCPayRequest',
+//                {$jsApiParameters},
+//                function(res){
+//                    //支付成功
+//                    if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+//                        window.location = 'paySuccessAndGetOrderList?out_trade_no={$order.out_trade_no}'
+//                    }else{
+//                        WeixinJSBridge.log(res.err_msg);
+//                        alert(res.err_code+res.err_desc+res.err_msg);
+//                    }
+//                }
+//        );
+//    }
+
+</script>
+
+
+</html>

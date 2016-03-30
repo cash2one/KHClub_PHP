@@ -129,10 +129,10 @@ function get_rand_code ($length = 6, $mode = 0)
 function getWXUser()
 {
     //先授权获取openID
-    $openID = $_SESSION['open_id'];
-    if(empty($openID)){
+    if(!isset($_SESSION['open_id']) || empty($_SESSION['open_id'])){
         return null;
     }
+    $openID = $_SESSION['open_id'];
 
     $model = M();
     $sql = 'SELECT user_id FROM biz_user_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
@@ -144,10 +144,11 @@ function getWXUser()
 function getShopUser()
 {
     //先授权获取openID
-    $openID = $_SESSION['open_id'];
-    if(empty($openID)){
+    if(!isset($_SESSION['open_id']) || empty($_SESSION['open_id'])){
         return null;
     }
+    $openID = $_SESSION['open_id'];
+
     $model = M();
     $sql = 'SELECT id, server_id, shop_name FROM biz_shop WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
     $user = $model->query($sql)[0];
@@ -158,10 +159,11 @@ function getShopUser()
 function getProxyUser()
 {
     //先授权获取openID
-    $openID = $_SESSION['open_id'];
-    if(empty($openID)){
+    if(!isset($_SESSION['open_id']) || empty($_SESSION['open_id'])){
         return null;
     }
+    $openID = $_SESSION['open_id'];
+
     $model = M();
     $sql = 'SELECT * FROM biz_proxy_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
     $user = $model->query($sql)[0];

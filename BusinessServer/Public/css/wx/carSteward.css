@@ -394,7 +394,7 @@ body{
 }
 .store_name{
     font-size: 16px;
-    margin-top: 35px;
+    margin-top: 25px;
     margin-left: 25px;
     height:20px;
     line-height:20px;
@@ -405,6 +405,12 @@ body{
     height: 40px;
     color: #646464;
     line-height: 40px;
+    margin-left: 25px;
+}
+.money{
+    height: 40px;
+    font-size: 14px;
+    color: #646464;
     margin-left: 25px;
 }
 .date{

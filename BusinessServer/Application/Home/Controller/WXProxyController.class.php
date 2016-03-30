@@ -286,7 +286,7 @@ class WXProxyController extends Controller {
     }
 
     /**
-     * @brief 交易提现
+     * @brief 分享二维码
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WXProxy/shareQrcode
      */

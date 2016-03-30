@@ -12,27 +12,47 @@
 <body>
 
 <volist name="list" id="order">
-    <a href="getOrderDetail?order_id={$order.id}">
-        <div class="ticket clear">
-            <div class="ticket_left">
-                <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+
+    <if condition="$order.goods_id neq 0">
+        <a href="getOrderDetail?order_id={$order.id}">
+            <div class="ticket clear">
+                <div class="ticket_left">
+                    <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+                </div>
+                <div class="ticket_center">
+                    <div class="store_name">{$order.shop_name}</div>
+                </div>
+                <div class="ticket_coupon">
+                    <img class="coupon" src="__PUBLIC__/icon/coupon.png" alt="">
+                </div>
+                <div class="ticket_right">
+                    <div class="discount"><span class="number">{$order.OFF}</span>折</div>
+                </div>
+                <if condition="$order.state eq 1">
+                    <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
+                    <else/>
+                    <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
+                </if>
             </div>
-            <div class="ticket_center">
-                <div class="store_name">{$order.shop_name}</div>
-            </div>
-            <div class="ticket_coupon">
-                <img class="coupon" src="__PUBLIC__/icon/coupon.png" alt="">
-            </div>
-            <div class="ticket_right">
-                <div class="discount"><span class="number">{$order.OFF}</span>折</div>
-            </div>
-            <if condition="$order.state eq 1">
-                <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
-                <else/>
+        </a>
+        <else/>
+        <a>
+            <div class="ticket clear">
+                <div class="ticket_left">
+                    <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+                    <div class="tel">{$order.shop_phone}</div>
+                </div>
+                <div class="ticket_center">
+                    <div class="store_name">{$order.shop_name}</div>
+                </div>
+                <div class="ticket_right">
+                    <div class="discount"><span class="number">{$order.total_fee}</span>元</div>
+                    <div class="date">{$order.pay_date}</div>
+                </div>
                 <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
-            </if>
-        </div>
-    </a>
+            </div>
+        </a>
+    </if>
 
 </volist>
 
