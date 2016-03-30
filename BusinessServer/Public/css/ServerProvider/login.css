@@ -17,7 +17,7 @@ body{
 .head{
     width: 1024px;
     height: 150px;
-    background-image: url("../../images/picture.png");
+    background-image: url("../../icon/managerBack.png");
     background-size: 100%;
     background-repeat: no-repeat;
     margin: auto;
