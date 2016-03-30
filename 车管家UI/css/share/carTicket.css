@@ -132,16 +132,6 @@ body{
     text-align: right;
     margin-right: 10px;
 }
-/*.services{*/
-    /*font-size: 18px;*/
-    /*padding: 15px 5px;*/
-/*}*/
-/*.item{*/
-    /*font-size: 18px;*/
-    /*padding-left: 5px;*/
-    /*float: left;*/
-    /*width: 15%;*/
-/*}*/
 .primary{
     font-size: 18px;
     color: #000000;
@@ -258,17 +248,26 @@ body{
 }
 .ticket_right{
     float: right;
-    width: 23.33%;
+    width: 30%;
 }
 .number{
-    font-size: 30px;
+    font-size: 24px;
+}
+.tel{
+    margin-top: 12px;
+    margin-left: 10px;
 }
 .discount{
     color: #e52828;
     font-size: 16px;
     text-align: right;
-    line-height: 150px;
+    margin-top: 55px;
     margin-right: 10px;
+}
+.date{
+    margin-top: 30px;
+    margin-right: 10px;
+    text-align: right;
 }
 .state_image{
     width: 60px;
