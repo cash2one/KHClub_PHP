@@ -93,8 +93,9 @@ class ShopManagerController extends Controller {
             }
             $page_count  = ceil($count/$size);
 
-            $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.mobile, od.use_date, od.total_fee FROM biz_order od, biz_car ca
-                    WHERE od.verify_shop_id='.$user['id'].' and od.state='.ORDER_HAS_USE.' AND od.car_id=ca.id
+            $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.mobile, od.use_date, od.total_fee
+                    FROM biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.verify_shop_id='.$user['id'].' and od.state='.ORDER_HAS_USE.'
                     AND use_date > '.$startTime.' AND use_date < '.$endTime.'
                     ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $list = $shopModel->query($sql);
@@ -154,8 +155,8 @@ class ShopManagerController extends Controller {
             $page_count  = ceil($count/$size);
 
             $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.car_type, ca.mobile, od.use_date, od.total_fee
-                    FROM biz_order od, biz_car ca
-                    WHERE od.verify_shop_id='.$user['id'].' and od.state='.ORDER_HAS_USE.' AND od.car_id=ca.id
+                    FROM biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.verify_shop_id='.$user['id'].' and od.state='.ORDER_HAS_USE.'
                     ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $list = $shopModel->query($sql);
 

@@ -57,6 +57,11 @@ body{
     padding-right: 15px;
     margin-top: 4px
 }
+.earnings{
+    margin-top: 60px;
+    margin-bottom: 40px;
+    text-align: center;
+}
 .num{
     font-size: 24px;
     color: #e52828;
@@ -65,15 +70,34 @@ body{
     float: left;
     clear: both;
     font-size: 18px;
-    line-height: 50px;
+    line-height: 45px;
     text-align: center;
     color: #949494;
-    height: 50px;
+    height: 45px;
     width: 100%;
     margin: 0px;
     position:fixed;
     bottom:0px;
     left: 0px;
-    background-color: #ffffff;
+    background-color: #0f0f0f;
     border-color: transparent;
+}
+#toast
+{
+    position: fixed;
+    top: 400px;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    border: 1px solid #666;
+    background-color: #ffffff;
+    padding: 10px 0 ;
+    text-align:center;
+    opacity: .9;
+
+    -webkit-transition: opacity 0.5s ease-out;
+    -moz-transition: opacity 0.5s ease-out;
+    -ms-transition: opacity 0.5s ease-out;
+    -o-transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out;
 }

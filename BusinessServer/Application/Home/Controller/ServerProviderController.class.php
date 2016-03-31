@@ -127,8 +127,9 @@ class ServerProviderController extends Controller{
             $start = ($page-1)*$size;
             $end   = $size;
             $orderModel = M();
-            $sql = 'SELECT od.id, od.total_fee FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
-                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
+            $sql = 'SELECT od.id, od.total_fee
+                    FROM biz_shop sh, biz_shop_goods go, biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.goods_id=go.id
                     ORDER BY od.use_date DESC';
             $money = $orderModel->query($sql);
             $sumMoney = '';
@@ -143,8 +144,8 @@ class ServerProviderController extends Controller{
             }
             $page_count  = ceil($count/$size);
             $sql = 'SELECT od.id, ca.name, ca.plate_number, go.goods_name, sh.shop_name, od.total_fee, ca.car_type, od.use_date
-                    FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
-                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
+                    FROM biz_shop sh, biz_shop_goods go, biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.goods_id=go.id
                     ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $orderInfo = $orderModel->query($sql);
             for($i=0;$i<count($orderInfo);$i++){
@@ -194,8 +195,9 @@ class ServerProviderController extends Controller{
             $start = ($page-1)*$size;
             $end   = $size;
             $orderModel = M();
-            $sql = 'SELECT od.id, od.total_fee FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
-                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
+            $sql = 'SELECT od.id, od.total_fee
+                    FROM biz_shop sh, biz_shop_goods go, biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.goods_id=go.id
                     AND od.use_date>'.$today.' ORDER BY od.use_date DESC';
             $money = $orderModel->query($sql);
             $sumMoney = '';
@@ -210,8 +212,8 @@ class ServerProviderController extends Controller{
             }
             $page_count  = ceil($count/$size);
             $sql = 'SELECT od.id, ca.name, ca.plate_number, go.goods_name, sh.shop_name, od.total_fee, ca.car_type, od.use_date
-                    FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
-                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
+                    FROM biz_shop sh, biz_shop_goods go, biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.delete_flag=0 AND od.state=2 AND od.verify_shop_id='.$verify_shop_id.' AND od.verify_shop_id=sh.id AND od.goods_id=go.id
                     AND od.use_date>'.$today.' ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $orderInfo = $orderModel->query($sql);
             for($i=0;$i<count($orderInfo);$i++){
@@ -260,8 +262,9 @@ class ServerProviderController extends Controller{
             $start = ($page-1)*$size;
             $end   = $size;
             $orderModel = M();
-            $sql = 'SELECT od.id, od.total_fee FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
-                    WHERE od.delete_flag=0 AND od.state=2 AND od.server_id='.$server_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
+            $sql = 'SELECT od.id, od.total_fee
+                    FROM biz_shop sh, biz_shop_goods go, biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.delete_flag=0 AND od.state=2 AND od.server_id='.$server_id.' AND od.verify_shop_id=sh.id AND od.goods_id=go.id
                     ORDER BY od.use_date DESC';
             $money = $orderModel->query($sql);
             $sumMoney = '';
@@ -275,8 +278,8 @@ class ServerProviderController extends Controller{
             }
             $page_count  = ceil($count/$size);
             $sql = 'SELECT od.id, ca.name, ca.plate_number, go.goods_name, sh.shop_name, od.total_fee, ca.car_type, od.use_date
-                    FROM biz_order od, biz_car ca, biz_shop sh, biz_shop_goods go
-                    WHERE od.delete_flag=0 AND od.state=2 AND od.server_id='.$server_id.' AND od.verify_shop_id=sh.id AND od.car_id=ca.id AND od.goods_id=go.id
+                    FROM biz_shop sh, biz_shop_goods go, biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
+                    WHERE od.delete_flag=0 AND od.state=2 AND od.server_id='.$server_id.' AND od.verify_shop_id=sh.id AND od.goods_id=go.id
                     ORDER BY od.use_date DESC LIMIT '.$start.','.$end;
             $orderInfo = $orderModel->query($sql);
             for($i=0;$i<count($orderInfo);$i++){

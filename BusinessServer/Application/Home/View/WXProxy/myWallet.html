@@ -23,46 +23,63 @@
         <div class="wire"></div>
     </volist>
 
-    <div class="wire1"></div>
+    <div class="earnings">当前收益<span class="num">{$total}</span>积分</div>
     <div style="height: 50px"></div>
-    <div class="add_car">当前收益<span class="num">{$total}</span>积分</div>
+    <div onclick="withdraw()" class="add_car">提现</div>
 
 </body>
 
 <script>
 
-    var reqWithdraw = 0;
-
     //提现
     function withdraw(){
 
-        if(reqWithdraw == 1){
-            return;
-        }
         var ret = confirm('您可提现一共{$total}元');
         if(ret){
             $.ajax({
                 type: "POST",
                 dataType: "json",
                 timeout: 10000,
-                url: "__URL__/redPacketWithdraw?" + Math.random(),
+                url: "__URL__/tradeWithdraw?" + Math.random(),
                 success: function (rData) {
                     var response = eval(rData);
                     if (response && response.status == 1) {
-                        $(".save").addClass("withdraw-ok").removeClass('save').html('申请成功');
-                        reqWithdraw = 1;
+                        drawToast("申请成功");
                     }else{
-                        alert('提现失败，请重试');
+                        drawToast('申请失败，请重试');
                     }
                 },
                 error: function (error) {
-                    alert(eval(error));
+                    drawToast('申请失败，请重试');
                     //alert('您好、当前服务器正忙、请稍后……');
                     return false;
                 }
             })
         }
+    }
 
+    var intervalCounter = 0;
+    function hideToast()
+    {
+        var alert = document.getElementById("toast");
+        alert.style.opacity = 0;
+        clearInterval(intervalCounter);
+    }
+
+    function drawToast(message)
+    {
+        var alert = document.getElementById("toast");
+        if (alert == null)
+        {
+            var toastHTML = '<div id="toast">' + message + '</div>';
+            document.body.insertAdjacentHTML('beforeEnd', toastHTML);
+        }
+        else
+        {
+            alert.style.opacity = .9;
+            alert.innerHTML = message;
+        }
+        intervalCounter = setInterval("hideToast()", 1000);
     }
 
 </script>
