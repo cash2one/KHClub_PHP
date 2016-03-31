@@ -393,7 +393,7 @@ class WXManagerController extends Controller{
                 $count = 1;
             }
             $page_count  = ceil($count/$size);
-            $sql = 'SELECT user_id, name, mobile, company, position FROM biz_proxy_info
+            $sql = 'SELECT user_id, name, mobile, wx_open_id, company, position FROM biz_proxy_info
                     WHERE state=1 AND delete_flag=0 ORDER BY add_date DESC LIMIT '.$start.','.$end;
             $proxyInfo = $proxyModel->query($sql);
             for($i=0;$i<count($proxyInfo);$i++){
@@ -440,7 +440,7 @@ class WXManagerController extends Controller{
             $start = ($page-1)*$size;
             $end   = $size;
             $proxyModel = M('biz_proxy_info');
-            $proxyInfo = $proxyModel->field("user_id, name, mobile, company, position")->where('user_id='.$user_id)->find();
+            $proxyInfo = $proxyModel->field("user_id, name, mobile, company, wx_open_id, position")->where('user_id='.$user_id)->find();
             $amountModel = M('biz_proxy_trade');
             $count = count($amountModel->field('amount')->where('user_id='.$user_id.' and delete_flag=0')->order('state asc, add_date desc')->select());
             if($count == false){
