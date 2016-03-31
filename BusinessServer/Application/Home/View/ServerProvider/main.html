@@ -11,14 +11,6 @@
 
 </head>
 
-<script type="text/javascript">
-
-    function show(e){
-        location.href = "shopRecord?verify_shop_id="+e;
-    }
-
-</script>
-
 <body>
 <div class="box">
     <div class="head"></div>
@@ -41,19 +33,19 @@
         <volist name="shop" id="v">
         <if condition="$i % 2 eq 1">
         <tr class="list_single">
-            <td class="user-list-cell shop-td-title" onclick="show('{$v.id}')">{$v.shop_name}</td>
+            <td class="user-list-cell">{$v.shop_name}</td>
             <td class="user-list-cell">{$v.use_date}</td>
             <td class="user-list-cell">{$v.moneyNum}</td>
             <td class="user-list-cell">{$v.carNum}</td>
-            <td class="user-list-cell"><a href="shopToday?verify_shop_id={$v.id}" class="shop-td-title">查看</a></td>
+            <td class="user-list-cell"><a href="shopRecord?verify_shop_id={$v.id}" class="shop-td-title">查看</a></td>
         </tr>
         <else/>
         <tr class="list_double">
-            <td class="user-list-cell shop-td-title" onclick="show('{$v.id}')">{$v.shop_name}</td>
+            <td class="user-list-cell">{$v.shop_name}</td>
             <td class="user-list-cell">{$v.use_date}</td>
             <td class="user-list-cell">{$v.moneyNum}</td>
             <td class="user-list-cell">{$v.carNum}</td>
-            <td class="user-list-cell"><a href="shopToday?verify_shop_id={$v.id}" class="shop-td-title">查看</a></td>
+            <td class="user-list-cell"><a href="shopRecord?verify_shop_id={$v.id}" class="shop-td-title">查看</a></td>
         </tr>
         </if>
         </volist>
