@@ -645,7 +645,7 @@ class WXManagerController extends Controller{
             $end   = $size;
             $proxyModel = M();
             $sql = 'SELECT fo.user_id FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
-                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
+                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=0
                     GROUP BY tr.user_id ORDER BY fo.add_date DESC';
             $count = count($proxyModel->query($sql));
             if($count == false){
@@ -654,7 +654,7 @@ class WXManagerController extends Controller{
             $page_count  = ceil($count/$size);
             $sql = 'SELECT fo.user_id, fo.name, fo.mobile, fo.company, fo.position, SUM(tr.amount) amount, wi.withdraw_state
                     FROM biz_proxy_info fo, biz_proxy_trade tr, biz_withdraw_notice wi
-                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=1
+                    WHERE fo.state=1 AND fo.delete_flag=0 AND fo.user_id=tr.user_id AND fo.user_id=wi.user_id AND tr.state=1 AND wi.withdraw_state=0
                     GROUP BY tr.user_id ORDER BY fo.add_date DESC LIMIT '.$start.','.$end;
             $proxyInfo = $proxyModel->query($sql);
             for($i=0;$i<count($proxyInfo);$i++){
