@@ -86,3 +86,23 @@ body{
     height: 50px;
     background-color: #e3e3e3;
 }
+.more{
+    margin: 120px auto auto auto;
+    color: #646464;
+    font-size: 16px;
+    text-align: center;
+}
+.contact{
+    font-size: 18px;
+    width: 90%;
+    display: block;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 45px;
+    margin: 60px auto auto auto;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}

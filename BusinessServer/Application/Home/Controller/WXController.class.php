@@ -595,6 +595,34 @@ class WXController extends Controller {
      */
     public function getBillShops(){
 
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_URL_PREFIX."getBillShops&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+        $model = M();
+        $sql = 'SELECT user_id FROM biz_user_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
+        $user = $model->query($sql)[0];
+        //如果系统中不存在这个人
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
         $category = 1;
         if(isset($_REQUEST['category'])){
             $category = $_REQUEST['category'];
@@ -1079,6 +1107,35 @@ class WXController extends Controller {
                 $order['state'] = ORDER_HAS_PAY;
             }
             $model->save($order);
+
+            //推送消息
+            $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+            $ACC_TOKEN = $jssdk->getAccessToken();
+            $sql = 'SELECT * FROM biz_user_info WHERE delete_flag=0 AND user_id='.$order['user_id'];
+            $user = $model->query($sql)[0];
+            $openID = $user['wx_open_id'];
+            if($openID && $order['goods_id'] != 0){
+                $data = '{
+                            "touser":"'.$openID.'",
+                            "msgtype":"text",
+                            "text":
+                            {
+                                "content":"您此次购买服务校验码为'.$order['out_trade_no'].'，校验码需提供给商家以确认为您服务"
+                            }
+                         }';
+
+                $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                curl_setopt($curl, CURLOPT_POST, 1);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_exec($curl);
+                curl_close($curl);
+            }
         }
     }
 
@@ -1142,6 +1199,18 @@ class WXController extends Controller {
         }
 
     }
+
+    /**
+     * @brief 跳转到临时页面
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/tempPromet
+     *
+     */
+    public function tempPromet(){
+
+        $this->display('carMaintenance');
+    }
+
 
 }
 

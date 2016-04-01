@@ -694,6 +694,10 @@ class WXManagerController extends Controller{
         $sql = 'UPDATE biz_proxy_trade SET state=2,update_date='.time().',withdraw_date='.time().'
                 WHERE user_id="'.$target_id.'" AND state=1 AND delete_flag=0';
         $num = $withdrawModel->execute($sql);
+
+        $sql = 'UPDATE biz_withdraw_notice SET withdraw_state=1 WHERE user_id="'.$target_id.'"';
+        $withdrawModel->execute($sql);
+
         if($num < 1){
             header('Location: '.__ROOT__.'/index.php/Home/WXManager/proxyDetails?user_id='.$target_id);
             exit;

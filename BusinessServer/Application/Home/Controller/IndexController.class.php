@@ -17,8 +17,18 @@ class IndexController extends Controller {
                   "button" : [
                     {
                       "name" : "会员专享",
-                      "type" : "view",
-                      "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify"
+                      "sub_button" : [
+                        {
+                          "name" : "会员服务",
+                          "type" : "view",
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify"
+                        },
+                        {
+                          "name" : "我要结账",
+                          "type" : "view",
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getBillShops"
+                        }
+                      ]
                     },
                     {
                       "name" : "品位环球",
