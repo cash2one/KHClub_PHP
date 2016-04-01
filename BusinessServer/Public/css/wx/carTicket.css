@@ -295,6 +295,7 @@ body{
     line-height: 45px;
     text-align: right;
     padding-right: 10px;
+    max-width: 45%;
 }
 .reminder{
     font-size: 16px;
