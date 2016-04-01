@@ -30,7 +30,9 @@ body{
     border-radius: 100%;
     margin-top: 15px;
     margin-left: 10px;
-    background-position:center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
 }
 .content_box{
     color: #000000;

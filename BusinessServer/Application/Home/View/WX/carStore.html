@@ -14,7 +14,7 @@
 <volist name="shops" id="shop">
     <a href="getShopDetail?shop_id={$shop.id}">
         <div class="store_box clear">
-            <img class="merchant_logo" src="__ROOT__/Uploads/{$shop.shop_image_thumb}" alt="">
+            <div class="merchant_logo" style="background-image: url(__ROOT__/Uploads/{$shop.shop_image_thumb})"></div>
             <div class="content_box">
                 <div class="carStore">{$shop.shop_name}</div>
                 <img class="addr_images" src="__PUBLIC__/icon/address.png" alt="">
