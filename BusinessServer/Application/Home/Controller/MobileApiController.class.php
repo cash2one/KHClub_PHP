@@ -2,11 +2,7 @@
 namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
-import('Org.Taobao.top.TopClient');
-import('Org.Taobao.top.ResultSet');
-import('Org.Taobao.top.RequestCheckUtil');
-import('Org.Taobao.top.TopLogger');
-import('Org.Taobao.top.request.AlibabaAliqinFcSmsNumSendRequest');
+Vendor('alisdk.TopSdk');
 import('Org.JPush.JPush');
 
 class MobileApiController extends Controller{
