@@ -27,6 +27,11 @@ class IndexController extends Controller {
                           "name" : "我要结账",
                           "type" : "view",
                           "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getBillShops"
+                        },
+                        {
+                          "name" : "豪车美容",
+                          "type" : "view",
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getShops"
                         }
                       ]
                     },
