@@ -7,8 +7,8 @@ import('Org.JPush.JPush');
 
 class MobileApiController extends Controller{
     //阿里大鱼KEY
-    private $APPKEY = '23312078';
-    private $SECRET = 'cd3b6b73c21bcc265fde56ec5f66544b';
+    private $APPKEY = '23338076';
+    private $SECRET = 'dc124fbe1bf22b515a8db2c6db660f43';
 
     //极光推送KEY
     private $app_key = '64323ace631a71b5ade21733';
@@ -134,9 +134,9 @@ class MobileApiController extends Controller{
             $req->setExtend("123456");
             $req->setSmsType("normal");
             $req->setSmsFreeSignName("注册验证");
-            $req->setSmsParam("{'code':'".$code."','product':'脈库'}");
+            $req->setSmsParam("{'code':'".$code."','product':'品位环球'}");
             $req->setRecNum($phone_num);
-            $req->setSmsTemplateCode("SMS_5058464");
+            $req->setSmsTemplateCode("SMS_4445955");
             $resp = $c->execute($req);
             if($resp->result->success == true){
                 $addModel = M('biz_sms');
@@ -240,9 +240,9 @@ class MobileApiController extends Controller{
             $req->setExtend("123456");
             $req->setSmsType("normal");
             $req->setSmsFreeSignName("变更验证");
-            $req->setSmsParam("{'code':'".$code."','product':'脈库'}");
+            $req->setSmsParam("{'code':'".$code."','product':'品位环球'}");
             $req->setRecNum($phone_num);
-            $req->setSmsTemplateCode("SMS_5058462");
+            $req->setSmsTemplateCode("SMS_4445953");
             $resp = $c->execute($req);
             if($resp->result->success == true){
                 $addModel = M('biz_sms');
