@@ -47,16 +47,15 @@
                 drawToast("车牌不能为空");
                 return;
             }
-            if($('#carFrame').val().length < 1){
-                drawToast("车架号不能为空");
-                return;
-            }
 
             //submit
             var form = $("#form");
             form.attr("method", "GET");
             form.attr("action", "addCare");
             form.submit();
+        }
+        function upload(){
+
         }
     </script>
 </head>
@@ -77,19 +76,21 @@
         <input class="input-class" maxlength="30" id="card" name="card" type="text" placeholder="（必填）" />
     </div>
     <div class="wire"></div>
-    <div class="list_box clear">
-        <div class="cars">
-            <div class="carFrame">车架号</div>
-            <div class="carToken">车辆识别代码</div>
-        </div>
-        <input class="car_input-class" maxlength="30" id="carFrame" name="carFrame" type="text" placeholder="（必填）" />
-    </div>
-    <div class="wire"></div>
     <a href="carBrand.html" class="myCard"><div class="list_box clear">
         <div class="genre">车型</div>
         <img class="select_images" src="../images/icon/arrow.png" alt="" width="20px">
         <!--<input class="input-class" maxlength="30" name="username" type="text" placeholder="（必填）" />-->
     </div></a>
+    <div class="wire"></div>
+    <div class="list_box clear" onclick="upload()">
+        <div class="genre">行驶证</div>
+        <div class="upload">上传</div>
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear">
+        <div class="genre">行驶证</div>
+        <img class="steer_images" src="../images/221446476438.jpg" alt="" width="40px">
+    </div>
     <div class="wire"></div>
     <a onclick="save()" class="add_car">申请</a>
 </form>
