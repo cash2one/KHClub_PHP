@@ -436,34 +436,53 @@ class WXController extends Controller {
             exit;
         }
 
-        $name = $_REQUEST['name'];
-        $mobile = $_REQUEST['mobile'];
-        $plate_number = '粤B'.$_REQUEST['plate_number'];
-        $vehicle_number = $_REQUEST['vehicle_number'];
-        $car_type = $_REQUEST['car_type'];
-        $car_type_code = $_REQUEST['car_type_code'];
-
-        //|| empty($car_type)
-        if(empty($name) || empty($mobile) || empty($plate_number) || empty($car_type) || empty($vehicle_number)){
-            header("Location: ".HTTP_URL_PREFIX."addCar?empty=1");
+        if(!isset($_REQUEST['name']) || !isset($_REQUEST['mobile']) || !isset($_REQUEST['plate_number']) || !isset($_REQUEST['car_type']) || !isset($_REQUEST['driving_license_url'])){
+            header("Location: ".HTTP_URL_PREFIX."applyCarView?empty=1");
             exit;
         }
 
+        $name = $_REQUEST['name'];
+        $mobile = $_REQUEST['mobile'];
+        $plate_number = '粤B'.$_REQUEST['plate_number'];
+        $car_type = $_REQUEST['car_type'];
+        $car_type_code = $_REQUEST['car_type_code'];
+
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $ACC_TOKEN = $jssdk->getAccessToken();
+        //二维码下载
+        $imageUrl = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token='.$ACC_TOKEN.'&media_id='.$_REQUEST['driving_license_url'];
+        $ch = curl_init($imageUrl);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_NOBODY, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $package = curl_exec($ch);
+        curl_close($ch);
+
+        //这里可能会出现“图片请求失败”问题 碍于时间问题先不处理
+        $filename = 'drivingLicense/'.$user['id'].time().'.png';
+        $local_file = fopen('./'.$filename, 'w');
+        if(false !== $local_file){
+            if(false !== fwrite($local_file, $package)){
+                fclose($local_file);
+            }
+        }
+
         //增加
-        $apply = array('user_id'=>$user['user_id'],'name'=>$name, 'mobile'=>$mobile, 'plate_number'=>$plate_number
-                       ,'vehicle_number'=>$vehicle_number, 'car_type'=>$car_type, 'state'=>1, 'car_type_code'=>$car_type_code, 'add_date'=>time());
+        $apply = array('user_id'=>$user['user_id'],'name'=>$name, 'mobile'=>$mobile, 'plate_number'=>$plate_number, 'driving_license_url'=>$filename
+                       , 'car_type'=>$car_type, 'state'=>1, 'car_type_code'=>$car_type_code, 'add_date'=>time());
         $carModel = M('biz_car');
         $ret = $carModel->add($apply);
 
         $_SESSION['name'] = '';
         $_SESSION['mobile'] = '';
         $_SESSION['plate_number'] = '';
-        $_SESSION['vehicle_number'] = '';
+        $_SESSION['driving_license_url'] = '';
         $_SESSION['car_type'] = '';
         $_SESSION['car_type_code'] = '';
 
-        //wxJs签名
-        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         if($ret){
@@ -514,7 +533,7 @@ class WXController extends Controller {
 
         $carModel = M('biz_car');
         $car = $carModel->where('delete_flag=0 AND id="'.$car_id.'"')->find();
-
+        $car['driving_license_url'] = __ROOT__.'/'.$car['driving_license_url'];
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
@@ -535,7 +554,7 @@ class WXController extends Controller {
         $_SESSION['name'] = $_REQUEST['name'];
         $_SESSION['mobile'] = $_REQUEST['mobile'];
         $_SESSION['plate_number'] = $_REQUEST['plate_number'];
-        $_SESSION['vehicle_number'] = $_REQUEST['vehicle_number'];
+        $_SESSION['driving_license_url'] = $_REQUEST['driving_license_url'];
 
         $cars = file_get_contents('cars.json');
         $carsList = json_decode($cars, true);

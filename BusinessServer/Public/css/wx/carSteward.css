@@ -90,7 +90,7 @@ body{
     font-size: 17px;
     color: #000000;
     line-height: 60px;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 .add{
     margin-top: 30px;
@@ -439,4 +439,22 @@ body{
     width: 1px;
     height: 100%;
     background-color: #000000;
+}
+.upload{
+    float: right;
+    width: 50px;
+    height: 30px;
+    border-radius: 2px;
+    margin-top: 15px;
+    margin-right: 20px;
+    line-height: 30px;
+    color: #2e7ce3;
+    font-size: 18px;
+    text-align: center;
+}
+.steer_images{
+    float: right;
+    margin-top: 5px;
+    margin-right: 20px;
+    width: 50px;
 }

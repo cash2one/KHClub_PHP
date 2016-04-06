@@ -33,36 +33,37 @@
             intervalCounter = setInterval("hideToast()", 1000);
         }
 
-        function save()
-        {
-            if($('#name').val().length < 1){
-                drawToast("姓名不能为空");
-                return;
-            }
-            if($('#mobile').val().length < 1){
-                drawToast("电话不能为空");
-                return;
-            }
-            if($('#plate_number').val().length < 1){
-                drawToast("车牌不能为空");
-                return;
-            }
-            if($('#car_type').val().length < 1){
-                drawToast("车型不能为空");
-                return;
-            }
+//        function save()
+//        {
+//            if($('#name').val().length < 1){
+//                drawToast("姓名不能为空");
+//                return;
+//            }
+//            if($('#mobile').val().length < 1){
+//                drawToast("电话不能为空");
+//                return;
+//            }
+//            if($('#plate_number').val().length < 1){
+//                drawToast("车牌不能为空");
+//                return;
+//            }
+//            if($('#car_type').val().length < 1){
+//                drawToast("车型不能为空");
+//                return;
+//            }
+//
+//            if($('#vehicle_number').val().length < 1){
+//                drawToast("车架号不能为空");
+//                return;
+//            }
+//
+//            //submit
+//            var form = $("#form");
+//            form.attr("method", "POST");
+//            form.attr("action", "applyCar");
+//            form.submit();
+//        }
 
-            if($('#vehicle_number').val().length < 1){
-                drawToast("车架号不能为空");
-                return;
-            }
-
-            //submit
-            var form = $("#form");
-            form.attr("method", "POST");
-            form.attr("action", "applyCar");
-            form.submit();
-        }
     </script>
 </head>
 <body>
@@ -83,19 +84,18 @@
         <input class="input-class" maxlength="5" id="plate_number" name="plate_number" type="text" placeholder="（必填）" value="{$_SESSION['plate_number']}" />
     </div>
     <div class="wire"></div>
-    <div class="list_box clear">
-        <div class="cars">
-            <div class="carFrame">车架号</div>
-            <div class="carToken">车辆识别代码</div>
-        </div>
-        <input class="car_input-class" maxlength="30" id="vehicle_number" name="vehicle_number" type="text" placeholder="（必填）" value="{$_SESSION['vehicle_number']}"/>
-    </div>
-    <div class="wire"></div>
     <div class="list_box clear" id="carType">
         <div class="genre">车型</div>
         <img class="select_images" src="__PUBLIC__/icon/arrow.png" alt="" width="20px">
         <input class="input-class" maxlength="30" id="car_type" name="car_type" type="text" placeholder="（必填）" readonly="true" value="{$_SESSION['car_type']}"/>
         <input class="input-class" maxlength="30" name="car_type_code" type="hidden" value="{$_SESSION['car_type_code']}"/>
+    </div>
+    <div class="wire"></div>
+    <div class="list_box clear" onclick="chooseImage()">
+        <div class="genre">行驶证</div>
+        <div class="upload">上传</div>
+        <img class="steer_images" alt="" width="40px">
+        <input id="driving_license_url" name="driving_license_url" type="hidden">
     </div>
     <div class="wire"></div>
     <a onclick="save()" class="add_car">申请</a>
@@ -105,20 +105,99 @@
 <script src="__PUBLIC__/js/wx/wxOperate.js"></script>
 <script>
 
+    var localID = '';
+
+    if("{$_SESSION['driving_license_url']}".length > 0 && "{$_SESSION['driving_license_url']}" != "undefined"){
+        var localIds = "{$_SESSION['driving_license_url']}";
+        var image = $(".steer_images");
+        image.attr("src", localIds);
+        localID = localIds;
+
+        image.show();
+        $(".upload").hide();
+    }else{
+        $(".steer_images").hide();
+    }
+
     wx.config({
                 debug: false,
                 appId: '{$signPackage.appId}',
                 timestamp: {$signPackage.timestamp},
             nonceStr: '{$signPackage.nonceStr}',
             signature: '{$signPackage.signature}',
-            jsApiList : []
+            jsApiList : [ "chooseImage" , "uploadImage"]
     });
     operate.initCloseShare();
+
+    function chooseImage(){
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                var image = $(".steer_images");
+                image.attr("src", localIds[0]);
+                localID = localIds[0];
+
+                image.show();
+                $(".upload").hide();
+            }
+        });
+    }
+
+
+    function save()
+    {
+        if($('#name').val().length < 1){
+            drawToast("姓名不能为空");
+            return;
+        }
+        if($('#mobile').val().length < 1){
+            drawToast("电话不能为空");
+            return;
+        }
+        if($('#plate_number').val().length < 1){
+            drawToast("车牌不能为空");
+            return;
+        }
+        if($('#car_type').val().length < 1){
+            drawToast("车型不能为空");
+            return;
+        }
+
+        //本地ID
+        if(localID.length > 0) {
+            wx.uploadImage({
+                localId: localID, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    $('#driving_license_url').val(serverId);
+                    confirmSave();
+                },
+                fail: function (){
+                    drawToast('图片上传失败');
+                }
+            });
+        }else{
+            drawToast("行驶证不能为空");
+        }
+    }
+
+    //最终提交
+    function confirmSave(){
+        //submit
+        var form = $("#form");
+        form.attr("method", "POST");
+        form.attr("action", "applyCar");
+        form.submit();
+    }
 
     $(function(){
        $('#carType').click(function(){
             location.href="carBrands?name="+$('#name').val()+"&mobile="+$('#mobile').val()+"&plate_number="
-            +$('#plate_number').val()+"&vehicle_number="+$('#vehicle_number').val();
+            +$('#plate_number').val()+"&driving_license_url="+$('.steer_images').attr('src');
        })
     });
 
