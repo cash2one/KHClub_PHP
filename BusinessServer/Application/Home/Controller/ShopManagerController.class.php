@@ -89,7 +89,7 @@ class ShopManagerController extends Controller {
                     ORDER BY use_date';
             $count = $shopModel->query($sql)['count'];
             if($count == false || $count == 0){
-                $count = 0;
+                $count = 1;
             }
             $page_count  = ceil($count/$size);
 
@@ -152,8 +152,10 @@ class ShopManagerController extends Controller {
             if(empty($count)){
                 $count = 0;
                 $total = 0;
+                $page_count = 1;
+            }else{
+                $page_count = ceil($count/$size);
             }
-            $page_count  = ceil($count/$size);
 
             $sql = 'SELECT od.id, ca.name, ca.plate_number, ca.car_type, ca.mobile, od.use_date, od.total_fee
                     FROM biz_order od LEFT JOIN biz_car ca ON(od.car_id=ca.id)
