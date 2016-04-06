@@ -608,7 +608,6 @@ class WXController extends Controller {
             exit;
         }
 
-
         $model = M('biz_shop');
         $shops = $model->where('delete_flag=0')->select();
         $this->assign('shops', $shops);

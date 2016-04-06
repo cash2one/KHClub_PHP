@@ -89,7 +89,7 @@ class ShopManagerController extends Controller {
                     ORDER BY use_date';
             $count = $shopModel->query($sql)['count'];
             if($count == false || $count == 0){
-                $count = 1;
+                $count = 0;
             }
             $page_count  = ceil($count/$size);
 
@@ -150,7 +150,8 @@ class ShopManagerController extends Controller {
             $total = $quanlityAndtotal['total'];
 
             if(empty($count)){
-                $count = 1;
+                $count = 0;
+                $total = 0;
             }
             $page_count  = ceil($count/$size);
 
