@@ -6,10 +6,14 @@
 //define("WX_APPID", "wxd5db3b57ffdfafb3");
 //define("WX_APPSecret","2ccd9fe700dda9b0e9db40212dba1f4b");
 //define("HTTP_HOST", "http://114.215.95.23");
+////通知用Topic
+//define("SYSTEM_NOTIFY", "systemNotifyTest");
 
 define("WX_APPID", "wx5764fdc7f223e062"); //a.pinweihuanqiu.com
 define("WX_APPSecret","ef6373955987b110fef9c0108ae15a02");
 define("HTTP_HOST", "http://a.pinweihuanqiu.com"); //a.pinweihuanqiu.com
+//通知用Topic
+define("SYSTEM_NOTIFY", "systemNotify");
 
 define("HTTP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/WX/");
 define("HTTP_SHOP_URL_PREFIX", HTTP_HOST."/BusinessServer/index.php/Home/Shop/");

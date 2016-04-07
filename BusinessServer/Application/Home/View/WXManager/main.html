@@ -27,6 +27,8 @@
 
         yunba.set_message_cb (function (data) {
             $(".main-notify").show();
+            var audio = document.getElementById('audio');
+            audio.play();
         });
 
         function mqtt_connect() {
@@ -40,7 +42,7 @@
         }
 
         function mqtt_subscribe() {
-            var topic = "systemNotify";
+            var topic = "{$Think.const.SYSTEM_NOTIFY}";
             yunba.subscribe({'topic': topic }, function (success, msg) {
                 if (success) {
                 } else {
@@ -77,6 +79,8 @@
         </div>
 
     </div>
+
+    <audio src="__PUBLIC__/asset/bell.mp3" id="audio" ></audio>
 
 </body>
 

@@ -41,6 +41,7 @@
 
     </div>
 
+    <audio src="../asset/bell.mp3" id="audio" ></audio>
 </body>
 
 <script type="text/javascript">
@@ -50,7 +51,10 @@
             $(this).addClass("active");
         });
     });
+
+    var audio = document.getElementById('audio');
     $(".main-notify").click(function () {
+        audio.play();
         $("li").removeClass("active");
         $("#applyCar").addClass("active");
 //        $(".main-notify").hide();
