@@ -59,3 +59,8 @@
     width: 45%;
     text-align: center
 }
+.driving-license{
+    max-width: 120px;
+    height: 60px;
+    cursor: pointer
+}

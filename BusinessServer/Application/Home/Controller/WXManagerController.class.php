@@ -166,7 +166,7 @@ class WXManagerController extends Controller{
             }
             $page_count  = ceil($count/$size);
             $carModel = M('biz_car');
-            $carInfo = $carModel->where('state=1')->field('id,name,mobile,plate_number,vehicle_number,car_type,state,add_date')->limit($start,$end)->select();
+            $carInfo = $carModel->where('state=1')->field('id,name,mobile,plate_number,driving_license_url,car_type,state,add_date')->limit($start,$end)->select();
             for($j=0;$j<count($carInfo);$j++){
                 $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
             }
@@ -251,7 +251,7 @@ class WXManagerController extends Controller{
             }
             $page_count  = ceil($count/$size);
             $carModel = M('biz_car');
-            $carInfo = $carModel->where('mobile='.$mobile.' and state!=0')->field('id,name,mobile,plate_number,vehicle_number,car_type,state,add_date,state')->limit($start,$end)->select();
+            $carInfo = $carModel->where('mobile='.$mobile.' and state!=0')->field('id,name,mobile,plate_number,driving_license_url,car_type,state,add_date,state')->limit($start,$end)->select();
             for($j=0;$j<count($carInfo);$j++){
                 $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
             }
@@ -296,7 +296,7 @@ class WXManagerController extends Controller{
                 }
                 $page_count  = ceil($count/$size);
                 $carModel = M('biz_car');
-                $carInfo = $carModel->where('user_id='.$user['user_id'].' and state!=0')->field('id,name,mobile,plate_number,vehicle_number,car_type,add_date,state')->limit($start,$end)->select();
+                $carInfo = $carModel->where('user_id='.$user['user_id'].' and state!=0')->field('id,name,mobile,plate_number,driving_license_url,car_type,add_date,state')->limit($start,$end)->select();
 
                 for($j=0;$j<count($carInfo);$j++){
                     $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
