@@ -7,13 +7,13 @@
 
 .nav-frame{
     width: 140px;
-    height: 600px;
+    height: 768px;
     float: left;
     padding-right: 2px;
     border-right: solid #808080 1px;
 }
 
 .nav-body{
-    width:1000px;
-    height: 600px;
+    width:1024px;
+    height: 768px;
 }
