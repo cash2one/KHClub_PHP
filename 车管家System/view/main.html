@@ -18,27 +18,28 @@
 
 </head>
 
-<body style="width:1200px;">
+<body>
 
-<h3 style="text-align: center">品位环球管理系统</h3>
-<hr/>
-<div>
-
-    <div class="nav-frame">
-        <ul class="nav nav-sidebar">
-            <li class="active"><a href="checkHome.html" target="mainframe">车辆申请</a></li>
-            <li><a href="proxyApply.html" target="mainframe">代理申请</a></li>
-            <li><a href="proxy.html" target="mainframe">代理者</a></li>
-            <li><a href="withdrawRequest.html" target="mainframe">提现申请</a></li>
-        </ul>
+    <div class="main-frame">
+        <div class="main-title">品位环球管理系统</div>
+        <div class="main-notify">你有待审核的车辆</div>
     </div>
+    <hr/>
+    <div>
+        <div class="nav-frame">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a id="checkHome" href="checkHome.html" target="mainframe">车辆申请</a></li>
+                <li><a href="proxyApply.html" target="mainframe">代理申请</a></li>
+                <li><a href="proxy.html" target="mainframe">代理者</a></li>
+                <li><a href="withdrawRequest.html" target="mainframe">提现申请</a></li>
+            </ul>
+        </div>
+        <div id="main" class="nav-body" style="float:left;">
+            <iframe name="mainframe" class="nav-body" src="checkHome.html" frameborder="0" scrolling="no">
+            </iframe>
+        </div>
 
-    <div id="main" class="nav-body" style="float:left;">
-        <iframe name="mainframe" class="nav-body" src="checkHome.html" frameborder="0" scrolling="no">
-        </iframe>
     </div>
-
-</div>
 
 </body>
 
@@ -49,6 +50,13 @@
             $(this).addClass("active");
         });
     });
+    $(".main-notify").click(function () {
+        $("li").removeClass("active");
+        $("#applyCar").addClass("active");
+//        $(".main-notify").hide();
+        document.getElementById("checkHome").click();
+    });
+
 </script>
 
 </html>

@@ -482,11 +482,12 @@ class WXController extends Controller {
         $_SESSION['car_type'] = '';
         $_SESSION['car_type_code'] = '';
 
-
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         if($ret){
             header("Location: ".HTTP_URL_PREFIX."myCars?isAdd=1");
+            //向系统推送新通知
+            pushMessage("systemNotify", "需要审核的新车辆", 1);
         }else{
             header("Location: ".HTTP_URL_PREFIX."userHome");
         }

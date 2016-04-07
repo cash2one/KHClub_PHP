@@ -5,15 +5,38 @@
     background-color: #428bca;
 }
 
+body{
+    width: 1200px
+}
+
 .nav-frame{
     width: 140px;
-    height: 600px;
+    height: 768px;
     float: left;
     padding-right: 2px;
     border-right: solid #808080 1px;
 }
 
 .nav-body{
-    width:1000px;
-    height: 600px;
+    width:1024px;
+    height: 768px;
+}
+
+.main-frame{
+    padding-top: 10px
+}
+
+.main-title{
+    display: inline-block;
+    width: 800px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    margin-left: 200px
+}
+
+.main-notify{
+    cursor: pointer;
+    display: inline-block;
+    color: red
 }

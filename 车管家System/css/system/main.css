@@ -5,6 +5,10 @@
     background-color: #428bca;
 }
 
+body{
+    width: 1200px
+}
+
 .nav-frame{
     width: 140px;
     height: 768px;
@@ -16,4 +20,23 @@
 .nav-body{
     width:1024px;
     height: 768px;
+}
+
+.main-frame{
+    padding-top: 10px
+}
+
+.main-title{
+    display: inline-block;
+    width: 800px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    margin-left: 200px
+}
+
+.main-notify{
+    cursor: pointer;
+    display: inline-block;
+    color: red
 }

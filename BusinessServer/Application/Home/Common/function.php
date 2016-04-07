@@ -84,6 +84,34 @@ function array_replace_null($result)
 
 }
 
+/*
+ * 云巴推送
+ * */
+function pushMessage($topic, $message, $type){
+
+    $content = array('type'=>$type,
+                     'content'=>$message);
+
+    $data = array ( 'method'=>'publish',
+                    'appkey'=>'5705c6534407a3cd028ada40',
+                    'seckey'=>'sec-cNoNS9aNTIzw7437eOyhihXO3hH7hw3TD7grYWJpKhVnudll',
+                    'topic'=>$topic,
+                    'msg'=>$content);
+    $data_string = json_encode($data);
+    $ch = curl_init('http://rest.yunba.io:8080');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$data_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
+    );
+
+    $result = curl_exec($ch);
+
+    return $result;
+}
 
 /**
  * @brief 获取随机数
