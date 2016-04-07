@@ -9,6 +9,13 @@
     <script src="__PUBLIC__/js/bootstrap.min.js"></script>
     <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
     <title>管理系统</title>
+    <script type="text/javascript">
+
+        function orignImage(e){
+            window.open(e);
+        }
+
+    </script>
 
 </head>
 <body>
@@ -20,7 +27,7 @@
             <th class="user-list-title">车主</th>
             <th class="user-list-title">电话</th>
             <th class="user-list-title">车牌</th>
-            <th class="user-list-title">车架号</th>
+            <th class="user-list-title">行驶证</th>
             <th class="user-list-title">车型</th>
             <th class="user-list-title">操作</th>
         </tr>
@@ -32,7 +39,9 @@
             <td class="user-list-cell">{$v.name}</td>
             <td class="user-list-cell">{$v.mobile}</td>
             <td class="user-list-cell">{$v.plate_number}</td>
-            <td class="user-list-cell">{$v.vehicle_number}</td>
+            <td class="user-list-cell">
+                <img onclick="orignImage('__ROOT__/{$v.driving_license_url}')" src="__ROOT__/{$v.driving_license_url}" class="driving-license">
+            </td>
             <td class="user-list-cell">{$v.car_type}</td>
             <if condition="($v.state eq 1)">
                 <td class="user-list-cell">
