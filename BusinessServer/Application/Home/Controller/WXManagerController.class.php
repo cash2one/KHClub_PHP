@@ -306,6 +306,7 @@ class WXManagerController extends Controller{
                 $carInfo = '';
                 $page_count = 1;
             }
+            $this->assign('mobile',$mobile);
             $this->assign('page',$page);
             $this->assign('page_count',$page_count);
             $this->assign('carInfo',$carInfo);
