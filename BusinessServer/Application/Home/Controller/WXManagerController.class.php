@@ -255,6 +255,7 @@ class WXManagerController extends Controller{
             for($j=0;$j<count($carInfo);$j++){
                 $carInfo[$j]['add_date'] = date('Y-m-d',$carInfo[$j]['add_date']);
             }
+            $this->assign('mobile',$mobile);
             $this->assign('page',$page);
             $this->assign('page_count',$page_count);
             $this->assign('carInfo',$carInfo);
