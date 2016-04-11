@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="../js/jquery-2.2.0.min.js"></script>
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/system/systemhome.css" rel="stylesheet">
+    <script src="../js/bootstrap.min.js"></script>
+    <link href="../css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+
+</head>
+<body>
+
+    <nav style="margin: auto" class="navbar navbar-default">
+        <div>
+            <ul style="width: 100%" class="nav navbar-nav">
+                <li id="wx-card" class="nav-width active"><a onclick="getWxData(1)">会员卡</a></li>
+                <li id="wx-leaflet" class="nav-width"><a  onclick="getWxData(2)">宣传单</a></li>
+            </ul>
+        </div>
+    </nav>
+    <table class="table table-min-width">
+        <thead>
+            <tr>
+                <th class="user-list-title">日期</th>
+                <th class="user-list-title">关注量</th>
+                <th class="user-list-title">注册量</th>
+                <th class="user-list-title">会员量</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="user-list-cell">2016-02-23</td>
+                <td class="user-list-cell">10</td>
+                <td class="user-list-cell">20</td>
+                <td class="user-list-cell">10</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-content">
+        <span class="next-page">上一页</span>
+        <span class="active-page">1</span>
+        <span class="page">2</span>
+        <span class="page">3</span>
+        <span class="page">4</span>
+        <span class="page">5</span>
+        <span class="next-page">下一页</span>
+    </div>
+
+</body>
+
+<script>
+
+    function getWxData(category){
+
+        var card = $("#wx-card");
+        var leaflet = $("#wx-leaflet");
+        card.removeClass('active');
+        leaflet.removeClass('active');
+        if(category == 1){
+            card.addClass('active');
+        }else{
+            leaflet.addClass('active');
+        }
+    }
+
+</script>
+
+</html>
