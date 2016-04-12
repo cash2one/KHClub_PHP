@@ -28,6 +28,11 @@ class WXManagerController extends Controller{
             $search = $_REQUEST['search'];
             $mobile = $_REQUEST['mobile'];
             $car['state'] = $_REQUEST['state'];
+            $car['update_date'] = time();
+            if($car['state'] == CAR_CHECK_OK){
+                //审核通过日期
+                $car['pass_date'] = time();
+            }
             $carModel = M('biz_car');
             $carModel->where('id='.$id)->save($car);
 
