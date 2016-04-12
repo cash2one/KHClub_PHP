@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <link href="__PUBLIC__/css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <title>管理系统</title>
+
+</head>
+<body>
+
+    <nav style="margin: auto" class="navbar navbar-default">
+        <div>
+            <ul style="width: 100%" class="nav navbar-nav">
+                <li id="wx-card" class="nav-width active"><a onclick="getWxData(1,1)">会员卡</a></li>
+                <li id="wx-leaflet" class="nav-width"><a onclick="getWxData(2,1)">宣传单</a></li>
+            </ul>
+        </div>
+    </nav>
+    <table class="table table-min-width">
+        <thead>
+            <tr>
+                <th class="user-list-title">日期</th>
+                <th class="user-list-title">关注量</th>
+                <th class="user-list-title">注册量</th>
+                <th class="user-list-title">会员量</th>
+            </tr>
+        </thead>
+        <tbody id="list">
+
+        </tbody>
+    </table>
+
+    <div id="pageHolder" style="text-align: center">
+
+    </div>
+
+</body>
+
+<script>
+    $(function(){
+        getWxData(1,1);
+    })
+    function getWxData(category,tmpPage){
+        var card = $("#wx-card");
+        var leaflet = $("#wx-leaflet");
+        card.removeClass('active');
+        leaflet.removeClass('active');
+        if(category == 1){
+            card.addClass('active');
+        }else{
+            leaflet.addClass('active');
+        }
+            var page = tmpPage;
+            if (page < 1) {
+                page = 1;
+            }
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                timeout: 10000,
+                url: '__URL__/wechatDataInfo?',
+                data: "category=" + category + "&page=" + page,
+                success: function (rData) {
+                    var questInfo = eval(rData)
+                    if (questInfo && questInfo.status == 1) {
+                        var result = questInfo.result;
+                        var pageCount = Number(result.page_count);
+                        var list = result.list;
+
+                        //游标当前的位置
+                        var currentPositon = page % 5;
+                        if (currentPositon == 0) {
+                            currentPositon = 5;
+                        }
+                        var firstPostion = page - currentPositon;
+
+                        var displayCount = 5;
+                        //判断是不是最后一页
+                        if (firstPostion + 5 > pageCount) {
+                            displayCount = pageCount - firstPostion;
+                        }
+
+                        var pageHtml = '';
+                        if (page > 1) {
+                            pageHtml += '<span onclick="getWxData(' +category+','+(page - 1) + ')" class="next-page">上一页</span>';
+                        }
+
+                        //中间的内容
+                        for (var i = 1; i <= displayCount; i++) {
+                            if (!(page == 1 && pageCount == 1)) {
+                                if (i != currentPositon) {
+                                    pageHtml += '<span onclick="getWxData(' + category + ',' + (firstPostion + i) + ')" class="page">' + (firstPostion + i) + '</span>';
+                                } else {
+                                    //被选中的
+                                    pageHtml += '<span class="active-page">' + (firstPostion + i) + '</span>';
+                                }
+                            }
+                        }
+                        if (page < pageCount) {
+                            pageHtml += '<span onclick="getWxData(' + category+','+(page + 1) + ')" class="next-page">下一页</span>';
+                        }
+                        $('#pageHolder').html(pageHtml);
+
+                        //内容
+                        var listContent = '';
+                        for (var i = 1460476799; i < list.length; i=i-86400) {
+                            var obj = list[i];
+                            listContent = listContent + '<tr> <td class="user-list-cell">' + obj.days + '</td> ' +
+                            '<td class="user-list-cell">' + obj.count + '</td> ' +
+                            '<td class="user-list-cell">' + obj.registerQuantity + '</td> ' +
+                            '<td class="user-list-cell">' + obj.memberQuantity + '</td> </tr>';
+
+                        }
+                        $("#list").html(listContent);
+                    }
+                },
+                error: function (error) {
+//                    alert(eval(error));
+                    alert('数据输入异常！');
+                    return false;
+                }
+            })
+    }
+
+</script>
+
+</html>

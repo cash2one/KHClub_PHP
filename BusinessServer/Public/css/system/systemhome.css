@@ -1,7 +1,7 @@
 
 
 .table-min-width{
-    width: 1000px;
+    width: 1024px;
 }
 
 .user-list-title{
@@ -63,4 +63,8 @@
     max-width: 120px;
     height: 60px;
     cursor: pointer
+}
+.nav-width{
+    width: 50%;
+    text-align: center
 }

@@ -710,4 +710,141 @@ class WXManagerController extends Controller{
         }
 
     }
+
+
+    //////////////////////////////////.公众号统计.//////////////////////////////////////////////////////
+    /**
+     * @brief 公众号统计
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXManager/wechatData
+     *
+     */
+    public function wechatData(){
+        $this->display('wechatData');
+    }
+    /**
+     * @brief 公众号统计
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WXManager/wechatDataInfo?category=1&page=1
+     *
+     */
+    public function wechatDataInfo(){
+        try {
+            $category = $_REQUEST['category'];
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            $startDay = strtotime(date('2016-03-11'));
+            $t = time();
+            $today = mktime(23,59,59,date("m",$t),date("d",$t),date("Y",$t));
+            $shareModel = M('');
+            $carModel = M('biz_car');
+            $attention = array();
+            $quantity = array();
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+            $count = ceil(($today - $startDay)/86400);
+            $page_count  = ceil($count/$size);
+            if($page == 1){
+                $startDays =$today;
+                $endDay = $today-86400*10;
+            }elseif($page == 2){
+                $startDays = $today-86400*10;
+                $endDay = $today-86400*20;
+            }elseif($page == 3){
+                $startDays = $today-86400*20;
+                $endDay = $today-86400*30;
+
+            }elseif($page=4){
+                $startDays = $today-86400*30;
+                $endDay = $startDay;
+            }
+            for($i=$startDays;$i>$endDay;$i=$i-86400){
+                $startTime = mktime(0,0,0,date("m",$i),date("d",$i),date("Y",$i));
+                $endTime = mktime(23,59,59,date("m",$i),date("d",$i),date("Y",$i));
+                if($category == 1 ){
+                    $agency_id = '24';
+                    // 查询关注数量及日期
+                    $sql = 'select COUNT(id) count from biz_proxy_share WHERE user_id='.$agency_id.' AND add_date>'.$startTime.'
+                            AND add_date<'.$endTime;
+                    $attentionQuantity = $shareModel->query($sql)[0];
+                    //查询注册用户数量
+                    $sql = 'SELECT us.user_id FROM biz_proxy_share pr, biz_user_info us
+                            WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.add_date > '.$startTime.' AND us.add_date<'.$endTime;
+                    $registerQuantitys = $shareModel->query($sql);
+                    //查询会员数量
+                    $memberQuantity = '';
+                    for($j=0;$j<count($registerQuantitys);$j++){
+                        $car = $carModel->field('id')->where('user_id='.$registerQuantitys[$j]['user_id'])->order('add_date')->find();
+                        $sql = 'SELECT ca.id count
+                        FROM biz_proxy_share pr, biz_user_info us, biz_car ca WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0
+                        AND us.user_id=ca.user_id AND ca.id='.$car['id'].' AND ca.delete_flag=0 AND ca.add_date>'.$startTime.' AND ca.add_date<'.$endTime;
+                        $memberQuantitys = $shareModel->query($sql);
+                        $memberQuantity += count($memberQuantitys);
+                    }
+                    if($memberQuantity){
+                        $member['count'] = $memberQuantity;
+                    }else{
+                        $member['count'] = 0;
+                    }
+                    if($registerQuantitys){
+                        $registerQuantitys['count'] = count($registerQuantitys);
+                    }else{
+                        $registerQuantitys['count'] = 0;
+                    }
+                    $attention['count'] = $attentionQuantity['count'];
+                    $attention['days'] = date('Y-m-d',$i);
+                    $attention['registerQuantity'] = $registerQuantitys['count'];
+                    $attention['memberQuantity'] = $member['count'];
+                }else{
+                    $agency_id = '25';
+                    // 查询关注数量及日期
+                    $sql = 'select COUNT(id) count from biz_proxy_share WHERE user_id='.$agency_id.' AND add_date>'.$startTime.'
+                            AND add_date<'.$endTime;
+                    $attentionQuantity = $shareModel->query($sql)[0];
+                    //查询注册用户数量
+                    $sql = 'SELECT us.user_id FROM biz_proxy_share pr, biz_user_info us
+                            WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.add_date > '.$startTime.' AND us.add_date<'.$endTime;
+                    $registerQuantitys = $shareModel->query($sql);
+                    //查询会员数量
+                    $memberQuantity = '';
+                    for($j=0;$j<count($registerQuantitys);$j++){
+                        $car = $carModel->field('id')->where('user_id='.$registerQuantitys[$j]['user_id'])->order('add_date')->find();
+                        $sql = 'SELECT ca.id count
+                        FROM biz_proxy_share pr, biz_user_info us, biz_car ca WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0
+                        AND us.user_id=ca.user_id AND ca.id='.$car['id'].' AND ca.delete_flag=0 AND ca.add_date>'.$startTime.' AND ca.add_date<'.$endTime;
+                        $memberQuantitys = $shareModel->query($sql);
+                        $memberQuantity += count($memberQuantitys);
+                    }
+                    if($memberQuantity){
+                        $member['count'] = $memberQuantity;
+                    }else{
+                        $member['count'] = 0;
+                    }
+                    if($registerQuantitys){
+                        $registerQuantitys['count'] = count($registerQuantitys);
+                    }else{
+                        $registerQuantitys['count'] = 0;
+                    }
+                    $attention['count'] = $attentionQuantity['count'];
+                    $attention['days'] = date('Y-m-d',$i);
+                    $attention['registerQuantity'] = $registerQuantitys['count'];
+                    $attention['memberQuantity'] = $member['count'];
+                }
+                $quantity[$i] = $attention;
+//                $quantity = $attention;
+//                $classScores = array_merge_recursive($attention);
+                print_r($attention);
+            }
+//            print_r($quantity);
+            exit;
+            $result = array('list'=>$quantity, 'page'=>$page, 'page_count'=>$page_count);
+            returnJson(1,"查询成功", $result);
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
 }
