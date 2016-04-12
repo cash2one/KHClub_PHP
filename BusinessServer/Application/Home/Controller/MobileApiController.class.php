@@ -318,7 +318,7 @@ class MobileApiController extends Controller{
             $shopModel = M('biz_shop');
             $shopInfo = $shopModel->field('id,shop_name,address,shop_image_thumb,longitude,latitude')->where('delete_flag=0')->limit($start,$end)->select();
             for($i=0;$i<count($shopInfo);$i++){
-                $shopInfo[$i]['shop_image_thumb'] = 'http://192.168.0.104/BusinessServer/Uploads/'.$shopInfo[$i]['shop_image_thumb'];
+                $shopInfo[$i]['shop_image_thumb'] = HTTP_HOST.'/BusinessServer/Uploads/'.$shopInfo[$i]['shop_image_thumb'];
             }
             //是否是最后一页
             $result['list'] = $shopInfo;
@@ -352,7 +352,7 @@ class MobileApiController extends Controller{
 
             $shopModel = M('biz_shop');
             $shopInfo = $shopModel->field('id,shop_name,address,shop_image,shop_phone,longitude,latitude')->where('delete_flag=0 AND id='.$shop_id)->find();
-            $shopInfo['shop_image'] = 'http://192.168.0.104/BusinessServer/Uploads/'.$shopInfo['shop_image'];
+            $shopInfo['shop_image'] = HTTP_HOST.'/BusinessServer/Uploads/'.$shopInfo['shop_image'];
             $goodsModel = M('biz_shop_goods');
             $goodInfo = $goodsModel->field('id,goods_name,original_price,discount_price')->where('delete_flag=0 AND shop_id='.$shop_id)->find();
             $result['shop'] = $shopInfo;
