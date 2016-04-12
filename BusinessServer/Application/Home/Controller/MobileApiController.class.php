@@ -322,16 +322,16 @@ class MobileApiController extends Controller{
             }
             //是否是最后一页
             $result['list'] = $shopInfo;
+            if(!isset($shopInfo)){
+                $result['list'] = array();
+            }
             if(count($shopInfo) < $size){
                 $result['is_last'] = '1';
             }else{
                 $result['is_last'] = '0';
             }
-            if($shopInfo){
-                returnJson(1,'获取成功！',$result);
-            }else{
-                returnJson(0,'获取失败！');
-            }
+
+            returnJson(1,'获取成功！',$result);
 
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
