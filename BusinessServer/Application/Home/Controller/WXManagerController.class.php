@@ -776,7 +776,7 @@ class WXManagerController extends Controller{
                     $registerQuantitys = $shareModel->query($sql);
                     //查询会员数量
                     $sql = 'SELECT cab.id FROM (select MIN(pass_date) pass_date,user_id from biz_car WHERE state=2 group by user_id) caa, biz_proxy_share pr, biz_user_info us, biz_car cab
-                            WHERE pr.user_id=24 AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.user_id=cab.user_id
+                            WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.user_id=cab.user_id
                             AND cab.state=2 AND caa.pass_date=cab.pass_date AND caa.user_id=cab.user_id AND cab.pass_date > '.$startTime.' AND cab.pass_date<'.$endTime.' GROUP BY cab.user_id';
                     $memberQuantity = count($shareModel->query($sql));
                     if($memberQuantity){
@@ -806,7 +806,7 @@ class WXManagerController extends Controller{
                     $registerQuantitys = $shareModel->query($sql);
                     //查询会员数量
                     $sql = 'SELECT cab.id FROM (select MIN(pass_date) pass_date,user_id from biz_car WHERE state=2 group by user_id) caa, biz_proxy_share pr, biz_user_info us, biz_car cab
-                            WHERE pr.user_id=25 AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.user_id=cab.user_id
+                            WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.user_id=cab.user_id
                             AND cab.state=2 AND caa.pass_date=cab.pass_date AND caa.user_id=cab.user_id AND cab.pass_date > '.$startTime.' AND cab.pass_date<'.$endTime.' GROUP BY cab.user_id';
                     $memberQuantity = count($shareModel->query($sql));
                     if($memberQuantity){
