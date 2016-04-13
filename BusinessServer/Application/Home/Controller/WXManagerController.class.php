@@ -742,9 +742,6 @@ class WXManagerController extends Controller{
             $t = time();
             $today = mktime(23,59,59,date("m",$t),date("d",$t),date("Y",$t));
             $shareModel = M('');
-            $carModel = M('biz_car');
-            $attention = array();
-            $quantity = array();
             if(empty($page)){
                 $page = 1;
             }
@@ -753,20 +750,17 @@ class WXManagerController extends Controller{
             }
             $count = ceil(($today - $startDay)/86400);
             $page_count  = ceil($count/$size);
-            if($page == 1){
-                $startDays =$today;
-                $endDay = $today-86400*10;
-            }elseif($page == 2){
-                $startDays = $today-86400*10;
-                $endDay = $today-86400*20;
-            }elseif($page == 3){
-                $startDays = $today-86400*20;
-                $endDay = $today-86400*30;
-
-            }elseif($page=4){
-                $startDays = $today-86400*30;
-                $endDay = $startDay;
+            for($j=1;$j<=$page_count;$j++){
+                if($page == $page_count && $j == $page_count){
+                    $startDays = $today-(86400*10*($j-1));
+                    $endDay = $startDay;
+                }elseif($j == $page){
+                    $startDays =$today-(86400*10*($j-1));
+                    $endDay = $today-86400*10*$j;
+                }
             }
+            $attention = array();
+            $quantity = array();
             for($i=$startDays;$i>$endDay;$i=$i-86400){
                 $startTime = mktime(0,0,0,date("m",$i),date("d",$i),date("Y",$i));
                 $endTime = mktime(23,59,59,date("m",$i),date("d",$i),date("Y",$i));
@@ -781,15 +775,10 @@ class WXManagerController extends Controller{
                             WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.add_date > '.$startTime.' AND us.add_date<'.$endTime;
                     $registerQuantitys = $shareModel->query($sql);
                     //查询会员数量
-                    $memberQuantity = '';
-                    for($j=0;$j<count($registerQuantitys);$j++){
-                        $car = $carModel->field('id')->where('user_id='.$registerQuantitys[$j]['user_id'])->order('add_date')->find();
-                        $sql = 'SELECT ca.id count
-                        FROM biz_proxy_share pr, biz_user_info us, biz_car ca WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0
-                        AND us.user_id=ca.user_id AND ca.id='.$car['id'].' AND ca.delete_flag=0 AND ca.add_date>'.$startTime.' AND ca.add_date<'.$endTime;
-                        $memberQuantitys = $shareModel->query($sql);
-                        $memberQuantity += count($memberQuantitys);
-                    }
+                    $sql = 'SELECT cab.id FROM (select MIN(pass_date) pass_date,user_id from biz_car WHERE state=2 group by user_id) caa, biz_proxy_share pr, biz_user_info us, biz_car cab
+                            WHERE pr.user_id=24 AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.user_id=cab.user_id
+                            AND cab.state=2 AND caa.pass_date=cab.pass_date AND caa.user_id=cab.user_id AND cab.pass_date > '.$startTime.' AND cab.pass_date<'.$endTime.' GROUP BY cab.user_id';
+                    $memberQuantity = count($shareModel->query($sql));
                     if($memberQuantity){
                         $member['count'] = $memberQuantity;
                     }else{
@@ -804,6 +793,7 @@ class WXManagerController extends Controller{
                     $attention['days'] = date('Y-m-d',$i);
                     $attention['registerQuantity'] = $registerQuantitys['count'];
                     $attention['memberQuantity'] = $member['count'];
+                    array_push($quantity,$attention);
                 }else{
                     $agency_id = '25';
                     // 查询关注数量及日期
@@ -815,15 +805,10 @@ class WXManagerController extends Controller{
                             WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.add_date > '.$startTime.' AND us.add_date<'.$endTime;
                     $registerQuantitys = $shareModel->query($sql);
                     //查询会员数量
-                    $memberQuantity = '';
-                    for($j=0;$j<count($registerQuantitys);$j++){
-                        $car = $carModel->field('id')->where('user_id='.$registerQuantitys[$j]['user_id'])->order('add_date')->find();
-                        $sql = 'SELECT ca.id count
-                        FROM biz_proxy_share pr, biz_user_info us, biz_car ca WHERE pr.user_id='.$agency_id.' AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0
-                        AND us.user_id=ca.user_id AND ca.id='.$car['id'].' AND ca.delete_flag=0 AND ca.add_date>'.$startTime.' AND ca.add_date<'.$endTime;
-                        $memberQuantitys = $shareModel->query($sql);
-                        $memberQuantity += count($memberQuantitys);
-                    }
+                    $sql = 'SELECT cab.id FROM (select MIN(pass_date) pass_date,user_id from biz_car WHERE state=2 group by user_id) caa, biz_proxy_share pr, biz_user_info us, biz_car cab
+                            WHERE pr.user_id=25 AND pr.share_open_id=us.wx_open_id AND us.delete_flag=0 AND us.user_id=cab.user_id
+                            AND cab.state=2 AND caa.pass_date=cab.pass_date AND caa.user_id=cab.user_id AND cab.pass_date > '.$startTime.' AND cab.pass_date<'.$endTime.' GROUP BY cab.user_id';
+                    $memberQuantity = count($shareModel->query($sql));
                     if($memberQuantity){
                         $member['count'] = $memberQuantity;
                     }else{
@@ -838,14 +823,9 @@ class WXManagerController extends Controller{
                     $attention['days'] = date('Y-m-d',$i);
                     $attention['registerQuantity'] = $registerQuantitys['count'];
                     $attention['memberQuantity'] = $member['count'];
+                    array_push($quantity,$attention);
                 }
-                $quantity[$i] = $attention;
-//                $quantity = $attention;
-//                $classScores = array_merge_recursive($attention);
-                print_r($attention);
             }
-//            print_r($quantity);
-            exit;
             $result = array('list'=>$quantity, 'page'=>$page, 'page_count'=>$page_count);
             returnJson(1,"查询成功", $result);
         }catch (Exception $e){

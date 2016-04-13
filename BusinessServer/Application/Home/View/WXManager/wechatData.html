@@ -109,7 +109,7 @@
 
                         //内容
                         var listContent = '';
-                        for (var i = 1460476799; i < list.length; i=i-86400) {
+                        for (var i = 0; i < list.length; i++) {
                             var obj = list[i];
                             listContent = listContent + '<tr> <td class="user-list-cell">' + obj.days + '</td> ' +
                             '<td class="user-list-cell">' + obj.count + '</td> ' +
@@ -121,8 +121,7 @@
                     }
                 },
                 error: function (error) {
-//                    alert(eval(error));
-                    alert('数据输入异常！');
+                    alert(eval(error));
                     return false;
                 }
             })
