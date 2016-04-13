@@ -795,7 +795,7 @@ class WXManagerController extends Controller{
                     $attention['memberQuantity'] = $member['count'];
                     array_push($quantity,$attention);
                 }else{
-                    $agency_id = '25';
+                    $agency_id = '23';
                     // 查询关注数量及日期
                     $sql = 'select COUNT(id) count from biz_proxy_share WHERE user_id='.$agency_id.' AND add_date>'.$startTime.'
                             AND add_date<'.$endTime;
