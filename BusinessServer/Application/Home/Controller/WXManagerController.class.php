@@ -738,7 +738,7 @@ class WXManagerController extends Controller{
             $category = $_REQUEST['category'];
             $page = $_REQUEST['page'];
             $size = $_REQUEST['size'];
-            $startDay = strtotime(date('2016-03-11'));
+            $startDay = strtotime(date('2016-04-11'));
             $t = time();
             $today = mktime(23,59,59,date("m",$t),date("d",$t),date("Y",$t));
             $shareModel = M('');
