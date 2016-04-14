@@ -369,4 +369,172 @@ class MobileApiController extends Controller{
     }
 
 
+    /////////////////////////////////////.APP.///////////////////////////////////////////////////////
+
+    /**
+     * @brief 添加车辆
+     * 接口地址
+     * http://192.168.0.104/BusinessServer/index.php/Home/MobileApi/addCar
+     * @param user_id 用户id
+     * @param name 姓名
+     * @param mobile 电话号
+     * @param plate_number 车牌号
+     * @param car_type 车类型
+     */
+    public function addCar(){
+        try{
+            $car = array();
+            $car['user_id'] = $_REQUEST['user_id'];
+            $car['name'] = $_REQUEST['name'];
+            $car['mobile'] = $_REQUEST['mobile'];
+            $car['plate_number'] = $_REQUEST['plate_number'];
+            $car['car_type'] = $_REQUEST['car_type'];
+            //判断用户id是否为空
+            if(empty($car['user_id'])){
+                returnJson(0,"用户不能为空！");
+                return;
+            }
+            //判断车主名是否为空
+            if(empty($car['name'])){
+                returnJson(0,"车主名不能为空！");
+                return;
+            }
+            //判断车主名是否为汉字
+            if(eregi("[^\x80-\xff]",trim($car['name']))){
+                returnJson(0,"请输入汉字！");
+                return;
+            }
+            //判断车主名是否为2-4位汉字
+            if(strlen(trim($car['name']))<6 || strlen(trim($car['name']))>12){
+                returnJson(0,"车主名不能为空！");
+                return;
+            }
+            //判断车主电话是否为空
+            if(empty($car['mobile'])){
+                returnJson(0,"电话不能为空！");
+                return;
+            }
+            //判断车主电话是否为手机号码
+            if(!(preg_match("/1[3458]{1}\d{9}$/",$car['mobile']))){
+                returnJson(0,"请输入正确的手机号码！");
+                return;
+            }
+            //判断车主车牌号是否为空  '粤B'.
+            if(empty($car['plate_number'])){
+                returnJson(0,"车牌不能为空！");
+                return;
+            }
+            //判断车主车牌号长度是否为数字跟英文
+            if(!(eregi("[^\x80-\xff]",trim($car['plate_number'])))){
+                returnJson(0,"车牌格式不正确！");
+                return;
+            }
+            //判断车主车牌号长度是否为五位数
+            if(strlen(trim($car['plate_number'])) != 5){
+                returnJson(0,"请输入正确的车牌！");
+                return;
+            }
+
+            $car['plate_number'] = '粤B'.strtoupper($car['plate_number']);
+            //判断车型是否为空
+            if(empty($car['car_type'])){
+                returnJson(0,"车型不能为空！");
+                return;
+            }
+            //判断行驶证是否为空
+            if(count($_FILES) < 1){
+                returnJson(0,"行驶证不能为空");
+                return;
+            }
+            $filename = $car['user_id'].time();
+            $car['driving_license_url'] = 'drivingLicense/'.$filename.'.png';
+            $car['state'] = 1;
+            $car['add_date'] = time();
+            //图片上传
+            if(!empty($_FILES)){
+                $upload = new \Think\Upload();// 实例化上传类
+                $upload->maxSize   =     10*1024*1024 ;// 设置附件上传大小
+                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                $upload->rootPath  =     './drivingLicense/'; // 设置附件上传根目录
+                $upload->savePath  =     ''; // 设置附件上传（子）目录
+                $upload->autoSub   =     false;
+                $upload->saveExt   =     'png';
+                $upload->saveName  =     $filename;
+                $info   =   $upload->upload();
+            }
+            if(!$info){
+                returnJson(0,"行驶证上传失败！");
+                return;
+            }
+            $carModel = M('biz_car');
+            $ret = $carModel->add($car);
+
+            if($ret){
+                returnJson(1,"车辆添加成功！",$ret);
+                return;
+            }else{
+                returnJson(0,"车辆添加失败！");
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 我的爱车页面
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/myCars?user_id=1
+     * user_id 用户id
+     */
+    public function myCars(){
+        try{
+            $user_id = $_REQUEST['user_id'];
+            if(empty($user_id)){
+                returnJson(0,'用户不能为空！');
+                return;
+            }
+            $carModel = M('biz_car');
+            $list = $carModel->field('id,user_id,plate_number,car_type,state')->where('delete_flag=0 AND user_id="'.$user_id.'"')->select();
+            if($list){
+                returnJson(1,'查询成功！',$list);
+                return;
+            }else{
+                returnJson(0,'查询失败！');
+            }
+            return;
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 爱车详情页面
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/carInfo?car_id=1
+     * car_id 车id
+     */
+    public function carInfo(){
+        try{
+            $car_id = $_REQUEST['car_id'];
+            if(empty($car_id)){
+                returnJson(0,'车辆不能为空！');
+                return;
+            }
+            $carModel = M('biz_car');
+            $carInfo = $carModel->field('id,user_id,name,mobile,plate_number,car_type,driving_license_url,state')->where('delete_flag=0 AND id="'.$car_id.'"')->find();
+            if($carInfo){
+                returnJson(1,'查询成功！',$carInfo);
+                return;
+            }else{
+                returnJson(0,'查询失败！');
+            }
+            return;
+
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
 }
