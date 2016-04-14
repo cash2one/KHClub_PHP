@@ -461,7 +461,7 @@ class WXController extends Controller {
         curl_close($ch);
 
         //这里可能会出现“图片请求失败”问题 碍于时间问题先不处理
-        $filename = 'drivingLicense/'.$user['id'].time().'.png';
+        $filename = 'drivingLicense/'.$user['user_id'].time().'.png';
         $local_file = fopen('./'.$filename, 'w');
         if(false !== $local_file){
             if(false !== fwrite($local_file, $package)){
