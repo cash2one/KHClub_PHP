@@ -380,15 +380,35 @@ class MobileApiController extends Controller{
      * @param mobile 电话号
      * @param plate_number 车牌号
      * @param car_type 车类型
+     * @param car_type_code 车型号代码
      */
     public function addCar(){
         try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
             $car = array();
             $car['user_id'] = $_REQUEST['user_id'];
             $car['name'] = $_REQUEST['name'];
             $car['mobile'] = $_REQUEST['mobile'];
             $car['plate_number'] = $_REQUEST['plate_number'];
             $car['car_type'] = $_REQUEST['car_type'];
+            $car['car_type_code'] = $_REQUEST['car_type_code'];
             //判断用户id是否为空
             if(empty($car['user_id'])){
                 returnJson(0,"用户不能为空！");
@@ -441,16 +461,18 @@ class MobileApiController extends Controller{
                 returnJson(0,"车型不能为空！");
                 return;
             }
+            //判断车型号代码是否为空
+            if(empty($car['user_id'])){
+                returnJson(0,"车型号代码不能为空！");
+                return;
+            }
             //判断行驶证是否为空
             if(count($_FILES) < 1){
                 returnJson(0,"行驶证不能为空");
                 return;
             }
-            $filename = $car['user_id'].time();
-            $car['driving_license_url'] = 'drivingLicense/'.$filename.'.png';
-            $car['state'] = 1;
-            $car['add_date'] = time();
             //图片上传
+            $filename = $car['user_id'].time();
             if(!empty($_FILES)){
                 $upload = new \Think\Upload();// 实例化上传类
                 $upload->maxSize   =     10*1024*1024 ;// 设置附件上传大小
@@ -458,10 +480,16 @@ class MobileApiController extends Controller{
                 $upload->rootPath  =     './drivingLicense/'; // 设置附件上传根目录
                 $upload->savePath  =     ''; // 设置附件上传（子）目录
                 $upload->autoSub   =     false;
-                $upload->saveExt   =     'png';
                 $upload->saveName  =     $filename;
                 $info   =   $upload->upload();
             }
+            if($info) {
+                foreach ($info as $file) {
+                    $car['driving_license_url'] = 'drivingLicense/'.$file['savename'];
+                }
+            }
+            $car['state'] = 1;
+            $car['add_date'] = time();
             if(!$info){
                 returnJson(0,"行驶证上传失败！");
                 return;
@@ -489,6 +517,24 @@ class MobileApiController extends Controller{
      */
     public function myCars(){
         try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
             $user_id = $_REQUEST['user_id'];
             if(empty($user_id)){
                 returnJson(0,'用户不能为空！');
@@ -499,8 +545,6 @@ class MobileApiController extends Controller{
             if($list){
                 returnJson(1,'查询成功！',$list);
                 return;
-            }else{
-                returnJson(0,'查询失败！');
             }
             return;
 
@@ -517,6 +561,24 @@ class MobileApiController extends Controller{
      */
     public function carInfo(){
         try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
             $car_id = $_REQUEST['car_id'];
             if(empty($car_id)){
                 returnJson(0,'车辆不能为空！');
@@ -524,11 +586,10 @@ class MobileApiController extends Controller{
             }
             $carModel = M('biz_car');
             $carInfo = $carModel->field('id,user_id,name,mobile,plate_number,car_type,driving_license_url,state')->where('delete_flag=0 AND id="'.$car_id.'"')->find();
+            $carInfo['driving_license_url'] = HTTP_HOST.'/BusinessServer/'.$carInfo['driving_license_url'];
             if($carInfo){
                 returnJson(1,'查询成功！',$carInfo);
                 return;
-            }else{
-                returnJson(0,'查询失败！');
             }
             return;
 
