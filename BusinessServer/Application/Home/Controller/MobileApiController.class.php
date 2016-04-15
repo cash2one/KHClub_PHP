@@ -368,6 +368,97 @@ class MobileApiController extends Controller{
 
     }
 
+    //////////////////////////////////////.车辆类型.////////////////////////////////////////////////////
+    /**
+     * @brief
+     * 接口地址
+     * http://192.168.0.104/BusinessServer/index.php/Home/MobileApi/carCategory
+     */
+    public function carCategory(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            $levelModel = M('biz_car_level_1');
+            $list = $levelModel->field('first_code,name,image,has_second')->where('delete_flag=0')->order('order_flag')->select();
+            if($list){
+                for($i=0;$i<count($list);$i++){
+                    $list[$i]['image'] = HTTP_HOST.'/Pubilc/logo/'.$list[$i]['image'];
+                }
+                returnJson(1,'查询成功！',$list);
+                return;
+            }else{
+                $list = array();
+                returnJson(0,'暂无品牌！',$list);
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+
+    }
+
+    /**
+     * @brief
+     * 接口地址
+     * http://192.168.0.104/BusinessServer/index.php/Home/MobileApi/carClassify
+     * @param first_code 品牌代码
+     */
+    public function carClassify(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            $first_code = $_REQUEST['first_code'];
+            //判断用户first_code是否为空
+            if(empty($first_code)){
+                returnJson(0,"车辆类型不能为空！");
+                return;
+            }
+            $levelModel = M('biz_car_level_2');
+            $list = $levelModel->field('first_code,second_code,name')->where('delete_flag=0 and first_code='.$first_code)->order('order_flag')->select();
+            if($list){
+                returnJson(1,'查询车辆型号成功！',$list);
+                return;
+            }else{
+                $list = array();
+                returnJson(0,'暂无车辆型号！',$list);
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
 
     /////////////////////////////////////.APP.///////////////////////////////////////////////////////
 
