@@ -404,7 +404,7 @@ class MobileApiController extends Controller{
                 return;
             }else{
                 $list = array();
-                returnJson(0,'暂无品牌！',$list);
+                returnJson(1,'暂无品牌！',$list);
             }
             return;
         }catch (Exception $e){
@@ -452,7 +452,7 @@ class MobileApiController extends Controller{
                 return;
             }else{
                 $list = array();
-                returnJson(0,'暂无车辆型号！',$list);
+                returnJson(1,'暂无车辆型号！',$list);
             }
             return;
         }catch (Exception $e){
@@ -638,7 +638,7 @@ class MobileApiController extends Controller{
                 return;
             }else{
                 $list = array();
-                returnJson(0,'该用户暂无车辆！',$list);
+                returnJson(1,'该用户暂无车辆！',$list);
             }
             return;
 
@@ -686,7 +686,7 @@ class MobileApiController extends Controller{
                 return;
             }else{
                 $carInfo = array();
-                returnJson(0,'该车辆暂无信息！',$carInfo);
+                returnJson(1,'该车辆暂无信息！',$carInfo);
             }
             return;
 
