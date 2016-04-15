@@ -694,4 +694,198 @@ class MobileApiController extends Controller{
         }
     }
 
+    /**
+     * @brief 重新提交车辆
+     * 接口地址
+     * http://192.168.0.104/BusinessServer/index.php/Home/MobileApi/updateCar
+     * @param car_id 车辆id
+     * @param user_id 用户id
+     * @param name 姓名
+     * @param mobile 电话号
+     * @param plate_number 车牌号
+     * @param car_type 车类型
+     * @param car_type_code 车型号代码
+     */
+    public function updateCar(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            $car_id = $_REQUEST['car_id'];
+            $car = array();
+            $car['user_id'] = $_REQUEST['user_id'];
+            $car['name'] = $_REQUEST['name'];
+            $car['mobile'] = $_REQUEST['mobile'];
+            $car['plate_number'] = $_REQUEST['plate_number'];
+            $car['car_type'] = $_REQUEST['car_type'];
+            $car['car_type_code'] = $_REQUEST['car_type_code'];
+
+            //判断车辆id是否为空
+            if(empty($car_id)){
+                returnJson(0,"车辆不能为空！");
+                return;
+            }
+            //判断用户id是否为空
+            if(empty($car['user_id'])){
+                returnJson(0,"用户不能为空！");
+                return;
+            }
+            //判断车主名是否为空
+            if(empty($car['name'])){
+                returnJson(0,"车主名不能为空！");
+                return;
+            }
+            //判断车主名是否为汉字
+            if(eregi("[^\x80-\xff]",trim($car['name']))){
+                returnJson(0,"请输入汉字！");
+                return;
+            }
+            //判断车主名是否为2-4位汉字
+            if(strlen(trim($car['name']))<6 || strlen(trim($car['name']))>12){
+                returnJson(0,"车主名格式不正确！");
+                return;
+            }
+            //判断车主电话是否为空
+            if(empty($car['mobile'])){
+                returnJson(0,"电话不能为空！");
+                return;
+            }
+            //判断车主电话是否为手机号码
+            if(!(preg_match("/1[3458]{1}\d{9}$/",$car['mobile']))){
+                returnJson(0,"请输入正确的手机号码！");
+                return;
+            }
+            //判断车主车牌号是否为空  '粤B'.
+            if(empty($car['plate_number'])){
+                returnJson(0,"车牌不能为空！");
+                return;
+            }
+            //判断车主车牌号长度是否为数字跟英文
+            if(!(eregi("[^\x80-\xff]",trim($car['plate_number'])))){
+                returnJson(0,"车牌格式不正确！");
+                return;
+            }
+            //判断车主车牌号长度是否为五位数
+            if(strlen(trim($car['plate_number'])) != 5){
+                returnJson(0,"请输入正确的车牌！");
+                return;
+            }
+
+            $car['plate_number'] = '粤B'.strtoupper($car['plate_number']);
+            //判断车型是否为空
+            if(empty($car['car_type'])){
+                returnJson(0,"车型不能为空！");
+                return;
+            }
+            //判断车型号代码是否为空
+            if(empty($car['user_id'])){
+                returnJson(0,"车型号代码不能为空！");
+                return;
+            }
+            //判断行驶证是否为空
+            if(count($_FILES) < 1){
+                returnJson(0,"行驶证不能为空");
+                return;
+            }
+            //图片上传
+            $carModel = M('biz_car');
+            $filename = $car['user_id'].time();
+            if(!empty($_FILES)){
+                $upload = new \Think\Upload();// 实例化上传类
+                $upload->maxSize   =     10*1024*1024 ;// 设置附件上传大小
+                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                $upload->rootPath  =     './drivingLicense/'; // 设置附件上传根目录
+                $upload->savePath  =     ''; // 设置附件上传（子）目录
+                $upload->autoSub   =     false;
+                $upload->saveName  =     $filename;
+                $info   =   $upload->upload();
+            }
+            if($info) {
+                foreach ($info as $file) {
+                    $car['driving_license_url'] = 'drivingLicense/'.$file['savename'];
+                }
+            }
+            $car['state'] = 1;
+            $car['update_date'] = time();
+            if(!$info){
+                returnJson(0,"行驶证上传失败！");
+                return;
+            }
+            $ret = $carModel->where('id='.$car_id)->save($car);
+
+            if($ret){
+                returnJson(1,"车辆修改成功！",$car_id);
+                return;
+            }else{
+                returnJson(0,"车辆修改失败！");
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 选择我的车
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/choiceMyCar
+     * @param user_id 用户ID
+     *
+     */
+    public function choiceMyCar(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            $user_id = $_REQUEST['user_id'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($user_id)){
+                returnJson(0,"用户不能为空！");
+                return;
+            }
+            $carModel = M('biz_car');
+            $list = $carModel->field('id,user_id,plate_number,car_type')->where('state=2 AND delete_flag=0 AND user_id="'.$user_id.'"')->select();
+            if($list){
+                returnJson(1,'车辆获取成功！',$list);
+                return;
+            }else{
+                $list = array();
+                returnJson(1,'暂无车辆！',$list);
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
 }
