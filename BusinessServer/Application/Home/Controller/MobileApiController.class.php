@@ -398,7 +398,7 @@ class MobileApiController extends Controller{
             $list = $levelModel->field('first_code,name,image,has_second')->where('delete_flag=0')->order('order_flag')->select();
             if($list){
                 for($i=0;$i<count($list);$i++){
-                    $list[$i]['image'] = HTTP_HOST.'/BusinessServer/Pubilc/logo/'.$list[$i]['image'];
+                    $list[$i]['image'] = HTTP_HOST.'/BusinessServer/Public/logo/'.$list[$i]['image'];
                 }
                 returnJson(1,'查询成功！',$list);
                 return;
