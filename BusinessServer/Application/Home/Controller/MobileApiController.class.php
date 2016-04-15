@@ -426,7 +426,7 @@ class MobileApiController extends Controller{
             }
             //判断车主名是否为2-4位汉字
             if(strlen(trim($car['name']))<6 || strlen(trim($car['name']))>12){
-                returnJson(0,"车主名不能为空！");
+                returnJson(0,"车主名格式不正确！");
                 return;
             }
             //判断车主电话是否为空
@@ -541,10 +541,13 @@ class MobileApiController extends Controller{
                 return;
             }
             $carModel = M('biz_car');
-            $list = $carModel->field('id,user_id,plate_number,car_type,state')->where('delete_flag=0 AND user_id="'.$user_id.'"')->select();
+            $list = $carModel->field('id,user_id,plate_number,car_type,state')->where('delete_flag=0 AND user_id="'.$user_id.'" AND state=2 OR delete_flag=0 AND user_id="'.$user_id.'" AND state=1')->select();
             if($list){
                 returnJson(1,'查询成功！',$list);
                 return;
+            }else{
+                $list = array();
+                returnJson(0,'该用户暂无车辆！',$list);
             }
             return;
 
@@ -586,10 +589,13 @@ class MobileApiController extends Controller{
             }
             $carModel = M('biz_car');
             $carInfo = $carModel->field('id,user_id,name,mobile,plate_number,car_type,driving_license_url,state')->where('delete_flag=0 AND id="'.$car_id.'"')->find();
-            $carInfo['driving_license_url'] = HTTP_HOST.'/BusinessServer/'.$carInfo['driving_license_url'];
             if($carInfo){
+                $carInfo['driving_license_url'] = HTTP_HOST.'/BusinessServer/'.$carInfo['driving_license_url'];
                 returnJson(1,'查询成功！',$carInfo);
                 return;
+            }else{
+                $carInfo = array();
+                returnJson(0,'该车辆暂无信息！',$carInfo);
             }
             return;
 
