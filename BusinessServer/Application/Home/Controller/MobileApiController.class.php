@@ -888,4 +888,162 @@ class MobileApiController extends Controller{
         }
     }
 
+    /**
+     * @brief 服务中列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/serviceList
+     * @param user_id 用户ID
+     *
+     */
+    public function serviceList(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            $user_id = $_REQUEST['user_id'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($user_id)){
+                returnJson(0,"用户不能为空！");
+                return;
+            }
+            $orderModel = M();
+            $sql = 'SELECT od.id,od.total_fee,sh.shop_name,od.add_date,sh.shop_image_thumb FROM biz_order od, biz_shop sh
+                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=1';
+            $list = $orderModel->query($sql);
+            for($i=0;$i<count($list);$i++){
+                $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
+                $list[$i]['shop_image_thumb'] = HTTP_HOST.'/Uploads/'.$list[$i]['shop_image_thumb'];
+            }
+            if($list){
+                returnJson(1,'服务订单获取成功！',$list);
+                return;
+            }else{
+                $list = array();
+                returnJson(1,'暂无服务订单！',$list);
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 已服务列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/alreadyServiceList
+     * @param user_id 用户ID
+     *
+     */
+    public function alreadyServiceList(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            $user_id = $_REQUEST['user_id'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($user_id)){
+                returnJson(0,"用户不能为空！");
+                return;
+            }
+            $orderModel = M();
+            $sql = 'SELECT od.id,od.total_fee,sh.shop_name,od.add_date,sh.shop_image_thumb FROM biz_order od, biz_shop sh
+                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=2';
+            $list = $orderModel->query($sql);
+            for($i=0;$i<count($list);$i++){
+                $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
+                $list[$i]['shop_image_thumb'] = HTTP_HOST.'/Uploads/'.$list[$i]['shop_image_thumb'];
+            }
+            if($list){
+                returnJson(1,'已服务订单获取成功！',$list);
+                return;
+            }else{
+                $list = array();
+                returnJson(1,'暂无已服务订单！',$list);
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 订单服务详情
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/ServiceDetails
+     * @param order_id 用户ID
+     *
+     */
+    public function ServiceDetails(){
+        try{
+            $login_token = $_REQUEST['login_token'];
+            $login_user = $_REQUEST['login_user'];
+            $order_id = $_REQUEST['order_id'];
+            //判断用户login_token是否为空
+            if(empty($login_token)){
+                returnJson(0,"login_token不能为空！");
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($login_user)){
+                returnJson(0,"login_user不能为空！");
+                return;
+            }
+            $userModel = M('biz_user_info');
+            $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
+            if(!$user){
+                returnJson(0,'该用户不存在！');
+                return;
+            }
+            //判断用户login_user是否为空
+            if(empty($order_id)){
+                returnJson(0,"用户不能为空！");
+                return;
+            }
+            $ordersModel = M();
+            $sql = 'SELECT od.id, od.out_trade_no, od.product_id, od.state, sh.shop_name, sh.shop_phone, go.goods_name, od.total_fee, ca.car_type
+                    FROM biz_order od, biz_shop sh, biz_shop_goods go, biz_car ca
+                    WHERE od.id='.$order_id.' and od.shop_id=sh.id AND od.goods_id=go.id AND od.car_id=ca.id';
+            $orderInfo = $ordersModel->query($sql);
+            if($orderInfo){
+                returnJson(1,'查询服务订单详情成功！',$orderInfo);
+                return;
+            }else{
+                returnJson(0,'查询失败！');
+            }
+            return;
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
 }
