@@ -999,11 +999,11 @@ class MobileApiController extends Controller{
     /**
      * @brief 订单服务详情
      * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/MobileApi/ServiceDetails
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/serviceDetails
      * @param order_id 用户ID
      *
      */
-    public function ServiceDetails(){
+    public function serviceDetails(){
         try{
             $login_token = $_REQUEST['login_token'];
             $login_user = $_REQUEST['login_user'];
