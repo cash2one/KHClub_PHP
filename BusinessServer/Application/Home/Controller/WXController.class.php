@@ -396,15 +396,15 @@ class WXController extends Controller {
         //处理选择的车型
         $brand = $_REQUEST['brand'];
         $type = $_REQUEST['type'];
+        $brandName = $_REQUEST['brandName'];
+        $typeName = $_REQUEST['typeName'];
 
         if($brand !== null){
             //读取本地文件
-            $cars = file_get_contents('cars.json');
-            $carsList = json_decode($cars, true);
 
-            $car_type_code = '000'.$brand.'000'.$type;
+            $car_type_code = $brand.$type;
 
-            $_SESSION['car_type'] = $carsList[$brand]['name'].' '.$carsList[$brand]['sub'][$type];
+            $_SESSION['car_type'] = $brandName.' '.$typeName;
             $_SESSION['car_type_code'] = $car_type_code;
         }
 
@@ -557,15 +557,15 @@ class WXController extends Controller {
         $_SESSION['plate_number'] = $_REQUEST['plate_number'];
         $_SESSION['driving_license_url'] = $_REQUEST['driving_license_url'];
 
-        $cars = file_get_contents('cars.json');
-        $carsList = json_decode($cars, true);
+        $model = M('biz_car_level_1');
+        $list = $model->where('delete_flag=0')->order('order_flag')->select();
 
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
-        $this->assign('cars',$carsList);
+        $this->assign('cars',$list);
         $this->display('carBrands');
     }
 
@@ -577,18 +577,19 @@ class WXController extends Controller {
      */
     public function carBrandTypes(){
 
-        $cars = file_get_contents('cars.json');
-
-        $carsList = json_decode($cars, true);
         $type = $_REQUEST["type"];
+
+        $model = M('biz_car_level_2');
+        $list = $model->where('delete_flag=0 AND first_code="'.$type.'"')->order('order_flag')->select();
 
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
 
-        $this->assign('types', $carsList[$type]["sub"]);
+        $this->assign('types', $list);
         $this->assign('brand', $type);
+        $this->assign('brandName', $_REQUEST['brandName']);
         $this->display('carBrandTypes');
     }
 

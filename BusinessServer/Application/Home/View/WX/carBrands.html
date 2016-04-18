@@ -10,14 +10,14 @@
 </head>
 <body>
 
-<foreach name="cars" item="car" key="k" >
-    <empty name="car.sub">
-        <a href="applyCarView?brand={$k}&type=0" class="myCard">
+<foreach name="cars" item="car" >
+    <if condition="$car.has_second eq 0">
+        <a href="applyCarView?brand={$car.first_code}&type=0001&brandName={$car.name}&typeName=" class="myCard">
         <else />
-        <a href="carBrandTypes?type={$k}" class="myCard">
-    </empty>
+        <a href="carBrandTypes?type={$car.first_code}&brandName={$car.name}" class="myCard">
+    </if>
             <div class="list_box clear">
-                <img src="__PUBLIC__/logo/{$k+1}.png" alt="" class="car_logo">
+                <img src="__PUBLIC__/logo/{$car.image}" alt="" class="car_logo">
                 <span class="car_name">{$car.name}</span>
                 <img class="select_images" src="__PUBLIC__/icon/arrow.png" alt="" width="20px">
             </div>

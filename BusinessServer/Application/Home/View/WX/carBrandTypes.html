@@ -9,10 +9,10 @@
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 <body>
-<foreach name="types" item="type" key="k" >
-    <a href="applyCarView?brand={$brand}&type={$k}" class="myCard">
+<foreach name="types" item="type" >
+    <a href="applyCarView?brand={$brand}&type={$type.second_code}&brandName={$brandName}&typeName={$type.name}" class="myCard">
         <div class="list_box clear">
-            <span class="car_name">{$type}</span>
+            <span class="car_name">{$type.name}</span>
         </div>
     </a>
     <div class="wire"></div>
