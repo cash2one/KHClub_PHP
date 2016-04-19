@@ -590,6 +590,8 @@ class MobileApiController extends Controller{
 
             if($ret){
                 returnJson(1,"车辆添加成功！",$ret);
+                //向系统推送新通知
+                pushMessage(SYSTEM_NOTIFY, "需要审核的新车辆", 1);
                 return;
             }else{
                 returnJson(0,"车辆添加失败！");
