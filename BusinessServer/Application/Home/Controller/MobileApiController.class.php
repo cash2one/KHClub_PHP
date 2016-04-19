@@ -921,20 +921,36 @@ class MobileApiController extends Controller{
                 returnJson(0,"用户不能为空！");
                 return;
             }
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+
+            $start = ($page-1)*$size;
+            $end   = $size;
             $orderModel = M();
             $sql = 'SELECT od.id,od.total_fee,sh.shop_name,od.add_date,sh.shop_image_thumb FROM biz_order od, biz_shop sh
-                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=1';
+                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=1 LIMIT '.$start.','.$end;
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
                 $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
                 $list[$i]['shop_image_thumb'] = HTTP_HOST.'/Uploads/'.$list[$i]['shop_image_thumb'];
             }
+            $result['list'] = $list;
+            if(count($list) < $size){
+                $result['is_last'] = '1';
+            }else{
+                $result['is_last'] = '0';
+            }
             if($list){
-                returnJson(1,'服务订单获取成功！',$list);
+                returnJson(1,'服务订单获取成功！',$result);
                 return;
             }else{
-                $list = array();
-                returnJson(1,'暂无服务订单！',$list);
+                returnJson(1,'暂无服务订单！',$result);
             }
             return;
         }catch (Exception $e){
@@ -975,20 +991,36 @@ class MobileApiController extends Controller{
                 returnJson(0,"用户不能为空！");
                 return;
             }
+            $page = $_REQUEST['page'];
+            $size = $_REQUEST['size'];
+            if(empty($page)){
+                $page = 1;
+            }
+            if(empty($size)){
+                $size = 10;
+            }
+
+            $start = ($page-1)*$size;
+            $end   = $size;
             $orderModel = M();
             $sql = 'SELECT od.id,od.total_fee,sh.shop_name,od.add_date,sh.shop_image_thumb FROM biz_order od, biz_shop sh
-                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=2';
+                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=2 LIMIT '.$start.','.$end;
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
                 $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
                 $list[$i]['shop_image_thumb'] = HTTP_HOST.'/Uploads/'.$list[$i]['shop_image_thumb'];
             }
+            $result['list'] = $list;
+            if(count($list) < $size){
+                $result['is_last'] = '1';
+            }else{
+                $result['is_last'] = '0';
+            }
             if($list){
-                returnJson(1,'已服务订单获取成功！',$list);
+                returnJson(1,'已服务订单获取成功！',$result);
                 return;
             }else{
-                $list = array();
-                returnJson(1,'暂无已服务订单！',$list);
+                returnJson(1,'暂无已服务订单！',$result);
             }
             return;
         }catch (Exception $e){
