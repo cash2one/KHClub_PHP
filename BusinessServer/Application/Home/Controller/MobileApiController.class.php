@@ -590,8 +590,6 @@ class MobileApiController extends Controller{
 
             if($ret){
                 returnJson(1,"车辆添加成功！",$ret);
-                //向系统推送新通知
-                pushMessage(SYSTEM_NOTIFY, "需要审核的新车辆", 1);
                 return;
             }else{
                 returnJson(0,"车辆添加失败！");
@@ -681,7 +679,7 @@ class MobileApiController extends Controller{
                 return;
             }
             $carModel = M('biz_car');
-            $carInfo = $carModel->field('id,user_id,name,mobile,plate_number,car_type,driving_license_url,state')->where('delete_flag=0 AND id="'.$car_id.'"')->find();
+            $carInfo = $carModel->field('id,user_id,name,mobile,plate_number,car_type,car_type_code,driving_license_url,state')->where('delete_flag=0 AND id="'.$car_id.'"')->find();
             if($carInfo){
                 $carInfo['driving_license_url'] = HTTP_HOST.'/BusinessServer/'.$carInfo['driving_license_url'];
                 returnJson(1,'查询成功！',$carInfo);
