@@ -202,6 +202,25 @@ class WXProxyController extends Controller {
      */
     public function myProxyList(){
 
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_PROXY_URL_PREFIX."myProxyList&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
         $user = getProxyUser();
 
         $model = M('biz_proxy_info');
