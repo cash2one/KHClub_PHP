@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
     <link href="__PUBLIC__/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/system/systemhome.css" rel="stylesheet">
     <script src="__PUBLIC__/js/bootstrap.min.js"></script>
@@ -15,12 +16,42 @@
             window.open(e);
         }
 
+        function giveCoupon(){
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                timeout: 10000,
+                url: "__URL__/giveCoupon?",
+                data : "user_id={$user_id}",
+                success: function (rData) {
+                    var userInfo = eval(rData);
+                    if (userInfo && userInfo.status == 1) {
+                        alert("赠送成功");
+                    }else{
+                        alert("赠送失败")
+                    }
+                },
+                error: function (error) {
+                    alert(eval(error));
+                    return false;
+                }
+            })
+        }
     </script>
 
 </head>
 <body>
 
 <table class="table table-min-width" >
+    <thead>
+        <tr>
+            <td colspan="7">
+                <div class="table-head">
+                    <button onclick="giveCoupon()" style="margin-right: 10px" type="button" class="btn btn-info">送券</button>
+                </div>
+            </td>
+        </tr>
+    </thead>
     <thead>
         <tr>
             <th class="user-list-title">日期</th>

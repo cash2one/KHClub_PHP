@@ -312,6 +312,8 @@ class WXManagerController extends Controller{
                 $carInfo = '';
                 $page_count = 1;
             }
+
+            $this->assign('user_id',$user['user_id']);
             $this->assign('mobile',$mobile);
             $this->assign('page',$page);
             $this->assign('page_count',$page_count);
@@ -319,6 +321,64 @@ class WXManagerController extends Controller{
             $this->display('searchUser');
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 查找用户车辆信息
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/index.php/Home/WXManager/searchUser?mobile=18697942051
+     * @param mobile 用户电话
+     * @param page  页码
+     * @param size 每页数量
+     */
+    public function giveCoupon(){
+        if(!isset($_REQUEST['user_id'])){
+            returnJson(0);
+            exit;
+        }
+        $user_id = $_REQUEST['user_id'];
+        $model = M('biz_coupon');
+
+        $coupon_code = $model->field('coupon_code')->order('id DESC')->limit(1)->find()['coupon_code'];
+        $coupon = array('coupon_code'=>$coupon_code+1, 'user_id'=>$user_id, 'type'=>'1',
+                        'state'=>'0', 'send_date'=>time(), 'add_date'=>time());
+        $ret = $model->add($coupon);
+        if($ret){
+            returnJson(1);
+
+            //消息推送
+            $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+            $ACC_TOKEN = $jssdk->getAccessToken();
+
+            $sql = 'SELECT wx_open_id FROM biz_user_info WHERE user_id='.$user_id;
+            $openID = $model->query($sql)[0]['wx_open_id'];
+            if($openID){
+                $data = '{
+                            "touser":"'.$openID.'",
+                            "msgtype":"text",
+                            "text":
+                            {
+                                "content":"尊敬的品位环球豪车会员，您的管家赠送给您免费精洗券一张，<a href=\"'.HTTP_URL_PREFIX.'getCouponList\">查看详情</a>，或查看商家，<a href=\"'.HTTP_URL_PREFIX.'getShops\">去服务</a>。"
+                            }
+                        }';
+
+                $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                curl_setopt($curl, CURLOPT_POST, 1);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_exec($curl);
+                curl_close($curl);
+            }
+
+
+        }else{
+            returnJson(0);
         }
     }
 

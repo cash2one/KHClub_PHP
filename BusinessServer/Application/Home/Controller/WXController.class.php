@@ -1125,6 +1125,88 @@ class WXController extends Controller {
         $this->display('consumptionDetails');
     }
 
+    /**
+     * @brief 现金券列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getCouponList
+     *
+     */
+    public function getCouponList(){
+
+        //先授权获取openID
+        $openID = $_SESSION['open_id'];
+        if(empty($openID)){
+            $code = $_REQUEST['code'];
+            if(!empty($code)){
+                $content = file_get_contents("https://api.weixin.qq.com/sns/oauth2/access_token?appid=".WX_APPID."&secret=".WX_APPSecret."&code=".$code."&grant_type=authorization_code");
+                $openID = json_decode($content)->openid;
+                if(empty($openID)){
+                    echo '不好意思，您微信未授权openID';
+                    return;
+                }
+                //openID存入
+                $_SESSION['open_id'] = $openID;
+            }else{
+                header("Location: https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WX_APPID."&redirect_uri=".HTTP_URL_PREFIX."getCouponList&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+                exit;
+            }
+        }
+
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $couponModel = M('biz_coupon');
+        $list = $couponModel->where('state=0 AND delete_flag=0 AND type=1 AND user_id='.$user['user_id'])->select();
+
+        for($i=0; $i<count($list); $i++){
+            $list[$i]['send_date'] = date('Y-m-d', $list[$i]['send_date']);
+        }
+
+        //wxJs签名
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('list',$list);
+        $this->display('');
+    }
+
+    /**
+     * @brief 现金券详情
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getCouponDetail
+     *
+     */
+    public function getCouponDetail(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        if(!isset($_REQUEST['coupon_id'])){
+            echo '现金券不存在';
+            exit;
+        }
+        $coupon_id = $_REQUEST['coupon_id'];
+
+        $couponModel = M('biz_coupon');
+        $coupon = $couponModel->where('delete_flag=0 AND user_id='.$user['user_id'].' AND id='.$coupon_id)->find();
+        $coupon['send_date'] = date('Y-m-d', $coupon['send_date']);
+
+        //wxJs签名
+        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign('signPackage',$signPackage);
+        $this->assign('coupon',$coupon);
+        $this->display('');
+    }
 
     /**
      * @brief 微信支付回调通知
