@@ -1,0 +1,53 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.ticket{
+    width: 95%;
+    height: 150px;
+    color: #000000;
+    border-radius: 5px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    position: relative;
+}
+.ticket_image{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    margin: 25px auto auto 10px;
+}
+.ticket_left{
+    float: left;
+    width: 80px;
+}
+.ticket_right{
+    float: right;
+    width: 50%;
+}
+.discount{
+    font-size: 22px;
+    text-align: right;
+    margin-top: 55px;
+    margin-right: 10px;
+}
+.date{
+    margin-top: 30px;
+    margin-right: 10px;
+    text-align: right;
+}
+.examine_image{
+    width: 40px;
+    position: absolute;
+    z-index: 9999;
+    top: 0px;
+    right: 0px;
+}
