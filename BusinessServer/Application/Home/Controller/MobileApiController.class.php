@@ -2,8 +2,13 @@
 namespace Home\Controller;
 use Think\Controller;
 use Think\Exception;
+
+require THINK_PATH.'Library/Vendor/wxpay/lib/WxPay.Api.php';
+require THINK_PATH.'Library/Vendor/wxpay/WxPay.JsApiPay.php';
+
 Vendor('alisdk.TopSdk');
 import('Org.JPush.JPush');
+Vendor('wxpay.notify');
 
 class MobileApiController extends Controller{
     //阿里大鱼KEY
@@ -1077,6 +1082,61 @@ class MobileApiController extends Controller{
             return;
         }catch (Exception $e){
             returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 创建订单
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/MobileApi/createOrder
+     * @param shop_id 商店ID
+     * @param goods_id 商品ID
+     * @param car_id 汽车ID
+     */
+    public function createOrder(){
+
+        $user = array('user_id'=>1);
+
+//        $shop_id = $_REQUEST['shop_id'];
+//        $goods_id = $_REQUEST['goods_id'];
+//        $car_id = $_REQUEST['car_id'];
+
+        $shop_id = 1;
+        $goods_id = 1;
+        $car_id = 1;
+
+        $model = M('biz_shop');
+        $shop = $model->where('delete_flag=0 AND id='.$shop_id)->find();
+        $goodsModel = M('biz_shop_goods');
+        $goods = $goodsModel->where('delete_flag=0 AND id='.$goods_id)->find();
+
+        //内部订单生成规则 goodsID+user_id+time()
+        $bizOrder = $goods_id.$user['user_id'].time();
+
+        $tools = new \JsApiPay();
+        //统一下单
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody($goods['goods_name']);
+        $input->SetAttach($shop['shop_name'].$shop['id']);
+        $input->SetOut_trade_no($bizOrder);
+        $input->SetTotal_fee($goods['discount_price']*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag($bizOrder);
+        $input->SetNotify_url(HTTP_URL_PREFIX."wxNotify");
+        $input->SetTrade_type("APP");
+        $order = \WxPayApi::unifiedAppOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        $orderModel = M('biz_order');
+        $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
+            'open_id'=>'', 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],
+            'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time(), 'type'=>1, 'server_id'=>$shop['server_id']);
+        $ret = $orderModel->add($newOrder);
+        if(!$ret){
+            returnJson(0, '订单生成失败');
+        }else{
+            returnJson(1, '订单生成成功', json_decode($jsApiParameters));
         }
     }
 
