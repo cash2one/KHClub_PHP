@@ -201,32 +201,53 @@ class ShopManagerController extends Controller {
         }
         $user = $_SESSION['shop'];
 
-        $model = M('biz_order');
-        $order = $model->where('server_id='.$user['server_id'].' AND out_trade_no="'.$out_trade_no.'" AND state='.ORDER_HAS_PAY)->find();
-        if(empty($order)){
-            $this->assign('fail', true);
+        //优惠券处理 查看是否是全免券
+        if(substr($out_trade_no,0,2) == 'yh'){
+            $model = M('biz_coupon');
+            $coupon = $model->where('delete_flag=0 AND state=0 AND type=1 AND coupon_code="'.substr($out_trade_no, 2).'"')->find();
+            if($coupon){
+
+                $coupon['id'] = 'yh'.$coupon['id'];
+                $coupon['total_fee'] = '无';
+                $coupon['pay_date'] = date('Y-m-d', $coupon['send_date']);
+
+                $this->assign('user',array('shop_name'=>'品位环球'));
+                $this->assign('goods',array('goods_name'=>'精洗'));
+                $this->assign('car',array('name'=>'无', 'car_type'=>'无', 'plate_number'=>'无'));
+                $this->assign('order',$coupon);
+                $this->display('checkOrder');
+            }else{
+                $this->assign('fail', true);
+                $this->display('checkOrder');
+                exit;
+            }
+        }else{
+            $model = M('biz_order');
+            $order = $model->where('server_id='.$user['server_id'].' AND out_trade_no="'.$out_trade_no.'" AND state='.ORDER_HAS_PAY)->find();
+            if(empty($order)){
+                $this->assign('fail', true);
+                $this->display('checkOrder');
+                exit;
+            }
+            $order['pay_date'] = date('Y-m-d', $order['pay_date']);
+
+            $goodsModel = M('biz_shop_goods');
+            $goods = $goodsModel->where('delete_flag=0 AND id='.$order['goods_id'])->find();
+            $carModel = M('biz_car');
+            $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
+
+            $this->assign('user',$user);
+            $this->assign('goods',$goods);
+            $this->assign('car',$car);
+            $this->assign('order',$order);
             $this->display('checkOrder');
-            exit;
         }
-        $order['pay_date'] = date('Y-m-d', $order['pay_date']);
-
-        $goodsModel = M('biz_shop_goods');
-        $goods = $goodsModel->where('delete_flag=0 AND id='.$order['goods_id'])->find();
-        $carModel = M('biz_car');
-        $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
-
-        $this->assign('user',$user);
-        $this->assign('goods',$goods);
-        $this->assign('car',$car);
-        $this->assign('order',$order);
-        $this->display('checkOrder');
-
     }
 
     /**
-     * @brief 手机验证页面
+     * @brief 确认订单
      * 接口地址
-     * http://localhost/BusinessServer/index.php/Home/Shop/confirmOrder
+     * http://localhost/BusinessServer/index.php/Home/ShopManager/confirmOrder
      * @param order_id 订单号
      */
     public function confirmOrder(){
@@ -242,6 +263,42 @@ class ShopManagerController extends Controller {
             exit;
         }
         $user = $_SESSION['shop'];
+
+        //优惠券处理 查看是否是全免券
+        if(substr($order_id,0,2) == 'yh'){
+            $model = M('biz_coupon');
+            $coupon = $model->where('delete_flag=0 AND state=0 AND type=1 AND id="'.substr($order_id, 2).'"')->find();
+
+            if($coupon){
+                $coupon['use_date'] = time();
+                $coupon['state'] = 1;
+
+                $goodsModel = M('biz_shop_goods');
+                $goods = $goodsModel->where('delete_flag=0 AND shop_id='.$user['id'])->find();
+
+                $newOrder = array('shop_id'=>$user['id'],'goods_id'=>$goods['id'],'user_id'=>$coupon['user_id'],'verify_shop_id'=>$user['id'],
+                                'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],'state'=>ORDER_HAS_USE,
+                                'out_trade_no'=>$goods['id'].$coupon['user_id'].time(), 'car_id'=>'0', 'add_date'=>time(),
+                                'use_date'=>time(), 'type'=>0, 'server_id'=>$user['server_id'], 'coupon_id'=>$coupon['id']);
+                $orderModel = M('biz_order');
+
+                $model->startTrans();
+                $couponRet = $model->save($coupon);
+                //统一更新订单和优惠券
+                if($couponRet){
+                    $orderRet = $orderModel->add($newOrder);
+                    if($orderRet){
+                        header('Location:'.__ROOT__.'/index.php/Home/ShopManager/orderDetails?order_id='.$orderRet);
+                        $model->commit();
+                        exit;
+                    }
+                }
+                $model->rollback();
+            }
+            //失败
+            header('Location:'.__ROOT__.'/index.php/Home/ShopManager/searchOrder');
+            exit;
+        }
 
         $model = M('biz_order');
         $order = $model->where('server_id='.$user['server_id'].' AND id="'.$order_id.'" AND state='.ORDER_HAS_PAY)->find();

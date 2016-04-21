@@ -56,4 +56,10 @@ class WxPayConfig
 	 * @var int
 	 */
 	const REPORT_LEVENL = 1;
+
+
+
+	const APP_APPID = 'wx5764fdc7f223e062';
+	const APP_MCHID = '1319164901';
+	const APP_KEY = 'shskhclub20160309wxpayshskhclub1';
 }

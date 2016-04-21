@@ -326,9 +326,9 @@ class WXController extends Controller {
         }
 
         $model = M();
-        $sql = 'SELECT o.id, s.shop_image_thumb, c.mobile, s.shop_name, o.use_date,o.goods_id, s.shop_phone, o.total_fee
+        $sql = 'SELECT o.id, s.shop_image_thumb, o.coupon_id, c.mobile, s.shop_name, o.use_date,o.goods_id, s.shop_phone, o.total_fee
                 FROM biz_shop s, biz_order o LEFT JOIN biz_car c ON(o.car_id=c.id)
-                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE;
+                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE.' ORDER BY o.use_date DESC';
         $list = $model->query($sql);
         for($i=0; $i<count($list); $i++){
             $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
@@ -340,7 +340,6 @@ class WXController extends Controller {
         $this->assign('list',$list);
         $this->display('record');
     }
-
 
     /**
      * @brief 跳到特权主页
@@ -937,7 +936,7 @@ class WXController extends Controller {
         $orderModel = M();
         $sql = 'SELECT o.id, s.shop_name, o.goods_id, o.state, o.total_fee, o.pay_date, s.shop_phone, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
-                WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
+                WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.') AND o.coupon_id=0
                 AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
 
@@ -985,7 +984,7 @@ class WXController extends Controller {
 
         $sql = 'SELECT o.id, s.shop_name, o.goods_id, o.state, o.total_fee, o.pay_date, s.shop_phone, FORMAT(10*o.total_fee/o.original_price,1) OFF, s.shop_image_thumb
                 FROM biz_order o, biz_shop s
-                WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.')
+                WHERE s.id=o.shop_id AND (state='.ORDER_HAS_PAY.' OR state='.ORDER_HAS_USE.') AND o.coupon_id=0
                 AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.state,o.add_date DESC';
         $list = $orderModel->query($sql);
 
@@ -1172,7 +1171,7 @@ class WXController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('list',$list);
-        $this->display('');
+        $this->display('myFreeTicket');
     }
 
     /**
@@ -1205,7 +1204,7 @@ class WXController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
         $this->assign('coupon',$coupon);
-        $this->display('');
+        $this->display('freeTicketDetails');
     }
 
     /**

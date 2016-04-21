@@ -26,6 +26,17 @@ class WxPayDataBase
 		$this->values['sign'] = $sign;
 		return $sign;
 	}
+
+	/**
+	 * 设置签名，详见签名生成算法
+	 * @param string $value
+	 **/
+	public function SetAppSign()
+	{
+		$sign = $this->MakeAppSign();
+		$this->values['sign'] = $sign;
+		return $sign;
+	}
 	
 	/**
 	* 获取签名，详见签名生成算法的值
@@ -121,6 +132,24 @@ class WxPayDataBase
 		$result = strtoupper($string);
 		return $result;
 	}
+
+	/**
+	 * 生成签名
+	 * @return 签名，本函数不覆盖sign成员变量，如要设置签名需要调用SetSign方法赋值
+	 */
+	public function MakeAppSign()
+	{
+		//签名步骤一：按字典序排序参数
+		ksort($this->values);
+		$string = $this->ToUrlParams();
+		//签名步骤二：在string后加入KEY
+		$string = $string . "&key=".WxPayConfig::APP_KEY;
+		//签名步骤三：MD5加密
+		$string = md5($string);
+		//签名步骤四：所有字符转为大写
+		$result = strtoupper($string);
+		return $result;
+	}
 	
 	/**
 	 * 获取设置的值
@@ -209,6 +238,22 @@ class WxPayResults extends WxPayDataBase
 		}
 		$obj->CheckSign();
         return $obj->GetValues();
+	}
+
+	/**
+	 * 将xml转为array
+	 * @param string $xml
+	 * @throws WxPayException
+	 */
+	public static function AppInit($xml)
+	{
+		$obj = new self();
+		$obj->FromXml($xml);
+		//fix bug 2015-06-29
+		if($obj->values['return_code'] != 'SUCCESS'){
+			return $obj->GetValues();
+		}
+		return $obj->GetValues();
 	}
 }
 

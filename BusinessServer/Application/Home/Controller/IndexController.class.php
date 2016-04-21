@@ -24,11 +24,6 @@ class IndexController extends Controller {
                           "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify"
                         },
                         {
-                          "name" : "我要结账",
-                          "type" : "view",
-                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getBillShops"
-                        },
-                        {
                           "name" : "豪车美容",
                           "type" : "view",
                           "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getShops"
@@ -57,17 +52,17 @@ class IndexController extends Controller {
                           "key" : "KEY_MANAGER",
                           "name" : "豪车管家",
                           "type" : "click"
+                        },
+                        {
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify",
+                          "name" : "注册会员",
+                          "type" : "view"
                         }
                       ]
                     },
                     {
                       "name" : "联盟商家",
                       "sub_button" : [
-                        {
-                          "name" : "商家专区",
-                          "type" : "view",
-                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/Shop/shopEnter"
-                        },
                         {
                           "name" : "我是代理",
                           "type" : "view",
@@ -90,6 +85,18 @@ class IndexController extends Controller {
         $result = curl_exec($curl);
         curl_close($curl);
         print_r($result);
+
+//        {
+//            "name" : "商家专区",
+//                          "type" : "view",
+//                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/Shop/shopEnter"
+//                        },
+//        {
+//            "name" : "我要结账",
+//                          "type" : "view",
+//                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getBillShops"
+//                        },
+
     }
 
     public function clearMenu(){

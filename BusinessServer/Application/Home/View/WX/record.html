@@ -15,7 +15,23 @@
     <div class="details_box clear">
         <div class="date">{$order.use_date}</div>
         <div class="spot"></div>
-        <if condition="$order.goods_id neq 0">
+
+        <if condition="$order.coupon_id gt 0">
+            <a href="getCouponDetail?coupon_id={$order.coupon_id}">
+                <div class="ticket">
+                    <div class="ticket_left">
+                        <img class="ticket_image" src="__PUBLIC__/icon/carWash.png" alt="">
+                    </div>
+                    <div class="ticket_center">
+                        <div style="height: 10px"></div>
+                        <div class="ticket_name">免费洗车券</div>
+                    </div>
+                    <div class="ticket_right">
+                        <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
+                    </div>
+                </div>
+            </a>
+        <elseif condition="$order.goods_id neq 0"/>
             <a href="getRecordDetail?order_id={$order.id}">
                 <div class="ticket">
                     <div class="ticket_left">
@@ -31,7 +47,7 @@
                     </div>
                 </div>
             </a>
-            <else/>
+        <else/>
             <a>
                 <div class="ticket">
                     <div class="ticket_left">
@@ -48,7 +64,6 @@
                 </div>
             </a>
         </if>
-
     </div>
 </volist>
 

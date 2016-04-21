@@ -12,10 +12,26 @@ class WXReceiverController extends Controller {
 
     public function index(){
 
-        Log::write($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],'INFO');
+//        Log::write($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],'INFO');
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $result = \WxPayResults::Init($xml);
-        Log::write(json_encode($result),'INFO');
+//        Log::write(json_encode($result),'INFO');
+
+        if($result['Event'] == 'subscribe') {
+
+            $content = "您好，欢迎关注“品位环球”--专为高端商务人士打造专属定制式服务，提供覆盖精英生活方方面面。\n".
+                        "“品位环球”旗下“豪车管家”是中国首家互联网+豪车管家会员服务平台，为中高端车车主提供“一站式”车管家服务。".
+                        "关注公众号，注册成为会员即可获取私人管家24小时咨询及电话问诊等<a href=\"".HTTP_URL_PREFIX."privilegeHome\">会员服务</a>。\n".
+                        "官方服务电话4008693911，期待您的来电。<a href=\"".HTTP_URL_PREFIX."userHome\">免费注册</a>成为会员。";
+
+            echo '<xml>
+              <ToUserName><![CDATA['.$result['FromUserName'].']]></ToUserName>
+              <FromUserName><![CDATA['.$result['ToUserName'].']]></FromUserName>
+              <CreateTime>'.time().'</CreateTime>
+              <MsgType><![CDATA[text]]></MsgType>
+              <Content><![CDATA['.$content.']]></Content>
+              </xml>';
+        }
 
         //通过分享订阅
         if($result['Event'] == 'subscribe' || $result['Event'] == 'SCAN'){

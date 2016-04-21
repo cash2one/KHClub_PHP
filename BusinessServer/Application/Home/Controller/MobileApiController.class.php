@@ -1126,6 +1126,7 @@ class MobileApiController extends Controller{
         $input->SetNotify_url(HTTP_URL_PREFIX."wxNotify");
         $input->SetTrade_type("APP");
         $order = \WxPayApi::unifiedAppOrder($input);
+
         $jsApiParameters = $tools->GetJsApiParameters($order);
 
         $orderModel = M('biz_order');
