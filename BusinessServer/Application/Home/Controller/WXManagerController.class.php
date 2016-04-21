@@ -10,8 +10,11 @@ use Think\Controller;
 use Think\Exception;
 
 Vendor('jssdk');
+import('Org.JPush.JPush');
 
 class WXManagerController extends Controller{
+    private $app_key = 'a3387af8e9748171ad82d8e7';
+    private $master_secret = 'f2ac08cb5fc22a1e20fdb915';
 
     /**
      * @brief 车辆审核状态
@@ -34,7 +37,11 @@ class WXManagerController extends Controller{
                 $car['pass_date'] = time();
             }
             $carModel = M('biz_car');
-            $carModel->where('id='.$id)->save($car);
+            $car = $carModel->where('id='.$id)->save($car);
+            if($car){
+                $carInfos = $carModel->field('user_id, id, plate_number')->where('id='.$id)->find();
+                $carInfo['content'] = $carInfos;
+            }
 
             //审核通过推送通知
             if($car['state'] == CAR_CHECK_OK){
@@ -129,7 +136,38 @@ class WXManagerController extends Controller{
                 }
 
             }
+            if($_REQUEST['state'] == 2){
+                $carInfo['type'] = 1;
+                $carInfo['content']['message'] = '你的车辆已通过审核';
+                $carInfo = json_encode($carInfo);
+                $title = '品位环球';
+                $message = '你的车辆已通过审核';
+                $client = new \JPush($this->app_key, $this->master_secret);
+                $client->push()
+                    ->setPlatform('ios','android')
+                    ->addAlias('global'.$carInfos['user_id'])
+                    ->setNotificationAlert('Hi, JPush')
+                    ->addAndroidNotification($message, $title, 1, array())
+                    ->addIosNotification($message, $title, 1, true, 'iOS category', array())
+                    ->setMessage($carInfo, $title, 'type', array())
+                    ->send();
+            }else{
+                $carInfo['type'] = 2;
+                $carInfo['content']['message'] = '你的车辆已通过审核';
+                $carInfo = json_encode($carInfo);
+                $title = '品位环球';
+                $message = '你的车辆未通过审核';
+                $client = new \JPush($this->app_key, $this->master_secret);
+                $client->push()
+                    ->setPlatform('ios','android')
+                    ->addAlias('global'.$carInfos['user_id'])
+                    ->setNotificationAlert('Hi, JPush')
+                    ->addAndroidNotification($message, $title, 1, array())
+                    ->addIosNotification($message, $title, 1, true, 'iOS category', array())
+                    ->setMessage($carInfo, $title, 'type', array())
+                    ->send();
 
+            }
             if($search == 1){
                 header("Location: searchUser?mobile=".$mobile);
                 return;
