@@ -784,35 +784,35 @@ class MobileApiController extends Controller{
                 returnJson(0,"车型号代码不能为空！");
                 return;
             }
+            $carModel = M('biz_car');
             //判断行驶证是否为空
             if(count($_FILES) < 1){
-                returnJson(0,"行驶证不能为空");
-                return;
-            }
-            //图片上传
-            $carModel = M('biz_car');
-            $filename = $car['user_id'].time();
-            if(!empty($_FILES)){
-                $upload = new \Think\Upload();// 实例化上传类
-                $upload->maxSize   =     10*1024*1024 ;// 设置附件上传大小
-                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-                $upload->rootPath  =     './drivingLicense/'; // 设置附件上传根目录
-                $upload->savePath  =     ''; // 设置附件上传（子）目录
-                $upload->autoSub   =     false;
-                $upload->saveName  =     $filename;
-                $info   =   $upload->upload();
-            }
-            if($info) {
-                foreach ($info as $file) {
-                    $car['driving_license_url'] = 'drivingLicense/'.$file['savename'];
+
+            }else {
+                //图片上传
+                $filename = $car['user_id'] . time();
+                if (!empty($_FILES)) {
+                    $upload = new \Think\Upload();// 实例化上传类
+                    $upload->maxSize = 10 * 1024 * 1024;// 设置附件上传大小
+                    $upload->exts = array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                    $upload->rootPath = './drivingLicense/'; // 设置附件上传根目录
+                    $upload->savePath = ''; // 设置附件上传（子）目录
+                    $upload->autoSub = false;
+                    $upload->saveName = $filename;
+                    $info = $upload->upload();
+                }
+                if ($info) {
+                    foreach ($info as $file) {
+                        $car['driving_license_url'] = 'drivingLicense/' . $file['savename'];
+                    }
+                }
+                if(!$info){
+                    returnJson(0,"行驶证上传失败！");
+                    return;
                 }
             }
             $car['state'] = 1;
             $car['update_date'] = time();
-            if(!$info){
-                returnJson(0,"行驶证上传失败！");
-                return;
-            }
             $ret = $carModel->where('id='.$car_id)->save($car);
 
             if($ret){
