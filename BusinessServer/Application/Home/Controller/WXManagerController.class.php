@@ -138,10 +138,10 @@ class WXManagerController extends Controller{
             }
             if($_REQUEST['state'] == 2){
                 $carInfo['type'] = 1;
-                $carInfo['content']['message'] = '你的车辆已通过审核';
+                $carInfo['content']['message'] = '您的车辆已通过审核';
                 $carInfo = json_encode($carInfo);
                 $title = '品位环球';
-                $message = '你的车辆已通过审核';
+                $message = '您的车辆已通过审核';
                 $client = new \JPush($this->app_key, $this->master_secret);
                 $client->push()
                     ->setPlatform('ios','android')
@@ -153,10 +153,10 @@ class WXManagerController extends Controller{
                     ->send();
             }else{
                 $carInfo['type'] = 2;
-                $carInfo['content']['message'] = '你的车辆已通过审核';
+                $carInfo['content']['message'] = '您的车辆未通过审核';
                 $carInfo = json_encode($carInfo);
                 $title = '品位环球';
-                $message = '你的车辆未通过审核';
+                $message = '您的车辆未通过审核';
                 $client = new \JPush($this->app_key, $this->master_secret);
                 $client->push()
                     ->setPlatform('ios','android')
