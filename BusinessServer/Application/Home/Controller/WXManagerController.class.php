@@ -145,7 +145,7 @@ class WXManagerController extends Controller{
                 $client = new \JPush($this->app_key, $this->master_secret);
                 $client->push()
                     ->setPlatform('ios','android')
-                    ->addAlias('global'.$carInfos['user_id'])
+                    ->addAlias('globalTest'.$carInfos['user_id'])
                     ->setNotificationAlert('Hi, JPush')
                     ->addAndroidNotification($message, $title, 1, array())
                     ->addIosNotification($message, $title, 1, true, 'iOS category', array())
@@ -160,7 +160,7 @@ class WXManagerController extends Controller{
                 $client = new \JPush($this->app_key, $this->master_secret);
                 $client->push()
                     ->setPlatform('ios','android')
-                    ->addAlias('global'.$carInfos['user_id'])
+                    ->addAlias('globalTest'.$carInfos['user_id'])
                     ->setNotificationAlert('Hi, JPush')
                     ->addAndroidNotification($message, $title, 1, array())
                     ->addIosNotification($message, $title, 1, true, 'iOS category', array())
