@@ -473,7 +473,6 @@ class MobileApiController extends Controller{
      * http://192.168.0.104/BusinessServer/index.php/Home/MobileApi/addCar
      * @param user_id 用户id
      * @param name 姓名
-     * @param mobile 电话号
      * @param plate_number 车牌号
      * @param car_type 车类型
      * @param car_type_code 车型号代码
@@ -501,10 +500,12 @@ class MobileApiController extends Controller{
             $car = array();
             $car['user_id'] = $_REQUEST['user_id'];
             $car['name'] = $_REQUEST['name'];
-            $car['mobile'] = $_REQUEST['mobile'];
             $car['plate_number'] = $_REQUEST['plate_number'];
             $car['car_type'] = $_REQUEST['car_type'];
             $car['car_type_code'] = $_REQUEST['car_type_code'];
+            //查找电话号码
+            $mobile = $userModel->field('mobile')->where('user_id='.$car['user_id'])->find();
+            $car['mobile'] = $mobile['mobile'];
             //判断用户id是否为空
             if(empty($car['user_id'])){
                 returnJson(0,"用户不能为空！");
@@ -525,17 +526,7 @@ class MobileApiController extends Controller{
                 returnJson(0,"车主名格式不正确！");
                 return;
             }
-            //判断车主电话是否为空
-            if(empty($car['mobile'])){
-                returnJson(0,"电话不能为空！");
-                return;
-            }
-            //判断车主电话是否为手机号码
-            if(!(preg_match("/1[3458]{1}\d{9}$/",$car['mobile']))){
-                returnJson(0,"请输入正确的手机号码！");
-                return;
-            }
-            //判断车主车牌号是否为空  '粤B'.
+            //判断车主车牌号是否为空
             if(empty($car['plate_number'])){
                 returnJson(0,"车牌不能为空！");
                 return;
@@ -706,7 +697,6 @@ class MobileApiController extends Controller{
      * @param car_id 车辆id
      * @param user_id 用户id
      * @param name 姓名
-     * @param mobile 电话号
      * @param plate_number 车牌号
      * @param car_type 车类型
      * @param car_type_code 车型号代码
@@ -735,10 +725,12 @@ class MobileApiController extends Controller{
             $car = array();
             $car['user_id'] = $_REQUEST['user_id'];
             $car['name'] = $_REQUEST['name'];
-            $car['mobile'] = $_REQUEST['mobile'];
             $car['plate_number'] = $_REQUEST['plate_number'];
             $car['car_type'] = $_REQUEST['car_type'];
             $car['car_type_code'] = $_REQUEST['car_type_code'];
+            //查找电话号码
+            $mobile = $userModel->field('mobile')->where('user_id='.$car['user_id'])->find();
+            $car['mobile'] = $mobile['mobile'];
 
             //判断车辆id是否为空
             if(empty($car_id)){
@@ -765,17 +757,7 @@ class MobileApiController extends Controller{
                 returnJson(0,"车主名格式不正确！");
                 return;
             }
-            //判断车主电话是否为空
-            if(empty($car['mobile'])){
-                returnJson(0,"电话不能为空！");
-                return;
-            }
-            //判断车主电话是否为手机号码
-            if(!(preg_match("/1[3458]{1}\d{9}$/",$car['mobile']))){
-                returnJson(0,"请输入正确的手机号码！");
-                return;
-            }
-            //判断车主车牌号是否为空  '粤B'.
+            //判断车主车牌号是否为空
             if(empty($car['plate_number'])){
                 returnJson(0,"车牌不能为空！");
                 return;

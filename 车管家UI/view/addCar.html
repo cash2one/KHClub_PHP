@@ -39,10 +39,6 @@
                 drawToast("姓名不能为空");
                 return;
             }
-            if($('#phone').val().length < 1){
-                drawToast("电话不能为空");
-                return;
-            }
             if($('#card').val().length < 1){
                 drawToast("车牌不能为空");
                 return;
@@ -64,11 +60,6 @@
     <div class="list_box clear">
         <div class="genre">姓名</div>
         <input class="input-class" maxlength="30" id="username" name="username" type="text" placeholder="（必填）" />
-    </div>
-    <div class="wire"></div>
-    <div class="list_box clear">
-        <div class="genre">电话</div>
-        <input class="input-class" maxlength="30" id="phone" name="phone" type="text" placeholder="（必填）" />
     </div>
     <div class="wire"></div>
     <div class="list_box clear">
