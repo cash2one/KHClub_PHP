@@ -271,6 +271,31 @@ class WXController extends Controller {
             $this->assign('signPackage',$signPackage);
 
             if($retID){
+
+                $num = $retID+801;
+                //消息推送
+                $ACC_TOKEN = $jssdk->getAccessToken();
+                $data = '{
+                            "touser":"'.$openID.'",
+                            "msgtype":"text",
+                            "text":
+                            {
+                                "content":"恭喜加入品位环球的大家庭，成为第'.$num.'位尊贵的会员！品位环球，有你更辉煌！点击查看<a href=\"'.HTTP_URL_PREFIX.'userVerify\">更多服务</a>"
+                            }
+                        }';
+
+                $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$ACC_TOKEN;
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+                curl_setopt($curl, CURLOPT_POST, 1);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_exec($curl);
+                curl_close($curl);
+
                 //注册成功
                 header("Location: ".HTTP_URL_PREFIX."applyCarView");
             }else{
@@ -435,13 +460,13 @@ class WXController extends Controller {
             exit;
         }
 
-        if(!isset($_REQUEST['name']) || !isset($_REQUEST['mobile']) || !isset($_REQUEST['plate_number']) || !isset($_REQUEST['car_type']) || !isset($_REQUEST['driving_license_url'])){
+        if(!isset($_REQUEST['name']) || !isset($_REQUEST['plate_number']) || !isset($_REQUEST['car_type']) || !isset($_REQUEST['driving_license_url'])){
             header("Location: ".HTTP_URL_PREFIX."applyCarView?empty=1");
             exit;
         }
 
         $name = $_REQUEST['name'];
-        $mobile = $_REQUEST['mobile'];
+        $mobile = $user['mobile'];
         $plate_number = '粤B'.$_REQUEST['plate_number'];
         $car_type = $_REQUEST['car_type'];
         $car_type_code = $_REQUEST['car_type_code'];
@@ -475,7 +500,6 @@ class WXController extends Controller {
         $ret = $carModel->add($apply);
 
         $_SESSION['name'] = '';
-        $_SESSION['mobile'] = '';
         $_SESSION['plate_number'] = '';
         $_SESSION['driving_license_url'] = '';
         $_SESSION['car_type'] = '';
@@ -552,7 +576,6 @@ class WXController extends Controller {
 
         //放到session里
         $_SESSION['name'] = $_REQUEST['name'];
-        $_SESSION['mobile'] = $_REQUEST['mobile'];
         $_SESSION['plate_number'] = $_REQUEST['plate_number'];
         $_SESSION['driving_license_url'] = $_REQUEST['driving_license_url'];
 

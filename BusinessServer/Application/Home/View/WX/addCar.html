@@ -74,11 +74,6 @@
     </div>
     <div class="wire"></div>
     <div class="list_box clear">
-        <div class="genre">电话</div>
-        <input class="input-class" maxlength="30" id="mobile" name="mobile" type="text" placeholder="（必填）" value="{$_SESSION['mobile']}"/>
-    </div>
-    <div class="wire"></div>
-    <div class="list_box clear">
         <div class="genre">车牌</div>
         <div class="yueb">粤B：</div>
         <input class="input-class" maxlength="5" id="plate_number" name="plate_number" type="text" placeholder="（必填）" value="{$_SESSION['plate_number']}" />
@@ -153,10 +148,6 @@
             drawToast("姓名不能为空");
             return;
         }
-        if($('#mobile').val().length < 1){
-            drawToast("电话不能为空");
-            return;
-        }
         if($('#plate_number').val().length < 1){
             drawToast("车牌不能为空");
             return;
@@ -196,7 +187,7 @@
 
     $(function(){
        $('#carType').click(function(){
-            location.href="carBrands?name="+$('#name').val()+"&mobile="+$('#mobile').val()+"&plate_number="
+            location.href="carBrands?name="+$('#name').val()+"&plate_number="
             +$('#plate_number').val()+"&driving_license_url="+$('.steer_images').attr('src');
        })
     });

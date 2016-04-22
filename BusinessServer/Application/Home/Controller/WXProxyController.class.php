@@ -271,6 +271,9 @@ class WXProxyController extends Controller {
         if(count($tradeList) > 0){
 
             $total = $model->field('SUM(amount) total')->where('user_id='.$user['user_id'].' AND state=1')->find();
+            if(empty($total['total'])){
+                $total['total'] = 0;
+            }
             $this->assign('total', $total['total']);
             $this->assign('tradeList', $tradeList);
             $this->display('myWallet');

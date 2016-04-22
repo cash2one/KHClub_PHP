@@ -167,7 +167,7 @@ function getWXUser()
     $openID = $_SESSION['open_id'];
 
     $model = M();
-    $sql = 'SELECT user_id FROM biz_user_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
+    $sql = 'SELECT user_id, mobile FROM biz_user_info WHERE delete_flag=0 AND wx_open_id="'.$openID.'"';
     $user = $model->query($sql)[0];
     return $user;
 }
