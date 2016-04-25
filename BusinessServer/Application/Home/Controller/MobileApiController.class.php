@@ -1077,15 +1077,21 @@ class MobileApiController extends Controller{
      */
     public function createOrder(){
 
-        $user = array('user_id'=>1);
+        if(!isset($_REQUEST['user_id']) && !isset($_REQUEST['shop_id']) && !isset($_REQUEST['goods_id']) && !isset($_REQUEST['car_id'])){
+            returnJson(0, '参数不完整');
+            exit;
+        }
 
-//        $shop_id = $_REQUEST['shop_id'];
-//        $goods_id = $_REQUEST['goods_id'];
-//        $car_id = $_REQUEST['car_id'];
+        $user = array('user_id'=>$_REQUEST['user_id']);
 
-        $shop_id = 1;
-        $goods_id = 1;
-        $car_id = 1;
+        $shop_id = $_REQUEST['shop_id'];
+        $goods_id = $_REQUEST['goods_id'];
+        $car_id = $_REQUEST['car_id'];
+
+//        $user = array('user_id'=>1);
+//        $shop_id = 1;
+//        $goods_id = 1;
+//        $car_id = 1;
 
         $model = M('biz_shop');
         $shop = $model->where('delete_flag=0 AND id='.$shop_id)->find();
@@ -1095,7 +1101,6 @@ class MobileApiController extends Controller{
         //内部订单生成规则 goodsID+user_id+time()
         $bizOrder = $goods_id.$user['user_id'].time();
 
-        $tools = new \JsApiPay();
         //统一下单
         $input = new \WxPayUnifiedOrder();
         $input->SetBody($goods['goods_name']);
@@ -1109,17 +1114,68 @@ class MobileApiController extends Controller{
         $input->SetTrade_type("APP");
         $order = \WxPayApi::unifiedAppOrder($input);
 
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-
         $orderModel = M('biz_order');
-        $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::MCHID,
+        $newOrder = array('shop_id'=>$shop_id,'goods_id'=>$goods_id,'user_id'=>$user['user_id'],'mch_id'=>\WxPayConfig::APP_MCHID,
             'open_id'=>'', 'original_price'=>$goods['original_price'], 'total_fee'=>$goods['discount_price'],
             'out_trade_no'=>$bizOrder, 'car_id'=>$car_id, 'add_date'=>time(), 'type'=>1, 'server_id'=>$shop['server_id']);
         $ret = $orderModel->add($newOrder);
         if(!$ret){
             returnJson(0, '订单生成失败');
         }else{
-            returnJson(1, '订单生成成功', json_decode($jsApiParameters));
+            //二次签名
+            $data["appid"] = \WxPayConfig::APP_APPID;
+            $data["noncestr"] = \WxPayApi::getNonceStr();
+            $data["package"] = "Sign=WXPay";
+            $data["partnerid"] = \WxPayConfig::APP_MCHID;
+            $data["prepayid"] = $order['prepay_id'];
+            $data["timestamp"] = time();
+
+
+            ksort($data);
+            $buff = "";
+            foreach ($data as $k => $v)
+            {
+                if($k != "sign" && $v != "" && !is_array($v)){
+                    $buff .= $k . "=" . $v . "&";
+                }
+            }
+            echo $buff;
+            exit;
+
+            $string = trim($buff, "&");
+
+            //签名步骤二：在string后加入KEY
+            $string = $string . "&key=".\WxPayConfig::APP_KEY;
+            //签名步骤三：MD5加密
+            $string = md5($string);
+            //签名步骤四：所有字符转为大写
+            $data["sign"] = strtoupper($string);
+
+
+
+
+//            foreach ($data as $k => $v)
+//            {
+//                $Parameters[strtolower($k)] = $v;
+//            }
+//            //签名步骤一：按字典序排序参数
+//            ksort($Parameters);
+//            $buff = "";
+//            ksort($Parameters);
+//            foreach ($Parameters as $k => $v)
+//            {
+//                $buff .= strtolower($k) . "=" . $v . "&";
+//            }
+//            if (strlen($buff) > 0)
+//            {
+//                $String = substr($buff, 0, strlen($buff)-1);
+//            }
+//            //签名步骤二：在string后加入KEY
+//            $String = $String."&key=".\WxPayConfig::APP_KEY;
+//            //签名步骤三：MD5加密
+//            $data["sign"] = strtoupper(md5($String));
+
+            returnJson(1, '订单生成成功', $data);
         }
     }
 
