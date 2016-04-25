@@ -536,20 +536,26 @@ class MobileApiController extends Controller{
                 returnJson(0,"车牌格式不正确！");
                 return;
             }
-            //判断车主车牌号长度是否为五位数
-            if(strlen(trim($car['plate_number'])) != 5){
+            //判断车主车牌号第一位是否为英文
+            $num = substr($car['plate_number'],0,1);
+            if(!preg_match('/[a-zA-Z]/', $num)){
+                returnJson(0,"车牌区号不正确！");
+                return;
+            }
+            //判断车主车牌号长度是否为六位数
+            if(strlen(trim($car['plate_number'])) != 6){
                 returnJson(0,"请输入正确的车牌！");
                 return;
             }
 
-            $car['plate_number'] = '粤B'.strtoupper($car['plate_number']);
+            $car['plate_number'] = '粤'.strtoupper($car['plate_number']);
             //判断车型是否为空
             if(empty($car['car_type'])){
                 returnJson(0,"车型不能为空！");
                 return;
             }
             //判断车型号代码是否为空
-            if(empty($car['user_id'])){
+            if(empty($car['car_type_code'])){
                 returnJson(0,"车型号代码不能为空！");
                 return;
             }

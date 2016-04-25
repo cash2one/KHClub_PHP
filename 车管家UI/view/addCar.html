@@ -39,10 +39,28 @@
                 drawToast("姓名不能为空");
                 return;
             }
-            if($('#card').val().length < 1){
+            var plate_number = $('#plate_number').val();
+            if(plate_number.length < 1){
                 drawToast("车牌不能为空");
                 return;
             }
+            //判断车主车牌号是否含有中文
+            if(/.*[\u4e00-\u9fa5]+.*$/.test(plate_number)) {
+                drawToast("不能含有汉字");
+                return;
+            }
+            //判断车主车牌号长度是否为六位数
+            if(plate_number.length !=6){
+                drawToast("请输入正确的车牌");
+                return;
+            }
+            //判断车主车牌号第一位是否为英文
+            var num = plate_number.slice(0,1);
+            if (!(/^[A-Za-z]/.test(num))) {
+                drawToast("请填写正确的区号");
+                return;
+            }
+
 
             //submit
             var form = $("#form");
