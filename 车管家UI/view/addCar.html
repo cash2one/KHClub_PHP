@@ -46,18 +46,18 @@
             }
             //判断车主车牌号是否含有中文
             if(/.*[\u4e00-\u9fa5]+.*$/.test(plate_number)) {
-                drawToast("不能含有汉字");
+                drawToast("车牌格式错误");
                 return;
             }
             //判断车主车牌号长度是否为六位数
             if(plate_number.length !=6){
-                drawToast("请输入正确的车牌");
+                drawToast("车牌格式错误");
                 return;
             }
             //判断车主车牌号第一位是否为英文
             var num = plate_number.slice(0,1);
             if (!(/^[A-Za-z]/.test(num))) {
-                drawToast("请填写正确的区号");
+                drawToast("车牌格式错误");
                 return;
             }
 
