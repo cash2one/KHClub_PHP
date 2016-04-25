@@ -573,9 +573,10 @@ class PushPayload {
                 return (object)$body;
             }
             return $body;
-        } else {
-            throw new APIRequestException($response);
         }
+//        else {
+//            throw new APIRequestException($response);
+//        }
     }
     private function generateSendno() {
         return rand(100000, 4294967294);
