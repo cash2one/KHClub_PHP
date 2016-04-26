@@ -27,6 +27,11 @@ class IndexController extends Controller {
                           "name" : "豪车美容",
                           "type" : "view",
                           "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/getShops"
+                        },
+                        {
+                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify",
+                          "name" : "注册会员",
+                          "type" : "view"
                         }
                       ]
                     },
@@ -37,6 +42,11 @@ class IndexController extends Controller {
                           "url" : "http://c.eqxiu.com/s/27ULUB5f",
                           "name" : "关于我们",
                           "type" : "view"
+                        },
+                        {
+                          "key" : "KEY_CONTACT",
+                          "name" : "联系我们",
+                          "type" : "click"
                         },
                         {
                           "key" : "KEY_INTRO",
@@ -52,11 +62,6 @@ class IndexController extends Controller {
                           "key" : "KEY_MANAGER",
                           "name" : "豪车管家",
                           "type" : "click"
-                        },
-                        {
-                          "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify",
-                          "name" : "注册会员",
-                          "type" : "view"
                         }
                       ]
                     },

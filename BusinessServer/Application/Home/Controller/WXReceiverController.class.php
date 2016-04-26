@@ -61,7 +61,7 @@ class WXReceiverController extends Controller {
             }else if($result['EventKey'] == 'KEY_MANAGER'){
                 $content = '“豪车管家”是“品味•环球”旗下专为中高端车车主提供全方位车管家服务的商务管家平台，从洗车、保养、维修、线上诊断，到保险业务等，我们都将有专人为您提供服务。现已开通4008693911官方服务电话，期待您的来电。';
             }else if($result['EventKey'] == 'KEY_VIP'){
-                $content = "拥有深圳市车牌的以下品牌车车主：\n1. 奔驰\n2. 宝马\n3. 奥迪\n4. 保时捷\n5. 路虎\n6. 兰博基尼\n7. 宾利\n8. 劳斯劳斯\n9. 法拉利\n10. 玛莎拉蒂\n"
+                $content = "拥有广东车牌的以下品牌车车主：\n1. 奔驰\n2. 宝马\n3. 奥迪\n4. 保时捷\n5. 路虎\n6. 兰博基尼\n7. 宾利\n8. 劳斯劳斯\n9. 法拉利\n10. 玛莎拉蒂\n"
                             ."【“品味•环球”其它城市及区域服务平台正在筹建中，敬请期待。】\n现已开通4008693911官方服务电话，期待您的来电。";
             }else if($result['EventKey'] == 'KEY_INTRO'){
                 $content = "注册成为“品味•环球”尊贵的会员，您将享有平台内所有联盟商家提供的会员VIP礼遇，无需另外办理门店会员卡。\n".
@@ -70,6 +70,8 @@ class WXReceiverController extends Controller {
                             "2、会员卡价格享受爱车精洗项目，无需再办理门店会员卡。此礼遇适用于全平台联盟商家。\n".
                             "3、豪车维修与保养将由专业的豪车管家为您一站式打理，轻松，高效的完成每一个环节。\n".
                             "4、“品味•环球”作为第三方服务平台将为本平台所有联盟商家的服务及产品做质量担保，杜绝任何虚假，伪劣产品，为会员权益提供双重保证。\n";
+            }else if($result['EventKey'] == 'KEY_CONTACT'){
+                $content = "管家热线：4008693911\n官方网址：".'<a href="http://www.pinweihuanqiu.com">www.pinweihuanqiu.com</a>';
             }else{
                 echo '';
                 exit;

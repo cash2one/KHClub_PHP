@@ -75,8 +75,8 @@
     <div class="wire"></div>
     <div class="list_box clear">
         <div class="genre">车牌</div>
-        <div class="yueb">粤B：</div>
-        <input class="input-class" maxlength="5" id="plate_number" name="plate_number" type="text" placeholder="（必填）" value="{$_SESSION['plate_number']}" />
+        <div class="yueb">粤</div>
+        <input class="input-class" maxlength="6" id="plate_number" name="plate_number" type="text" placeholder="（必填）" value="{$_SESSION['plate_number']}" />
     </div>
     <div class="wire"></div>
     <div class="list_box clear" id="carType">
@@ -144,18 +144,39 @@
 
     function save()
     {
-        if($('#name').val().length < 1){
-            drawToast("姓名不能为空");
-            return;
-        }
-        if($('#plate_number').val().length < 1){
-            drawToast("车牌不能为空");
-            return;
-        }
+
+
         if($('#car_type').val().length < 1){
             drawToast("车型不能为空");
             return;
         }
+
+        if($('#name').val().length < 1){
+            drawToast("姓名不能为空");
+            return;
+        }
+        var plate_number = $('#plate_number').val();
+        if(plate_number.length < 1){
+            drawToast("车牌格式错误");
+            return;
+        }
+        //判断车主车牌号是否含有中文
+        if(/.*[\u4e00-\u9fa5]+.*$/.test(plate_number)) {
+            drawToast("车牌格式错误");
+            return;
+        }
+        //判断车主车牌号长度是否为六位数
+        if(plate_number.length !=6){
+            drawToast("车牌格式错误");
+            return;
+        }
+        //判断车主车牌号第一位是否为英文
+        var num = plate_number.slice(0,1);
+        if (!(/^[A-Za-z]/.test(num))) {
+            drawToast("车牌格式错误");
+            return;
+        }
+
 
         //本地ID
         if(localID.length > 0) {

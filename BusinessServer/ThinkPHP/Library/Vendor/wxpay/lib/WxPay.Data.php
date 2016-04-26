@@ -183,7 +183,7 @@ class WxPayResults extends WxPayDataBase
 		if($this->GetSign() == $sign){
 			return true;
 		}
-		throw new WxPayException("签名错误！");
+		throw new WxPayException("签名错误！！！！2");
 	}
 	
 	/**
@@ -236,7 +236,7 @@ class WxPayResults extends WxPayDataBase
 		if($obj->values['return_code'] != 'SUCCESS'){
 			 return $obj->GetValues();
 		}
-		$obj->CheckSign();
+//		$obj->CheckSign();
         return $obj->GetValues();
 	}
 

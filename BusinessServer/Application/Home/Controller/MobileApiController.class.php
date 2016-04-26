@@ -8,7 +8,7 @@ require THINK_PATH.'Library/Vendor/wxpay/WxPay.JsApiPay.php';
 
 Vendor('alisdk.TopSdk');
 import('Org.JPush.JPush');
-Vendor('wxpay.notify');
+Vendor('wxpay.appNotify');
 
 class MobileApiController extends Controller{
     //阿里大鱼KEY
@@ -1116,7 +1116,7 @@ class MobileApiController extends Controller{
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag($bizOrder);
-        $input->SetNotify_url(HTTP_URL_PREFIX."wxNotify");
+        $input->SetNotify_url(HTTP_HOST."/BusinessServer/index.php/Home/MobileApi/wxNotify");
         $input->SetTrade_type("APP");
         $order = \WxPayApi::unifiedAppOrder($input);
 
@@ -1136,52 +1136,55 @@ class MobileApiController extends Controller{
             $data["prepayid"] = $order['prepay_id'];
             $data["timestamp"] = time();
 
-
-            ksort($data);
+            $Parameters = $data;
+            //签名步骤一：按字典序排序参数
+            ksort($Parameters);
             $buff = "";
-            foreach ($data as $k => $v)
+            foreach ($Parameters as $k => $v)
             {
-                if($k != "sign" && $v != "" && !is_array($v)){
-                    $buff .= $k . "=" . $v . "&";
-                }
+                $buff .= strtolower($k) . "=" . $v . "&";
             }
-            echo $buff;
-            exit;
-
-            $string = trim($buff, "&");
-
+            $String = substr($buff, 0, strlen($buff)-1);
             //签名步骤二：在string后加入KEY
-            $string = $string . "&key=".\WxPayConfig::APP_KEY;
+            $String = $String."&key=".\WxPayConfig::APP_KEY;
             //签名步骤三：MD5加密
-            $string = md5($string);
-            //签名步骤四：所有字符转为大写
-            $data["sign"] = strtoupper($string);
-
-
-
-
-//            foreach ($data as $k => $v)
-//            {
-//                $Parameters[strtolower($k)] = $v;
-//            }
-//            //签名步骤一：按字典序排序参数
-//            ksort($Parameters);
-//            $buff = "";
-//            ksort($Parameters);
-//            foreach ($Parameters as $k => $v)
-//            {
-//                $buff .= strtolower($k) . "=" . $v . "&";
-//            }
-//            if (strlen($buff) > 0)
-//            {
-//                $String = substr($buff, 0, strlen($buff)-1);
-//            }
-//            //签名步骤二：在string后加入KEY
-//            $String = $String."&key=".\WxPayConfig::APP_KEY;
-//            //签名步骤三：MD5加密
-//            $data["sign"] = strtoupper(md5($String));
+            $data["sign"] = strtoupper(md5($String));
 
             returnJson(1, '订单生成成功', $data);
+        }
+    }
+
+    /**
+     * @brief 微信支付回调通知
+     */
+    public function wxNotify(){
+
+        $notify = new \AppPayNotifyCallBack();
+        $notify->Handle(false);
+
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $result = \WxPayResults::Init($xml);
+
+        $out_trade_no = $result['out_trade_no'];
+        $model = M('biz_order');
+        $order = $model->where('out_trade_no="'.$out_trade_no.'"')->find();
+        //订单成功
+        if($order){
+            $order['transaction_id'] = $result["transaction_id"];
+            $order['nonce_str'] = $result["nonce_str"];
+            $order['sign'] = $result["sign"];
+
+            $order['update_date'] = time();
+            $order['pay_date'] = time();
+            if($order['goods_id'] == 0){
+                $order['state']=ORDER_HAS_USE;
+                $order['use_date']=time();
+                $order['verify_shop_id']=$order['shop_id'];
+            }else{
+                $order['state'] = ORDER_HAS_PAY;
+            }
+            $model->save($order);
+
         }
     }
 

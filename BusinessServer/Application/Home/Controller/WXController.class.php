@@ -121,7 +121,7 @@ class WXController extends Controller {
         $username = $_REQUEST['username'];
         $password = md5($_REQUEST['password']);
         $userModel = M('biz_user_info');
-        $user = $userModel->field('id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
+        $user = $userModel->field('user_id')->where('username='.'"'.$username.'"'.' and password='.'"'.$password.'"')->find();
 
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
@@ -467,7 +467,7 @@ class WXController extends Controller {
 
         $name = $_REQUEST['name'];
         $mobile = $user['mobile'];
-        $plate_number = '粤B'.$_REQUEST['plate_number'];
+        $plate_number = '粤'.$_REQUEST['plate_number'];
         $car_type = $_REQUEST['car_type'];
         $car_type_code = $_REQUEST['car_type_code'];
 
@@ -495,7 +495,7 @@ class WXController extends Controller {
 
         //增加
         $apply = array('user_id'=>$user['user_id'],'name'=>$name, 'mobile'=>$mobile, 'plate_number'=>$plate_number, 'driving_license_url'=>$filename
-                       , 'car_type'=>$car_type, 'state'=>1, 'car_type_code'=>$car_type_code, 'add_date'=>time());
+                       , 'car_type'=>$car_type, 'state'=>CAR_CHECK_OK, 'car_type_code'=>$car_type_code, 'add_date'=>time());
         $carModel = M('biz_car');
         $ret = $carModel->add($apply);
 
@@ -510,7 +510,7 @@ class WXController extends Controller {
         if($ret){
             header("Location: ".HTTP_URL_PREFIX."myCars?isAdd=1");
             //向系统推送新通知
-            pushMessage(SYSTEM_NOTIFY, "需要审核的新车辆", 1);
+//            pushMessage(SYSTEM_NOTIFY, "需要审核的新车辆", 1);
         }else{
             header("Location: ".HTTP_URL_PREFIX."userHome");
         }
@@ -539,10 +539,16 @@ class WXController extends Controller {
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
         $signPackage = $jssdk->GetSignPackage();
         $this->assign('signPackage',$signPackage);
+        if(count($list) < 1){
+            $this->display('notCar');
+            exit;
+        }
         $this->assign('isAdd',$_REQUEST['isAdd']);
         $this->assign('list',$list);
         $this->assign('mobile', $user['mobile']);
         $this->display('myCars');
+
+
     }
 
     /**

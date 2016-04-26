@@ -59,7 +59,7 @@ class WxPayConfig
 
 
 
-	const APP_APPID = 'wx5764fdc7f223e062';
-	const APP_MCHID = '1319164901';
-	const APP_KEY = 'shskhclub20160309wxpayshskhclub1';
+	const APP_APPID = 'wx7941b7c16b724574';
+	const APP_MCHID = '1335376801';
+	const APP_KEY = 'shsglobal20160425wxpayshsglobal1';
 }
