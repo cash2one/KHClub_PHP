@@ -929,7 +929,7 @@ class MobileApiController extends Controller{
             $end   = $size;
             $orderModel = M();
             $sql = 'SELECT od.id,od.total_fee,sh.shop_name,od.add_date,sh.shop_image_thumb FROM biz_order od, biz_shop sh
-                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=1 AND od.coupon_id=0 LIMIT '.$start.','.$end;
+                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=1 AND od.coupon_id=0 ORDER BY pay_date DESC LIMIT '.$start.','.$end;
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
                 $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
@@ -999,7 +999,7 @@ class MobileApiController extends Controller{
             $end   = $size;
             $orderModel = M();
             $sql = 'SELECT od.id,od.total_fee,sh.shop_name,od.add_date,sh.shop_image_thumb FROM biz_order od, biz_shop sh
-                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=2 AND od.coupon_id=0 LIMIT '.$start.','.$end;
+                    WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=2 AND od.coupon_id=0 ORDER BY use_date DESC LIMIT '.$start.','.$end;
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
                 $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
