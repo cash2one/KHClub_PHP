@@ -581,7 +581,7 @@ class MobileApiController extends Controller{
                     $car['driving_license_url'] = 'drivingLicense/'.$file['savename'];
                 }
             }
-            $car['state'] = 1;
+            $car['state'] = 2;
             $car['add_date'] = time();
             if(!$info){
                 returnJson(0,"行驶证上传失败！");
