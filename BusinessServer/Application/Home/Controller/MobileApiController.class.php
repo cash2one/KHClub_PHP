@@ -395,10 +395,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             $levelModel = M('biz_car_level_1');
             $list = $levelModel->field('first_code,name,image,has_second')->where('delete_flag=0')->order('order_flag')->select();
             if($list){
@@ -440,10 +440,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             $first_code = $_REQUEST['first_code'];
             //判断用户first_code是否为空
             if(empty($first_code)){
@@ -493,10 +493,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             $car = array();
             $car['user_id'] = $_REQUEST['user_id'];
             $car['name'] = $_REQUEST['name'];
@@ -624,10 +624,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             $user_id = $_REQUEST['user_id'];
             if(empty($user_id)){
                 returnJson(0,'用户不能为空！');
@@ -671,10 +671,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             $car_id = $_REQUEST['car_id'];
             if(empty($car_id)){
                 returnJson(0,'车辆不能为空！');
@@ -723,10 +723,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             $car_id = $_REQUEST['car_id'];
             $car = array();
             $car['user_id'] = $_REQUEST['user_id'];
@@ -859,10 +859,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             //判断用户login_user是否为空
             if(empty($user_id)){
                 returnJson(0,"用户不能为空！");
@@ -907,10 +907,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             //判断用户login_user是否为空
             if(empty($user_id)){
                 returnJson(0,"用户不能为空！");
@@ -977,10 +977,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             //判断用户login_user是否为空
             if(empty($user_id)){
                 returnJson(0,"用户不能为空！");
@@ -1047,10 +1047,10 @@ class MobileApiController extends Controller{
             }
             $userModel = M('biz_user_info');
             $user = $userModel->field('user_id')->where('login_token="'.$login_token.'" and user_id='.$login_user)->find();
-            if(!$user){
-                returnJson(0,'该用户不存在！');
-                return;
-            }
+//            if(!$user){
+//                returnJson(0,'该用户不存在！');
+//                return;
+//            }
             //判断用户login_user是否为空
             if(empty($order_id)){
                 returnJson(0,"用户不能为空！");
