@@ -933,7 +933,7 @@ class MobileApiController extends Controller{
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
                 $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
-                $list[$i]['shop_image_thumb'] = HTTP_HOST.'/Uploads/'.$list[$i]['shop_image_thumb'];
+                $list[$i]['shop_image_thumb'] = HTTP_HOST.'/BusinessServer/Uploads/'.$list[$i]['shop_image_thumb'];
             }
             $result['list'] = $list;
             if(count($list) < $size){
@@ -1003,7 +1003,7 @@ class MobileApiController extends Controller{
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
                 $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
-                $list[$i]['shop_image_thumb'] = HTTP_HOST.'/Uploads/'.$list[$i]['shop_image_thumb'];
+                $list[$i]['shop_image_thumb'] = HTTP_HOST.'/BusinessServer/Uploads/'.$list[$i]['shop_image_thumb'];
             }
             $result['list'] = $list;
             if(count($list) < $size){
