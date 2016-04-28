@@ -932,7 +932,7 @@ class MobileApiController extends Controller{
                     WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=1 AND od.coupon_id=0 ORDER BY pay_date DESC LIMIT '.$start.','.$end;
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
-                $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
+                $list[$i]['pay_date'] = date('Y-m-d', $list[$i]['pay_date']);
                 $list[$i]['shop_image_thumb'] = HTTP_HOST.'/BusinessServer/Uploads/'.$list[$i]['shop_image_thumb'];
             }
             $result['list'] = $list;
@@ -1002,7 +1002,7 @@ class MobileApiController extends Controller{
                     WHERE od.user_id='.$user_id.' and od.shop_id=sh.id AND od.state=2 AND od.coupon_id=0 ORDER BY use_date DESC LIMIT '.$start.','.$end;
             $list = $orderModel->query($sql);
             for($i=0;$i<count($list);$i++){
-                $list[$i]['add_date'] = date('Y-m-d', $list[$i]['add_date']);
+                $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
                 $list[$i]['shop_image_thumb'] = HTTP_HOST.'/BusinessServer/Uploads/'.$list[$i]['shop_image_thumb'];
             }
             $result['list'] = $list;
