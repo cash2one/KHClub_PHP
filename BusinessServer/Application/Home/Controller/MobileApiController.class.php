@@ -1113,6 +1113,7 @@ class MobileApiController extends Controller{
         $input->SetAttach($shop['shop_name'].$shop['id']);
         $input->SetOut_trade_no($bizOrder);
         $input->SetTotal_fee($goods['discount_price']*100);
+//        $input->SetTotal_fee(1);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag($bizOrder);

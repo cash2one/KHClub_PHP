@@ -718,6 +718,17 @@ class WXController extends Controller {
     }
 
     /**
+     * @brief 保养维修商店列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/repairShops
+     *
+     */
+    public function repairShops(){
+        $this->display('maintenanceStore');
+    }
+
+
+    /**
      * @brief 商店详情
      * 接口地址
      * http://localhost/BusinessServer/index.php/Home/WX/getShopDetail
