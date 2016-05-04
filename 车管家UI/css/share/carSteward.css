@@ -109,7 +109,7 @@ body{
 }
 .car{
     height: 50px;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 50px;
     padding-left: 10px;
     background-color: #ffffff;
@@ -464,4 +464,25 @@ body{
     margin-left: 25px;
     height:20px;
     line-height:20px;
+}
+.genre_box{
+    height: 50px;
+    width: 100%;
+    color: #000000;
+    background-color: #ffffff;
+}
+.genres{
+    width: 45%;
+    float: left;
+    /*color: #646464;*/
+    font-size: 16px;
+    line-height: 50px;
+    padding-left: 10px;
+}
+.values{
+    float: right;
+    font-size: 16px;
+    line-height: 45px;
+    text-align: right;
+    padding-right: 10px;
 }
