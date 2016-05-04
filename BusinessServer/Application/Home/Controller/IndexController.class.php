@@ -32,12 +32,22 @@ class IndexController extends Controller {
                           "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WX/userVerify",
                           "name" : "注册会员",
                           "type" : "view"
+                        },
+                        {
+                          "key" : "KEY_VIP",
+                          "name" : "会员条件",
+                          "type" : "click"
                         }
                       ]
                     },
                     {
                       "name" : "品位环球",
                       "sub_button" : [
+                        {
+                          "url" : "http://app.qq.com/#id=detail&appid=1105254023",
+                          "name" : "APP下载",
+                          "type" : "view"
+                        },
                         {
                           "url" : "http://c.eqxiu.com/s/27ULUB5f",
                           "name" : "关于我们",
@@ -54,11 +64,6 @@ class IndexController extends Controller {
                           "type" : "click"
                         },
                         {
-                          "key" : "KEY_VIP",
-                          "name" : "会员条件",
-                          "type" : "click"
-                        },
-                        {
                           "key" : "KEY_MANAGER",
                           "name" : "豪车管家",
                           "type" : "click"
@@ -69,7 +74,7 @@ class IndexController extends Controller {
                       "name" : "联盟商家",
                       "sub_button" : [
                         {
-                          "name" : "我是代理",
+                          "name" : "品牌代言",
                           "type" : "view",
                           "url" : "'.HTTP_HOST.'/BusinessServer/index.php/Home/WXProxy/proxyEnter"
                         }
@@ -79,7 +84,6 @@ class IndexController extends Controller {
                 }';
 
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$ACC_TOKEN;
-
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);

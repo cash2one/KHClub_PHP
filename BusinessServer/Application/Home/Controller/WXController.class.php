@@ -350,19 +350,50 @@ class WXController extends Controller {
             exit;
         }
 
-        $model = M();
-        $sql = 'SELECT o.id, s.shop_image_thumb, o.coupon_id, c.mobile, s.shop_name, o.use_date,o.goods_id, s.shop_phone, o.total_fee
-                FROM biz_shop s, biz_order o LEFT JOIN biz_car c ON(o.car_id=c.id)
-                WHERE o.user_id='.$user['user_id'].' AND o.shop_id=s.id AND o.delete_flag=0 AND o.state='.ORDER_HAS_USE.' ORDER BY o.use_date DESC';
-        $list = $model->query($sql);
+        $orderModel = M();
+        $sql = 'SELECT o.id, s.shop_name, o.total_fee, o.pay_date, s.shop_phone, s.shop_image_thumb, o.coupon_id
+                FROM biz_order o, biz_shop s
+                WHERE s.id=o.shop_id AND state='.ORDER_HAS_PAY.' AND coupon_id=0
+                AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.add_date DESC';
+        $list = $orderModel->query($sql);
+
         for($i=0; $i<count($list); $i++){
-            $list[$i]['use_date'] = date('Y-m-d', $list[$i]['use_date']);
+            $list[$i]['date'] = date('Y-m-d', $list[$i]['pay_date']);
         }
-        //wxJs签名
-        $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
-        $signPackage = $jssdk->GetSignPackage();
-        $this->assign('signPackage',$signPackage);
+
         $this->assign('list',$list);
+        $this->assign('isHasPay', 1);
+        $this->display('record');
+    }
+
+    /**
+     * @brief 获取已使用的订单列表
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getOrderList
+     *
+     */
+    public function getHasUseOrderList(){
+
+        $user = getWXUser();
+        //如果系统中不存在这个人跳转到注册
+        if(empty($user)){
+            header("Location: ".HTTP_URL_PREFIX."userVerify");
+            exit;
+        }
+
+        $orderModel = M();
+        $sql = 'SELECT o.id, s.shop_name, o.total_fee, o.use_date, s.shop_phone, s.shop_image_thumb, o.coupon_id
+                FROM biz_order o, biz_shop s
+                WHERE s.id=o.shop_id AND state='.ORDER_HAS_USE.'
+                AND o.delete_flag=0 AND o.user_id="'.$user['user_id'].'" ORDER BY o.add_date DESC';
+        $list = $orderModel->query($sql);
+
+        for($i=0; $i<count($list); $i++){
+            $list[$i]['date'] = date('Y-m-d', $list[$i]['use_date']);
+        }
+
+        $this->assign('list',$list);
+        $this->assign('isHasPay', 0);
         $this->display('record');
     }
 
@@ -724,9 +755,63 @@ class WXController extends Controller {
      *
      */
     public function repairShops(){
+
+        $json = '[
+                  {
+                    "address" : "深圳市南山区东滨路86号",
+                    "latitude" : "22.518719",
+                    "longitude" : "113.923805",
+                    "shop_name" : "华胜专修店南山店"
+                  },
+                  {
+                    "address" : "深圳市宝安区西乡大道西大锌湾佳鸿世界名车博览中心",
+                    "latitude" : "22.56933",
+                    "longitude" : "113.861619",
+                    "shop_name" : "深圳市驰宝汽车销售服务有限公司"
+                  },
+                  {
+                    "address" : "深圳市宝安区西乡大道西大锌湾佳鸿世界名车博览中心",
+                    "latitude" : "22.56933",
+                    "longitude" : "113.861619",
+                    "shop_name" : "奥羽汽车销售服务有限公司"
+                  },
+                  {
+                    "address" : "深圳市宝安区西乡大道西大锌湾佳鸿世界名车博览中心",
+                    "latitude" : "22.56933",
+                    "longitude" : "113.861619",
+                    "shop_name" : "路豹汽车销售服务有限公司"
+                  },
+                  {
+                    "address" : "深圳市南山区月亮湾大道嘉进隆前海汽车城C区1号",
+                    "latitude" : "22.541227",
+                    "longitude" : "113.914586",
+                    "shop_name" : "南方腾星汽车销售服务有限公司"
+                  }
+                ]';
+
+        $this->assign("list", json_decode($json, true));
         $this->display('maintenanceStore');
     }
 
+    /**
+     * @brief 获取维修商店详情
+     * 接口地址
+     * http://localhost/BusinessServer/index.php/Home/WX/getRepairShopDetail
+     *
+     */
+    public function getRepairShopDetail(){
+
+        $address = $_REQUEST['address'];
+        $latitude = $_REQUEST['latitude'];
+        $longitude = $_REQUEST['longitude'];
+        $shop_name = $_REQUEST['shop_name'];
+
+        $this->assign("address", $address);
+        $this->assign("latitude", $latitude);
+        $this->assign("longitude", $longitude);
+        $this->assign("shop_name", $shop_name);
+        $this->display('carShopDetails');
+    }
 
     /**
      * @brief 商店详情
@@ -1067,8 +1152,8 @@ class WXController extends Controller {
         $carModel = M('biz_car');
         $car = $carModel->where('delete_flag=0 AND id='.$order['car_id'])->find();
 
-        $order['use_date'] = date('Y-m-d', $order['use_date']);
-        $order['OFF'] = number_format(10*$order['total_fee']/$order['original_price'], 1);
+//        $order['use_date'] = date('Y-m-d', $order['use_date']);
+//        $order['OFF'] = number_format(10*$order['total_fee']/$order['original_price'], 1);
 
         //wxJs签名
         $jssdk = new \JSSDK(WX_APPID, WX_APPSecret);
@@ -1357,15 +1442,13 @@ class WXController extends Controller {
         $category = $_REQUEST['category'];
 
         if($category == 1){
-            $this->display('carBeauty');
-        }else if($category == 2){
             $this->display('onlineVisits');
-        }else if($category == 3){
+        }else if($category == 2){
             $this->display('insuranceConsult');
+        }else if($category == 3){
+            $this->display('examinedCommission');
         }else if($category == 4){
-            $this->display('roadsideAssistance');
-        }else if($category == 5){
-            $this->display('carMaintenance');
+            $this->display('accidentCommission');
         }
 
     }

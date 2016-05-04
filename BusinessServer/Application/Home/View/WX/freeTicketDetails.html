@@ -8,29 +8,15 @@
     <link rel="stylesheet" href="__PUBLIC__/css/wx/freeTicketDetails.css">
 </head>
 <body>
-    <div class="ticket clear">
-        <div class="ticket_left">
-            <img class="ticket_image" src="__PUBLIC__/icon/carWash.png" alt="">
-        </div>
-        <div class="ticket_right">
-            <div class="discount">免费精洗券</div>
-            <div class="date">{$coupon.send_date}</div>
-        </div>
-        <if condition="$coupon.state eq 0">
-            <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
-            <else/>
-            <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
-        </if>
-    </div>
     <div class="box">
         <div class="genre_box">
-            <div class="genre">校验码</div>
+            <div class="genre">订单号</div>
             <div class="values">yh{$coupon.coupon_code}</div>
         </div>
         <div class="wire"></div>
         <a href="orderQrcode?out_trade_no=yh{$coupon.coupon_code}">
             <div class="genre_box">
-                <div class="genre">校验二维码</div>
+                <div class="genre">订单二维码</div>
                 <div class="code_box">
                     <img class="arrows" src="__PUBLIC__/icon/arrow.png" alt="">
                     <img class="code" src="__PUBLIC__/icon/qrCode.png" alt="">

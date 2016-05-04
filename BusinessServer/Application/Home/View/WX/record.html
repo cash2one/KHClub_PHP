@@ -5,80 +5,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
     <title>记录</title>
-    <link rel="stylesheet" href="__PUBLIC__/css/wx/carSteward.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/order.css">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 
 <body style="background-color: #ebebeb">
 
-<volist name="list" id="order">
-    <div class="details_box clear">
-        <div class="date">{$order.use_date}</div>
-        <div class="spot"></div>
-
+    <div class="option">
+        <if condition="$isHasPay eq 0">
+            <a href="recordHome"><span class="nav-width">服务中</span></a>
+            <a  href="getHasUseOrderList"><span  class="nav-width active">已服务</span></a>
+            <else/>
+            <a href="recordHome"><span class="nav-width active">服务中</span></a>
+            <a  href="getHasUseOrderList"><span  class="nav-width">已服务</span></a>
+        </if>
+    </div>
+    <volist name="list" id="order">
         <if condition="$order.coupon_id gt 0">
             <a href="getCouponDetail?coupon_id={$order.coupon_id}">
-                <div class="ticket">
+                <div class="ticket clear">
                     <div class="ticket_left">
                         <img class="ticket_image" src="__PUBLIC__/icon/carWash.png" alt="">
                     </div>
-                    <div class="ticket_center">
-                        <div style="height: 10px"></div>
-                        <div class="ticket_name">免费洗车券</div>
+                    <div class="free_ticket_right">
+                        <div class="free">免费精洗券</div>
+                        <div class="date">{$order.date}</div>
                     </div>
-                    <div class="ticket_right">
-                        <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
-                    </div>
-                </div>
-            </a>
-        <elseif condition="$order.goods_id neq 0"/>
-            <a href="getRecordDetail?order_id={$order.id}">
-                <div class="ticket">
-                    <div class="ticket_left">
-                        <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
-                    </div>
-                    <div class="ticket_center">
-                        <div style="height: 10px"></div>
-                        <div class="store_name">{$order.shop_name}</div>
-                        <div class="tel">{$order.mobile}</div>
-                    </div>
-                    <div class="ticket_right">
-                        <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
-                    </div>
+                    <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
                 </div>
             </a>
         <else/>
-            <a>
-                <div class="ticket">
+            <a href="getOrderDetail?order_id={$order.id}">
+                <div class="ticket clear">
                     <div class="ticket_left">
                         <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
                     </div>
                     <div class="ticket_center">
                         <div class="store_name">{$order.shop_name}</div>
-                        <div class="tel">{$order.shop_phone}</div>
-                        <div class="money">{$order.total_fee}元</div>
                     </div>
                     <div class="ticket_right">
-                        <img class="state_image" src="__PUBLIC__/icon/rightarrow.png" alt="">
+                        <div class="discount"><span class="number">{$order.total_fee}</span>元</div>
+                        <div class="date">{$order.date}</div>
                     </div>
+                    <if condition="$isHasPay eq 0">
+                        <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
+                        <else/>
+                        <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
+                    </if>
                 </div>
             </a>
         </if>
-    </div>
-</volist>
+    </volist>
 
-<div class="menu_box clear">
-    <a href="privilegeHome" class="menu">特权</a>
-    <a class="menu" style="background-color: #e9e9e9">记录</a>
-    <a href="userHome" class="menu">会员</a>
-    <a href="stewardHome" class="menu">管家</a>
-</div>
-<div class="vertical_bar"></div>
-<div style="height: 80px"></div>
-<div class="wire2"></div>
-<div class="wire2_left"></div>
-<div class="wire2_center"></div>
-<div class="wire2_right"></div>
+    <div class="menu_box clear">
+        <a href="privilegeHome" class="menu">特权</a>
+        <a class="menu" style="background-color: #e9e9e9">记录</a>
+        <a href="userHome" class="menu">会员</a>
+        <a href="stewardHome" class="menu">管家</a>
+    </div>
+    <div class="vertical_bar"></div>
+    <div style="height: 80px"></div>
+    <div class="wire2"></div>
+    <div class="wire2_left"></div>
+    <div class="wire2_center"></div>
+    <div class="wire2_right"></div>
 </body>
 
 </html>

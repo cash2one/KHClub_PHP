@@ -1,0 +1,163 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.menu_box{
+    font-size: 16px;
+    float: left;
+    clear: both;
+    text-align: center;
+    color: #000000;
+    width: 100%;
+    height: 50px;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    z-index: 99;
+    background-color: #fafafa;
+    border-color: transparent;
+}
+.menu{
+    display: block;
+    float: left;
+    color: #474747;
+    line-height: 50px;
+    width: 25%;
+    height: 100%;
+}
+.wire2{
+    position: fixed;
+    bottom:50px;
+    left: 0px;
+    z-index: 9999;
+    width: 100%;
+    height: 1px;
+    background-color: #bdbdbd;
+}
+.wire2_left{
+    position: fixed;
+    bottom:0px;
+    left: 25%;
+    z-index: 9999;
+    width: 1px;
+    height: 50px;
+    background-color: #bdbdbd;
+}
+.wire2_center{
+    position: fixed;
+    bottom:0px;
+    left: 50%;
+    z-index: 9999;
+    width: 1px;
+    height: 50px;
+    background-color: #bdbdbd;
+}
+.wire2_right{
+    position: fixed;
+    bottom:0px;
+    left: 75%;
+    z-index: 9999;
+    width: 1px;
+    height: 50px;
+    background-color: #bdbdbd;
+}
+.option{
+    width: 95%;
+    height: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 10px auto;
+}
+.nav-width{
+    float: left;
+    display: block;
+    width: 50%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 10px;
+}
+.active{
+    background-color: #cccccc;
+}
+.ticket{
+    width: 95%;
+    height: 150px;
+    color: #000000;
+    border-radius: 5px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    position: relative;
+}
+.ticket_image{
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    margin: 45px auto auto 10px;
+}
+.store_name{
+    color: #000000;
+    font-size: 16px;
+    line-height: 150px;
+    overflow: hidden;
+}
+.ticket_left{
+    float: left;
+    width: 80px;
+}
+.tel{
+    margin-top: 12px;
+    margin-left: 10px;
+}
+.ticket_center{
+    float: left;
+    width: 33.33%;
+}
+.store_name{
+    color: #000000;
+    font-size: 16px;
+    line-height: 150px;
+    overflow: hidden;
+}
+.ticket_right{
+    float: right;
+    width: 30%;
+}
+.free_ticket_right{
+    float: right;
+    width: 50%;
+}
+.discount{
+    color: #e52828;
+    font-size: 16px;
+    text-align: right;
+    margin-top: 65px;
+    margin-right: 10px;
+}
+.free{
+    font-size: 22px;
+    text-align: right;
+    margin-top: 60px;
+    margin-right: 10px;
+}
+.date{
+    margin-top: 30px;
+    margin-right: 10px;
+    text-align: right;
+}
+.examine_image{
+    width: 40px;
+    position: absolute;
+    z-index: 9;
+    top: 0px;
+    right: 0px;
+}

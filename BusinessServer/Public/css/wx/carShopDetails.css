@@ -1,0 +1,84 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.images{
+    height: 170px;
+    width: 100%;
+    background-position:center;
+}
+.navigate{
+    width: 100%;
+    height: 30px;
+    background-color: #000000;
+    position:relative;
+    top:140px;
+    left: 0px;
+    opacity: 0.2;
+}
+.addr_distance{
+    position:relative;
+    top:110px;
+    left: 0px;
+}
+.navigate_carStore{
+    float: left;
+    color: #ffffff;
+    margin-left: 10px;
+    font-size: 18px;
+    line-height: 30px;
+}
+.navigate_distance{
+    float: right;
+    margin-right: 10px;
+    color: #e3e3e3;
+    font-size: 18px;
+    line-height: 30px;
+}
+.box{
+    background-color: #ffffff;
+}
+.address{
+    font-size: 18px;
+}
+.addr_name{
+    float: left;
+    width: 40px;
+    margin: 15px auto 15px 10px;
+}
+.type_addr{
+    float: right;
+    width: 75%;
+    margin: 15px 10px 15px auto;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.add_car{
+    font-size: 18px;
+    float: left;
+    clear: both;
+    font-size: 18px;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    height: 45px;
+    width: 100%;
+    margin: 0px;
+    position:fixed;
+    bottom:0px;
+    left: 0px;
+    background-color: #0f0f0f;
+    border-color: transparent;
+}

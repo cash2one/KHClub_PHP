@@ -9,40 +9,15 @@
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 <body>
-
-    <div class="ticket clear">
-        <div class="ticket_left">
-            <img class="ticket_image" src="__ROOT__/Uploads/{$shop.shop_image_thumb}" alt="">
-        </div>
-        <div class="ticket_center">
-            <div class="store_name">{$shop.name}</div>
-        </div>
-        <div class="ticket_coupon">
-            <img class="coupon" src="__PUBLIC__/icon/coupon.png" alt="">
-        </div>
-        <div class="ticket_right">
-            <div class="discount"><span class="number">{$order.OFF}</span>折</div>
-        </div>
-
-        <if condition="$isDetail eq 1">
-            <if condition="$order.state eq 1">
-                <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
-                <else/>
-                <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
-            </if>
-        </if>
-
-    </div>
-
     <div class="box">
         <div class="genre_box">
-            <div class="genre">校验码</div>
+            <div class="genre">订单号</div>
             <div class="values">{$order.out_trade_no}</div>
         </div>
         <div class="wire"></div>
         <a href="orderQrcode?out_trade_no={$order.out_trade_no}">
             <div class="genre_box">
-                <div class="genre">校验二维码</div>
+                <div class="genre">订单二维码</div>
                 <div class="code_box">
                     <img class="arrows" src="__PUBLIC__/icon/arrow.png" alt="" >
                     <img class="code" src="__PUBLIC__/icon/qrCode.png" alt="" >
@@ -75,11 +50,12 @@
             <div class="values">{$car.car_type}</div>
         </div>
     </div>
-
-    <div class="reminder">校验码或校验二维码须提供给商家，以便于商家确认为您服务</div>
-<if condition="$isDetail neq 1">
-    <a onclick="jsApiCall()" class="add_car">确认购买</a>
-</if>
+    <if condition="$order.state eq 1">
+        <div class="reminder">订单号或二维码须提供给商家，以便于商家确认为您服务</div>
+    </if>
+    <if condition="$isDetail neq 1">
+        <a onclick="jsApiCall()" class="add_car">确认购买</a>
+    </if>
 
 
 </body>

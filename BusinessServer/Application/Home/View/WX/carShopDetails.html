@@ -4,29 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
-    <title>保养维修车店</title>
-    <link rel="stylesheet" href="__PUBLIC__/css/wx/maintenanceStore.css">
+    <title>车店详情</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/wx/carShopDetails.css">
     <script src="__PUBLIC__/js/jquery-2.2.0.min.js"></script>
 </head>
 <body style="background-color: #f1f1f1">
-
-    <volist name="list" id="shop">
-        <a href="getRepairShopDetail?address={$shop.address}&latitude={$shop.latitude}&longitude={$shop.longitude}&shop_name={$shop.shop_name}">
-            <div class="store_box clear">
-                <img class="merchant_logo" src="__PUBLIC__/icon/carWash.png" alt=""/>
-                <div class="content_box">
-                    <div class="carStore">{$shop.shop_name}</div>
-                    <img class="addr_images" src="__PUBLIC__/icon/address.png" alt="">
-                    <div class="addr">{$shop.address}</div>
-                    <div class="distance"></div>
-                </div>
-            </div>
-        </a>
-        <div class="wire"></div>
-    </volist>
-
+    <div class="images" style="background-image:url('__PUBLIC__/icon/carWash.png'); background-size:100%;">
+        <div class="navigate clear"></div>
+        <div class="addr_distance">
+            <span class="navigate_carStore">{$shop_name}</span>
+            <span class="navigate_distance"></span>
+        </div>
+    </div>
+    <div class="box">
+        <div class="address clear">
+            <div class="addr_name">地址</div>
+            <div class="type_addr">{$address}</div>
+        </div>
+    </div>
+    <a href="tel:4008693911" class="add_car">一键呼叫管家</a>
 </body>
-
 
 <script>
 
@@ -47,12 +44,7 @@
     function showPosition(position)
     {
         curPosition = position;
-        <php>
-            for($i=0; $i<count($list); $i++){
-                $shop = $list[$i];
-                echo "$('.distance').get($i).innerHTML=GetDistance(".$shop['latitude'].",".$shop['longitude'].")+'km';";
-            }
-        </php>
+        $('.navigate_distance').html(GetDistance({$latitude},{$longitude})+"km");
     }
 
     function Rad(d){
