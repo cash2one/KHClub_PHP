@@ -33,8 +33,33 @@ body{
     font-size: 18px;
     line-height: 40px;
     overflow: hidden;
-    margin-top: 40px;
+    margin-top: 25px;
     margin-right: 5px;
+}
+.addr_images{
+    float: left;
+    width: 18px;
+    margin-top: 2px;
+}
+.addr{
+    float: left;
+    height: 25px;
+    width: 60%;
+    color: #949494;
+    font-size: 16px;
+    line-height: 25px;
+    overflow: hidden;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+.distance{
+    float: left;
+    height: 25px;
+    width: 50px;
+    color: #949494;
+    font-size: 15px;
+    line-height: 25px;
+    overflow: hidden;
 }
 .wire{
     margin-left: 10px;
