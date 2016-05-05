@@ -13,52 +13,56 @@
     <a onclick="getList(1)"><span id="wx-card" class="nav-width active">服务中</span></a>
     <a  onclick="getList(2)"><span id="wx-leaflet" class="nav-width">已服务</span></a>
 </div>
-<a href="ticketDetails.html"><div class="ticket clear">
-    <div class="ticket_left">
-        <img class="ticket_image" src="../images/221446476438.jpg" alt="">
-    </div>
-    <div class="ticket_center">
-        <div class="store_name">豪气万丈豪气万丈</div>
-    </div>
-    <div class="ticket_right">
-        <div class="discount"><span class="number">80000</span>元</div>
-        <div class="date">2016-03-20</div>
-    </div>
-    <img class="examine_image" src="../images/icon/unused.png" alt="">
-</div></a>
-<a href="ticketDetails.html"><div class="ticket clear">
-    <div class="ticket_left">
-        <img class="ticket_image" src="../images/221446476438.jpg" alt="">
-    </div>
-    <div class="ticket_center">
-        <div class="store_name">豪气万丈豪气万丈</div>
-    </div>
-    <div class="ticket_right">
-        <div class="discount"><span class="number">80000</span>元</div>
-        <div class="date">2016-03-20</div>
-    </div>
-    <img class="examine_image" src="../images/icon/usable.png" alt="">
-</div></a>
-<a href="freeTicketDetails.html"><div class="ticket clear">
-    <div class="ticket_left">
-        <img class="ticket_image" src="../images/icon/carWash.png" alt="">
-    </div>
-    <div class="free_ticket_right">
-        <div class="free">免费精洗券</div>
-        <div class="date">2016-03-20</div>
-    </div>
-    <img class="examine_image" src="../images/icon/usable.png" alt="">
-</div></a>
-<a href="freeTicketDetails.html"><div class="ticket clear">
-    <div class="ticket_left">
-        <img class="ticket_image" src="../images/icon/carWash.png" alt="">
-    </div>
-    <div class="free_ticket_right">
-        <div class="free">免费精洗券</div>
-        <div class="date">2016-03-20</div>
-    </div>
-    <img class="examine_image" src="../images/icon/unused.png" alt="">
-</div></a>
+<div class="box">
+    <a href="ticketDetails.html"><div class="ticket clear">
+        <div class="ticket_left">
+            <img class="ticket_image" src="../images/221446476438.jpg" alt="">
+        </div>
+        <div class="ticket_center">
+            <div class="discount"><span class="number">80000</span>元</div>
+            <div class="store_name">豪气万丈豪气万丈</div>
+            <div class="date">2016-03-20</div>
+        </div>
+    </div></a>
+    <div class="examine_image"><span>已服务</span></div>
+</div>
+<div class="box">
+    <a href="ticketDetails.html"><div class="ticket clear">
+        <div class="ticket_left">
+            <img class="ticket_image" src="../images/221446476438.jpg" alt="">
+        </div>
+        <div class="ticket_center">
+            <div class="discount"><span class="number">80000</span>元</div>
+            <div class="store_name">豪气万丈豪气万丈</div>
+            <div class="date">2016-03-20</div>
+        </div>
+    </div></a>
+    <div class="examine_image"><span>未服务</span></div>
+</div>
+<div class="box">
+    <a href="freeTicketDetails.html"><div class="ticket clear">
+        <div class="ticket_left">
+            <img class="ticket_image" src="../images/icon/carWash.png" alt="">
+        </div>
+        <div class="ticket_center">
+            <div class="free">免费精洗券</div>
+            <div class="date">2016-03-20</div>
+        </div>
+    </div></a>
+    <div class="examine_image"><span>已服务</span></div>
+</div>
+<div class="box">
+    <a href="freeTicketDetails.html"><div class="ticket clear">
+        <div class="ticket_left">
+            <img class="ticket_image" src="../images/icon/carWash.png" alt="">
+        </div>
+        <div class="ticket_center">
+            <div class="free">免费精洗券</div>
+            <div class="date">2016-03-20</div>
+        </div>
+    </div></a>
+    <div class="examine_image"><span>未服务</span></div>
+</div>
 
 <div class="menu_box clear">
     <a href="privilege.html" class="menu">特权</a>
@@ -79,11 +83,11 @@
         var card = $("#wx-card");
         var leaflet = $("#wx-leaflet");
         card.removeClass('active');
-        leaflet.removeClass('active');
+        leaflet.removeClass('actives');
         if(category == 1){
             card.addClass('active');
         }else{
-            leaflet.addClass('active');
+            leaflet.addClass('actives');
         }
     }
 
