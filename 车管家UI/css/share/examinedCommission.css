@@ -53,14 +53,12 @@ body{
 }
 .genre{
     padding-top: 8px;
-    width: 80%;
     float: left;
     color: #000000;
     font-size: 16px;
     padding-left: 10px;
 }
 .genres{
-    width: 80%;
     float: left;
     color: #000000;
     font-size: 16px;
