@@ -1,0 +1,64 @@
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+}
+.clear{
+    overflow: hidden;
+    clear: both;
+}
+.wire{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #e3e3e3;
+}
+.box{
+    background-color: #ffffff;
+}
+.list_box{
+    height: 60px;
+}
+.genre{
+    float: left;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 60px;
+    margin-left: 10px;
+}
+.input-class {
+    width: 45%;
+    margin-left: 30px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #888888;
+    text-align: right;
+    height: 55px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
+.insurance_input-class {
+    width: 45%;
+    margin-left: 45px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #888888;
+    text-align: right;
+    height: 55px;
+    border-style: none none solid none;
+    border-bottom-color: transparent;
+    background-color: transparent;
+}
+.select_images{
+    float: right;
+    width: 14px;
+    margin-top: 18px;
+    margin-right: 20px;
+}
