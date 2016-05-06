@@ -541,7 +541,7 @@ class WXController extends Controller {
         if($ret){
             header("Location: ".HTTP_URL_PREFIX."myCars?isAdd=1");
             //向系统推送新通知
-//            pushMessage(SYSTEM_NOTIFY, "需要审核的新车辆", 1);
+            pushMessage(SYSTEM_NOTIFY, $mobile, 1);
         }else{
             header("Location: ".HTTP_URL_PREFIX."userHome");
         }

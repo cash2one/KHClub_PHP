@@ -474,7 +474,7 @@ body{
 .genres{
     width: 45%;
     float: left;
-    /*color: #646464;*/
+    color: #000000;
     font-size: 16px;
     line-height: 50px;
     padding-left: 10px;
@@ -482,7 +482,8 @@ body{
 .values{
     float: right;
     font-size: 16px;
+    color: #888888;
     line-height: 45px;
     text-align: right;
-    padding-right: 10px;
+    padding-right: 20px;
 }

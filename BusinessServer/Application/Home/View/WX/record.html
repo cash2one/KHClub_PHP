@@ -13,47 +13,49 @@
 
     <div class="option">
         <if condition="$isHasPay eq 0">
-            <a href="recordHome"><span class="nav-width">服务中</span></a>
-            <a  href="getHasUseOrderList"><span  class="nav-width active">已服务</span></a>
+            <a onclick="getList(1)"><span class="nav-width">服务中</span></a>
+            <a onclick="getList(2)"><span  class="nav-width active">已服务</span></a>
             <else/>
-            <a href="recordHome"><span class="nav-width active">服务中</span></a>
-            <a  href="getHasUseOrderList"><span  class="nav-width">已服务</span></a>
+            <a onclick="getList(1)"><span class="nav-width active">服务中</span></a>
+            <a onclick="getList(2)"><span  class="nav-width">已服务</span></a>
         </if>
     </div>
     <volist name="list" id="order">
         <if condition="$order.coupon_id gt 0">
-            <a href="getCouponDetail?coupon_id={$order.coupon_id}">
-                <div class="ticket clear">
-                    <div class="ticket_left">
-                        <img class="ticket_image" src="__PUBLIC__/icon/carWash.png" alt="">
+            <div class="box">
+                <a href="getCouponDetail?coupon_id={$order.coupon_id}">
+                    <div class="ticket clear">
+                        <div class="ticket_left">
+                            <img class="ticket_image" src="__PUBLIC__/icon/carWash.png" alt="">
+                        </div>
+                        <div class="ticket_center">
+                            <div class="free">免费精洗券</div>
+                            <div class="date">{$order.date}</div>
+                        </div>
                     </div>
-                    <div class="free_ticket_right">
-                        <div class="free">免费精洗券</div>
-                        <div class="date">{$order.date}</div>
-                    </div>
-                    <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
-                </div>
-            </a>
+                </a>
+                <div class="examine_image"><span>已服务</span></div>
+            </div>
         <else/>
-            <a href="getOrderDetail?order_id={$order.id}">
-                <div class="ticket clear">
-                    <div class="ticket_left">
-                        <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+            <div class="box">
+                <a href="getOrderDetail?order_id={$order.id}">
+                    <div class="ticket clear">
+                        <div class="ticket_left">
+                            <img class="ticket_image" src="__ROOT__/Uploads/{$order.shop_image_thumb}" alt="">
+                        </div>
+                        <div class="ticket_center">
+                            <div class="discount"><span class="number">{$order.total_fee}</span>元</div>
+                            <div class="store_name">{$order.shop_name}</div>
+                            <div class="date">{$order.date}</div>
+                        </div>
                     </div>
-                    <div class="ticket_center">
-                        <div class="store_name">{$order.shop_name}</div>
-                    </div>
-                    <div class="ticket_right">
-                        <div class="discount"><span class="number">{$order.total_fee}</span>元</div>
-                        <div class="date">{$order.date}</div>
-                    </div>
-                    <if condition="$isHasPay eq 0">
-                        <img class="examine_image" src="__PUBLIC__/icon/unused.png" alt="">
-                        <else/>
-                        <img class="examine_image" src="__PUBLIC__/icon/usable.png" alt="">
-                    </if>
-                </div>
-            </a>
+                </a>
+                <if condition="$isHasPay eq 0">
+                    <div class="examine_image"><span>已服务</span></div>
+                    <else/>
+                    <div class="examine_image"><span>未服务</span></div>
+                </if>
+            </div>
         </if>
     </volist>
 
@@ -70,5 +72,16 @@
     <div class="wire2_center"></div>
     <div class="wire2_right"></div>
 </body>
+
+<script>
+    function getList(category){
+
+        if(category == 1){
+            location.href = 'recordHome';
+        }else{
+            location.href = 'getHasUseOrderList';
+        }
+    }
+</script>
 
 </html>

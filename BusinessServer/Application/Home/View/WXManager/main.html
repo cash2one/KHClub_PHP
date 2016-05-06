@@ -24,8 +24,10 @@
                 mqtt_connect();
             }
         });
-
+        $mobile = '';
         yunba.set_message_cb (function (data) {
+            var content = eval('('+data.msg+')');
+            $mobile = content.content;
             $(".main-notify").show();
             var audio = document.getElementById('audio');
             audio.play();
@@ -59,7 +61,7 @@
 
     <div class="main-frame">
         <div class="main-title">品位环球管理系统</div>
-        <div class="main-notify">你有待审核的车辆</div>
+        <div class="main-notify">你有了新的车辆</div>
     </div>
     <hr/>
     <div>
@@ -71,6 +73,7 @@
                 <li><a href="proxy" target="mainframe">代理者</a></li>
                 <li><a href="withdrawRequest" target="mainframe">提现申请</a></li>
                 <li><a href="wechatData" target="mainframe">数据统计</a></li>
+                <li><a href="payList" target="mainframe">消费统计</a></li>
             </ul>
         </div>
 
@@ -99,7 +102,8 @@
             $("li").removeClass("active");
             $("#applyCar").addClass("active");
             notify.hide();
-            document.getElementById("checkHome").click();
+//            document.getElementById("checkHome").click();
+            window.mainframe.location.href = 'searchUser.html?mobile='+$mobile;
         });
     });
 </script>
