@@ -18,20 +18,27 @@ body{
     background-position: center;
 }
 .add_car{
-    float: left;
-    clear: both;
-    font-size: 18px;
-    line-height: 45px;
-    text-align: center;
-    color: #ffffff;
+    display: block;
+    margin: 70px auto auto auto;
+    width: 60%;
     height: 45px;
-    width: 100%;
-    margin: 0px;
-    position:fixed;
-    bottom:0px;
-    left: 0px;
-    background-color: #0f0f0f;
-    border-color: transparent;
+    border: 1px solid #d6a41b;
+    border-radius: 45px;
+    background-color: #ffffff;
+    font-size: 14px;
+    color: #d6a41b;
+    text-align: center;
+    line-height: 45px;
+}
+.btn{
+    float: left;
+    margin-left: 15%;
+    width: 25px;
+    margin-top: 10px;
+}
+.shout{
+    float: left;
+    margin-left: 20px;
 }
 .wire{
     margin-left: 10px;
@@ -40,35 +47,34 @@ body{
     background-color: #e3e3e3;
 }
 .genre_box{
-    height: 45px;
+    height: 50px;
     width: 100%;
     background-color: #ffffff;
 }
 .genre{
-    padding-top: 5px;
-    width: 80%;
+    padding-top: 8px;
     float: left;
-    color: #646464;
+    color: #000000;
     font-size: 16px;
     padding-left: 10px;
 }
 .genres{
-    width: 80%;
     float: left;
-    color: #646464;
+    color: #000000;
     font-size: 16px;
-    line-height: 45px;
+    line-height: 50px;
     padding-left: 10px;
 }
 .require{
     padding-top: 3px;
-    color: #e6e6e6;
+    color: #888888;
     font-size: 12px;
 }
 .values{
     float: right;
     font-size: 16px;
-    line-height: 45px;
+    color: #888888;
+    line-height: 50px;
     text-align: right;
     padding-right: 10px;
 }

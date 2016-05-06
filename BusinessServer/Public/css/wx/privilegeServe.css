@@ -87,7 +87,7 @@ body{
     background-color: #e3e3e3;
 }
 .more{
-    margin: 120px auto auto auto;
+    margin: 100px auto 150px auto;
     color: #646464;
     font-size: 16px;
     text-align: center;
@@ -110,4 +110,27 @@ body{
     margin: 20px 15px;
     font-size: 16px;
     color: #646464;
+}
+.add_btn{
+    display: block;
+    margin: 50px auto auto auto;
+    width: 60%;
+    height: 45px;
+    border: 1px solid #d6a41b;
+    border-radius: 45px;
+    background-color: #ffffff;
+    font-size: 14px;
+    color: #d6a41b;
+    text-align: center;
+    line-height: 45px;
+}
+.btn{
+    float: left;
+    margin-left: 15%;
+    width: 25px;
+    margin-top: 10px;
+}
+.shout{
+    float: left;
+    margin-left: 20px;
 }
