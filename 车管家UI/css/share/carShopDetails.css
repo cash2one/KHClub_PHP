@@ -33,14 +33,14 @@ body{
     float: left;
     color: #ffffff;
     margin-left: 10px;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 30px;
 }
 .navigate_distance{
     float: right;
     margin-right: 10px;
     color: #e3e3e3;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 30px;
 }
 .box{
@@ -52,10 +52,14 @@ body{
 .addr_name{
     float: left;
     width: 40px;
+    color: #000000;
+    font-size: 16px;
     margin: 15px auto 15px 10px;
 }
 .type_addr{
     float: right;
+    font-size: 14px;
+    color: #888888;
     width: 75%;
     margin: 15px 10px 15px auto;
 }
@@ -66,19 +70,25 @@ body{
     background-color: #e3e3e3;
 }
 .add_car{
-    font-size: 18px;
-    float: left;
-    clear: both;
-    font-size: 18px;
-    line-height: 45px;
-    text-align: center;
-    color: #ffffff;
+    display: block;
+    margin: 50px auto auto auto;
+    width: 60%;
     height: 45px;
-    width: 100%;
-    margin: 0px;
-    position:fixed;
-    bottom:0px;
-    left: 0px;
-    background-color: #0f0f0f;
-    border-color: transparent;
+    border: 1px solid #d6a41b;
+    border-radius: 45px;
+    background-color: #ffffff;
+    font-size: 14px;
+    color: #d6a41b;
+    text-align: center;
+    line-height: 45px;
+}
+.btn{
+    float: left;
+    margin-left: 15%;
+    width: 25px;
+    margin-top: 10px;
+}
+.shout{
+    float: left;
+    margin-left: 20px;
 }
