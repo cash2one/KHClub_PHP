@@ -930,4 +930,115 @@ class WXManagerController extends Controller{
             returnJson(0,'数据异常！',$e);
         }
     }
+
+    ////////////////////////////////////////////消费统计//////////////////////////////////////////////////////
+    /**
+     * @brief 检查车辆首页
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/SHS_Contact_PHP/index.php/Home/WXManager/payList
+     * @param page  页码
+     * @param size 每页数量
+     */
+    public function payList(){
+        try{
+
+            if($_SESSION['manager'] != 1){
+                echo '请登录';
+                exit;
+            }
+            if(!isset($page)){
+                $page = 1;
+            }else{
+                $page = $_REQUEST['page'];
+            }
+            if(!isset($size)){
+                $size = 10;
+            }else{
+                $size = $_REQUEST['size'];
+            }
+
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $model = M();
+            $sql = 'SELECT COUNT(1) count FROM biz_shop s, biz_server_provider sp
+                    WHERE s.server_id=sp.server_id AND s.delete_flag=0 AND sp.delete_flag=0';
+            $count = $model->query($sql)[0]['count'];
+            if($count == 0){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $sql = 'SELECT s.id, s.shop_name, CASE WHEN SUM(o.total_fee)>0 THEN SUM(o.total_fee) ELSE 0 END total
+                    FROM biz_server_provider sp, biz_shop s LEFT JOIN biz_order o
+                    ON(s.id=o.shop_id AND o.state='.ORDER_HAS_USE.' AND o.delete_flag=0)
+                    WHERE s.server_id=sp.server_id AND s.delete_flag=0 AND sp.delete_flag=0 GROUP BY s.id LIMIT '.$start.','.$end;
+
+            $list = $model->query($sql);
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('list',$list);
+            $this->display('payTable');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
+
+    /**
+     * @brief 检查车辆首页
+     * 接口地址
+     * http://114.215.95.23/BusinessServer/SHS_Contact_PHP/index.php/Home/WXManager/payList
+     * @param page  页码
+     * @param size 每页数量
+     */
+    public function payDetail(){
+        try{
+
+            if($_SESSION['manager'] != 1){
+                echo '请登录';
+                exit;
+            }
+            if(!isset($_REQUEST['page'])){
+                $page = 1;
+            }else{
+                $page = $_REQUEST['page'];
+            }
+            if(!isset($_REQUEST['size'])){
+                $size = 10;
+            }else{
+                $size = $_REQUEST['size'];
+            }
+
+            if(!isset($_REQUEST['shop_id'])){
+                echo '商店不存在';
+                exit;
+            }
+
+            $shop_id = $_REQUEST['shop_id'];
+
+            $start = ($page-1)*$size;
+            $end   = $size;
+            $model = M();
+            $sql = 'SELECT COUNT(1) count FROM biz_order o WHERE o.shop_id='.$shop_id.' AND o.state='.ORDER_HAS_USE;
+            $count = $model->query($sql)[0]['count'];
+            if($count == 0){
+                $count = 1;
+            }
+            $page_count  = ceil($count/$size);
+            $sql = 'SELECT c.name, c.plate_number, c.mobile, o.total_fee, o.use_date
+                    FROM biz_order o LEFT JOIN biz_car c ON (o.car_id=c.id)
+                    WHERE o.shop_id='.$shop_id.' AND o.state='.ORDER_HAS_USE.' ORDER BY o.use_date DESC LIMIT '.$start.','.$end;
+            $list = $model->query($sql);
+
+            for($i=0; $i<count($list); $i++) {
+                $list[$i]['use_date'] = date('Y-m-d',$list[$i]['use_date']);
+            }
+
+            $this->assign('page',$page);
+            $this->assign('page_count',$page_count);
+            $this->assign('shop_id',$shop_id);
+            $this->assign('list',$list);
+            $this->display('payDetail');
+        }catch (Exception $e){
+            returnJson(0,'数据异常！',$e);
+        }
+    }
 }
