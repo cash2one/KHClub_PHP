@@ -761,31 +761,41 @@ class WXController extends Controller {
                     "address" : "深圳市南山区东滨路86号",
                     "latitude" : "22.518719",
                     "longitude" : "113.923805",
-                    "shop_name" : "华胜专修店南山店"
+                    "image" : "1.png",
+                    "shop_name" : "华胜专修店南山店",
+                    "shop_detail_name" : " 华胜汽车销售服务有限公司"
                   },
                   {
                     "address" : "深圳市宝安区西乡大道西大锌湾佳鸿世界名车博览中心",
                     "latitude" : "22.56933",
                     "longitude" : "113.861619",
-                    "shop_name" : "深圳市驰宝汽车销售服务有限公司"
+                    "image" : "2.png",
+                    "shop_name" : "宝马4S店宝安店",
+                    "shop_detail_name" : " 深圳市驰宝汽车销售服务有限公司"
                   },
                   {
                     "address" : "深圳市宝安区西乡大道西大锌湾佳鸿世界名车博览中心",
                     "latitude" : "22.56933",
                     "longitude" : "113.861619",
-                    "shop_name" : "奥羽汽车销售服务有限公司"
+                    "image" : "3.png",
+                    "shop_name" : "奥迪4S店宝安店",
+                    "shop_detail_name" : " 奥羽汽车销售服务有限公司"
                   },
                   {
                     "address" : "深圳市宝安区西乡大道西大锌湾佳鸿世界名车博览中心",
                     "latitude" : "22.56933",
                     "longitude" : "113.861619",
-                    "shop_name" : "路豹汽车销售服务有限公司"
+                    "image" : "4.png",
+                    "shop_name" : "路豹4S店宝安店",
+                    "shop_detail_name" : " 路豹汽车销售服务有限公司"
                   },
                   {
                     "address" : "深圳市南山区月亮湾大道嘉进隆前海汽车城C区1号",
                     "latitude" : "22.541227",
                     "longitude" : "113.914586",
-                    "shop_name" : "南方腾星汽车销售服务有限公司"
+                    "image" : "5.png",
+                    "shop_name" : "奔驰4S店南山店",
+                    "shop_detail_name" : " 南方腾星汽车销售服务有限公司"
                   }
                 ]';
 
@@ -805,11 +815,13 @@ class WXController extends Controller {
         $latitude = $_REQUEST['latitude'];
         $longitude = $_REQUEST['longitude'];
         $shop_name = $_REQUEST['shop_name'];
+        $image = $_REQUEST['image'];
 
         $this->assign("address", $address);
         $this->assign("latitude", $latitude);
         $this->assign("longitude", $longitude);
         $this->assign("shop_name", $shop_name);
+        $this->assign("image", $image);
         $this->display('carShopDetails');
     }
 

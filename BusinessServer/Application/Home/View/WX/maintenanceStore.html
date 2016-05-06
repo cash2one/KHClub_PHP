@@ -11,9 +11,9 @@
 <body style="background-color: #f1f1f1">
 
     <volist name="list" id="shop">
-        <a href="getRepairShopDetail?address={$shop.address}&latitude={$shop.latitude}&longitude={$shop.longitude}&shop_name={$shop.shop_name}">
+        <a href="getRepairShopDetail?address={$shop.address}&latitude={$shop.latitude}&longitude={$shop.longitude}&shop_name={$shop.shop_detail_name}&image={$shop.image}">
             <div class="store_box clear">
-                <img class="merchant_logo" src="__PUBLIC__/icon/carWash.png" alt=""/>
+                <img class="merchant_logo" src="__PUBLIC__/tmpLogo/{$shop.image}" alt=""/>
                 <div class="content_box">
                     <div class="carStore">{$shop.shop_name}</div>
                     <img class="addr_images" src="__PUBLIC__/icon/address.png" alt="">
