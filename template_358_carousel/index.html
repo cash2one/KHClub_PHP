@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>FMB Group Inc.</title>
+<link href="css/templatemo_style.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="js/jquery-1-4-2.min.js"></script> 
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/showhide.js"></script> 
+<script type="text/JavaScript" src="js/jquery.mousewheel.js"></script> 
+
+<link rel="stylesheet" type="text/css" href="css/ddsmoothmenu.css" />
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/ddsmoothmenu.js">
+
+</script>
+
+<script type="text/javascript">
+
+ddsmoothmenu.init({
+	mainmenuid: "templatemo_menu", //menu DIV id
+	orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+	classname: 'ddsmoothmenu', //class added to menu's outer DIV
+	//customtheme: ["#1c5a80", "#18374a"],
+	contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+})
+
+</script> 
+
+<!-- Load the CloudCarousel JavaScript file -->
+<script type="text/JavaScript" src="js/cloud-carousel.1.0.5.js"></script>
+ 
+<script type="text/javascript">
+$(document).ready(function(){
+						   
+	// This initialises carousels on the container elements specified, in this case, carousel1.
+	$("#carousel1").CloudCarousel(		
+		{			
+			reflHeight: 40,
+			reflGap:2,
+			titleBox: $('#da-vinci-title'),
+			altBox: $('#da-vinci-alt'),
+			buttonLeft: $('#slider-left-but'),
+			buttonRight: $('#slider-right-but'),
+			yRadius:30,
+			xPos: 480,
+			yPos: 32,
+			speed:0.15,
+		}
+	);
+});
+ 
+</script>
+
+</head>
+
+<body id="home">
+
+<div id="templatemo_header_wrapper">
+	<div id="site_title"><h1><a href="#">Free CSS Templates</a></h1></div>
+     <div id="templatemo_menu" class="ddsmoothmenu">
+        <ul>
+            <li><a href="index.html" class="selected">Home</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="blog.html">Tour</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <br style="clear: left" />
+    </div> <!-- end of templatemo_menu -->
+    <div class="cleaner"></div>
+</div>	<!-- END of templatemo_header_wrapper -->
+<div id="templatemo_slider">
+	<!-- This is the container for the carousel. -->
+    <div id = "carousel1" style="width:960px; height:280px;background:none;overflow:scroll; margin-top: 20px">            
+        <!-- All images with class of "cloudcarousel" will be turned into carousel items -->
+        <!-- You can place links around these images -->
+        <a rel="lightbox"><img class="cloudcarousel" src="images/slider/01.png" /></a>
+        <a rel="lightbox"><img class="cloudcarousel" src="images/slider/02.png" /></a>
+        <a rel="lightbox"><img class="cloudcarousel" src="images/slider/03.png" /></a>
+        <a rel="lightbox"><img class="cloudcarousel" src="images/slider/04.png" /></a>
+        <a rel="lightbox"><img class="cloudcarousel" src="images/slider/05.png" /></a>
+        <a rel="lightbox"><img class="cloudcarousel" src="images/slider/06.png" /></a>
+    </div>
+    
+    <!-- Define left and right buttons. -->
+    <center>
+    <input id="slider-left-but" type="button" value="" />
+    <input id="slider-right-but" type="button" value="" />
+    </center>
+</div>
+<div id="templatemo_main">
+	
+    <div class="col one_third fp_services">
+    <h2>Welcome!</h2>
+        <img src="images/welcome.png" class="image_fl" />
+        <p>Welcome
+            FMB Group Inc is a Chicago based film production company , with an integrated business model encompassing film distribution, production, exhibition and talent representation, distributing films throughout the United States, and we are marching-on to the Greater China, Korea, Southeast Asia, and Europe as well , invests in and produces movies in a variety of genres.</p>
+    </div>
+    <div class="col one_third fp_services">
+        <h2>Recent Project</h2>
+        <div class="rp_pp">
+            1. Valkyrie - A Medieval Epic 3D Show called
+            <div class="cleaner"></div>
+        </div>
+        <div class="rp_pp">
+            2. Iron Coffin - 1950’s feature film called Iron Coffin
+            <div class="cleaner"></div>
+        </div>
+        <div class="rp_pp">
+            3. FMB Tour has started operating in USA and China
+            <div class="cleaner"></div>
+        </div>
+        <div class="rp_pp">
+            4. Other project
+            <div class="cleaner"></div>
+        </div>
+    </div>
+    <div class="col one_third no_margin_right fp_services">
+        
+        <h2>Invest Movies</h2>
+        <div class="testimonial">
+            <p>
+                <a href="portfolio.html">1. Fade</a>
+                <br/>
+                Suspense, thrill.
+                Complex CG and Practical Effects and Action Sequences
+            </p>
+        </div>
+    	<div class="testimonial">
+            <p>
+               <a href="portfolio.html">2. Grifter</a>
+               <br/>
+               Pro-existing fan base to portray an accurate experience of a high-end future concept and alien creation.
+            </p>
+    	</div>
+    </div>
+    
+    <div class="cleaner"></div>
+</div> <!-- END of templatemo_main -->
+
+<div id="templatemo_bottom_wrapper">
+    <div id="templatemo_bottom">
+    	<div class="col one_third">
+        	<h4><span></span>Blogroll</h4>
+            <div class="bottom_box">
+                <ul class="footer_list">
+                    <li><a href="http://www.cssmoban.com/">Free CSS Templates</a></li>
+                    <li><a href="http://www.webdesignmo.com/blog">Web Design Resources</a></li>
+                    <li><a href="#">Free Flash Templates</a></li>
+                    <li><a href="#">Website Templates</a></li>
+                    <li><a href="http://www.koflash.com">Free Web Gallery</a></li>
+                </ul>  
+			</div>
+        </div>
+        <div class="col one_third">
+        	<h4><span></span>Updates</h4>
+            <div class="bottom_box">
+                <ul class="twitter_post">
+                    <li>Curabitur nec dui venenatis sem consectetur facilisis. Donec velit nisi, lacinia sed et. <a href="#">http://bit.ly/13IwZO</a></li>
+                    <li>Proin dignissim, diam nec <a href="#">@TemplateMo</a> enim lorem tempus orci, ac imperdiet ante purus in justo.</li>
+                </ul>
+			</div>
+        </div>
+        <div class="col one_third no_margin_right">
+        	<h4><span></span>About Us</h4>
+            <div class="bottom_box">
+                <p><em>Duis sem nisl, dignissim ac feugiat in, mattis sit amet est. Duis leo leo, suscipit cursus vehicula sit amet. Sed varius pellentesque massa vel rutrum.</em></p><br />              
+                <div class="footer_social_button">
+                    <a href="#"><img src="images/facebook.png" title="facebook" alt="facebook" /></a>
+                    <a href="#"><img src="images/flickr.png" title="flickr" alt="flickr" /></a>
+                    <a href="#"><img src="images/twitter.png" title="twitter" alt="twitter" /></a>
+                    <a href="#"><img src="images/youtube.png" title="youtube" alt="youtube" /></a>
+                    <a href="#"><img src="images/feed.png" title="rss" alt="rss" /></a>
+                </div>
+            </div>
+        </div>
+        
+    	<div class="cleaner"></div>
+    </div> <!-- END of tempatemo_bottom -->
+</div> <!-- END of tempatemo_bottom_wrapper -->
+
+</body>
+</html>
