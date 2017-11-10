@@ -66,6 +66,7 @@ body{
     padding-left: 10px;
 }
 .require{
+    padding-top: 3px;
     color: #888888;
     font-size: 12px;
 }

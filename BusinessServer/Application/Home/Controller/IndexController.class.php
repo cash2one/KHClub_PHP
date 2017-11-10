@@ -44,7 +44,7 @@ class IndexController extends Controller {
                       "name" : "品位环球",
                       "sub_button" : [
                         {
-                          "url" : "http://a.app.qq.com/o/simple.jsp?pkgname=com.shs.global",
+                          "url" : "http://app.qq.com/#id=detail&appid=1105254023",
                           "name" : "APP下载",
                           "type" : "view"
                         },
